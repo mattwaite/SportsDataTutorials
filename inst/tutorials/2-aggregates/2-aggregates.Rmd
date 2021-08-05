@@ -1,0 +1,259 @@
+---
+title: "Lesson 2: Aggregates"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to take lots of little things and total them up into bigger things.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+## Introduction 
+
+R is a statistical programming language that is purpose built for data analysis.
+
+Base R does a lot, but there are a mountain of external libraries that do things to make R better/easier/more fully featured. We already installed the tidyverse -- or you should have if you followed the instructions for the last assignment -- which isn't exactly a library, but a collection of libraries. Together, they make up the tidyverse. Individually, they are extraordinarily useful for what they do. We can load them all at once using the tidyverse name, or we can load them individually. Let's start with individually. 
+
+The two libraries we are going to need for this assignment are `readr` and `dplyr`. The library `readr` reads different types of data in as a dataframe. For this assignment, we're going to read in csv data or Comma Separated Values data. That's data that has a comma between each column of data. 
+
+Then we're going to use `dplyr` to analyze it. 
+
+To use a library, you need to import it. Good practice -- one I'm going to insist on -- is that you put all your library steps at the top of your notebooks. 
+
+That code looks like this:
+
+```
+library(readr)
+```
+
+To load them both, you need to run two lines of code like this:
+
+```
+library(readr)
+library(dplyr)
+```
+
+You can keep doing that for as many libraries as you need. I've seen notebooks with 10 or more library imports.
+
+But the tidyverse has a neat little trick. We can load most of the libraries we'll need for the whole semester with one line.
+
+Run this.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+
+**From now on, if that's not the first line of your notebook, you're probably doing it wrong.**
+
+## Loading data
+
+### Exercise: Load data to work with it 
+
+The first thing we need to do is get some data to work with. We do that by reading it in. In our case, we're going to read data from a csv file -- a comma-separated values file.
+
+The CSV file we're going to read from is a [Basketball Reference](https://www.basketball-reference.com/leagues/NBA_2020_advanced.html) page of advanced metrics for NBA players this season. The Sports Reference sites are a godsend of data, a trove of stuff, and we're going to use it a lot in this class.
+
+You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/nbaadvancedplayers1920.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+So step 2, after setting up our libraries, is most often going to be importing data. In order to analyze data, we need data, so it stands to reason that this would be something we'd do very early.
+
+The code looks *something* like this, but hold off doing anything just yet:
+
+```
+nbaplayers <- read_csv("~/Box/SportsData/nbaadvancedplayers1920.csv")
+```
+
+Let's unpack that.
+
+The first part -- nbaplayers -- is the name of your variable. A variable is just a name of a thing that stores stuff. In this case, our variable is a data frame, which is R's way of storing data (technically it's a tibble, which is the tidyverse way of storing data, but the differences aren't important and people use them interchangeably). **We can call this whatever we want.** I always want to name data frames after what is in it. In this case, we're going to import a dataset of NBA players. Variable names, by convention are one word all lower case. You can end a variable with a number, but you can't start one with a number.
+
+The <- bit is the variable assignment operator. It's how we know we're assigning something to a word. Think of the arrow as saying "Take everything on the right of this arrow and stuff it into the thing on the left." So we're creating an empty vessel called `nbaplayers` and stuffing all this data into it. 
+
+The `read_csv` bits are pretty obvious, except for one thing. What happens in the quote marks is the path to the data. In there, I have to tell R where it will find the data. The easiest thing to do when you are working on your own computer, if you are confused about how to find your data, is to put your data in the same folder as as your notebook (you'll have to save that notebook first). If you do that, then you just need to put the name of the file in there (nbaadvancedplayers1920.csv). For this exercise, we're pulling the data from a website, and the path that we'll enter is the url of the data.
+
+Your first task is to import the data. For this exercise, you need to simply run this:
+
+```{r load-data}
+nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaadvancedplayers1920.csv")
+```
+```{r load-data-exercise, exercise = TRUE}
+nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaadvancedplayers1920.csv")
+```
+
+Now we can inspect the data we imported. What does it look like? What's in it? What do we have to work with? 
+
+To do that, we use `head()` and **put the name of the variable we created above between the parenthesis** to show the headers and **the first six rows of data**. 
+```{r head-data, exercise=TRUE, exercise.setup = "load-data"}
+head(??????)
+```
+<div id="head-data-hint">
+**Hint:** The thing you need is to the left of a <- in a block above.
+</div>
+
+Let's look at this. As you can see by the data, we have six players, which is what we expect from `head()`. But notice the first row -- the headers. We have things like Tm and Pos for team and position. And we have a lot of number columns, showing everything from minutes played (MP) to VORP, which stands for Value Over Replacement Player. 
+
+Why do this? It gives us a glimpse of the data. Which ... conveniently ... is also a way to look at your data, and it works the same way as `head()` 
+
+```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
+glimpse(??????)
+```
+<div id="glimpse-data-hint">
+**Hint:** This works the same as head() above.
+</div>
+
+Either of these will guide you with what you have to work with in the coming problems. 
+
+## Answering questions with code
+
+### Group and count
+
+What if we wanted to know how many players there were by position, i.e. how many centers are there in the NBA? Or guards? To do that by hand, we'd have to take each of the 651 records and sort them into piles. Centers over here. Forwards over here. We'd put them in groups and then count them.
+
+`dplyr` has a **group by** function in it that does just this. A massive amount of data analysis involves grouping like things together at some point. So it's a good place to start.
+
+**The secret to writing code is that much of it is a pattern.** The building blocks largely stay the same. With the tidyverse, this is *especially* true.
+
+To accomplish our goal, we start with the name of the data we created before. The same name we used in `head()` and `glipse()`. We'll take that data and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." So the start of our pattern is `data %>%` which you can read as `data and now we'll do this`.
+
+The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need to put something in the parenthesis**. But unlike `head()` and `glimpse()`, this time the something comes from that first row of head. We are grouping data by one of the pieces of the data -- a field. *If we're trying to group by position*, which field looks like it holds the position name? Let's use head again and take a look at the very top row in bold.
+
+```{r head-review, exercise=TRUE, exercise.setup = "load-data"}
+head(??????)
+```
+
+That block of code you just ran has two hints for the code block you'll have to complete later: What data are you using? What field in that data do you want to group by? Keep those in mind.
+
+After we group our data together by the thing we want to group it by, we need to count how many things are in each group. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want to summarize. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something. 
+
+Here's the pattern. **You fill in where there are all capitals with what needs to be there.** What you fill in are the two hints from above.
+
+```{r group-by, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
+NAMEOFDATA %>%
+  group_by(NAMEOFFIELD) %>%
+  summarise(
+    total = n()
+  ) 
+```
+<div id="group-by-hint">
+**Hint:** The name of your data is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top.
+</div>
+In this case, we wanted to group together positions, signified by the field name `Pos`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](http://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are. 
+
+And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This %>% and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. In arrange, we need to tell it what we are arranging by. **If you have group_by, then whatever you are arranging by will *always* come from inside summarize.** The pattern looks like this:
+
+```{r group-by-2, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
+nbaplayers %>%
+  group_by(?????) %>%
+  summarise(
+    total = n()
+  ) %>% 
+  arrange(desc(????))
+```
+<div id="group-by-2-hint">
+**Hint:** The only thing new here is the arrange, and what goes in arrange comes from summarize, and it isn't the n() parts.
+</div>
+The most common position in the NBA? Shooting guard, followed by power forward. 
+
+### Grouping by more than one thing
+
+We can, if we want, group by more than one thing. Which team has the most of a single position? To do that, we can group by the team -- called Tm in the data -- and position, or Pos in the data:
+
+```{r group-by-3, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
+nbaplayers %>%
+  group_by(??, ???) %>%
+  summarise(
+    total = n()
+  ) %>% 
+  arrange(desc(?????))
+```
+
+So wait, what team is TOT? 
+
+Valuable lesson: whoever collects the data has opinions on how to solve problems. In this case, Basketball Reference, when a player get's traded, records stats for the player's first team, their second team, and a combined season total for a team called TOT, meaning Total. Is there a team abbreviated TOT? No. So ignore them here.
+
+Sacramento has 9 power forwards. Brooklyn has 8 shooting guards, as do the Lakers. You can learn a bit about how a team is assembled by looking at these simple counts.
+
+### Other aggregates: Mean and median
+
+In the last example, we grouped some data together and counted it up, but there's so much more you can do. **You can do multiple measures in a single step as well.**
+
+Sticking with our NBA player data, we can calculate any number of measures inside summarize. Here, we'll use R's built in mean and median functions to calculate ... well, you get the idea.
+
+Let's look just a the number of minutes (MP) each position gets. In summarize, what you do left of the equal sign is giving something a name. We should name our new columns what they are: mean_minutes and median_minutes.
+
+```{r group-by-4, exercise=TRUE, exercise.setup = "load-data"}
+???????? %>%
+  group_by(???) %>%
+  summarise(
+    count = n(),
+    ??????? = mean(??),
+    ??????? = median(??)
+  )
+```
+<div id="group-by-4-hint">
+**Hint:** What goes in `group_by`, `mean()` and `median()` all come from column names you find with `head()`. What goes before the = are names you come up with. I gave you suggestions. 
+</div>
+So there's 651 players in the data. Let's look at shooting guards. The average shooting guard plays 842.5 minutes and the median is 653.5 minutes. 
+
+Why? 
+
+Let's let sort help us. Remember, if you have group_by, then what is in arrange comes from a name you created in summarize. In this case, we don't have group_by, so what goes in arrange is just the field name.
+
+```{r group-by-5, exercise=TRUE, exercise.setup = "load-data"}
+nbaplayers %>% arrange(desc(MP))
+```
+
+The player with the most minutes on the floor is a shooting guard. Shooting guard is the most common position, so that means there's CJ McCollum rolling up 2,556 minutes in a season, and then there's Cleveland Cavalier's sensation J.P. Macura. Never heard of J.P. Macura? Might be because he logged one minute in one game this season. 
+
+That's a huge difference.
+
+So when choosing a measure of the middle, you have to ask yourself -- could I have extremes? Because a median won't be sensitive to extremes. It will be the point at which half the numbers are above and half are below. The average or mean will be a measure of the middle, but if you have a bunch of pine riders and then one iron man superstar, the average will be wildly skewed. 
+
+## Even more aggregates
+
+There's a ton of things we can do in summarize -- we'll work with more of them as the course progresses -- but here's a few other questions you can ask.
+
+Which position in the NBA plays the most minutes? And what is the highest and lowest minute total for that position? And how wide is the spread between minutes? We can find that with `sum` to add up the minutes to get the total minutes, `min` to find the minimum minutes, `max` to find the maximum minutes and `sd` to find the standard deviation in the numbers. 
+
+```{r group-by-6, exercise=TRUE, exercise.setup = "load-data"}
+?????? %>% 
+  group_by(???) %>% 
+  summarise(
+    total = sum(MP), 
+    avgminutes = mean(MP), 
+    minminutes = min(MP),
+    maxminutes = max(MP),
+    stdev = sd(MP)) %>% arrange(desc(total))
+```
+
+So again, no surprise, shooting guards spend the most minutes on the floor in the NBA. They average 842 minutes, but we noted why that's trouble. The minimum is the J.P. Macura Award, max is the Trailblazer's failing at load management, and the standard deviation is a measure of how spread out the data is. In this case, not the highest spread among positions, but pretty high. When your standard deviation is large, that's a sign you've got some huge minutes players and a bunch of bench players. 
+
+### Summary
+
+In data analysis, `group_by` and `summarize` are two of the most basic, but most common functions. With these functions, you can take every game played and turn it into season totals, team statistics and many others. You can take every pitch thrown and look at them by type. You can look at a volleyball team in conference and out of conference. What you need to do all this you learned here. What remains is creative application of what you've learned.
