@@ -11,7 +11,6 @@ description: >
 
 ```{r setup, include=FALSE}
 library(learnr)
-library(gradethis)
 knitr::opts_chunk$set(echo = FALSE)
 options(tutorial.storage = filesystem_storage("~"))
 ```

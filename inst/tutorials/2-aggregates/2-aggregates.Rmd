@@ -51,6 +51,12 @@ Run this.
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
 ```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
 
 **From now on, if that's not the first line of your notebook, you're probably doing it wrong.**
 
@@ -105,12 +111,23 @@ nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaadvancedpl
 ```{r load-data-exercise, exercise = TRUE}
 nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaadvancedplayers1920.csv")
 ```
-
+```{r load-data-exercise-solution}
+nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaadvancedplayers1920.csv")
+```
+```{r load-data-exercise-check}
+grade_this_code()
+```
 Now we can inspect the data we imported. What does it look like? What's in it? What do we have to work with? 
 
 To do that, we use `head()` and **put the name of the variable we created above between the parenthesis** to show the headers and **the first six rows of data**. 
 ```{r head-data, exercise=TRUE, exercise.setup = "load-data"}
 head(??????)
+```
+```{r head-data-solution}
+head(nbaplayers)
+```
+```{r head-data-check}
+grade_this_code()
 ```
 <div id="head-data-hint">
 **Hint:** The thing you need is to the left of a <- in a block above.
@@ -122,6 +139,12 @@ Why do this? It gives us a glimpse of the data. Which ... conveniently ... is al
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
 glimpse(??????)
+```
+```{r glimpse-data-solution}
+glimpse(nbaplayers)
+```
+```{r glimpse-data-check}
+grade_this_code()
 ```
 <div id="glimpse-data-hint">
 **Hint:** This works the same as head() above.
@@ -146,7 +169,12 @@ The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need
 ```{r head-review, exercise=TRUE, exercise.setup = "load-data"}
 head(??????)
 ```
-
+```{r head-review-solution}
+head(nbaplayers)
+```
+```{r head-review-check}
+grade_this_code()
+```
 That block of code you just ran has two hints for the code block you'll have to complete later: What data are you using? What field in that data do you want to group by? Keep those in mind.
 
 After we group our data together by the thing we want to group it by, we need to count how many things are in each group. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want to summarize. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something. 
@@ -159,6 +187,16 @@ NAMEOFDATA %>%
   summarise(
     total = n()
   ) 
+```
+```{r group-by-solution}
+nbaplayers %>%
+  group_by(Pos) %>%
+  summarise(
+    total = n()
+  ) 
+```
+```{r group-by-check}
+grade_this_code()
 ```
 <div id="group-by-hint">
 **Hint:** The name of your data is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top.
@@ -174,6 +212,17 @@ nbaplayers %>%
     total = n()
   ) %>% 
   arrange(desc(????))
+```
+```{r group-by-2-solution}
+nbaplayers %>%
+  group_by(Pos) %>%
+  summarise(
+    total = n()
+  ) %>% 
+  arrange(desc(total))
+```
+```{r group-by-2-check}
+grade_this_code()
 ```
 <div id="group-by-2-hint">
 **Hint:** The only thing new here is the arrange, and what goes in arrange comes from summarize, and it isn't the n() parts.
@@ -192,7 +241,20 @@ nbaplayers %>%
   ) %>% 
   arrange(desc(?????))
 ```
-
+```{r group-by-3-solution}
+nbaplayers %>%
+  group_by(Tm, Pos) %>%
+  summarise(
+    total = n()
+  ) %>% 
+  arrange(desc(total))
+```
+```{r group-by-3-check}
+grade_this_code()
+```
+<div id="group-by-3-hint">
+**Hint:** If you're reading this, you're going too fast. I told you what to put in group_by in the sentence above this code window.
+</div>
 So wait, what team is TOT? 
 
 Valuable lesson: whoever collects the data has opinions on how to solve problems. In this case, Basketball Reference, when a player get's traded, records stats for the player's first team, their second team, and a combined season total for a team called TOT, meaning Total. Is there a team abbreviated TOT? No. So ignore them here.
@@ -216,6 +278,18 @@ Let's look just a the number of minutes (MP) each position gets. In summarize, w
     ??????? = median(??)
   )
 ```
+```{r group-by-4-solution}
+nbaplayers %>%
+  group_by(Pos) %>%
+  summarise(
+    count = n(),
+    mean_minutes = mean(MP),
+    median_minutes = median(MP)
+  )
+```
+```{r group-by-4-check}
+grade_this_code()
+```
 <div id="group-by-4-hint">
 **Hint:** What goes in `group_by`, `mean()` and `median()` all come from column names you find with `head()`. What goes before the = are names you come up with. I gave you suggestions. 
 </div>
@@ -228,7 +302,12 @@ Let's let sort help us. Remember, if you have group_by, then what is in arrange 
 ```{r group-by-5, exercise=TRUE, exercise.setup = "load-data"}
 nbaplayers %>% arrange(desc(MP))
 ```
-
+```{r group-by-5-solution}
+nbaplayers %>% arrange(desc(MP))
+```
+```{r group-by-5-check}
+grade_this_code()
+```
 The player with the most minutes on the floor is a shooting guard. Shooting guard is the most common position, so that means there's CJ McCollum rolling up 2,556 minutes in a season, and then there's Cleveland Cavalier's sensation J.P. Macura. Never heard of J.P. Macura? Might be because he logged one minute in one game this season. 
 
 That's a huge difference.
@@ -251,7 +330,22 @@ Which position in the NBA plays the most minutes? And what is the highest and lo
     maxminutes = max(MP),
     stdev = sd(MP)) %>% arrange(desc(total))
 ```
-
+```{r group-by-6-solution}
+nbaplayers %>% 
+  group_by(Pos) %>% 
+  summarise(
+    total = sum(MP), 
+    avgminutes = mean(MP), 
+    minminutes = min(MP),
+    maxminutes = max(MP),
+    stdev = sd(MP)) %>% arrange(desc(total))
+```
+```{r group-by-6-check}
+grade_this_code()
+```
+<div id="group-by-6-hint">
+**Hint:** Breathe deep. Slow down. Think about it. What's missing here is stuff you've done already. 
+</div>
 So again, no surprise, shooting guards spend the most minutes on the floor in the NBA. They average 842 minutes, but we noted why that's trouble. The minimum is the J.P. Macura Award, max is the Trailblazer's failing at load management, and the standard deviation is a measure of how spread out the data is. In this case, not the highest spread among positions, but pretty high. When your standard deviation is large, that's a sign you've got some huge minutes players and a bunch of bench players. 
 
 ### Summary
