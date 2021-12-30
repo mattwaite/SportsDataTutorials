@@ -1,5 +1,5 @@
 Package: SportsDataTutorials
-Title: What the Package Does (One Line, Title Case)
+Title: The Companion Tutorials To UNL's SPMC 350 Sports Data Analysis Course
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Matt",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "matt.waite@unl.edu")
 Description: What the package does (one paragraph).
-License: use_mit_license()
+License: CC BY-SA 4.0
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

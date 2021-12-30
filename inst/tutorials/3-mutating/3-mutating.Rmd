@@ -1,74 +1,218 @@
 ---
 title: "Lesson 3: Mutating data"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
+description: >
+  Learn how to make new columns of data.
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
+library(gradethis)
+library(tidyverse)
 knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
 ```
 
+# Mutating data
 
-## Topic 1
+One of the most common data analysis techniques is to look at change over time. The most common way of comparing change over time is through percent change. The math behind calculating percent change is very simple, and you should know it off the top of your head. The easy way to remember it is:
 
-### Exercise 
+`(new - old) / old` 
 
-*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+Or new minus old divided by old. Your new number minus the old number, the result of which is divided by the old number. To do that in R, we can use `dplyr` and `mutate` to calculate new metrics in a new field using existing fields of data. 
 
-Write the R code required to add two plus two:
+So first we'll import the tidyverse so we can read in our data and begin to work with it.
 
-```{r two-plus-two, exercise=TRUE}
-
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
 ```
 
-### Exercise with Code
+Now you'll need a common and simple dataset of total attendance at NCAA football games over the last few seasons. You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this.**
 
-*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
 
-Now write a function that adds any two numbers and then call it:
-
-```{r add-function, exercise=TRUE, exercise.lines = 5}
-add <- function() {
-  
-}
-```
-
-## Topic 2
-
-### Exercise with Hint
-
-*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
-
-Modify the following code to limit the number of rows printed to 5:
-
-```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
-mtcars
-```
-
-```{r print-limit-hint}
-head(mtcars)
-```
-
-### Quiz
-
-*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
-
-Some questions to verify that you understand the purposes of various base and recommended R packages:
-
-```{r quiz}
-quiz(
-  question("Which package contains functions for installing other R packages?",
-    answer("base"),
-    answer("tools"),
-    answer("utils", correct = TRUE),
-    answer("codetools")
-  ),
-  question("Which of the R packages listed below are used to create plots?",
-    answer("lattice", correct = TRUE),
-    answer("tools"),
-    answer("stats"),
-    answer("grid", correct = TRUE)
-  )
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/attendance.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
 )
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
 ```
+
+Your first task is to import the data. For this exercise, you need to simply run this:
+
+```{r mutating-load-data, message=FALSE, warning=FALSE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r mutating-load-data-exercise, exercise = TRUE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r mutating-load-data-exercise-solution}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r mutating-load-data-exercise-check}
+grade_this_code()
+```
+
+Remember, if you want to see the first six rows -- handy to take a peek at your data -- you can use the function `head`.
+
+```{r head-data, exercise=TRUE, exercise.setup = "mutating-load-data"}
+head(??????)
+```
+```{r head-data-solution}
+head(attendance)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2018\` as the new data, and we'll use \`2017\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year. Similar to summarize, we'll want to give what we create a name using =. 
+
+Replace the words in all caps with the correct parts and name the new column we're creating as change. **NOTE: The backticks in the previous paragraph -- the key to the left of the 1 key, NOT the apostrophe -- are very important here.** Column names that start with numbers -- or are numbers -- have to be wrapped in backticks. Otherwise, our code thinks they're numbers, not column names.  
+
+```{r mutate-change, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
+NAMEOFDATA %>%
+  mutate(NEWCOLUMNNAME = (NEWYEAR - OLDYEAR)/OLDYEAR
+) 
+```
+```{r mutate-change-solution}
+attendance %>% mutate(
+  change = (`2018` - `2017`)/`2017`
+) 
+```
+```{r mutate-change-check}
+grade_this_code()
+```
+
+What do we see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100. 
+
+```{r mutate-change-percent, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
+NAMEOFDATA %>%
+  mutate(NEWCOLUMNNAME = ((NEWYEAR - OLDYEAR)/OLDYEAR)*???
+) 
+```
+```{r mutate-change-percent-solution}
+attendance %>% mutate(
+  change = ((`2018` - `2017`)/`2017`)*100
+) 
+```
+```{r mutate-change-percent-check}
+grade_this_code()
+```
+
+Now, does this ordering do anything for us? No. We want the fastest changing attenance at the top, not an alphabetical listing. Let's fix that with arrange. 
+
+```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
+NAMEOFDATA %>%
+  mutate(NEWCOLUMNNAME = ((NEWYEAR - OLDYEAR)/OLDYEAR)*???
+) %>% arrange(desc(?????))
+```
+```{r mutate-change-percent-arrange-solution}
+attendance %>% mutate(
+  change = ((`2018` - `2017`)/`2017`)*100
+) %>% arrange(desc(change))
+```
+```{r mutate-change-percent-arrange-check}
+grade_this_code()
+```
+
+So who had the most growth from 2017 to 2018? Something going on at Georgia Southern. 
+
+## A more complex example
+
+There's metric in basketball that's easy to understand -- shooting percentage. It's the number of shots made divided by the number of shots attempted. Simple, right? Except it's a little too simple. Because what about three point shooters? They tend to be more valuable because the three point shot is worth more. What about players who get to the line? In shooting percentage, free throws are nowhere to be found. 
+
+Basketball nerds, because of these weaknesses, have created a new metric called [True Shooting Percentage](https://en.wikipedia.org/wiki/True_shooting_percentage). True shooting percentage takes into account all aspects of a players shooting to determine who the real shooters are. 
+
+Using `dplyr` and `mutate`, we can calculate true shooting percentage. So let's look at a new dataset, one of every college basketball player's season stats in 2020-21 season. It's a dataset of more than 5,300 players, and we've got 59 variables -- one of them is True Shooting Percentage, but we're going to ignore that. 
+
+You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/players21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+Import it like this:
+
+```{r mutating-load-player-data, message=FALSE, warning=FALSE}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
+```
+```{r mutating-load-player-data-exercise, exercise = TRUE}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
+```
+```{r mutating-load-player-data-exercise-solution}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
+```
+```{r mutating-load-player-data-exercise-check}
+grade_this_code()
+```
+
+The basic true shooting percentage formula is `(Points / (2*(FieldGoalAttempts + (.44 * FreeThrowAttempts)))) * 100`. Let's talk that through. Points divided by a lot. It's really field goal attempts plus 44 percent of the free throw attempts. Why? Because that's about what a free throw is worth, compared to other ways to score. After adding those things together, you double it. And after you divide points by that number, you multiply the whole lot by 100. 
+
+In our data, we need to be able to find the fields so we can complete the formula. To do that, one way is to use the Environment tab in R Studio. In the Environment tab is a listing of all the data you've imported, and if you click the triangle next to it, it'll list all the field names, giving you a bit of information about each one. 
+
+```{r, echo=FALSE}
+knitr::include_graphics(rep("images/environment.png"))
+```
+
+Unfortunately, in this tutorial environment, we don't see the environment. For us, `glimpse` is going to give us our best view of the data. 
+
+```{r mutating-player-glimpse-data, exercise=TRUE, exercise.setup = "mutating-load-player-data"}
+glimpse(??????)
+```
+```{r mutating-player-glimpse-data-solution}
+glimpse(nbaplayers)
+```
+```{r mutating-player-glimpse-data-check}
+grade_this_code()
+```
+
+Note from glimpse what columns we need. Points are from a column labeled what? What about Field Goals Attempted and Free Throws Attempted? Look for the \$. Those indicate each **column** name in the dataset. The word or abbreviation next to the \$ is a column name. For instance, MP is Minutes Played. Note which column names have backticks around them. Why? Because they contain symbols. Once we know the names of the columns we need -- Points, Field Goals Attempted and Free Throws Attempted -- we can turn this into code. And what question does that code ask?
+
+Who had the best true shooting season last year? Replace the words in all caps and the ????? and find out.
+
+```{r mutate-trueshooting, exercise=TRUE, exercise.setup = "mutating-load-player-data", message=FALSE}
+NAMEOFDATA %>%
+  mutate(trueshooting = (POINTSCOLUMNNAME/(2*(FIELDGOALSATTEMPTEDCOLUMNNAME + (.44*FREETHROWSATTEMPTEDCOLUMNNAME))))*100) %>% 
+  arrange(desc(?????))
+```
+```{r mutate-trueshooting-solution}
+players %>%
+  mutate(trueshooting = (PTS/(2*(FGA + (.44*FTA))))*100) %>%
+  arrange(desc(trueshooting))
+```
+```{r mutate-trueshooting-check}
+grade_this_code()
+```
+
+You'll be forgiven if you did not hear about Weber State's shooting sensation Jake Furgerson. He played in one game for five minutes, took one shot and actually hit it. It happened to be a three pointer, which is one more three pointer than I've hit in college basketball. So props to him. Does that mean he had the best true shooting season in college basketball last year? 
+
+Not hardly. 
+
+We'll talk about how to narrow the pile and filter out data in the next tutorial.
