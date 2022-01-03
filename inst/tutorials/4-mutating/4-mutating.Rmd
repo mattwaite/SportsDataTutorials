@@ -1,5 +1,5 @@
 ---
-title: "Lesson 3: Mutating data"
+title: "Lesson 4: Mutating data"
 output: 
   learnr::tutorial:
     progressive: true

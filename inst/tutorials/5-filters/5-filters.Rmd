@@ -1,0 +1,243 @@
+---
+title: "Lesson 5: Filters"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to narrow in on what's important and remove what isn't.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Filtering
+
+More often than not, we have more data than we want. Sometimes we need to be rid of that data. In `dplyr`, there's two ways to go about this: filtering and selecting.
+
+**Filtering creates a subset of the data based on criteria**. All records where the count is greater than 10. All records that match "Nebraska". Something like that. 
+
+**Selecting simply returns only the fields named**. So if you only want to see School and Attendance, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error.  
+
+Let's work with our football attendance data to show some examples. You can download the data here if you want to use it in your own notebook -- and this is the same data we used in the mutating tutorial, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/attendance.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+First we'll need the tidyverse. Your first step is always loading libraries and you'll need to run this step in nearly every single thing you do.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+Now import the data.
+
+```{r filtering-load-data, message=FALSE, warning=FALSE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r filtering-load-data-exercise, exercise = TRUE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r filtering-load-data-exercise-solution}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r filtering-load-data-exercise-check}
+grade_this_code()
+```
+
+So, first things first, let's say we don't care about all this Air Force, Akron, Alabama crap and just want to see Dear Old Nebraska U. We do that with `filter` and then we pass it a condition. 
+
+Before we do that, a note about conditions. Most of the conditional operators you'll understand -- greater than and less than are > and <. The tough one to remember is equal to. In conditional statements, equal to is == not =. If you haven't noticed, = is a variable assignment operator, not a conditional statement. So equal is == and NOT equal is !=. 
+
+So if you want to see Nebraska, what would you do?
+
+First, let's use head to give us a peek at the data.
+
+```{r head-data, exercise=TRUE, exercise.setup = "filtering-load-data"}
+head(??????)
+```
+```{r head-data-solution}
+head(attendance)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+Now that we can see the column names, we now know Institutions are where the names of the universities are. Replace the all caps and question marks here and see if you can get only Nebraska.
+
+```{r filtering-nebraska, exercise=TRUE, exercise.setup = "filtering-load-data"}
+NAMEOFDATA %>% filter(NAMEOFCOLUMN == "?????")
+```
+```{r filtering-nebraska-solution}
+attendance %>% filter(Institution == "Nebraska")
+```
+```{r filtering-nebraska-check}
+grade_this_code()
+```
+
+What if we want to see schools that had a half a million people or more buy tickets to a football game in 2018? NOTE THE BACKTICKS. 
+
+```{r filtering-big, exercise=TRUE, exercise.setup = "filtering-load-data"}
+NAMEOFDATA %>% filter(`????` >= ??????)
+```
+```{r filtering-big-solution}
+attendance %>% filter(`2018` >= 500000)
+```
+```{r filtering-big-check}
+grade_this_code()
+```
+
+But what if we want to see all of the Power Five conferences? We *could* use conditional logic in our filter. The conditional logic operators are `|` for OR and `&` for AND. NOTE: AND means all conditions have to be met. OR means any of the conditions work. So be careful about boolean logic. 
+
+Here's what that looks like. It's a lot of extra code that you've got to be careful with.
+
+```{r filtering-power5, exercise=TRUE, exercise.setup = "filtering-load-data"}
+attendance %>% filter(Conference == "Big 10" | Conference == "SEC" | Conference == "Pac-12" | Conference == "ACC" | Conference == "Big 12")
+```
+```{r filtering-power5-solution}
+attendance %>% filter(Conference == "Big 10" | Conference == "SEC" | Conference == "Pac-12" | Conference == "ACC" | Conference == "Big 12")
+```
+```{r filtering-power5-check}
+grade_this_code()
+```
+
+
+But that's a lot of repetitive code. And a lot of typing. And typing is the devil. So what if we could create a list and pass it into the filter? It's pretty simple.
+
+We can create a new variable -- remember variables can represent just about anything -- and create a list. To do that we use the `c` operator, which stands for concatenate. That just means take all the stuff in the parenthesis after the c and bunch it into a list. 
+
+Note here: text is in quotes. If they were numbers, we wouldn't need the quotes. And `c()` gives us a list that we can use. With a list, we can use the %in% operator. It does what you think it does -- it gives you data that matches things IN the list you give it. 
+
+```{r filtering-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
+powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+
+NAMEOFDATA %>% filter(???? %in% ??????)
+```
+```{r filtering-power-solution}
+powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+
+attendance %>% filter(Conference %in% powerfive)
+```
+```{r filtering-power-check}
+grade_this_code()
+```
+
+## Selecting data to make it easier to read
+
+So now we have our Power Five list. What if we just wanted to see attendance from the most recent season and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Institution, Conference and the 2018 season.
+
+```{r selecting-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
+powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+
+NAMEOFDATA %>% 
+  filter(???? %in% ??????) %>% 
+  select(???????, ??????, `????`)
+```
+```{r selecting-power-solution}
+powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+
+attendance %>% 
+  filter(Conference %in% powerfive) %>% 
+  select(Institution, Conference, `2018`)
+```
+```{r selecting-power-check}
+grade_this_code()
+```
+
+If you have truly massive data, Select has tools to help you select fields that start_with the same things or ends with a certain word. [The documentation will guide you](https://dplyr.tidyverse.org/reference/select.html) if you need those someday. For 90 plus percent of what we do, just naming the fields will be sufficient. 
+
+## Using conditional filters to set limits
+
+Let's return to the problem of one-hit wonders in basketball mucking up our true shooting analysis. How can we set limits in something like a question of who had the best season? Let's get set up.
+
+```{r filtering-load-player-data, message=FALSE, warning=FALSE}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
+```
+```{r filtering-load-player-data-exercise, exercise = TRUE}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
+```
+```{r filtering-load-player-data-exercise-solution}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
+```
+```{r filtering-load-player-data-exercise-check}
+grade_this_code()
+```
+
+In the previous module, we found that Weber State's Jake Ferguson was your One Shot One Kill sniper in the COVID season. But in most contests, like the batting title in Major League Baseball, there's a minimum number of X to qualify. In baseball, it's at bats. In basketball, it attempts. So let's set a floor and see how it changes. 
+
+What if we said you had to have played 100 minutes in a season? The top players in college basketball play more than 1000 minutes in a season. So 100 is not that much. Let's add a filter to what we did last module and see how it changes.
+
+```{r filtering-trueshooting, exercise=TRUE, exercise.setup = "filtering-load-player-data", message=FALSE}
+NAMEOFDATA %>%
+  mutate(trueshooting = (POINTSCOLUMNNAME/(2*(FIELDGOALSATTEMPTEDCOLUMNNAME + (.44*FREETHROWSATTEMPTEDCOLUMNNAME))))*100) %>% 
+  arrange(desc(?????)) %>%
+  filter(?? > ???)
+```
+```{r filtering-trueshooting-solution}
+players %>%
+  mutate(trueshooting = (PTS/(2*(FGA + (.44*FTA))))*100) %>%
+  arrange(desc(trueshooting)) %>%
+  filter(MP > 100)
+```
+```{r filtering-trueshooting-check}
+grade_this_code()
+```
+
+If you did it right, now you get South Carolina's Nathan Nelson, who played in 15 games and was on the floor for 113 minutes. So he played regularly, but not a lot. But in that time, he only attempted 14 shots, and made 64 percent of them. In other words, when he shot, he probably scored. He just rarely shot. 
+
+So is 100 minutes our level? Here's the truth -- there's not really an answer here. We're picking a cutoff. If you can cite a reason for it and defend it, then it probably works. 
+
+## Top list
+
+One last little dplyr trick that's nice to have in the toolbox is a shortcut for selecting only the top values for your dataset. Want to make a Top 10 List? Or Top 25? Or Top Whatever You Want? It's easy. 
+
+So what are the top 10 Power Five schools by season attendance. All we're doing here is chaining commands together with what we've already got. We're *filtering* by our list of Power Five conferences, we're *selecting* the three fields we need, now we're going to *arrange* it by total attendance in 2018 and then we'll introduce the new function: `top_n`. The `top_n` function just takes a number. So we want a top 10 list? Take what you did above and just add `top_n` to the end with a number inside the ().
+
+```{r selecting-top-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
+powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+
+NAMEOFDATA %>% 
+  filter(???? %in% ??????) %>% 
+  select(???????, ??????, `????`) %>%
+  arrange(desc(`????`)) %>%
+  top_n(??)
+```
+```{r selecting-top-power-solution}
+powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
+
+attendance %>%
+  filter(Conference %in% powerfive) %>% 
+  select(Institution, Conference, `2018`) %>%
+  arrange(desc(`2018`)) %>%
+  top_n(10)
+```
+```{r selecting-top-power-check}
+grade_this_code()
+```
+That's all there is to it. Just remember -- for it to work correctly, you need to sort your data BEFORE you run top_n. Otherwise, you're just getting the first 10 values in the list. The function doesn't know what field you want the top values of. You have to do it. 

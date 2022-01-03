@@ -1,5 +1,5 @@
 ---
-title: "Lesson 2: Aggregates"
+title: "Lesson 3: Aggregates"
 output: 
   learnr::tutorial:
     progressive: true
@@ -62,8 +62,6 @@ grade_this_code()
 
 ## Loading data
 
-### Exercise: Load data to work with it 
-
 The first thing we need to do is get some data to work with. We do that by reading it in. In our case, we're going to read data from a csv file -- a comma-separated values file.
 
 The CSV file we're going to read from is a [Basketball Reference](https://www.basketball-reference.com/leagues/NBA_2020_advanced.html) page of advanced metrics for NBA players this season. The Sports Reference sites are a godsend of data, a trove of stuff, and we're going to use it a lot in this class.
@@ -117,9 +115,13 @@ nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaadvancedpl
 ```{r load-data-exercise-check}
 grade_this_code()
 ```
+
+### Exercise 1: Using head to see your data 
+
 Now we can inspect the data we imported. What does it look like? What's in it? What do we have to work with? 
 
 To do that, we use `head()` and **put the name of the variable we created above between the parenthesis** to show the headers and **the first six rows of data**. 
+
 ```{r head-data, exercise=TRUE, exercise.setup = "load-data"}
 head(??????)
 ```
@@ -135,7 +137,9 @@ grade_this_code()
 
 Let's look at this. As you can see by the data, we have six players, which is what we expect from `head()`. But notice the first row -- the headers. We have things like Tm and Pos for team and position. And we have a lot of number columns, showing everything from minutes played (MP) to VORP, which stands for Value Over Replacement Player. 
 
-Why do this? It gives us a glimpse of the data. Which ... conveniently ... is also a way to look at your data, and it works the same way as `head()` 
+### Exercise 2: Using glimpse to see your data 
+
+Why do this? Why use head? It gives us a glimpse of the data. Which ... conveniently ... is also a way to look at your data, and it works the same way as `head()` 
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
 glimpse(??????)
@@ -153,8 +157,6 @@ grade_this_code()
 Either of these will guide you with what you have to work with in the coming problems. 
 
 ## Answering questions with code
-
-### Group and count
 
 What if we wanted to know how many players there were by position, i.e. how many centers are there in the NBA? Or guards? To do that by hand, we'd have to take each of the 651 records and sort them into piles. Centers over here. Forwards over here. We'd put them in groups and then count them.
 
@@ -175,7 +177,10 @@ head(nbaplayers)
 ```{r head-review-check}
 grade_this_code()
 ```
+
 That block of code you just ran has two hints for the code block you'll have to complete later: What data are you using? What field in that data do you want to group by? Keep those in mind.
+
+### Exercise 3: Group by and count
 
 After we group our data together by the thing we want to group it by, we need to count how many things are in each group. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want to summarize. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something. 
 
@@ -203,6 +208,8 @@ grade_this_code()
 </div>
 In this case, we wanted to group together positions, signified by the field name `Pos`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](http://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are. 
 
+### Exercise 4: Arranging data
+
 And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This %>% and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. In arrange, we need to tell it what we are arranging by. **If you have group_by, then whatever you are arranging by will *always* come from inside summarize.** The pattern looks like this:
 
 ```{r group-by-2, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
@@ -229,7 +236,7 @@ grade_this_code()
 </div>
 The most common position in the NBA? Shooting guard, followed by power forward. 
 
-### Grouping by more than one thing
+### Exercise 5: Grouping by more than one thing 
 
 We can, if we want, group by more than one thing. Which team has the most of a single position? To do that, we can group by the team -- called Tm in the data -- and position, or Pos in the data:
 
@@ -261,7 +268,7 @@ Valuable lesson: whoever collects the data has opinions on how to solve problems
 
 Sacramento has 9 power forwards. Brooklyn has 8 shooting guards, as do the Lakers. You can learn a bit about how a team is assembled by looking at these simple counts.
 
-### Other aggregates: Mean and median
+### Exercise 6: More in summarize 
 
 In the last example, we grouped some data together and counted it up, but there's so much more you can do. **You can do multiple measures in a single step as well.**
 
@@ -297,10 +304,12 @@ So there's 651 players in the data. Let's look at shooting guards. The average s
 
 Why? 
 
-Let's let sort help us. Remember, if you have group_by, then what is in arrange comes from a name you created in summarize. In this case, we don't have group_by, so what goes in arrange is just the field name.
+### Exercise 7: Arranging two ways 
+
+Let's let arrange help us. Remember, if you have group_by, then what is in arrange comes from a name you created in summarize. In this case, we don't have group_by, so what goes in arrange is just the field name. Let's put this in order of minutes played.
 
 ```{r group-by-5, exercise=TRUE, exercise.setup = "load-data"}
-nbaplayers %>% arrange(desc(MP))
+nbaplayers %>% arrange(desc(??))
 ```
 ```{r group-by-5-solution}
 nbaplayers %>% arrange(desc(MP))
@@ -308,13 +317,14 @@ nbaplayers %>% arrange(desc(MP))
 ```{r group-by-5-check}
 grade_this_code()
 ```
+
 The player with the most minutes on the floor is a shooting guard. Shooting guard is the most common position, so that means there's CJ McCollum rolling up 2,556 minutes in a season, and then there's Cleveland Cavalier's sensation J.P. Macura. Never heard of J.P. Macura? Might be because he logged one minute in one game this season. 
 
 That's a huge difference.
 
 So when choosing a measure of the middle, you have to ask yourself -- could I have extremes? Because a median won't be sensitive to extremes. It will be the point at which half the numbers are above and half are below. The average or mean will be a measure of the middle, but if you have a bunch of pine riders and then one iron man superstar, the average will be wildly skewed. 
 
-## Even more aggregates
+### Exercise 8: Even more aggregatess
 
 There's a ton of things we can do in summarize -- we'll work with more of them as the course progresses -- but here's a few other questions you can ask.
 
@@ -328,7 +338,8 @@ Which position in the NBA plays the most minutes? And what is the highest and lo
     avgminutes = mean(MP), 
     minminutes = min(MP),
     maxminutes = max(MP),
-    stdev = sd(MP)) %>% arrange(desc(total))
+    stdev = sd(MP)) %>% 
+  arrange(desc(total))
 ```
 ```{r group-by-6-solution}
 nbaplayers %>% 
@@ -338,7 +349,8 @@ nbaplayers %>%
     avgminutes = mean(MP), 
     minminutes = min(MP),
     maxminutes = max(MP),
-    stdev = sd(MP)) %>% arrange(desc(total))
+    stdev = sd(MP)) %>% 
+  arrange(desc(total))
 ```
 ```{r group-by-6-check}
 grade_this_code()
