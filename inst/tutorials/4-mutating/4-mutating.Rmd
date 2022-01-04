@@ -83,6 +83,8 @@ head(attendance)
 grade_this_code()
 ```
 
+### Exercise 1: Calculating percent change. 
+
 The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2018\` as the new data, and we'll use \`2017\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year. Similar to summarize, we'll want to give what we create a name using =. 
 
 Replace the words in all caps with the correct parts and name the new column we're creating as change. **NOTE: The backticks in the previous paragraph -- the key to the left of the 1 key, NOT the apostrophe -- are very important here.** Column names that start with numbers -- or are numbers -- have to be wrapped in backticks. Otherwise, our code thinks they're numbers, not column names.  
@@ -92,7 +94,7 @@ NAMEOFDATA %>%
   mutate(NEWCOLUMNNAME = (NEWYEAR - OLDYEAR)/OLDYEAR
 ) 
 ```
-```{r mutate-change-solution}
+```{r mutate-change-solution, exercise.reveal_solution = FALSE}
 attendance %>% mutate(
   change = (`2018` - `2017`)/`2017`
 ) 
@@ -101,14 +103,16 @@ attendance %>% mutate(
 grade_this_code()
 ```
 
-What do we see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100. 
+What do we see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100.
+
+### Exercise 2: Changing a decimal to a percentage.
 
 ```{r mutate-change-percent, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
 NAMEOFDATA %>%
   mutate(NEWCOLUMNNAME = ((NEWYEAR - OLDYEAR)/OLDYEAR)*???
 ) 
 ```
-```{r mutate-change-percent-solution}
+```{r mutate-change-percent-solution, exercise.reveal_solution = FALSE}
 attendance %>% mutate(
   change = ((`2018` - `2017`)/`2017`)*100
 ) 
@@ -119,12 +123,14 @@ grade_this_code()
 
 Now, does this ordering do anything for us? No. We want the fastest changing attenance at the top, not an alphabetical listing. Let's fix that with arrange. 
 
+### Exercise 3: Arranging by our new number 
+
 ```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
 NAMEOFDATA %>%
   mutate(NEWCOLUMNNAME = ((NEWYEAR - OLDYEAR)/OLDYEAR)*???
 ) %>% arrange(desc(?????))
 ```
-```{r mutate-change-percent-arrange-solution}
+```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE}
 attendance %>% mutate(
   change = ((`2018` - `2017`)/`2017`)*100
 ) %>% arrange(desc(change))
@@ -193,7 +199,11 @@ glimpse(nbaplayers)
 grade_this_code()
 ```
 
-Note from glimpse what columns we need. Points are from a column labeled what? What about Field Goals Attempted and Free Throws Attempted? Look for the \$. Those indicate each **column** name in the dataset. The word or abbreviation next to the \$ is a column name. For instance, MP is Minutes Played. Note which column names have backticks around them. Why? Because they contain symbols. Once we know the names of the columns we need -- Points, Field Goals Attempted and Free Throws Attempted -- we can turn this into code. And what question does that code ask?
+Note from glimpse what columns we need. Points are from a column labeled what? What about Field Goals Attempted and Free Throws Attempted? Look for the \$. Those indicate each **column** name in the dataset. The word or abbreviation next to the \$ is a column name. For instance, MP is Minutes Played. Note which column names have backticks around them. Why? Because they contain symbols. 
+
+### Exercise 4: Calculating true shooting percentage
+
+Once we know the names of the columns we need -- Points, Field Goals Attempted and Free Throws Attempted -- we can turn this into code. And what question does that code ask?
 
 Who had the best true shooting season last year? Replace the words in all caps and the ????? and find out.
 
@@ -202,7 +212,7 @@ NAMEOFDATA %>%
   mutate(trueshooting = (POINTSCOLUMNNAME/(2*(FIELDGOALSATTEMPTEDCOLUMNNAME + (.44*FREETHROWSATTEMPTEDCOLUMNNAME))))*100) %>% 
   arrange(desc(?????))
 ```
-```{r mutate-trueshooting-solution}
+```{r mutate-trueshooting-solution, exercise.reveal_solution = FALSE}
 players %>%
   mutate(trueshooting = (PTS/(2*(FGA + (.44*FTA))))*100) %>%
   arrange(desc(trueshooting))

@@ -53,7 +53,7 @@ What that means is when you look at a mathematical formula, you do the calculati
 ```{r addition, exercise=TRUE, exercise.reveal_solution = FALSE}
 
 ```
-```{r addition-solution}
+```{r addition-solution, exercise.reveal_solution = FALSE}
 17+34
 ```
 ```{r addition-check}
@@ -107,7 +107,7 @@ We're going to name the first variable HomeRuns and the second variable Games. *
 
 *Write the code necessary to create the variables and set it to the number of home runs Nebraska hit in the 2021 season and the number of games played.*
 
-```{r variables-one, exercise=TRUE, exercise.reveal_solution = FALSE}
+```{r variables-one, exercise=TRUE}
 
 ```
 ```{r variables-one-hint}
@@ -115,7 +115,7 @@ HomeRuns <- ??
 Games <- ??
 SOMETHING / SOMETHING
 ```
-```{r variables-one-solution}
+```{r variables-one-solution, exercise.reveal_solution = FALSE}
 HomeRuns <- 59
 Games <- 48
 HomeRuns / Games

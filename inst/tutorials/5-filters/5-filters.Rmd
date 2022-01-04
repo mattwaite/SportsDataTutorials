@@ -91,6 +91,8 @@ grade_this_code()
 
 Now that we can see the column names, we now know Institutions are where the names of the universities are. Replace the all caps and question marks here and see if you can get only Nebraska.
 
+### Exercise 1: Dear Old Nebraska U 
+
 ```{r filtering-nebraska, exercise=TRUE, exercise.setup = "filtering-load-data"}
 NAMEOFDATA %>% filter(NAMEOFCOLUMN == "?????")
 ```
@@ -100,6 +102,8 @@ attendance %>% filter(Institution == "Nebraska")
 ```{r filtering-nebraska-check}
 grade_this_code()
 ```
+
+### Exercise 2: Big Stadiums Only
 
 What if we want to see schools that had a half a million people or more buy tickets to a football game in 2018? NOTE THE BACKTICKS. 
 
@@ -127,8 +131,9 @@ attendance %>% filter(Conference == "Big 10" | Conference == "SEC" | Conference 
 grade_this_code()
 ```
 
-
 But that's a lot of repetitive code. And a lot of typing. And typing is the devil. So what if we could create a list and pass it into the filter? It's pretty simple.
+
+### Exercise 3: Filtering with a list
 
 We can create a new variable -- remember variables can represent just about anything -- and create a list. To do that we use the `c` operator, which stands for concatenate. That just means take all the stuff in the parenthesis after the c and bunch it into a list. 
 
@@ -150,7 +155,9 @@ grade_this_code()
 
 ## Selecting data to make it easier to read
 
-So now we have our Power Five list. What if we just wanted to see attendance from the most recent season and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Institution, Conference and the 2018 season.
+So now we have our Power Five list. What if we just wanted to see attendance from the most recent season and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Institution, Conference and the 2018 season. NOTE: Watch those backticks. 
+
+### Exercise 4: Select to simplify 
 
 ```{r selecting-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
 powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
@@ -191,6 +198,8 @@ grade_this_code()
 
 In the previous module, we found that Weber State's Jake Ferguson was your One Shot One Kill sniper in the COVID season. But in most contests, like the batting title in Major League Baseball, there's a minimum number of X to qualify. In baseball, it's at bats. In basketball, it attempts. So let's set a floor and see how it changes. 
 
+### Exercise 5: Filtering to set a floor for inclusion 
+
 What if we said you had to have played 100 minutes in a season? The top players in college basketball play more than 1000 minutes in a season. So 100 is not that much. Let's add a filter to what we did last module and see how it changes.
 
 ```{r filtering-trueshooting, exercise=TRUE, exercise.setup = "filtering-load-player-data", message=FALSE}
@@ -199,7 +208,7 @@ NAMEOFDATA %>%
   arrange(desc(?????)) %>%
   filter(?? > ???)
 ```
-```{r filtering-trueshooting-solution}
+```{r filtering-trueshooting-solution, exercise.reveal_solution = FALSE}
 players %>%
   mutate(trueshooting = (PTS/(2*(FGA + (.44*FTA))))*100) %>%
   arrange(desc(trueshooting)) %>%
@@ -217,6 +226,8 @@ So is 100 minutes our level? Here's the truth -- there's not really an answer he
 
 One last little dplyr trick that's nice to have in the toolbox is a shortcut for selecting only the top values for your dataset. Want to make a Top 10 List? Or Top 25? Or Top Whatever You Want? It's easy. 
 
+### Exercise 6: Top N lists
+
 So what are the top 10 Power Five schools by season attendance. All we're doing here is chaining commands together with what we've already got. We're *filtering* by our list of Power Five conferences, we're *selecting* the three fields we need, now we're going to *arrange* it by total attendance in 2018 and then we'll introduce the new function: `top_n`. The `top_n` function just takes a number. So we want a top 10 list? Take what you did above and just add `top_n` to the end with a number inside the ().
 
 ```{r selecting-top-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
@@ -228,7 +239,7 @@ NAMEOFDATA %>%
   arrange(desc(`????`)) %>%
   top_n(??)
 ```
-```{r selecting-top-power-solution}
+```{r selecting-top-power-solution, exercise.reveal_solution = FALSE}
 powerfive <- c("SEC", "Big Ten", "Pac-12", "Big 12", "ACC")
 
 attendance %>%

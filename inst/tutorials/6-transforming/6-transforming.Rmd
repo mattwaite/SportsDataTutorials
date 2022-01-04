@@ -6,7 +6,7 @@ output:
     allow_skip: true
 runtime: shiny_prerendered
 description: >
-  Learn how to narrow in on what's important and remove what isn't.
+  Learn how to turn data on it's side and back again.
 ---
 
 ```{r setup, include=FALSE}
@@ -88,12 +88,14 @@ To do that, we use `pivot_longer` because we're making wide data long. `pivot_lo
 
 Given our data, we have Intitution, Conference, and then a bunch of columns that are years. What we want to see is something like Institution, Conference, Year, Attendance. That way, we get Nebraska, Big Ten, 2017, 12345 on one row. Then the next row is Nebraska, Big Ten, 2018, 12345. And so on. Instead of one row, one institution, it's that each year for each institution is it's own row. If we have six years of data, we have six rows of Nebraska. And six rows of Iowa, god forbid.
 
+### Exercise 1: Making data longer 
+
 The hardest part of pivoting longer is telling it which columns to pivot. You spell this out in `cols`. With simpler datasets, you can just say which ones. The columns we want to pivot are the ones with the numbers -- the year columns. There are some shortcuts to help us. Since all of the columns we want to make rows start with 20, we can use that pattern in our `cols` directive . Then we give that column a name -- Year -- and the values for each year need a name too. Those are the attendance figure, so let's call those Attendance. Replace the all caps here and you can see how it works.
 
 ```{r pivoting-longer, exercise=TRUE, exercise.setup = "transforming-load-data"}
 NAMEOFDATA %>% pivot_longer(cols = starts_with("20"), names_to = "????", values_to = "??????????")
 ```
-```{r pivoting-longer-solution}
+```{r pivoting-longer-solution, exercise.reveal_solution = FALSE}
 attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
 ```
 ```{r pivoting-longer-check}
@@ -112,48 +114,58 @@ In some cases, you're going to be given long data - six Nebraskas and six Iowas 
 
 Fortunately, pivoting wider is easier than pivoting longer. We don't have to specify what columns are going to be pivoted in a cols directive. We do that in `names_from` and `values_from`. And those names and values? Those are actual column names instead of text, so no quote marks.
 
-Let's assign what we did above and create something called `longdata`. Then we'll use pivot wider to make our long data wide again. 
+### Exercise 2: Making long data wide 
 
-```{r pivoting-longer, exercise=TRUE, exercise.setup = "transforming-load-data"}
+Let's assign what we did above and create something called `longdata`. Then we'll use pivot wider to make our long data wide again. To `pivot_wider`, we just need to say where our column names are coming from. The hint for what those columns are called? In this case, look in `pivot_longer`.  
+
+```{r pivoting-wider, exercise=TRUE, exercise.setup = "transforming-load-data"}
 ???????? <- NAMEOFDATA %>% pivot_longer(cols = starts_with("20"), names_to = "????", values_to = "??????????")
 
 longdata %>% pivot_wider(names_from = ????, values_from = ??????????)
 ```
-```{r pivot-longer-hint}
+```{r pivoting-wider-solution, exercise.reveal_solution = FALSE}
+longdata <- attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
 
+longdata %>% pivot_wider(names_from = Year, values_from = Attendance)
 ```
-```{r pivoting-longer-solution}
-attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
-```
-```{r pivoting-longer-check}
+```{r pivoting-wider-check}
 grade_this_code()
 ```
 
-
-
-To `pivot_wider`, we just need to say where our column names are coming from -- the Year -- and where the data under it should come from -- Attendance. 
-
-```{r}
-longdata %>% pivot_wider(names_from = Year, values_from = Attendance)
-```
-
 And just like that, we're back. 
-
-## Why this matters
 
 This matters because certain visualization types need wide or long data. A significant hurdle you will face for the rest of the semester is getting the data in the right format for what you want to do. 
 
 So let me walk you through an example using this data. 
 
-Let's look at Nebraska's attendance over the time period. In order to do that, I need long data because that's what the charting library, `ggplot2`, needs. You're going to learn a lot more about ggplot later.
+Let's look at Nebraska's attendance over the time period. In order to do that, I need long data because that's what the charting library, `ggplot2`, needs. You're going to learn a lot more about ggplot later, so don't worry about that now.
 
-```{r}
-nebraska <- longdata %>% filter(Institution == "Nebraska")
 ```
+longdata <- attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
 
-Now that we have long data for just Nebraska, we can chart it.
+nebraska <- longdata %>% filter(Institution == "Nebraska")
 
-```{r}
+ggplot(nebraska, aes(x=Year, y=Attendance, group=1)) + 
+  geom_line() + 
+  scale_y_continuous(labels = scales::comma) + 
+  labs(x="Year", y="Attendance", title="We'll all stick together?", subtitle="It's not as bad as you think -- they widened the seats, cutting the number.", caption="Source: NCAA | By Matt Waite", color = "Outcome") +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.title.y = element_blank(),
+    axis.text = element_text(size = 7),
+    axis.ticks = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    legend.position="bottom"
+  )
+```
+```{r longchart, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "transforming-load-data"}
+longdata <- attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
+
+nebraska <- longdata %>% filter(Institution == "Nebraska")
+
 ggplot(nebraska, aes(x=Year, y=Attendance, group=1)) + 
   geom_line() + 
   scale_y_continuous(labels = scales::comma) + 
