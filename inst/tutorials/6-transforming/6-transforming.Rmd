@@ -25,7 +25,7 @@ You are soon going to discover that long before you can visualize data, **you ne
 
 But what if your visualization library needs one row for each measure? So state, data type and the data. Nebraska, Population, 1,929,000. That's one row. Then the next row is Nebraska, Average Life Expectancy, 76. That's the next row. That's where recasting your data comes in. 
 
-We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of college football attendance to demonstrate. 
+We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of college football attendance to demonstrate. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
@@ -86,7 +86,7 @@ As you can see, each row represents a school, and then each column represents a 
 
 To do that, we use `pivot_longer` because we're making wide data long. `pivot_longer` is a function, much like `summarize` and `filter` in that it takes input. In this case, pivot_longer needs three things: what columns are getting pivoted, and what we need to name the new columns that are getting pivoted. Those names are called `names_to` and `values_to` because one is going to be a label and one is going to be a ... value. 
 
-Given our data, we have Intitution, Conference, and then a bunch of columns that are years. What we want to see is something like Institution, Conference, Year, Attendance. That way, we get Nebraska, Big Ten, 2017, 12345 on one row. Then the next row is Nebraska, Big Ten, 2018, 12345. And so on. Instead of one row, one institution, it's that each year for each institution is it's own row. If we have six years of data, we have six rows of Nebraska. And six rows of Iowa, god forbid.
+Given our data, we have Institution, Conference, and then a bunch of columns that are years. What we want to see is something like Institution, Conference, Year, Attendance. That way, we get Nebraska, Big Ten, 2017, 12345 on one row. Then the next row is Nebraska, Big Ten, 2018, 12345. And so on. Instead of one row, one institution, it's that each year for each institution is it's own row. If we have six years of data, we have six rows of Nebraska. And six rows of Iowa, god forbid.
 
 ### Exercise 1: Making data longer 
 

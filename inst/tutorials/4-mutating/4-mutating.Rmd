@@ -37,7 +37,7 @@ library(tidyverse)
 grade_this_code()
 ```
 
-Now you'll need a common and simple dataset of total attendance at NCAA football games over the last few seasons. You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this.**
+Now you'll need a common and simple dataset of total attendance at NCAA football games over the last few seasons. You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
@@ -149,7 +149,7 @@ Basketball nerds, because of these weaknesses, have created a new metric called 
 
 Using `dplyr` and `mutate`, we can calculate true shooting percentage. So let's look at a new dataset, one of every college basketball player's season stats in 2020-21 season. It's a dataset of more than 5,300 players, and we've got 59 variables -- one of them is True Shooting Percentage, but we're going to ignore that. 
 
-You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this.**
+You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 dllink <- download_link(

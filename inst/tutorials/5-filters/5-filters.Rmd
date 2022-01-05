@@ -25,7 +25,7 @@ More often than not, we have more data than we want. Sometimes we need to be rid
 
 **Selecting simply returns only the fields named**. So if you only want to see School and Attendance, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error.  
 
-Let's work with our football attendance data to show some examples. You can download the data here if you want to use it in your own notebook -- and this is the same data we used in the mutating tutorial, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this.**
+Let's work with our football attendance data to show some examples. You can download the data here if you want to use it in your own notebook -- and this is the same data we used in the mutating tutorial, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)

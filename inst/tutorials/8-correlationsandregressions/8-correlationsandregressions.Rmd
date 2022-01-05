@@ -1,0 +1,311 @@
+---
+title: "Lesson 8: Correlations and regressions"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to see how related two numbers are and make a model.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Correlations and regression
+
+Throughout sports, you will find no shortage of opinions. From people yelling at their TV screens to an entire industry of people paid to have opinions, there are no shortage of reasons why this team sucks and that player is great. They may have their reasons, but a better question is, does that reason really matter? 
+
+Can we put some numbers behind that? Can we prove it or not? 
+
+This is what we're going to start to answer. And we'll do it with correlations and regressions.
+
+First, we need data from the 2020 college football season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+Then load the tidyverse.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+To do this, we need all FBS college football teams and their season stats from last year. Now import the data.
+
+```{r correlations-load-data, message=FALSE, warning=FALSE}
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv")
+```
+```{r correlations-load-data-exercise, exercise = TRUE}
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv")
+```
+```{r correlations-load-data-exercise-solution}
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv")
+```
+```{r correlations-load-data-exercise-check}
+grade_this_code()
+```
+
+How much, over the course of a season, does a thing matter? That's the question you're going to answer. 
+
+In our case, we want to know how much does a team's accumulated penalties influence the number of points they score in a season? How much difference can we explain in points with penalties? 
+
+We're going to use two different methods here and they're closely related. Correlations -- specifically the Pearson Correlation Coefficient -- is a measure of how related two numbers are in a linear fashion. In other words -- if our X value goes up one, what happens to Y? If it also goes up 1, that's a perfect correlation. X goes up 1, Y goes up 1. Every time. 
+
+Correlation coefficients are a number between 0 and 1, with zero being no correlation and 1 being perfect correlation **if our data is linear**. We'll soon go over scatterplots to visually determine if our data is linear, but for now, we have a hypothesis: More penalties are bad. Penalties hurt. So if a team gets lots of them, they should have worse outcomes than teams that get few of them. That is an argument for a linear relationship between them.
+
+But is there one?
+
+Let's first take a look at the data. 
+
+```{r head-data, exercise=TRUE, exercise.setup = "correlations-load-data"}
+head(????????????)
+```
+```{r head-data-solution}
+head(correlations)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+### Exercise 1: Correlating penalty yards and points.
+
+First, we're going create a new dataframe called `newcorrelations` that takes our data that we imported and adds a column called `differential` because we don't have separate offense and defense penalties, and then we'll use correlations to see how related those two things are.
+
+Then, in R, there is a `cor` function, and it works much the same as `mean` or `median`. So we want to see if `differential` is correlated with `TotalPenaltyYards`, which is the yards of penalties a team gets in a game. We do that by referencing `differential` and `TotalPenaltyYards` and specifying we want a `pearson` correlation. The number we get back is the correlation coefficient.
+
+```{r correlation1, exercise=TRUE, exercise.setup = "correlations-load-data"}
+??????????????? <- ??????????? %>% 
+  mutate(
+    differential = TeamScore - ?????????????, 
+    TotalPenalties = ?????????+DefPenalties, 
+    TotalPenaltyYards = PenaltyYds+?????????????
+    )
+
+???????????????? %>% 
+  summarise(
+    correlation = cor(differential, ??????????????????, method="pearson")
+    )
+```
+```{r correlation1-solution, exercise.reveal_solution = FALSE}
+newcorrelations <- correlations %>% 
+  mutate(
+    differential = TeamScore - OpponentScore, 
+    TotalPenalties = Penalties+DefPenalties, 
+    TotalPenaltyYards = PenaltyYds+DefPenaltyYds
+    )
+
+newcorrelations %>% 
+  summarise(
+    correlation = cor(differential, TotalPenaltyYds, method="pearson")
+    )
+```
+```{r correlation1-check}
+grade_this_code()
+```
+
+So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, penalty yards and whether or not the team scores more points than it give up are at -0.0068. You could say they're .7 percent related toward the negative -- more penalties, the lower your differential. Another way to say it? They're 99.3 percent not related.
+
+### Exercise 2: Correlating penalties and points.
+
+What about the total number of penalties instead of the yards?
+
+```{r correlation2, exercise=TRUE, exercise.setup = "correlations-load-data"}
+??????????????? <- ??????????? %>% 
+  mutate(
+    differential = TeamScore - ?????????????, 
+    TotalPenalties = ?????????+DefPenalties, 
+    TotalPenaltyYards = PenaltyYds+?????????????
+    )
+
+???????????????? %>% 
+  summarise(
+    correlation = cor(differential, ??????????????????, method="pearson")
+    )
+```
+```{r correlation2-solution, exercise.reveal_solution = FALSE}
+newcorrelations <- correlations %>% 
+  mutate(
+    differential = TeamScore - OpponentScore, 
+    TotalPenalties = Penalties+DefPenalties, 
+    TotalPenaltyYards = PenaltyYds+DefPenaltyYds
+    )
+
+newcorrelations %>% 
+  summarise(
+    correlation = cor(differential, TotalPenalties, method="pearson")
+    )
+```
+```{r correlation2-check}
+grade_this_code()
+```
+
+So wait, what does this all mean? 
+
+It means that when you look at every game in college football, the number of penalties and penalty yards *does* have a negative impact on the score difference between your team and the other team. But the relationship between penalties, penalty yards and the difference between scores is *barely* anything at all. Like 99+ percent plus not related.
+
+Normally, at this point, you'd quit while you were ahead. A correlation coefficient that shows there's no relationship between two things means stop. It's pointless to go on. But let's beat a dead horse a bit for the sake of talk radio callers who want to complain about undisciplined football teams.
+
+Enter regression. Regression is how we try to fit our data into a line that explains the relationship the best. Regressions will help us predict things as well -- if we have a team that has so many penalties, what kind of point differential could we expect? So regressions are about prediction, correlations are about description. Correlations describe a relationship. Regressions help us predict what that relationship means and what it might look like in the real world. Specifically, it tells us how much of the change in a dependent variable can be explained by the independent variable.
+
+Another thing regressions do is give us some other tools to evaluate if the relationship is real or not.
+
+### Exercise 3: Using linear regressions for penalties
+
+Let's use linear modeling to look at penalty yards. 
+
+First things first, we're going to recreate newcorrelations like we did above. We need the numbers in newcorrelations for this as well. Then we're going to create a new object called fit -- named after the line of best fit, which is the regression line. It's going to use a new function -- `lm`. Then we need to say X is approximately modeled by Y. X will be our differential. Y will be the total penalty yards. The approximately modeled by is the ~ character. In fact, that's how you read ~ in R. When you see ~, you can say "is approximately modeled by."
+
+```{r regression1, exercise=TRUE, exercise.setup = "correlations-load-data"}
+??????????????? <- ??????????? %>% 
+  mutate(
+    differential = TeamScore - ?????????????, 
+    TotalPenalties = ?????????+DefPenalties, 
+    TotalPenaltyYards = PenaltyYds+?????????????
+    )
+
+fit <- lm(?????????? ~ ??????????????, data = newcorrelations)
+summary(???)
+```
+```{r regression1-solution, exercise.reveal_solution = FALSE}
+newcorrelations <- correlations %>% 
+  mutate(
+    differential = TeamScore - OpponentScore, 
+    TotalPenalties = Penalties+DefPenalties, 
+    TotalPenaltyYards = PenaltyYds+DefPenaltyYds
+    )
+
+fit <- lm(differential ~ TotalPenaltyYards, data = newcorrelations)
+summary(fit)
+```
+```{r regression1-check}
+grade_this_code()
+```
+
+There's three things we need here: 
+
+1. First we want to look at the p-value. It's at the bottom right corner of the output. In the case of Total Penalty Yards, the p-value is .8226. The threshold we're looking for here is .05. If it's less than .05, then the relationship is considered to be *statistically significant*. Significance here does not mean it's a big deal. It means it's not random. That's it. Just that. Not random. So in our case, the relationship between total penalty yards and a team's aggregate point differential are **not statistically significant**. The differences in score difference and penalty yards could be completely random. This is another sign we should just stop with this.
+2. Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between teams aggregate point values can be explained by penalty yards. Our correlation coefficient said they're .7 percent related to each other, but penalty yard's ability to explain the difference between teams? About .08 percent. That's ... not much. It's really nothing. Again, we should quit.
+3. The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is 1.21614 and the TotalPenaltyYards coefficient is -0.00349. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is -0.00349 and b is 1.21614. So we would multiply a teams total penalty yards by -0.00349 and then add 1.21614 to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that your even close with this? About .08 percent. In other words, you've got a 99.92 percent chance of being completely wrong. Did I say we should quit? Yeah. 
+
+So penalty yards are totally meaningless to the outcome of a game.
+
+You can see the problem in a graph. On the X axis is penalty yards, on the y is aggregate score. If these elements had a strong relationship, we'd see a clear pattern moving from right to left, sloping down. On the left would be the teams with few penalties and a positive point differential. On right would be teams with high penalty yards and negative point differentials. Do you see that below?
+
+```{r correlationchart, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
+newcorrelations <- correlations %>% 
+  mutate(
+    differential = TeamScore - OpponentScore, 
+    TotalPenalties = Penalties+DefPenalties, 
+    TotalPenaltyYards = PenaltyYds+DefPenaltyYds
+    )
+
+ggplot(newcorrelations, aes(x=TotalPenaltyYards, y=differential)) + geom_point()
+```
+
+## A more predictive example
+
+So we've **firmly** established that penalties aren't predictive. But what is? 
+
+So instead of looking at penalty yards, let's make a new metric: Net Yards. Can we predict the score differential by looking at the yards a team gained minus the yards they gave up?
+
+### Exercise 4: A second correlation
+
+First, we're going to make a new dataframe called regressions and mutate two new measures: differential -- you did this above -- and NetYards, which is just the offensive yards minus the defensive yards. Look above where you ran head to see what those names are. 
+
+Then, just run your correlations like before.
+
+```{r regression2, exercise=TRUE, exercise.setup = "correlations-load-data"}
+???????????? <- correlations %>% 
+  mutate(
+    differential = ????????? - ????????????,
+    NetYards = ??????????Yards - ???Yards
+    )
+
+regressions %>% 
+  summarise(correlation = cor(differential, ????????, method="pearson"))
+```
+```{r regression2-solution, exercise.reveal_solution = FALSE}
+regressions <- correlations %>% 
+  mutate(
+    differential = TeamScore - OpponentScore,
+    NetYards = OffensiveYards - DefYards
+    )
+
+regressions %>% 
+  summarise(correlation = cor(differential, NetYards, method="pearson"))
+```
+```{r regression2-check}
+grade_this_code()
+```
+
+Answer: 80 percent. Not a perfect relationship, but very good. But how meaningful is that relationship and how predictive is it?
+
+### Exercise 5: A second regression
+
+```{r regression3, exercise=TRUE, exercise.setup = "correlations-load-data"}
+???????????? <- correlations %>% 
+  mutate(
+    differential = ????????? - ????????????,
+    NetYards = ??????????Yards - ???Yards
+    )
+
+regressions %>% 
+  summarise(correlation = cor(differential, ????????, method="pearson"))
+```
+```{r regression3-solution, exercise.reveal_solution = FALSE}
+regressions <- correlations %>% 
+  mutate(
+    differential = TeamScore - OpponentScore,
+    NetYards = OffensiveYards - DefYards
+    )
+
+net <- lm(differential ~ ????????, data = regressions)
+summary(net)
+```
+```{r regression3-check}
+grade_this_code()
+```
+
+First we check p-value. See that e-16? That means scientific notation. That means our number is 2.2 times 10 to the -16 power. So -.000000000000000022. That's sixteen zeros between the decimal and 22. Is that less than .05? Uh, yeah. So this is really, really, really not random. But anyone who has watched a game of football knows this is true. It makes intuitive sense. 
+
+Second, Adjusted R-squared: 0.6414. So we can predict a whopping 64 percent of the difference in the score differential by simply looking at the net yards the team has.
+
+Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = 0.101704x + 0.311030`. So if we were applying this, let's look at Nebraska's 26-20 loss to Iowa in 2020. Nebraska's net yards that game? 16. That's right -- we outgained them.  
+
+```{r calculate, exercise=TRUE}
+(0.101704*16)+0.311030 
+```
+```{r calculate-solution}
+(0.101704*16)+0.311030 
+```
+```{r calculate-check}
+grade_this_code()
+```
+
+So by our model, Nebraska should have won by 1.94 points. Some games are closer than others. But when you can explain 65 percent of the difference, this is the kind of result you get. What would improve the model? Using more data to start. And using more inputs.
