@@ -179,6 +179,8 @@ head(penalties)
 grade_this_code()
 ```
 
+### Exercise 2: Create another model.
+
 For this we'll make an object called pfit -- for penalty fit -- similar to what we did before. This time, we'll say differential is approximately modeled by TotalPenaltyYards. 
 
 ```{r regression3, exercise=TRUE, exercise.setup = "correlations-load-data"}
@@ -199,7 +201,11 @@ So from top to bottom:
 * Our adjusted R-squared is ... -0.0008935. Not much at all. 
 * Our p-value is ... 0.8307, which is more than than .05. 
 
-So what we can say about this model is that it's statistically insignificant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. Just like a previous exercise, we'll add precited and residuals to our dataframe. Then we'll arrange it, and use a little select magic to make it easier to read. 
+So what we can say about this model is that it's statistically insignificant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. 
+
+### Exercise 3: Adding residuals and arranging them.
+
+Just like a previous exercise, we'll add precited and residuals to our dataframe. Then we'll arrange it, and use a little select magic to make it easier to read. 
 
 ```{r regression4, exercise=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties %>% mutate(predicted = predict(????), residuals = ?????????(pfit))
