@@ -1,0 +1,246 @@
+---
+title: "Lesson 12: Bar charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to start turning data into graphics.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(scales)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Intro to ggplot
+
+## The basics
+
+With `ggplot2`, we dive into the world of programmatic data visualization. The `ggplot2` library implements something called the grammar of graphics. The main concepts are: 
+
+* aesthetics - which in this case means the data which we are going to plot
+* geometries - which means the shape the data is going to take
+* scales - which means any transformations we might make on the data
+* facets - which means how we might graph many elements of the same dataset in the same space
+* layers - which means how we might lay multiple geometries over top of each other to reveal new information.
+
+Hadley Wickham, who is behind all of the libraries we have used in this course to date, wrote about his layered grammar of graphics in [this 2009 paper that is worth your time to read](http://byrneslab.net/classes/biol607/readings/wickham_layered-grammar.pdf). 
+
+Here are some `ggplot2` resources you'll want to keep handy: 
+
+* [The ggplot documentation](http://ggplot2.tidyverse.org/reference/index.html)
+* [The ggplot cookbook](http://www.cookbook-r.com/Graphs/)
+
+Let's dive in using data we've already seen before -- football attendance. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will either write the code that adds necessary and required parts to finish it, or you'll export your work into a program like Illustrator to finish the work. 
+
+To begin, we'll use data we've seen before: college football attendance. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/attendance.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+Now load the tidyverse and a library called scales that we'll get into later.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(scales)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(scales)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data.
+
+```{r ggplot-load-data, message=FALSE, warning=FALSE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+
+top10 <- attendance %>%
+  arrange(desc(`2018`)) %>% 
+  top_n(10)
+```
+```{r ggplot-load-data-exercise, exercise = TRUE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r ggplot-load-data-exercise-solution}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r ggplot-load-data-exercise-check}
+grade_this_code()
+```
+
+And let's get a glimpse of the data to remind us what is all there. 
+
+Let's `glimpse` the data because it's very wide and has a lot of columns. 
+
+```{r glimpse-data, exercise=TRUE, exercise.setup = "ggplot-load-data"}
+glimpse(??????????)
+```
+```{r glimpse-data-solution}
+glimpse(attendance)
+```
+```{r glimpse-data-check}
+grade_this_code()
+```
+
+Now that we're set up, when making graphics, you're rarely ever going straight from data to graphic. Normally, you'll have way too much data to visualize, or you need to do something to that data in order to visualize it. In our case, we have way too many schools in our attenance data to make a reasonable bar chart. Our first challenge, then, is to make a top 10 list of schools. 
+
+### Exercise 1: Set up your data. 
+
+To make the top 10 list, we'll use the same tricks we used in the filtering assignment. We're going to arrange by 2018 attendance and use top_n to make our top 10 list to make a dataframe called top10.
+
+```{r ggplot-top, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
+????? <- ?????????? %>%
+  arrange(desc(`????`)) %>% 
+  top_n(??) 
+```
+```{r ggplot-top-solution, exercise.reveal_solution = FALSE}
+top10 <- attendance %>%
+  arrange(desc(`2018`)) %>% 
+  top_n(10)
+```
+```{r ggplot-top-check}
+grade_this_code()
+```
+
+And we can check that it all worked by doing glimpse again on on our new dataframe.
+
+```{r glimpse2-data, exercise=TRUE, exercise.setup = "ggplot-load-data"}
+glimpse(?????)
+```
+```{r glimpse2-data-solution}
+glimpse(top10)
+```
+```{r glimpse2-data-check}
+grade_this_code()
+```
+
+## The bar chart
+
+The easiest thing we can do is create a simple bar chart of our data. **Bar charts show magnitude. They invite you to compare how much more or less one thing is compared to others.**
+
+We could, for instance, create a bar chart of the total attendance. To do that, we simply tell `ggplot2` what our dataset is, what element of the data we want to make the bar chart out of (which is the aesthetic), and the geometry type (which is the geom). It looks like this:
+
+`ggplot() + geom_bar(data=top10, aes(x=Institution))` 
+
+We start with `ggplot()` which is creating a blank canvas for us to work in. The `geom_bar()` is the geometry -- the form the data will take. We will learn many geometries over the next several lessons. `top10` is our data, `aes` means aesthetics, `x=Institution` explicitly tells `ggplot2` that our x value -- our horizontal value -- is the Institution field from the data. Put the schools on the x axis is what that is saying.  And what do we get when we run that? 
+
+```{r ggplot-bar1, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
+ggplot() + geom_bar(data=top10, aes(x=Institution))
+```
+```{r ggplot-bar1-solution, exercise.reveal_solution = FALSE}
+ggplot() + geom_bar(data=top10, aes(x=Institution))
+```
+```{r ggplot-bar1-check}
+grade_this_code()
+```
+
+We get ... weirdness. We expected to see bars of different sizes, but we get all with a count of 1. What gives? Well, this is the default behavior. What we have here is something called a histogram, where `ggplot2` helpfully counted up the number of times the Institution appears and made bars as long as the count. Since we only have one record per Institution, the count is always 1. How do we fix this? By adding `weight` to our aesthetic. 
+
+### Exercise 2: The weight of responsibility
+
+You saw how it was done before. This just adds weight to the aes. The weight is always going to be a number, and our number is the 2018 attendance.
+
+```{r ggplot-bar2, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=Institution, weight=`????`))
+```
+```{r ggplot-bar2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=Institution, weight=`2018`))
+```
+```{r ggplot-bar2-check}
+grade_this_code()
+```
+
+Closer. But ... what order is that in? And what happened to our count numbers on the left? Why are they in scientific notation?
+
+Let's deal with the ordering first. 
+
+### Exercise 3: Reordering
+
+`ggplot2`'s default behavior is to sort the data by the x axis variable. It's in alphabetical order. To change that, we have to `reorder` it. With `reorder`, we first have to tell `ggplot` what we are reordering, and then we have to tell it HOW we are reordering it. So it's reorder(FIELD, SORTFIELD). 
+
+```{r ggplot-bar3, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(??????????, `????`), weight=`????`))
+```
+```{r ggplot-bar3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, `2018`), weight=`2018`))
+```
+```{r ggplot-bar3-check}
+grade_this_code()
+```
+
+Better. We can argue about if the right order is smallest to largest or largest to smallest. But this gets us close. By the way, to sort it largest to smallest, put a negative sign in front of the sort field. 
+
+## Scales
+
+To fix the axis labels, we need try one of the other main elements of the `ggplot2` library, which is transforming a scale. More often than not, that means doing something like putting it on a logarithmic scale or some other kind of transformation. In this case, we're just changing how it's represented. The default in `ggplot2` for large values is to express them as scientific notation. Rarely ever is that useful in our line of work -- regular readers don't think in scientific notation. So we have to transform them into human readable numbers. 
+
+The easiest way to do this is to use a library called `scales` and it's already installed.
+
+To alter the scale, we add a piece to our plot with `+` and we tell it which scale is getting altered and what kind of data it is. In our case, our Y axis is what is needing to be altered, and it's continuous data (meaning it can be any number between x and y). So we need to add `scale_y_continuous` and the information we want to pass it is to alter the labels with a function called `comma`. 
+
+```{r ggplot-bar4, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(??????????, `????`), weight=`????`)) +
+  scale_y_continuous(labels=comma)
+```
+```{r ggplot-bar4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, `2018`), weight=`2018`)) +
+  scale_y_continuous(labels=comma)
+```
+```{r ggplot-bar4-check}
+grade_this_code()
+```
+
+Better. 
+
+## One last trick: coord flip
+
+Sometimes, we don't want vertical bars. Maybe we think this would look better horizontal. Maybe our x-axis labels will never fit on the x-axis. How do we do that? By adding `coord_flip()` to our code. It does what it says -- it inverts the coordinates of the figures.
+
+### Exercise 4: Flip the coordinates
+
+```{r ggplot-bar5, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(??????????, `????`), weight=`????`)) +
+  scale_y_continuous(labels=comma) +
+  ?????_????()
+```
+```{r ggplot-bar5-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, `2018`), weight=`2018`)) +
+  scale_y_continuous(labels=comma) +
+  coord_flip()
+```
+```{r ggplot-bar5-check}
+grade_this_code()
+```
+
+Now we've got something working. There's a lot of work left to do to make this publishable, but we'll get to that in due time.

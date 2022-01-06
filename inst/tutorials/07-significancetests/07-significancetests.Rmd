@@ -19,6 +19,8 @@ tutorial_options(exercise.completion=FALSE)
 
 # Significance tests
 
+## The basics
+
 Now that we've worked with data a little, it's time to start asking more probing questions of our data. One of the most probing questions we can ask -- one that so few sports journalists ask -- is if the difference between this thing and the normal thing is real. 
 
 We had a perfect natural experiment going on in sports to show how significance tests work. The NBA in 2021, to salvage a season and get to the playoffs, put their players in a bubble -- more accurately a hotel complex at Disney World in Orlando -- and had them play games without fans. 

@@ -19,6 +19,8 @@ tutorial_options(exercise.completion=FALSE)
 
 # Filtering
 
+## The basics
+
 More often than not, we have more data than we want. Sometimes we need to be rid of that data. In `dplyr`, there's two ways to go about this: filtering and selecting.
 
 **Filtering creates a subset of the data based on criteria**. All records where the count is greater than 10. All records that match "Nebraska". Something like that. 

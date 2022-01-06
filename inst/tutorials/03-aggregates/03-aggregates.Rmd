@@ -19,6 +19,8 @@ tutorial_options(exercise.completion=FALSE)
 
 ## Introduction 
 
+## The basics
+
 R is a statistical programming language that is purpose built for data analysis.
 
 Base R does a lot, but there are a mountain of external libraries that do things to make R better/easier/more fully featured. We already installed the tidyverse -- or you should have if you followed the instructions for the last assignment -- which isn't exactly a library, but a collection of libraries. Together, they make up the tidyverse. Individually, they are extraordinarily useful for what they do. We can load them all at once using the tidyverse name, or we can load them individually. Let's start with individually. 

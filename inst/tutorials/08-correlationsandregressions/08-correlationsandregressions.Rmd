@@ -19,6 +19,8 @@ tutorial_options(exercise.completion=FALSE)
 
 # Correlations and regression
 
+## The basics
+
 Throughout sports, you will find no shortage of opinions. From people yelling at their TV screens to an entire industry of people paid to have opinions, there are no shortage of reasons why this team sucks and that player is great. They may have their reasons, but a better question is, does that reason really matter? 
 
 Can we put some numbers behind that? Can we prove it or not? 

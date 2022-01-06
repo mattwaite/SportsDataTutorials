@@ -17,6 +17,8 @@ options(tutorial.storage = filesystem_storage("~"))
 
 ## Starting out
 
+## The basics of the basics
+
 R is a programming language, one specifically geared toward statistical analysis. Like all programming languages, it has certain built-in functions and you can interact with it in multiple ways. The first, and most basic, is the console. Think of the console like talking directly to R. It's direct, but it has some drawbacks and some quirks we'll get into later. 
 
 For now, we're going to use windows in this page like console windows. You'll type commands into the boxes below and hit the Run Code button on the top right of the box. Be sure that you're reading closely -- things like spaces, capitalization and spelling all matter. Some things matter to the point that if you miss them, the code won't work. Other things are stylistic. It takes time and practice to know the difference.

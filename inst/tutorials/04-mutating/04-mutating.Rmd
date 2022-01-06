@@ -19,6 +19,8 @@ tutorial_options(exercise.completion=FALSE)
 
 # Mutating data
 
+## The basics
+
 One of the most common data analysis techniques is to look at change over time. The most common way of comparing change over time is through percent change. The math behind calculating percent change is very simple, and you should know it off the top of your head. The easy way to remember it is:
 
 `(new - old) / old` 

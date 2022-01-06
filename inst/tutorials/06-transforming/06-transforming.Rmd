@@ -19,6 +19,8 @@ tutorial_options(exercise.completion=FALSE)
 
 # Transforming data
 
+## The basics
+
 Sometimes long data needs to be wide, and sometimes wide data needs to be long. I'll explain.
 
 You are soon going to discover that long before you can visualize data, **you need to have it in a form that the visualization library can deal with**. One of the ways that isn't immediately obvious is **how your data is cast**. Most of the data you will encounter will be **wide -- each row will represent a single entity with multiple measures for that entity**. So think of states. Your row of your dataset could have the state name, population, average life expectancy and other demographic data. 
