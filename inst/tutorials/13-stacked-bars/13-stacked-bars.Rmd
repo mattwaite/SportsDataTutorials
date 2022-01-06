@@ -1,0 +1,215 @@
+---
+title: "Lesson 13: Stacked bar charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to add nuance to a bar chart.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Stacked bar charts
+
+## The basics
+
+One of the elements of data visualization excellence is **inviting comparison**. Often that comes in showing **what proportion a thing is in relation to the whole thing**. With bar charts, we're showing magnitude of the whole thing. If we have information about the parts of the whole, **we can stack them on top of each other to compare them, showing both the whole and the components**. And it's a simple change to what we've already done. 
+
+We're going to use a dataset of college football games from this season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+Load the tidyverse.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data.
+
+```{r stacked-load-data, message=FALSE, warning=FALSE}
+football <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+
+big <- football %>% 
+  group_by(Conference, Team) %>% 
+  summarise(
+    SeasonRushingYards = sum(RushingYds),
+    SeasonPassingYards = sum(PassingYds),
+  ) %>% filter(Conference == "Big Ten Conference")
+
+bigwide <- big %>% 
+  pivot_longer(
+    cols=starts_with("Season"), 
+    names_to="Type", 
+    values_to="Yards")
+```
+```{r stacked-load-data-exercise, exercise = TRUE}
+football <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+```
+```{r stacked-load-data-exercise-solution}
+football <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+```
+```{r stacked-load-data-exercise-check}
+grade_this_code()
+```
+
+What we have here is every game in college football in 2021. Let's quick take a glimpse.
+
+```{r glimpse-data, exercise=TRUE, exercise.setup = "stacked-load-data"}
+glimpse(??????????)
+```
+```{r glimpse-data-solution}
+glimpse(football)
+```
+```{r glimpse-data-check}
+grade_this_code()
+```
+
+The question we want to answer is this: Who had the most prolific offenses in the Big Ten? And how did they get there? 
+
+So to make this chart, we have to just add one thing to a bar chart like we did in the previous chapter. However, it's not that simple.
+
+### Exercise 1: Preparing your data
+
+We have game data, and we need season data. To get that, we need to do some group by and sum work. And since we're only interested in the Big Ten, we have some filtering to do too. For this, we're going to measure offensive production by rushing yards and passing yards. So if we have all the games a team played, and the rushing and passing yards for each of those games, what we need to do to get the season totals is just add them up. We'll put all of that into a new dataframe called big
+
+```{r stacked-big, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
+??? <- football %>% 
+  group_by(Conference, Team) %>% 
+  summarise(
+    SeasonRushingYards = sum(??????????),
+    SeasonPassingYards = sum(??????????)
+  ) %>% 
+  filter(Conference == "Big Ten Conference")
+```
+```{r stacked-big-solution, exercise.reveal_solution = FALSE}
+big <- football %>% 
+  group_by(Conference, Team) %>% 
+  summarise(
+    SeasonRushingYards = sum(RushingYds),
+    SeasonPassingYards = sum(PassingYds)
+  ) %>% 
+  filter(Conference == "Big Ten Conference")
+```
+```{r stacked-big-check}
+grade_this_code()
+```
+
+By looking at this, we can see we got what we needed. We have 14 teams (though remember that head only shows you six) and numbers that look like season totals for yards. 
+
+```{r head-data, exercise=TRUE, exercise.setup = "stacked-load-data"}
+head(big)
+```
+```{r head-data-solution}
+head(big)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+Now, the problem we have is that ggplot wants long data and this data is wide. 
+
+### Exercise 2: Making wide data long
+
+Remember transforming data? Lesson 6? This is where that work is going to pay off. We need to pivot this data longer. In order to do that, we need to say which columns are being pivoted. Note in the head block above, we have four columns. Two columns are the Team and the Conference. The other columns start with the word Season. That, my friends, is a gigantic hint.
+
+We're going to save this work to a new dataframe called bigwide. 
+
+```{r stacked-pivot, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
+??????? <- ??? %>% 
+  pivot_longer(
+    cols=starts_with("??????"), 
+    names_to="Type", 
+    values_to="Yards")
+```
+```{r stacked-pivot-solution, exercise.reveal_solution = FALSE}
+bigwide <- big %>% 
+  pivot_longer(
+    cols=starts_with("Season"), 
+    names_to="Type", 
+    values_to="Yards")
+```
+```{r stacked-pivot-check}
+grade_this_code()
+```
+
+If this worked, you'll have two rows for each team: One for rushing yards, one for passing yards. This is what ggplot needs. 
+
+```{r head2-data, exercise=TRUE, exercise.setup = "stacked-load-data"}
+head(bigwide)
+```
+```{r head2-data-solution}
+head(bigwide)
+```
+```{r head2-data-check}
+grade_this_code()
+```
+
+### Exercise 3: Making your first plot
+
+Building on what we learned in the last chapter, we know we can turn this into a bar chart with an x value, a weight and a geom_bar. What we are going to add is a `fill`. The `fill` will stack bars on each other based on which element it is. In this case, we can fill the bar by Type, which means it will stack the number of rushing yards on top of passing yards and we can see how they compare. 
+
+```{r stacked-plot1, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=???????, aes(x=????, weight=Yards, fill=????)) + 
+  coord_flip()
+```
+```{r stacked-plot1-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=bigwide, aes(x=Team, weight=Yards, fill=Type)) + 
+  coord_flip()
+```
+```{r stacked-plot1-check}
+grade_this_code()
+```
+
+What's the problem with this chart? 
+
+There's a couple of things, one of which we'll deal with now: The ordering is alphabetical (from the bottom up). So let's `reorder` the teams by Yards.
+
+### Exercise 4: Reordering your bars
+
+```{r stacked-plot2, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=???????, aes(x=reorder(????, ?????), weight=Yards, fill=????)) + 
+  coord_flip()
+```
+```{r stacked-plot2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=bigwide, aes(x=reorder(Team, Yards), weight=Yards, fill=Type)) + 
+  coord_flip()
+```
+```{r stacked-plot2-check}
+grade_this_code()
+```
+
+And just like that ... Ohio State comes out on top. And look who is right in the middle of the pack.
