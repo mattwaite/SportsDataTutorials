@@ -1,0 +1,248 @@
+---
+title: "Lesson 16: Line charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to show change over time.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Line charts
+
+## The basics
+
+So far, we've talked about bar charts -- stacked or otherwise -- are good for showing relative size of a thing compared to another thing. Stacked Bars and Waffle charts are good at showing proportions of a whole. 
+
+**Line charts are good for showing change over time.** 
+
+Let's look at how we can answer this question: Why was Nebraska terrible at basketball last season?
+
+We'll need the logs of every game in college basketball. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/logs21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+Let's start getting all that we need. We can use the tidyverse shortcut. 
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data.
+
+```{r line-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+
+nu <- logs %>% filter(Team == "Nebraska")
+msu <- logs %>% filter(Team == "Michigan State")
+big <- logs %>% filter(Conference == "Big Ten")
+average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
+
+```
+```{r line-load-data-exercise, exercise = TRUE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+```
+```{r line-load-data-exercise-solution}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+```
+```{r line-load-data-exercise-check}
+grade_this_code()
+```
+
+### Exercise 1: Prepare your data
+
+This data has every game from every team in it, so we need to use filtering to limit it, because we just want to look at Nebraska. If you don't remember, flip back to lesson 5. Let's make a new dataframe called nu for Nebraska's games.
+
+```{r nu, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
+?? <- logs %>% filter(Team == "????????")
+```
+```{r nu-solution, exercise.reveal_solution = FALSE}
+nu <- logs %>% filter(Team == "Nebraska")
+```
+```{r nu-check}
+grade_this_code()
+```
+
+We can get a peek at it to make sure it all worked.
+
+```{r head-data, exercise=TRUE, exercise.setup = "line-load-data"}
+head(nu)
+```
+```{r head-data-solution}
+head(nu)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+Because this data has just Nebraska data in it, the dates are formatted correctly, and the data is long data (instead of wide), we have what we need to make line charts.
+
+### Exercise 2: Your first line chart
+
+Line charts, unlike bar charts, do have a y-axis. So in our ggplot step, we have to define what our x and y axes are. In this case, the x axis is our Date -- *the most common x axis in line charts is going to be a date of some variety* -- and y in this case is up to us. We've seen from previous walkthroughs that how well a team shoots the ball has a lot to do with how well a team does in a season, so let's chart that. 
+
+```{r line1, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
+ggplot() + geom_line(data=??, aes(x=????, y=????FGPCT))
+```
+```{r line1-solution, exercise.reveal_solution = FALSE}
+ggplot() + geom_line(data=nu, aes(x=Date, y=TeamFGPCT))
+```
+```{r line1-check}
+grade_this_code()
+```
+
+See some problems here? The first you'll probably see is the long COVID pause the team had to take. The real problem, though is that the Y axis doesn't start with zero. 
+
+### Exercise 3: Zeroing your axes
+
+Using a non-zero axis makes a line chart look more dramatic than it is. To make the axis what you want, you can use `scale_x_continuous` or `scale_y_continuous` and pass in a list with the bottom and top value you want. The bottom value is zero. The upper value is up to you. Let'ss try .7 or 70 percent.
+
+```{r line2, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
+ggplot() + 
+  geom_line(data=??, aes(x=????, y=????FGPCT)) +
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_line(data=nu, aes(x=Date, y=TeamFGPCT)) +
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line2-check}
+grade_this_code()
+```
+
+Note also that our X axis labels are automated. It knows it's a date and it just labels it by month.
+
+## One line line charts are bad 
+
+With datasets, we want to invite comparison. So let's answer the question visually. Let's put two lines on the same chart. How does Nebraska compare to Michigan State, for example? 
+
+When you have multiple datasets from the same data, you can add multiple geoms. All you have to do is swap out the data and add a + between them. 
+
+```{r line3, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
+msu <- logs %>% filter(Team == "???????? ?????")
+
+ggplot() + 
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line3-solution, exercise.reveal_solution = FALSE}
+msu <- logs %>% filter(Team == "Michigan State")
+
+ggplot() + 
+  geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line3-check}
+grade_this_code()
+```
+
+When you're doing this on your own in a notebook, REMEMBER COPY AND PASTE IS A THING. Nothing changes except what data you are using and maybe the color. The less typing you're doing, the better.
+
+So visually speaking, the difference between Nebraska and Michigan State's season is that Michigan State stayed mostly on an even keel, and Nebraska went on a two month swoon.
+
+## A lot of lines = context. 
+
+There are some line charts where a small number are good. A good way to add more context? Add more lines. But unlike what we're doing above, some lines don't need attention. I'll explain.
+
+Let's add all of the Big Ten to our line chart, but this time, we're going to fade them into the background by making them grey. Then, our red line for Nebraska and the green line of Michigan State will really stand out.
+
+### Exercise 4: Adding the B1G
+
+An important thing to know is that geoms render in the order that they appear. The first one is on the bottom. The next one is the second layer. The third layer of three is on top. If you put the Big Ten layer last, the lines will cover everything in grey. If you put it first, then the Nebraska and Michigan State lines will be the only ones covered ... by Nebraska and Michigan State.
+
+```{r line4, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
+big <- logs %>% filter(Conference == "Big Ten")
+
+ggplot() + 
+  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="????") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line4-solution, exercise.reveal_solution = FALSE}
+big <- logs %>% filter(Conference == "Big Ten")
+
+ggplot() + 
+  geom_line(data=big, aes(x=Date, y=TeamFGPCT), color="grey") +
+  geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line4-check}
+grade_this_code()
+```
+
+What do we see here? How has Nebraska and Michigan State's season evolved against all the rest of the teams in college basketball?
+
+### Exercise 5: Adding the average
+
+But how does that compare to the average? We can add that pretty easily by creating a new dataframe with it and add another geom_line. 
+
+```{r average, exercise=TRUE, exercise.setup = "line-load-data"}
+average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
+```
+```{r average-solution}
+average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
+```
+```{r average-check}
+grade_this_code()
+```
+
+And now we have another geom_line to add. 
+
+```{r line5, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
+big <- logs %>% filter(Conference == "Big Ten")
+
+ggplot() + 
+  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="????") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=???????, aes(x=Date, y=mean_shooting), color="black") + 
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line5-solution, exercise.reveal_solution = FALSE}
+big <- logs %>% filter(Conference == "Big Ten")
+
+ggplot() + 
+  geom_line(data=big, aes(x=Date, y=TeamFGPCT), color="grey") +
+  geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=average, aes(x=Date, y=mean_shooting), color="black") + 
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r line5-check}
+grade_this_code()
+```
