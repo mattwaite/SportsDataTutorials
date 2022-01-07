@@ -183,11 +183,13 @@ Let's add all of the Big Ten to our line chart, but this time, we're going to fa
 
 An important thing to know is that geoms render in the order that they appear. The first one is on the bottom. The next one is the second layer. The third layer of three is on top. If you put the Big Ten layer last, the lines will cover everything in grey. If you put it first, then the Nebraska and Michigan State lines will be the only ones covered ... by Nebraska and Michigan State.
 
+NOTE: When you have more than one thing in a dataframe -- teams, players, whatever -- and you're making a line chart out of it, you need to add the `group` to the aesthetic. In this case, the group is the Team.
+
 ```{r line4, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
 big <- logs %>% filter(Conference == "Big Ten")
 
 ggplot() + 
-  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="????") +
+  geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
   scale_y_continuous(limits = c(0, .7))
@@ -196,7 +198,7 @@ ggplot() +
 big <- logs %>% filter(Conference == "Big Ten")
 
 ggplot() + 
-  geom_line(data=big, aes(x=Date, y=TeamFGPCT), color="grey") +
+  geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
   geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
   scale_y_continuous(limits = c(0, .7))
@@ -227,7 +229,7 @@ And now we have another geom_line to add.
 big <- logs %>% filter(Conference == "Big Ten")
 
 ggplot() + 
-  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="????") +
+  geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
   geom_line(data=???????, aes(x=Date, y=mean_shooting), color="black") + 
@@ -237,7 +239,7 @@ ggplot() +
 big <- logs %>% filter(Conference == "Big Ten")
 
 ggplot() + 
-  geom_line(data=big, aes(x=Date, y=TeamFGPCT), color="grey") +
+  geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
   geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
   geom_line(data=average, aes(x=Date, y=mean_shooting), color="black") + 
