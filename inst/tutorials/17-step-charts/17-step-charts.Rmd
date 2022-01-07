@@ -1,0 +1,216 @@
+---
+title: "Lesson 17: Step charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to show change over time, but now with magnitude.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Step charts
+
+## The basics
+
+Step charts are **a method of showing progress** toward a total number They combine showing change over time -- **cumulative change over time** -- with magnitude. They're good at inviting comparison. 
+
+There's great examples out there. First is the Washignton Post looking at [Lebron passing Jordan's career point total](https://www.washingtonpost.com/graphics/sports/lebron-james-michael-jordan-nba-scoring-list/?utm_term=.481074150849). Another is John Burn-Murdoch's work at the Financial Times (which is paywalled) about soccer stars. [Here's an example of his work outside the paywall](http://johnburnmurdoch.github.io/projects/goal-lines/CL/).
+
+To replicate this, we need cumulative data -- data that is the running total of data at a given point. So think of it this way -- Nebraska scores 50 points in a basketball game and then 50 more the next, their cumulative total at two games is 100 points. 
+
+Step charts can be used for all kinds of things -- showing how a player's career has evolved over time, how a team fares over a season, or franchise history. Let's walk through an example. 
+
+Let's look at Fred Hoiberg's team last season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/logs21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+We'll need the tidyverse.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data.
+
+```{r step-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+
+difflogs <- logs %>% 
+  mutate(Differential = TeamScore - OpponentScore) %>% 
+  group_by(Team) %>% 
+  mutate(CumDiff = cumsum(Differential))
+
+bigdiff <- difflogs %>% filter(Conference == "Big Ten")
+nu <- bigdiff %>% filter(Team == "Nebraska")
+il <- bigdiff %>% filter(Team == "Illinois")
+```
+```{r step-load-data-exercise, exercise = TRUE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+```
+```{r step-load-data-exercise-solution}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+```
+```{r step-load-data-exercise-check}
+grade_this_code()
+```
+
+Here we're going to look at the scoring differential of teams. If you score more than your opponent, you win. So it stands to reason that if you score a lot more than your opponent over the course of a season, you should be very good, right? Let's see.
+
+### Exercise 1: Setting up the data
+
+The first step to making a step chart is that we need to calculate our rolling cumulative value. To do that, we'll create a new dataframe called difflogs -- for differential logs, since we have game log data. Then, we'll group it by the Team. After that, we're going to *mutate* using a new function called `cumsum` or cumulative sum -- the sum for each game as we go forward. So game 1's cumsum is the differential of that game. Game 2's cumsum is Game 1 + Game 2. Game 3 is Game 1 + 2 + 3 and so on. When you group by and *don't* summarize, it's like putting all your data into little piles -- your groups -- and doing something to each thing in the pile. Then, when you're done, you put the things back. Where group by and summarize creates one row per group, group by *without* summarize leaves you with the same number you started with. It's a subtle thing, but important. 
+
+
+```{r step1, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
+???????? <- logs %>% 
+  mutate(Differential = TeamScore - OpponentScore) %>% 
+  group_by(????) %>% 
+  mutate(CumDiff = ??????(Differential))
+```
+```{r step1-solution, exercise.reveal_solution = FALSE}
+difflogs <- logs %>% 
+  mutate(Differential = TeamScore - OpponentScore) %>% 
+  group_by(Team) %>% 
+  mutate(CumDiff = cumsum(Differential))
+```
+```{r step1-check}
+grade_this_code()
+```
+
+And now we have the same data, but each team has a rolling cumulative value for how many points they scored versus there opponent.
+
+### Exercise 2: Filtering
+
+Now that we have the cumulative sum for each, let's filter it down to just Big Ten teams. Let's create a new dataframe called bigdiff -- for Big Ten differential. 
+
+```{r step2, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
+??????? <- difflogs %>% filter(Conference == "??? ???")
+```
+```{r step2-solution, exercise.reveal_solution = FALSE}
+bigdiff <- difflogs %>% filter(Conference == "Big Ten")
+```
+```{r step2-check}
+grade_this_code()
+```
+
+Now we've got what we need to make a graphic.
+
+### Exercise 3: The step chart
+
+The step chart is it's own geom -- `geom_step` -- so we can employ it just like we have the others. It works almost exactly the same as a line chart, but it uses the cumulative number instead of a regular value and, as the name implies, creates a step like shape to the line instead of a curve.
+
+```{r step3, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
+ggplot() + geom_????(data=???????, aes(x=Date, y=???????, group=Team))
+```
+```{r step3-solution, exercise.reveal_solution = FALSE}
+ggplot() + geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team))
+```
+```{r step3-check}
+grade_this_code()
+```
+
+### Exercise 4: Using color ... badly.
+
+Let's try a different element of the aesthetic: color, but this time *inside the aesthetic*. Last time, we did the color outside. When you put it inside, you pass it a column name and ggplot will color each line based on what thing that is, and it will create a legend that labels each line that thing. 
+
+```{r step4, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
+ggplot() + geom_????(data=???????, aes(x=Date, y=???????, group=Team, color=Team))
+```
+```{r step4-solution, exercise.reveal_solution = FALSE}
+ggplot() + geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team, color=Team))
+```
+```{r step4-check}
+grade_this_code()
+```
+
+From this, we can see a handful of teams in the Big Ten had negative point differentials last season. But which is which? And which one is Nebraska? Too many colors and it's too hard to tell. This is a lesson: *We use color to highlight.* When everything is a color, nothing is highlighted. We use color sparingly.
+
+### Exercise 5: Using color the right way
+
+How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick two teams to highlight -- Nebraska and Illinois. 
+
+```{r step5, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
+nu <- bigdiff %>% filter(Team == "Nebraska")
+il <- bigdiff %>% filter(Team == "Illinois")
+```
+```{r step5-solution, exercise.reveal_solution = FALSE}
+nu <- bigdiff %>% filter(Team == "Nebraska")
+il <- bigdiff %>% filter(Team == "Illinois")
+```
+```{r step5-check}
+grade_this_code()
+```
+
+Let's introduce a couple of new things here. First, note when I take the color OUT of the aesthetic, the legend disappears. 
+
+Our chart is going to layer bigdiff, nu and il in that order. We put bigdiff first because order matters and the first geom goes on the bottom.
+
+The second thing I'm going to add is the annotation layer. In this case, I am adding a text annotation layer, and I can specify where by adding in a x and a y value where I want to put it. This takes some finesse -- trial and error. You use the x and y axis values, guesstimate where you want the center of the words to be and enter those numbers into the x and y values. 
+
+After that, I'm going to add labels and a theme. These too are new. Eventually, every chart we make will include labels and theming. Because step charts are so similar to line charts, we can add new stuff here and your brain won't break (I promise). To get credit for this, you'll need to fill in the `labs` part where there's all caps. 
+
+```{r step6, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
+ggplot() + 
+  geom_step(data=???????, aes(x=Date, y=???????, group=Team), color="light grey") +
+  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="red") + 
+  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="orange") +
+  annotate("text", x=(as.Date("2021-02-10")), y=-70, label="Nebraska") +
+  annotate("text", x=(as.Date("2021-03-01")), y=330, label="Illinois") +
+  labs(
+    x="YOU SHOULD CHANGE THIS TO WHAT THE X AXIS IS", 
+    y="Cumulative Point Differential", 
+    title="GIVE THIS A HEADLINE: WHAT DOES THE GRAPH SAY?", 
+    subtitle="THE SUBTITLE IS THE TEXT UNDER THE HEADLINE: CHANGE THIS TO HELP EXPLAIN YOUR GRAPH", 
+    caption="Source: Sports-Reference.com | By YOUR NAME") +
+  theme_minimal()
+```
+```{r step6-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team), color="light grey") +
+  geom_step(data=nu, aes(x=Date, y=CumDiff, group=Team), color="red") + 
+  geom_step(data=il, aes(x=Date, y=CumDiff, group=Team), color="orange") +
+  annotate("text", x=(as.Date("2021-02-10")), y=-70, label="Nebraska") +
+  annotate("text", x=(as.Date("2021-03-01")), y=330, label="Illinois") +
+  labs(
+    x="Date", 
+    y="Cumulative Point Differential", 
+    title="Nebraska's season long slide", 
+    subtitle="The Huskers started solidly but ended up being outscored by more than any other Big Ten team.", 
+    caption="Source: Sports-Reference.com | By Matt Waite") +
+  theme_minimal()
+```
+```{r step6-check}
+grade_this_code()
+```
+
+This is a decent looking chart. Depressing, but it tells a story. 

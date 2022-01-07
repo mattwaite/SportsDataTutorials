@@ -147,6 +147,8 @@ Note also that our X axis labels are automated. It knows it's a date and it just
 
 With datasets, we want to invite comparison. So let's answer the question visually. Let's put two lines on the same chart. How does Nebraska compare to Michigan State, for example? 
 
+### Exercise 4: Adding another line
+
 When you have multiple datasets from the same data, you can add multiple geoms. All you have to do is swap out the data and add a + between them. 
 
 ```{r line3, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
@@ -179,7 +181,7 @@ There are some line charts where a small number are good. A good way to add more
 
 Let's add all of the Big Ten to our line chart, but this time, we're going to fade them into the background by making them grey. Then, our red line for Nebraska and the green line of Michigan State will really stand out.
 
-### Exercise 4: Adding the B1G
+### Exercise 5: Adding the B1G
 
 An important thing to know is that geoms render in the order that they appear. The first one is on the bottom. The next one is the second layer. The third layer of three is on top. If you put the Big Ten layer last, the lines will cover everything in grey. If you put it first, then the Nebraska and Michigan State lines will be the only ones covered ... by Nebraska and Michigan State.
 
@@ -209,7 +211,7 @@ grade_this_code()
 
 What do we see here? How has Nebraska and Michigan State's season evolved against all the rest of the teams in college basketball?
 
-### Exercise 5: Adding the average
+### Exercise 6: Adding the average
 
 But how does that compare to the average? We can add that pretty easily by creating a new dataframe with it and add another geom_line. 
 
