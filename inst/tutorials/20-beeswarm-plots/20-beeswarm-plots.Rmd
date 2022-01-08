@@ -1,0 +1,330 @@
+---
+title: "Lesson 20: Beeswarm plots"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to make scatterplots grouped by categories on a number line.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+library(ggbeeswarm)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Beeswarm plots
+
+## The basics
+
+A beeswarm plot is sometimes called a column scatterplot. It's an effective way to show how individual things -- teams, players, etc. -- are distributed along a numberline. The column is a grouping -- say positions in basketball -- and the dots are players, and the dots cluster where the numbers are more common. So think of it like a histogram mixed with a scatterplot crossed with a bar chart. 
+
+An example will help.
+
+Let's use the current NU Men's Basketball team as our example. The criticism of the team -- the reason they aren't winning a lot of games -- is because they aren't hitting a lot of shots. Three points, from the line, doesn't matter. Need to make more shots. Let's look at a metric we've seen before: true shooting percentage. 
+
+Here is that data. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/players22.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+To make beeswarm plots, you need a library that adds some geoms to ggplot. In this cases it's called ggbeeswarm, and you installed it way back at the beginning. But any time you need a library, and it's on CRAN, you can go to your console and install it with `install.packages("ggbeeswarm")`
+
+We'll need to load ggbeeswarm, the tidyverse and, for later, ggrepel.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(ggbeeswarm)
+library(ggrepel)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(ggbeeswarm)
+library(ggrepel)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data.
+
+```{r beeswarm-load-data, message=FALSE, warning=FALSE}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+
+set.seed(1234)
+
+activeplayers <- players %>% filter(MP>30) 
+
+shooters <- activeplayers %>% filter(FGA > 100)
+
+nu <- players %>% 
+  filter(Team == "Nebraska Cornhuskers") %>% 
+  filter(FGA>100) %>% 
+  arrange(desc(`TS%`))
+```
+```{r beeswarm-load-data-exercise, exercise = TRUE}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+```
+```{r beeswarm-load-data-exercise-solution}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+```
+```{r beeswarm-load-data-exercise-check}
+grade_this_code()
+```
+
+Another bit of setup: we need to set the seed for the random number generator. The library "jitters" the dots in the beeswarm randomly. If we don't set the seed, we'll get different results each time. Setting the seed means we get the same look. You *can* use any number you want. I use 1234, so that's what we'll use here.
+
+```{r beeswarm1, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+set.seed(1234)
+```
+```{r beeswarm1-solution, exercise.reveal_solution = FALSE}
+set.seed(1234)
+```
+```{r beeswarm1-check}
+grade_this_code()
+```
+
+We know this data has a lot of players who didn't play, so let's get rid of them.
+
+### Exercise 1: Active players only please.
+
+Recall in an earlier lesson, we used `filter` to get rid of players who don't play much. Let's do that again, dumping everyone who hasn't played 30 minutes of basketball this seasons. We'll name our dataframe activeplayers.
+
+```{r beeswarm2, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+????????????? <- ??????? %>% filter(MP>??) 
+```
+```{r beeswarm2-solution, exercise.reveal_solution = FALSE}
+activeplayers <- players %>% filter(MP>30) 
+```
+```{r beeswarm2-check}
+grade_this_code()
+```
+
+Now let's ask what makes a good shooter? The best measure, in my book, is True Shooting Percentage. It's a combination of weighted field goal shooting -- to account for three pointers -- and free throws. Our data has `TS%`, but if we include *all* players, we'll have too many dots. So let's narrow it down. A decent tool for cutoffs? Field goal attempts. Let's get a quick look at them. A very, very quick way to do that? With the summary function.
+
+```{r beeswarm3, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+summary(activeplayers$FGA)
+```
+```{r beeswarm3-solution, exercise.reveal_solution = FALSE}
+summary(activeplayers$FGA)
+```
+```{r beeswarm3-check}
+grade_this_code()
+```
+
+### Exercise 3: Just shooters, please
+
+At the time of this writing, the median number of shots is 61, but we only really care about good ones. Let's use the third quartile as our cutoff -- 100. By the time you do this, the data will update, and the numbers will change. Let's stick with 100 because it's a nice round number. We'll name our dataframe shooters.
+
+```{r beeswarm4, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+???????? <- activeplayers %>% filter(FGA > ???)
+```
+```{r beeswarm4-solution, exercise.reveal_solution = FALSE}
+shooters <- activeplayers %>% filter(FGA > 100)
+```
+```{r beeswarm4-check}
+grade_this_code()
+```
+
+Now we've got enough for a beeswarm plot. 
+
+### Exercise 4: Your first beeswarm
+
+It works very much like you would expect, if you think about it. The group value -- the columns that you put your dotss in -- is the x, the number is the y. We're going to beeswarm by position -- Pos -- and the dots will be true shooting percentage (TS%, but watch those backticks). 
+
+```{r beeswarm5, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+ggplot() + geom_beeswarm(data=????????, aes(x=???, y=`???`), color="grey")
+```
+```{r beeswarm5-solution, exercise.reveal_solution = FALSE}
+ggplot() + geom_beeswarm(data=shooters, aes(x=Pos, y=`TS%`), color="grey")
+```
+```{r beeswarm5-check}
+grade_this_code()
+```
+
+You can see that there's a lot fewer centers who have attempted more than 100 shots than guards, but then there's a lot more guards in college basketball than anything else. In the guards column, note that fat width of the swarm is between .5 and .6. So that means most guards who shoot more than 100 shots end up in that area. They're the average shooter at that level. You can see, some are better, some are worse. 
+
+So where are the Nebraska players in that mix? 
+
+### Exercise 5: Layering in Nebraska
+
+We'll filter players on Nebraska who meet our criteria. 
+
+```{r beeswarm6, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+nu <- players %>% 
+  filter(Team == "Nebraska Cornhuskers") %>% 
+  filter(FGA>100) %>% 
+  arrange(desc(`TS%`))
+```
+```{r beeswarm6-solution, exercise.reveal_solution = FALSE}
+nu <- players %>% 
+  filter(Team == "Nebraska Cornhuskers") %>% 
+  filter(FGA>100) %>% 
+  arrange(desc(`TS%`))
+```
+```{r beeswarm6-check}
+grade_this_code()
+```
+
+As of this writing, only a handful of players on Nebraska match the critera. 
+
+But how good are they as true shooters?  
+
+When you add another beeswarm, we need to pass another element in -- we need to tell it if we're grouping on the x value. Not sure why, but you'll get a warning if you don't. 
+
+```{r beeswarm7, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+ggplot() + 
+  geom_beeswarm(
+    data=????????, 
+    groupOnX=TRUE, 
+    aes(x=???, y=`???`), color="grey") + 
+  geom_beeswarm(
+    data=??, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="red")
+```
+```{r beeswarm7-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_beeswarm(
+    data=shooters, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="grey") + 
+  geom_beeswarm(
+    data=nu, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="red")
+```
+```{r beeswarm7-check}
+grade_this_code()
+```
+
+Ooof. Best we can muster is middle of the fat part. Who is that? 
+
+This is where we can use ggrepel. Let's add a text layer and label the dots. 
+
+```{r beeswarm8, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+ggplot() + 
+  geom_beeswarm(
+    data=????????, 
+    groupOnX=TRUE, 
+    aes(x=???, y=`???`), color="grey") + 
+  geom_beeswarm(
+    data=??, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="red") + 
+  geom_text_repel(
+    data=nu, 
+    aes(x=???, y=`???`, label=Player))
+```
+```{r beeswarm8-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_beeswarm(
+    data=shooters, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="grey") + 
+  geom_beeswarm(
+    data=nu, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="red") + 
+  geom_text_repel(
+    data=nu, 
+    aes(x=Pos, y=`TS%`, label=Player))
+```
+```{r beeswarm8-check}
+grade_this_code()
+```
+
+Sigh. Why are we bad at (mens) basketball?
+
+## A few other options
+
+The ggbeeswarm library has a couple of variations on the geom_beeswarm that may work better for your application. They are `geom_quasirandom` and `geom_jitter`. 
+
+There's not a lot to change from our example to see what they do. 
+
+```{r beeswarm9, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+ggplot() + 
+  geom_quasirandom(
+    data=shooters, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="grey") + 
+  geom_quasirandom(
+    data=nu, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="red") + 
+  geom_text_repel(
+    data=nu, 
+    aes(x=Pos, y=`TS%`, label=Player))
+```
+```{r beeswarm9-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_quasirandom(
+    data=shooters, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="grey") + 
+  geom_quasirandom(
+    data=nu, 
+    groupOnX=TRUE, 
+    aes(x=Pos, y=`TS%`), color="red") + 
+  geom_text_repel(
+    data=nu, 
+    aes(x=Pos, y=`TS%`, label=Player))
+```
+```{r beeswarm9-check}
+grade_this_code()
+```
+
+Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- quasirandom spacing. 
+
+For `geom_jitter`, we need to remove the groupOnX value. Why? No clue. 
+
+```{r beeswarm10, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
+ggplot() + 
+  geom_jitter(
+    data=shooters, 
+    aes(x=Pos, y=`TS%`), color="grey") + 
+  geom_jitter(
+    data=nu, 
+    aes(x=Pos, y=`TS%`), color="red") + 
+  geom_text_repel(
+    data=nu, 
+    aes(x=Pos, y=`TS%`, label=Player))
+```
+```{r beeswarm10-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_jitter(
+    data=shooters, 
+    aes(x=Pos, y=`TS%`), color="grey") + 
+  geom_jitter(
+    data=nu, 
+    aes(x=Pos, y=`TS%`), color="red") + 
+  geom_text_repel(
+    data=nu, 
+    aes(x=Pos, y=`TS%`, label=Player))
+```
+```{r beeswarm10-check}
+grade_this_code()
+```
+
+`geom_jitter` spreads out the dots evenly across the width of the column, randomly deciding where in the line of the true shooting percentage they appear. 
+
+Which one is right for you? You're going to have to experiment and decide. This is the art in the art and a science. 

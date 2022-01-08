@@ -1,0 +1,371 @@
+---
+title: "Lesson 19: Bubble charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to show relationships, but now with magnitude.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Bubble charts
+
+## The basics
+
+Here is the real talk: Bubble charts are hard. The reason they are hard is not because of the code, or the complexity or anything like that. They're a scatterplot with magnitude added -- the size of the dot in the scatterplot has meaning. The hard part is seeing when a bubble chart works and when it doesn't. 
+
+If you want to see it work spectacularly well, [watch a semi-famous Ted Talk](https://www.youtube.com/watch?v=hVimVzgtD6w) by Hans Rosling from 2006 where bubble charts were the centerpiece. It's worth watching. It'll change your perspective on the world. No seriously. It will.
+
+And since then, people have wanted bubble charts. And we're back to the original problem: They're hard. There's a finite set of circumstances where they work. 
+
+First, I'm going to show you an example of them not working to illustrate the point. 
+
+For this example, I want to look at where Big Ten teams compare to the rest of college football last season. Is the Big Ten's reputation for tough games and defenses earned? Can we see patterns in good team vs bad teams? 
+
+I'm going to create a scatterplot with offensive yards per play on the X axis and defensive yards per play on the y axis. We can then divide the grid into four quadrants. Teams with high yards per offensive play and low defensive yards per play are teams with good offenses and good defenses. The opposite means bad defense, bad offense. Then, to drive the point home, I'm going to make the dot the size of the total wins on the season -- the bubble in my bubble charts. 
+
+Here is that data. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+We'll need the tidyverse and a library called ggrepel that we'll talk about later.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(ggrepel)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(ggrepel)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data.
+
+```{r bubble-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+
+winlosslogs <- logs %>% 
+  mutate(
+    wins = case_when(
+      grepl("W", Outcome) ~ 1, 
+      grepl("L", Outcome) ~ 0)
+  )
+    
+ypp <- winlosslogs %>% 
+  group_by(Team, Conference) %>% 
+  summarise(
+    TotalPlays = sum(OffensivePlays), 
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards), 
+    TotalWins = sum(wins)) %>% 
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays)
+
+bigten <- ypp %>% filter(Conference == "Big Ten Conference")
+```
+```{r bubble-load-data-exercise, exercise = TRUE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+```
+```{r bubble-load-data-exercise-solution}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+```
+```{r bubble-load-data-exercise-check}
+grade_this_code()
+```
+
+To do this, I've got some work to do. First, I need to mutate the outcomes of the games into 1s and 0s so I can add up the wins. We've done this before, so this won't be new to you, just adjusted slightly from basketball data.
+
+```{r bubble1, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+winlosslogs <- logs %>% 
+  mutate(
+    wins = case_when(
+      grepl("W", Outcome) ~ 1, 
+      grepl("L", Outcome) ~ 0)
+)
+```
+```{r bubble1-solution, exercise.reveal_solution = FALSE}
+winlosslogs <- logs %>% 
+  mutate(
+    wins = case_when(
+      grepl("W", Outcome) ~ 1, 
+      grepl("L", Outcome) ~ 0)
+)
+```
+```{r bubble1-check}
+grade_this_code()
+```
+
+Now I have some more work to do. 
+
+My football logs data has the yards per play of each game, and I could average those together and get something very close to what I'm going to do, but averaging each games yards per play is not the same thing as calculating it, so we're going to calculate it. 
+
+I'm going to give you the data. It's pretty straightforward. We're making a new dataframe called ypp. It's going to group and sum wins, plays and yards -- offensive and defensive -- so we can divide them and get the season long yards per play on both offense and defense.
+
+```{r bubble2, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+ypp <- winlosslogs %>% 
+  group_by(Team, Conference) %>% 
+  summarise(
+    TotalPlays = sum(OffensivePlays), 
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards), 
+    TotalWins = sum(wins)) %>% 
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays)
+```
+```{r bubble2-solution, exercise.reveal_solution = FALSE}
+ypp <- winlosslogs %>% 
+  group_by(Team, Conference) %>% 
+  summarise(
+    TotalPlays = sum(OffensivePlays), 
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards), 
+    TotalWins = sum(wins)) %>% 
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays)
+```
+```{r bubble2-check}
+grade_this_code()
+```
+
+A bubble chart is just a scatterplot with one additional element in the aesthetic -- a size. Here's the scatterplot version. 
+
+```{r bubble3, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+ggplot() + geom_point(data=ypp, aes(x=OffensiveYPP, y=DefensiveYPP))
+```
+```{r bubble3-solution, exercise.reveal_solution = FALSE}
+ggplot() + geom_point(data=ypp, aes(x=OffensiveYPP, y=DefensiveYPP))
+```
+```{r bubble3-check}
+grade_this_code()
+```
+
+Looks kind of random, eh? In this case, that's not that bad because we're not claiming a relationship. We're saying the location on the chart has meaning. 
+
+So, do teams on the bottom right -- good offense, good defense -- win more games? 
+
+### Exercise 1: The bubble chart
+
+Let's add the size element. From our data work above, we want to add the column that has the total wins in it. That's a hint, look at the code.
+
+```{r bubble4, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????)
+    )
+```
+```{r bubble4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins)
+    )
+```
+```{r bubble4-check}
+grade_this_code()
+```
+
+What does this chart tell you? We can see a general pattern that there are more big dots on the bottom right than the upper left. 
+
+### Exercise 2: Adding transparency and scale
+
+But we can make this more readable by adding an `alpha` element outside the aesthetic -- `alpha` in this case is transparency -- and we can manually change the size of the dots by adding `scale_size` and a `range`. Let's try an `alpha` of .3. 
+
+```{r bubble5, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????),
+    alpha = ??) + 
+  scale_size(range = c(3, 8), name="Wins")
+```
+```{r bubble5-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins),
+    alpha = .3) + 
+  scale_size(range = c(3, 8), name="Wins")
+```
+```{r bubble5-check}
+grade_this_code()
+```
+
+Better?
+
+### Exercise 3: Layering
+
+And by now, you now know to add in the Big Ten as a layer, I would hope.
+
+```{r bubble6, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+bigten <- ypp %>% filter(Conference == "??? ??? ?????????")
+
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    color="red")
+```
+```{r bubble6-solution, exercise.reveal_solution = FALSE}
+bigten <- ypp %>% filter(Conference == "Big Ten Conference")
+
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red")
+```
+```{r bubble6-check}
+grade_this_code()
+```
+
+It's clearer where Big Ten teams are. But which Big Ten team is which?
+
+### Exercise 4: Adding reference lines 
+
+Let's add some things to this chart to help us out. First, let's add lines that show us the average of all teams for those two metrics. So first, we need to calculate those. Because I have grouped data, it's going to require me to ungroup it so I can get just the total average of those two numbers. 
+
+```{r bubble7, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+ypp %>% 
+  ungroup() %>% 
+  summarise(
+    offense = mean(OffensiveYPP), 
+    defense = mean(DefensiveYPP)
+    )
+```
+```{r bubble7-solution, exercise.reveal_solution = FALSE}
+ypp %>% 
+  ungroup() %>% 
+  summarise(
+    offense = mean(OffensiveYPP), 
+    defense = mean(DefensiveYPP)
+    )
+```
+```{r bubble7-check}
+grade_this_code()
+```
+
+Now we can use those averages to add two more geoms -- geom_vline and geom_hline, for vertical lines and horizontal lines. The defense is the horizontal line, the offense is the vertical line.
+
+```{r bubble8, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    color="red") + 
+  geom_vline(xintercept = ?.??????) + 
+  geom_hline(yintercept = ?.??????)
+```
+```{r bubble8-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.791851) + 
+  geom_hline(yintercept = 5.664038)
+```
+```{r bubble8-check}
+grade_this_code()
+```
+
+Getting better.
+
+### Exercise 5: Adding names to the dots
+
+Now it's time for ggrepel. What ggrepel does is help us label the dots without overwriting other labels. By importing ggrepel, we now have access to a new geom -- `geom_text_repel` -- which is a modification of `geom_text` that we've used before that automatically keeps labels from overlapping. What do we want to label? The Big Ten teams in our bigten dataframe. The three elements we need in `geom_text_repel` are an x and y coordinate and a label. The label, in this case, is the name of the Team.
+
+```{r bubble9, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    color="red") + 
+  geom_vline(xintercept = ?.??????) + 
+  geom_hline(yintercept = ?.??????) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=????)
+  )
+```
+```{r bubble9-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  )
+```
+```{r bubble9-check}
+grade_this_code()
+```
+
+Well, what do you know about that? Nebraska was ... up there with the conference's best. With three wins. 
