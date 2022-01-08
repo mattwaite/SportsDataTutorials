@@ -131,7 +131,7 @@ summary(activeplayers$FGA)
 grade_this_code()
 ```
 
-### Exercise 3: Just shooters, please
+### Exercise 2: Just shooters, please
 
 At the time of this writing, the median number of shots is 61, but we only really care about good ones. Let's use the third quartile as our cutoff -- 100. By the time you do this, the data will update, and the numbers will change. Let's stick with 100 because it's a nice round number. We'll name our dataframe shooters.
 
@@ -147,7 +147,7 @@ grade_this_code()
 
 Now we've got enough for a beeswarm plot. 
 
-### Exercise 4: Your first beeswarm
+### Exercise 3: Your first beeswarm
 
 It works very much like you would expect, if you think about it. The group value -- the columns that you put your dotss in -- is the x, the number is the y. We're going to beeswarm by position -- Pos -- and the dots will be true shooting percentage (TS%, but watch those backticks). 
 
@@ -165,7 +165,7 @@ You can see that there's a lot fewer centers who have attempted more than 100 sh
 
 So where are the Nebraska players in that mix? 
 
-### Exercise 5: Layering in Nebraska
+### Exercise 4: Layering in Nebraska
 
 We'll filter players on Nebraska who meet our criteria. 
 
