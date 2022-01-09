@@ -1,0 +1,296 @@
+---
+title: "Lesson 24: Cowplots"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to make multiple charts into one graphic.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(cowplot)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Arranging multiple plots together
+
+## The basics
+
+Sometimes you have two or three (or more) charts that by themselves aren't very exciting and are really just one chart that you need to merge together. It would be nice to be able to arrange them programmatically and not have to mess with it in Adobe Illustrator.
+
+Good news.
+
+There is.
+
+It's called `cowplot`, and it's pretty easy to use. You installed cowplots way back in the beginning, but if you're having problems just go to the console in R Studio and run `install.packages("cowplot")`. 
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(cowplot)
+
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(cowplot)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+We'll use the college football attendance data we've used before. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/attendance.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+And load it.
+
+```{r cowplot-load-data, message=FALSE, warning=FALSE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+
+attendance <- attendance %>% mutate(change = ((`2018`-`2017`)/`2017`)*100)
+
+top10 <- attendance %>% top_n(10, wt=change)
+bottom10 <- attendance %>% top_n(10, wt=-change)
+
+cc <- bottom10 %>% filter(Institution == "Coastal Caro.")
+gs <- top10 %>% filter(Institution == "Ga. Southern")
+
+bar1 <- ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip()
+
+bar2 <- ggplot() + 
+  geom_bar(data=bottom10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip()
+```
+```{r cowplot-load-data-exercise, exercise = TRUE}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r cowplot-load-data-exercise-solution}
+attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+```
+```{r cowplot-load-data-exercise-check}
+grade_this_code()
+```
+
+For this, I let's quick mutate a percent change in attendance from the two most recent years we have, and then we'll create a top 10 and bottom 10 list.
+
+```{r cowolot1, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
+attendance <- attendance %>% mutate(change = ((`2018`-`2017`)/`2017`)*100)
+
+top10 <- attendance %>% top_n(10, wt=change)
+bottom10 <- attendance %>% top_n(10, wt=-change)
+```
+```{r cowolot1-solution, exercise.reveal_solution = FALSE}
+attendance <- attendance %>% mutate(change = ((`2018`-`2017`)/`2017`)*100)
+
+top10 <- attendance %>% top_n(10, wt=change)
+bottom10 <- attendance %>% top_n(10, wt=-change)
+```
+```{r cowolot1-check}
+grade_this_code()
+```
+
+
+### Exercise 1: Making bar charts into objects
+
+Okay, now to do this I need to **save my plots to an object**. We do this the same way we save things to a dataframe -- with the arrow aka the assignment operator. We'll make two identical bar charts, one with the top 10 and one with the bottom 10. We'll call them bar1 and bar2.
+
+```{r cowolot2, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
+???? <- ggplot() + 
+  geom_bar(data=?????, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip()
+
+???? <- ggplot() + 
+  geom_bar(data=????????, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip()
+```
+```{r cowolot2-solution, exercise.reveal_solution = FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip()
+
+bar2 <- ggplot() + 
+  geom_bar(data=bottom10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip()
+```
+```{r cowolot2-check}
+grade_this_code()
+```
+
+### Exercise 2: Making a plot grid
+
+With cowplot, we can use a function called `plot_grid` to arrange the charts. All we need to do is pass the names of the charts we just made into it.
+
+```{r cowolot3, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
+plot_grid(????, ????) 
+```
+```{r cowolot3-solution, exercise.reveal_solution = FALSE}
+plot_grid(bar1, bar2) 
+```
+```{r cowolot3-check}
+grade_this_code()
+```
+
+We can also stack them on top of each other with ncol=1, meaning number of columns equals 1.
+
+```{r cowolot4, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
+plot_grid(????, ????, ncol=1) 
+```
+```{r cowolot4-solution, exercise.reveal_solution = FALSE}
+plot_grid(bar1, bar2, ncol=1) 
+```
+```{r cowolot4-check}
+grade_this_code()
+```
+
+## Moving toward publication
+
+To make these publishable, we should add headlines, chatter, decent labels, credit lines, etc. But to do this, we'll have to figure out which labels go on which charts, so we can make it look decent. For example -- both charts don't need x or y labels. If you don't have a title and subtitle on both, the spacing is off, so you need to leave one blank or the other blank. You'll just have to fiddle with it until you get it looking right. 
+
+```{r cowolot5, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip() + 
+  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2018. But some really did.",  x="", y="Percent change", caption = "") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+bar2 <- ggplot() + 
+  geom_bar(data=bottom10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip() +  
+  labs(title = "... and losers", subtitle= "", x="", y="",  caption="Source: NCAA | By Matt Waite") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+plot_grid(bar1, bar2) 
+```
+```{r cowolot5-solution, exercise.reveal_solution = FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip() + 
+  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2018. But some really did.",  x="", y="Percent change", caption = "") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+bar2 <- ggplot() + 
+  geom_bar(data=bottom10, aes(x=reorder(Institution, change), weight=change)) + 
+  coord_flip() +  
+  labs(title = "... and losers", subtitle= "", x="", y="",  caption="Source: NCAA | By Matt Waite") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+plot_grid(bar1, bar2) 
+```
+```{r cowolot5-check}
+grade_this_code()
+```
+
+What's missing here? Color. Our eyes aren't drawn to anything (except maybe the top and bottom). So we need to help that. **A bar chart without context or color to draw attention to something isn't much of a bar chart**. Same with a line chart -- if your line chart has one line, no context, no color, it's going to fare poorly. To get some color and context in this, we're going to pull the top and bottom programs with filter and add another geom_bar to our two bar charts using that data. We can then assign that one bar a color.
+
+```{r cowolot6, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
+cc <- bottom10 %>% filter(Institution == "Coastal Caro.")
+gs <- top10 %>% filter(Institution == "Ga. Southern")
+
+bar1 <- ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
+  geom_bar(data=gs, aes(x=reorder(Institution, change), weight=change), fill="#011E41") + 
+  coord_flip() + 
+  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2018. But some really did.",  x="", y="Percent change", caption = "") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+bar2 <- ggplot() + 
+  geom_bar(data=bottom10, aes(x=reorder(Institution, change), weight=change)) + 
+  geom_bar(data=cc, aes(x=reorder(Institution, change), weight=change), fill="#006F71") + 
+  coord_flip() +  
+  labs(title = "... and losers", subtitle= "", x="", y="",  caption="Source: NCAA | By Matt Waite") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+plot_grid(bar1, bar2) 
+```
+```{r cowolot6-solution, exercise.reveal_solution = FALSE}
+cc <- bottom10 %>% filter(Institution == "Coastal Caro.")
+gs <- top10 %>% filter(Institution == "Ga. Southern")
+
+bar1 <- ggplot() + 
+  geom_bar(data=top10, aes(x=reorder(Institution, change), weight=change)) + 
+  geom_bar(data=gs, aes(x=reorder(Institution, change), weight=change), fill="#011E41") + 
+  coord_flip() + 
+  labs(title="College football winners...", subtitle = "Not every football program saw attendance shrink in 2018. But some really did.",  x="", y="Percent change", caption = "") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+bar2 <- ggplot() + 
+  geom_bar(data=bottom10, aes(x=reorder(Institution, change), weight=change)) + 
+  geom_bar(data=cc, aes(x=reorder(Institution, change), weight=change), fill="#006F71") + 
+  coord_flip() +  
+  labs(title = "... and losers", subtitle= "", x="", y="",  caption="Source: NCAA | By Matt Waite") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+
+plot_grid(bar1, bar2) 
+```
+```{r cowolot6-check}
+grade_this_code()
+```

@@ -1,0 +1,216 @@
+---
+title: "Lesson 23: Faceting"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to make a lot of graphics with little code.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+library(ggbeeswarm)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Facet wraps
+
+## The basics
+
+Sometimes the easiest way to spot a trend is to chart a bunch of small things side by side. Edward Tufte, one of the most well known data visualization thinkers on the planet, calls this "small multiples" where ggplot calls this a facet wrap or a facet grid, depending. 
+
+One thing we noticed earlier in the semester -- it seems that a lot of teams shoot worse as the season goes on. Do they? We could answer this a number of ways, but the best way to show people would be visually. Let's use Small Multiples.
+
+As always, we start with libraries. 
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+We're going to use the logs of college basketball games last season. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/logs21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+And load it.
+
+```{r facet-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+
+big10 <- logs %>% filter(Conference == "Big Ten")
+```
+```{r facet-load-data-exercise, exercise = TRUE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+```
+```{r facet-load-data-exercise-solution}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+```
+```{r facet-load-data-exercise-check}
+grade_this_code()
+```
+
+Let's narrow our pile and look just at the Big Ten.
+
+```{r facet1, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
+big10 <- logs %>% filter(Conference == "Big Ten")
+```
+```{r facet1-solution, exercise.reveal_solution = FALSE}
+big10 <- logs %>% filter(Conference == "Big Ten")
+```
+```{r facet1-check}
+grade_this_code()
+```
+
+The first thing we can do is look at a line chart, like we have done in previous lessons.
+
+### Exercise 1: Make a line chart
+
+We'll do something simple like a line chart of TeamFGPCT -- team field goal percentage -- and we're going to group on Team.
+
+```{r facet2, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
+ggplot() + 
+  geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r facet2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
+  scale_y_continuous(limits = c(0, .7))
+```
+```{r facet2-check}
+grade_this_code()
+```
+
+And, not surprisingly, we get a hairball. We could color certain lines, but that would limit us to focus on one team. **What if we did all of them at once?** We do that with a `facet_wrap`. 
+
+### Exercise 2: The facet wrap
+
+The only thing we MUST pass into a `facet_wrap` is what thing we're going to separate them out by. In this case, we precede that field with a tilde, so in our case we want the Team field.
+
+```{r facet3, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
+ggplot() + 
+  geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_wrap(~????)
+```
+```{r facet3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_wrap(~Team)
+```
+```{r facet3-check}
+grade_this_code()
+```
+
+Answer: Not immediately clear, but we can look at this and analyze it. We could add a piece of annotation to help us out.
+
+### Exercise 3: Put everyone in context
+
+Let's add a line to every chart that's the conference average shooting percentage. 
+
+```{r facet4, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
+big10 %>% summarise(mean(TeamFGPCT))
+```
+```{r facet4-solution, exercise.reveal_solution = FALSE}
+big10 %>% summarise(mean(TeamFGPCT))
+```
+```{r facet4-check}
+grade_this_code()
+```
+
+Copy that number, and we're going to add it into the facet chart with a `geom_hline`.
+
+```{r facet5, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
+ggplot() + 
+  geom_hline(yintercept=.??????, color="blue") + 
+  geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_wrap(~????)
+```
+```{r facet5-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_hline(yintercept=.4446667, color="blue") + 
+  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_wrap(~Team)
+```
+```{r facet5-check}
+grade_this_code()
+```
+
+What do you see here? How do teams compare? How do they change over time? I'm not asking you these questions because they're an assignment -- I'm asking because that's exactly what this chart helps answer. Your brain will immediately start making those connections. 
+
+## Facet grid vs facet wraps
+
+Facet grids allow us to put teams on the same plane, versus just repeating them. And we can specify that plane as vertical or horizontal. For example, here's our chart from above, but using facet_grid to stack them.
+
+### Exercise 4: Facet grids
+
+```{r facet6, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
+ggplot() + 
+  geom_hline(yintercept=.??????, color="blue") + 
+  geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_grid(Team ~ .)
+```
+```{r facet6-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_hline(yintercept=.4446667, color="blue") + 
+  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_grid(Team ~ .)
+```
+```{r facet6-check}
+grade_this_code()
+```
+
+And here they are next to each other:
+
+```{r facet7, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
+ggplot() + 
+  geom_hline(yintercept=.??????, color="blue") + 
+  geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_grid(. ~ Team)
+```
+```{r facet7-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_hline(yintercept=.4446667, color="blue") + 
+  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
+  scale_y_continuous(limits = c(0, .7)) + 
+  facet_grid(. ~ Team)
+```
+```{r facet7-check}
+grade_this_code()
+```
+
+Two notes:
+
+1. We'd have some work to do with the labeling on this -- we'll get to that -- but you can see where this is valuable comparing a group of things. One warning: Don't go too crazy with this or it loses it's visual power.
+2. There's nothing special about a line chart with faceting. You can facet any kind of ggplot chart. 
