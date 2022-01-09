@@ -1,0 +1,268 @@
+---
+title: "Lesson 21: Bump charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to make a combination of step charts and subway maps for ranks.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+library(ggbeeswarm)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Bump charts
+
+## The basics
+
+The point of a bump chart is to show how the ranking of something changed over time -- you could do this with the top 25 in football or basketball. I've seen it done with European soccer league standings over a season. 
+
+The requirements are that you have a row of data for a team, in that week, with their rank.
+
+This is another extension to ggplot. You installed it at the beginning of the semester, but if you need it, you'll install it the usual way: `install.packages("ggbump")`
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(ggbump)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(ggbump)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+Let's use college football playoff rankings, specifically the top 10 in each week of the rankings. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/cfbranking21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+Now let's load it.
+
+```{r bump-load-data, message=FALSE, warning=FALSE}
+rankings <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfbranking21.csv")
+```
+```{r bump-load-data-exercise, exercise = TRUE}
+rankings <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfbranking21.csv")
+```
+```{r bump-load-data-exercise-solution}
+rankings <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfbranking21.csv")
+```
+```{r bump-load-data-exercise-check}
+grade_this_code()
+```
+
+Given our requirements of a row of data for a team, in that week, with their rank, take a look at the data provided. We have 5 weeks of playoff rankings, so we should see a ranking, the week of the ranking and the team at that rank. You can see the basic look of the data by using head()
+
+```{r head-data, exercise=TRUE, exercise.setup = "bump-load-data"}
+head(rankings)
+```
+```{r head-data-solution}
+head(rankings)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+Our data is in the form we need it to be. Now we can make a bump chart. 
+
+### Exercise 1: 
+
+We'll start simple. `ggbump` adds it's own geom, `geom_bump`, and the parts of it are what you think. x is the time element -- Week in our case -- and the Y is the rank. Last, we'll add a color inside the aesthetic. Given that our data only has three columns, that narrows down what the color should be. 
+
+```{r bump1, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
+ggplot() + geom_bump(data=rankings, aes(x=????, y=????, color=????))
+```
+```{r bump1-solution, exercise.reveal_solution = FALSE}
+ggplot() + geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team))
+```
+```{r bump1-check}
+grade_this_code()
+```
+
+Well, it's a start. 
+
+First things first: I'm immediately annoyed by the top teams being at the bottom. 
+
+### Exercise 2: Reversing one of the axes.
+
+I learned a neat trick from ggbump that's been in ggplot all along -- `scale_y_reverse()`
+
+```{r bump2, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=????, y=????, color=????)) +
+  scale_y_reverse()
+```
+```{r bump2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) +
+  scale_y_reverse()
+```
+```{r bump2-check}
+grade_this_code()
+```
+
+Better. But, still not great. 
+
+### Exercise 3: Adding a point for each week
+
+Let's add a point at each week. All along to this point, we've been laying in geoms but mostly they're the same geom. There's no reason they can't be different, though. To make this happen, we add a `geom_point` with the exact same aesthetic.
+
+```{r bump3, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=????, y=????, color=????)) +
+  geom_point(data=rankings, aes(x=????, y=????, color=????), size = 4) +
+  scale_y_reverse() 
+```
+```{r bump3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) +
+  scale_y_reverse() 
+```
+```{r bump3-check}
+grade_this_code()
+```
+
+## Fine tuning
+
+We've taken another step closer. That makes it more subway-map like. But the colors are all wrong. To fix this, we're going to use `scale_color_manual` and we're going to Google the hex codes for each team. The legend will tell you what order your `scale_color_manual` needs to be. You just need to have an entry for every team in the legend. Googling "Alabama hex code" will give you the info you need to copy and paste into `scale_color_manual`. 
+
+```{r bump4, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_y_reverse() 
+```
+```{r bump4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_y_reverse() 
+```
+```{r bump4-check}
+grade_this_code()
+```
+
+Another step. But the legend is annoying. And trying to find which red is Alabama vs Ohio State is hard. So what if we labeled each dot at the beginning **and** end? We can do that with some clever usage of geom_text and a little dplyr filtering inside the data step. We filter out the first and last weeks, then use hjust -- horizontal justification -- to move them left or right. NOTE: A good practice is to put all your geoms together, all your scale work together, an your theme work last. 
+
+```{r bump5, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_y_reverse() 
+```
+```{r bump5-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_y_reverse() 
+```
+```{r bump5-check}
+grade_this_code()
+```
+
+Better, but the legend is still there. We can drop it in a theme directive by saying `legend.position = "none"`. We'll also throw a theme_minimal on there to drop the default grey, and we'll add some better labeling.
+
+```{r bump6, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_y_reverse() +
+  labs(title="Alabama is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_blank()
+    ) 
+```
+```{r bump6-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_y_reverse() +
+  labs(title="Alabama is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_blank()
+    ) 
+```
+```{r bump6-check}
+grade_this_code()
+```
+
+And the last thing: anyone else annoyed at 7.5th place on the left? We can fix that too by specifying the breaks in scale_y_reverse. We can do that with the x axis as well, but since we haven't reversed it, we do that in `scale_x_continuous` with the same breaks. 
+
+```{r bump7, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_x_continuous(breaks=c(13,14,15,16,17)) + 
+  scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +
+  labs(title="Alabama is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_blank()
+    ) 
+```
+```{r bump7-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
+  geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
+  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  scale_color_manual(values = c("#9E1B32","#154734", "#E00122", "#BA0C2F", "#00274C", "#18453B","#660000", "#C99700", "#BB0000", "#841617", "#FF7300", "#154733", "#000000")) +
+  scale_x_continuous(breaks=c(13,14,15,16,17)) + 
+  scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +
+  labs(title="Alabama is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    panel.grid.major = element_blank()
+    ) 
+```
+```{r bump7-check}
+grade_this_code()
+```
+There's still some work to do here -- note the names on the edges are getting cut off. But compare to where we started. This is looking pretty good. 
