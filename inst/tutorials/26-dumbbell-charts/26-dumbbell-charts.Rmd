@@ -1,0 +1,209 @@
+---
+title: "Lesson 26: Dumbbell charts"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to show the difference between two points on a number line.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Dumbbell charts
+
+## The basics
+
+Second to my love of waffle charts because or their name and I'm always hungry, dumbbell charts are an excellently named way of **showing the difference between two things on a number line** -- a start and a finish, for instance. Or the difference between two related things. Say, turnovers and assists. 
+
+Dumbbell charts come batteries included in `ggalt` which we used in Lesson 25. Like usual, you already installed this if you followed the install instructions at the beginning of the course. But if you're having trouble getting this to work, go to your console in R Studio and install it with `install.packages("ggalt")`
+
+Let's give it a whirl.
+
+```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggalt)
+
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(ggalt)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+For this, let's use college football game logs from this season.
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+And load it.
+
+```{r dumbbell-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+
+turnovers <- logs %>%
+  group_by(Team, Conference) %>% 
+  summarise(
+    Giveaways = sum(TotalTurnovers), 
+    Takeaways = sum(DefTotalTurnovers)) %>%
+  filter(Conference == "Big Ten Conference")
+```
+```{r dumbbell-load-data-exercise, exercise = TRUE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+```
+```{r dumbbell-load-data-exercise-solution}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+```
+```{r dumbbell-load-data-exercise-check}
+grade_this_code()
+```
+
+Let's remember what we're looking at here:
+
+```{r head-data, exercise=TRUE, exercise.setup = "dumbbell-load-data"}
+head(logs)
+```
+```{r head-data-solution}
+head(logs)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+For this example, let's look at the difference between a team's giveaways -- turnovers lost -- versus takeaways, or turnovers gained. 
+
+### Exercise 1: Preparing the data
+
+To get this, we're going to add up all offensive turnovers and defensive turnovers for a team in a season and take a look at where they come out. Remember: TotalTurnovers is giving the ball away (bad turnovers) and DefTotalTurnovers is takeaways, good turnovers. To make this readable, I'm going to focus on the Big Ten.
+
+```{r dumbbell1, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+turnovers <- ???? %>%
+  group_by(Team, Conference) %>% 
+  summarise(
+    Giveaways = sum(?????Turnovers), 
+    Takeaways = sum(????????Turnovers)) %>%
+  filter(Conference == "Big Ten Conference")
+```
+```{r dumbbell1-solution, exercise.reveal_solution = FALSE}
+turnovers <- logs %>%
+  group_by(Team, Conference) %>% 
+  summarise(
+    Giveaways = sum(TotalTurnovers), 
+    Takeaways = sum(DefTotalTurnovers)) %>%
+  filter(Conference == "Big Ten Conference")
+```
+```{r dumbbell1-check}
+grade_this_code()
+```
+
+Now, the way that the `geom_dumbbell` works is pretty simple when viewed through what we've done before. There's just some tweaks. 
+
+### Exercise 2: The first dumbbell
+
+First: We start with the y axis. The reason is we want our dumbbells going left and right, so the label is going to be on the y axis. 
+
+Second: Our x is actually two things: x and xend. What you put in there will decide where on the line the dot appears.
+
+Because we grouped by and summarized earlier, we have three fields to work with: Team, Takeaways and Giveaways.
+
+```{r dumbbell2, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=?????????, 
+    aes(y=????, x=?????????, xend=?????????)
+  )
+```
+```{r dumbbell2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=turnovers, 
+    aes(y=Team, x=Takeaways, xend=Giveaways)
+  )
+```
+```{r dumbbell2-check}
+grade_this_code()
+```
+
+Well, that's a chart alright, but what dot is the giveaways and what are the takeaways? To fix this, we'll add colors.
+
+### Exercise 3: Colors and size
+
+So our choice of colors here is important. We want giveaways to be seen as bad and takeaways to be seen as good. So lets try red for giveaways and green for takeaways. To make this work, we'll need to do three things: first, use the English spelling of color, so `colour`. The, uh, `colour` is the bar between the dots, the `x_colour` is the color of the x value dot and the `xend_colour` is the color of the xend dot. So in our setup, takeaways are x, they're good, so they're green. While we're at it, we'll add a size to make the dots stand out.
+
+```{r dumbbell3, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=?????????, 
+    aes(y=????, x=Takeaways, xend=Giveaways),
+    size = 2,
+    colour = "????",
+    colour_x = "?????",
+    colour_xend = "???")
+```
+```{r dumbbell3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=turnovers, 
+    aes(y=Team, x=Takeaways, xend=Giveaways),
+    size = 2,
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "red")
+```
+```{r dumbbell3-check}
+grade_this_code()
+```
+
+And now we have a chart that is trying to tells a story. We know, logically, that green on the right is good. A long distance between green and red? Better. 
+
+### Exercise 4: Arrange helps tell the story
+
+But what if we sort it by good turnovers? 
+
+```{r dumbbell4, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=?????????, 
+    aes(y=reorder(????, ????aways), x=Takeaways, xend=Giveaways),
+    size = 2,
+    colour = "????",
+    colour_x = "?????",
+    colour_xend = "???")
+```
+```{r dumbbell4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=turnovers, 
+    aes(y=reorder(Team, Takeaways), x=Takeaways, xend=Giveaways),
+    size = 2,
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "red")
+```
+```{r dumbbell4-check}
+grade_this_code()
+```
+
+Believe it or not, Iowa had the most takeaways in the Big Ten this season. And believe it: Nebraska ended up on the wrong side of the turnover margin again.
