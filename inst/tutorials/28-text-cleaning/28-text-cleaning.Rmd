@@ -1,0 +1,331 @@
+---
+title: "Lesson 28: Text cleaning"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to clear out some junk that data providers give you.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Text cleaning 
+
+## The basics
+
+On occasion, you'll get some data from someone that ... isn't quite what you need it to be. There's something flawed in it. Some extra text, some choice that the data provider made that you just don't agree with. 
+
+There's a ton of tools in the tidyverse to fix this, and you already have some tools in your toolboxt. Let's take a look at a couple. 
+
+First, you know what you need.
+
+```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+Second: The trick to this is thinking logically. If I could do X, I could get this where I want it to be. How do I do X? If you can get to a point where you ask that question, text cleaning gets a lot easier.
+
+Now, two examples.
+
+## Stripping out text
+
+Throughout this class, we've used data from Sports Reference. If you've used their Share > CSV method to copy data from a table, you may have noticed some extra cruft in the player name field. If you haven't seen it, I'll give you an example -- a dataset of NBA players and their advanced metrics.
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+Now load it.
+
+```{r cleaning-load-data, message=FALSE, warning=FALSE}
+nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+```
+```{r cleaning-load-data-exercise, exercise = TRUE}
+nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+```
+```{r cleaning-load-data-exercise-solution}
+nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+```
+```{r cleaning-load-data-exercise-check}
+grade_this_code()
+```
+
+Let's take a look:
+
+```{r head-data, exercise=TRUE, exercise.setup = "cleaning-load-data"}
+head(nbaplayers)
+```
+```{r head-data-solution}
+head(nbaplayers)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+You can see that every player's name is their name, then two backslashes, then some version of their name that must have meaning to Sports Reference, but not to us. We need to get rid of that, or our graphics will look like garbage. 
+
+To do this, we're going to use a little regular expression magic. Regular expressions are a programmatic way to find any pattern in text. What we're looking for is that `\\` business. But, that presents a problem, because the `\` is a special character. It's called an escape character. That escape character means what comes next is potentially special. For instance, if you see `\n`, that's a newline character. So normally, if you see that, it would add a return. 
+
+So for us to get rid of the `\` we're going to have to escape the escape character with an escape character. And we have two of them. So we have to do it twice. 
+
+Yes. Really.
+
+So if we wanted to find two backslashes, we need `\\\\`. Then, using regular expressions, we can say "and then everything else after this" with this: .* 
+
+No really. That's it. So we're looking for `\\\\.*`. That'll find two backslashes and then everything after it. If you think this is hard ... you're right. Regular expressions are an entire month of a programming course by themselves. They are EXTREMELY powerful. 
+
+### Exercise 1: Using regular expressions to clean out junk
+
+To find something in text, we'll use a function called `gsub`. The pattern in `gsub` is `pattern, what we want to replace it with, what column this can all be found in`. So in our example, the pattern is `\\\\.*`, what we want to replace it with is ... nothing, and this is all in the Player column. 
+
+```{r cleaning1, exercise=TRUE, exercise.setup = "cleaning-load-data", message=FALSE}
+nbaplayers %>% mutate(Player=gsub("??????","",??????))
+```
+```{r cleaning1-solution, exercise.reveal_solution = FALSE}
+nbaplayers %>% mutate(Player=gsub("\\\\.*","",Player))
+```
+```{r cleaning1-check}
+grade_this_code()
+```
+
+Just like that, the trash is gone.
+
+## Another example: splitting columns
+
+Text cleaning is really just a set of logic puzzles. What do I need to do? How can I get there step by step?
+
+The NCAA does some very interesting things with data, making it pretty useless. Here's some volleyball data from a few seasons ago.
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/killsperset.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+Let's import it and take a look.
+
+```{r cleaning2-load-data, message=FALSE, warning=FALSE}
+kills <- read_csv("http://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+```
+```{r cleaning2-load-data-exercise, exercise = TRUE}
+kills <- read_csv("http://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+```
+```{r cleaning2-load-data-exercise-solution}
+kills <- read_csv("http://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+```
+```{r cleaning2-load-data-exercise-check}
+grade_this_code()
+```
+
+And we'll take a look.
+
+```{r head2-data, exercise=TRUE, exercise.setup = "cleaning2-load-data"}
+head(kills)
+```
+```{r head2-data-solution}
+head(kills)
+```
+```{r head2-data-check}
+grade_this_code()
+```
+
+First things first, Player isn't just player, it's player, school and conference, all in one. And Ht is a character field -- and in feet and inches.
+
+So ... this is a mess. But there is a pattern. See it? A comma after the player's name. The Conference is in parens. We can use that. 
+
+For this, we're going to use a `tidyr` function called `separate` to split columns into multiple columns based on a character. We'll do this step by step.
+
+### Exercise 2: Separating on a character
+
+Let's use that comma to split the player and the rest. With separate, the pattern is separate WHAT, into WHAT, by WHAT. So we're going to separate Player into Player and School, and we're going to separate it by the comma.
+
+```{r cleaning2, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
+kills %>% separate(Player, into=c("??????", "??????"), sep=",") 
+```
+```{r cleaning2-solution, exercise.reveal_solution = FALSE}
+kills %>% separate(Player, into=c("Player", "School"), sep=",") 
+```
+```{r cleaning2-check}
+grade_this_code()
+```
+
+Good start.
+
+Now, let's get the conference separated. 
+
+### Exericse 3: Separating again, this time with a special character
+
+A problem is going to crop up here -- the paren is a special character, so we have to escape it with the `\\`. 
+
+```{r cleaning3, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
+kills %>% 
+  separate(Player, into=c("??????", "??????"), sep=",") %>%
+  separate(School, into=c("School", "Conference"), sep="??(") 
+```
+```{r cleaning3-solution, exercise.reveal_solution = FALSE}
+kills %>% 
+  separate(Player, into=c("Player", "School"), sep=",") %>%
+  separate(School, into=c("School", "Conference"), sep="\\(")
+```
+```{r cleaning3-check}
+grade_this_code()
+```
+
+Uh oh. Says we have problems in rows 15, 42 and 83. What are they? The NCAA has decided to put (FL), (NY) and (PA) into three teams to tell you they're in Florida, New York and Pennsylvania respectively. 
+
+### Exercise 4: I hate the NCAA 
+
+Well, we can fix that with some gsub and we'll use a switch called `fixed`, which when set to TRUE it means this literal string, no special characters.
+
+```{r cleaning4, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
+kills %>% 
+  separate(Player, into=c("??????", "??????"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="??(") 
+```
+```{r cleaning4-solution, exercise.reveal_solution = FALSE}
+kills %>% 
+  separate(Player, into=c("Player", "School"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="\\(")
+```
+```{r cleaning4-check}
+grade_this_code()
+```
+
+One last thing: see the trailing paren? 
+
+### Exercise 5: One last bit of junk
+
+Believe it or not the trailing paren is NOT a special character. We can use mutate and gsub to replace ) with nothing. 
+
+```{r cleaning5, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
+kills %>% 
+  separate(Player, into=c("??????", "??????"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="??(") %>% 
+  mutate(Conference=gsub("?", "", Conference))
+```
+```{r cleaning5-solution, exercise.reveal_solution = FALSE}
+kills %>% 
+  separate(Player, into=c("Player", "School"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
+  mutate(Conference=gsub(")", "", Conference))
+```
+```{r cleaning5-check}
+grade_this_code()
+```
+
+Looking good, no errors.
+
+## Working with numbers
+
+Now, what should we do about Ht? 6-2 is not going to tell me much when I want to run a regression of height to kills per set. And it's a character field. So we need to convert it to numbers.
+
+Separate again comes to the rescue.
+
+```{r cleaning6, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
+kills %>% 
+  separate(Player, into=c("Player", "School"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
+  mutate(Conference=gsub(")", "", Conference)) %>%
+  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches))
+```
+```{r cleaning6-solution, exercise.reveal_solution = FALSE}
+kills %>% 
+  separate(Player, into=c("Player", "School"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
+  mutate(Conference=gsub(")", "", Conference)) %>%
+  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches))
+```
+```{r cleaning6-check}
+grade_this_code()
+```
+
+But how do we turn that into a height? Math! Check the last mutate.
+
+```{r cleaning7, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
+kills %>% 
+  separate(Player, into=c("Player", "School"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
+  mutate(Conference=gsub(")", "", Conference)) %>%
+  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
+  mutate(Height = (Feet*12)+Inches)
+```
+```{r cleaning7-solution, exercise.reveal_solution = FALSE}
+kills %>% 
+  separate(Player, into=c("Player", "School"), sep=",") %>% 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
+  mutate(Conference=gsub(")", "", Conference)) %>%
+  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
+  mutate(Height = (Feet*12)+Inches)
+```
+```{r cleaning7-check}
+grade_this_code()
+```
+
+And now, in 10 lines of code, using separate, mutate and gsub, we've turned the mess that is the NCAA's data into actually useful data we can analyze. 
+
+These patterns of thought come in handy when facing messed up data.
