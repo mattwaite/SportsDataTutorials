@@ -13,6 +13,7 @@ description: >
 library(learnr)
 library(gradethis)
 library(tidyverse)
+library(ggalt)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
