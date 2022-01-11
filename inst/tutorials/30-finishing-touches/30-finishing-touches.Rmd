@@ -1,0 +1,449 @@
+---
+title: "Lesson 30: Finishing touches"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to add the final visual flourishes to make your charts professional and presentable.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+library(ggtext)
+library(waffle)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Finishing touches
+
+## A quick review
+
+The output from ggplot is good, but not great. We need to add some pieces to it. The elements of a good graphic are:
+
+* Headline
+* Chatter
+* The main body
+* Annotations
+* Labels
+* Source line
+* Credit line
+
+That looks like:
+
+```{r, echo=FALSE}
+knitr::include_graphics(rep("images/chartannotated.png"))
+```
+
+Let's explore fixing up ggplot's output. We'll need a graphic to work with first, so I'm going to use the bubble chart we just worked with in the last lesson. 
+
+```{r text-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+
+winlosslogs <- logs %>% 
+  mutate(
+    wins = case_when(
+      grepl("W", Outcome) ~ 1, 
+      grepl("L", Outcome) ~ 0)
+  )
+    
+ypp <- winlosslogs %>% 
+  group_by(Team, Conference) %>% 
+  summarise(
+    TotalPlays = sum(OffensivePlays), 
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards), 
+    TotalWins = sum(wins)) %>% 
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays)
+
+bigten <- ypp %>% filter(Conference == "Big Ten Conference")
+```
+
+```{r bubble6, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble6-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble6-check}
+grade_this_code()
+```
+
+The first thing you should do with any chart that isn't a waffle chart -- more on that later -- is remove the default plot look and grey backgound by adding a pre-defined theme. There are two you should use to clean your charts up: `theme_minimal` or `theme_light`. These pre-packaged themes do just that. They make your chart cleaner and easier to read in one swoop. 
+
+**NOTE**: Theming is something you do last. And if you're going to change theme elements, you need to apply your prepackaged theme first, then do your theme customization. Everything in ggplot is rendered in order. If you do custom theming, THEN apply the prepackaged theme, the prepackaged theme will overwrite anything you did. So theme_minimal comes first.
+
+Scroll down here and find the theme_minimal() at the very end. We're just adding it on, like any other part of ggplot.
+
+```{r bubble7, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal()
+```
+```{r bubble7-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal()
+```
+```{r bubble7-check}
+grade_this_code()
+```
+
+Compare that to your previous chart. Easier to read, right?
+
+We're off to a good start, but our text has no real hierarchy. We want our headline to stand out more. So let's change that. When it comes to changing text, the place to do that is in the theme element. [There are a lot of ways to modify the theme](http://ggplot2.tidyverse.org/reference/theme.html). 
+
+We'll start easy. Let's make the headline bigger and bold. Scroll down here under theme_minimal and you'll see what I've done.
+
+```{r bubble8, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 20, face = "bold")
+    ) 
+```
+```{r bubble8-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 20, face = "bold")
+    ) 
+```
+```{r bubble8-check}
+grade_this_code()
+```
+
+Now let's fix a few other things -- like the axis labels being too big, the subtitle could be smaller and lets drop some grid lines. Scroll down and take a look. 
+
+```{r bubble9, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    ) 
+```
+```{r bubble9-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    ) 
+```
+```{r bubble9-check}
+grade_this_code()
+```
+
+## Waffle charts require special attention
+
+Frequently in my classes, students use the waffle charts library quite extensively to make graphics. This is a quick walkthough on how to get a waffle chart into a publication ready state. 
+
+Let's look go back to the Nebraska vs Michigan State waffle chart we did in the waffle tutorial. 
+
+```{r waffle-load-data, message=FALSE, warning=FALSE}
+nu <- c("Rushing"=187, "Passing"=255)
+ms <- c("Rushing"=71, "Passing"=183, 188)
+```
+
+We can add labels and themes, but you have to be careful. The waffle library is applying it's own theme -- like theme_minimal -- but if we override something they are using in their theme, some things that are hidden come back and make it worse. So here is an example of how to use ggplot's `labs` and the `theme` to make a fully publication ready graphic. They just get added with a + after the waffle.
+
+```{r waffle1, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
+waffle(
+        nu, 
+        rows = 10, 
+        colors = c("black", "red")
+) +
+  labs(
+    x = "1 square = 1 yard",
+    title="Nebraska rolled up yards on offense", 
+    subtitle="The Huskers had a good night throwing and running.",
+    caption="Source: NCAA | Graphic by Matt Waite") + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.title.y = element_blank()
+  )
+```
+```{r waffle1-solution, exercise.reveal_solution = FALSE}
+waffle(
+        nu, 
+        rows = 10, 
+        colors = c("black", "red")
+) +
+  labs(
+    x = "1 square = 1 yard",
+    title="Nebraska rolled up yards on offense", 
+    subtitle="The Huskers had a good night throwing and running.",
+    caption="Source: NCAA | Graphic by Matt Waite") + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.title.y = element_blank()
+  )
+```
+```{r waffle1-check}
+grade_this_code()
+```
+
+But what if we're using a waffle iron? It gets tougher. 
+
+Here is a full example. I start with my waffle iron code, but note that each waffle is pretty much a self contained thing. That's because a waffle iron isn't really a thing. It's just a way to group waffles together, so you have to make each waffle individually. My first waffle has the title and subtitle and the x-axis label is the team -- Nebraska. The bottom one has no title or subtitle but it does have the caption and the axis label has a little trick to add a return into the label, so I get both the team and the unit in there. 
+
+```{r waffle2, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
+iron(
+ waffle(
+   nu, 
+   rows = 10, 
+   colors = c("black", "red", "white")) + 
+   labs(
+     x="Nebraska",
+     title="Nebraska vs Michigan State: By the numbers", 
+     subtitle="The Huskers won everywhere except the scoreboard.") + 
+   theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.title.y = element_blank()
+  ),
+ waffle(
+   ms, 
+   rows = 10, 
+   colors = c("black", "dark green", "white")) + 
+   labs(
+     x = "Michigan State\n1 square = 10 yards",
+     caption="Source: NCAA | Graphic by Matt Waite"
+     )
+) 
+```
+```{r waffle2-solution, exercise.reveal_solution = FALSE}
+iron(
+ waffle(
+   nu, 
+   rows = 10, 
+   colors = c("black", "red", "white")) + 
+   labs(
+     x="Nebraska",
+     title="Nebraska vs Michigan State: By the numbers", 
+     subtitle="The Huskers won everywhere except the scoreboard.") + 
+   theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 10),
+    axis.title.y = element_blank()
+  ),
+ waffle(
+   ms, 
+   rows = 10, 
+   colors = c("black", "dark green", "white")) + 
+   labs(
+     x = "Michigan State\n1 square = 10 yards",
+     caption="Source: NCAA | Graphic by Matt Waite"
+     )
+) 
+```
+```{r waffle2-check}
+grade_this_code()
+```
+
+Note: These finishing touches aren't optional. They're required of every graphic you create for this course.

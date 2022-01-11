@@ -1,0 +1,447 @@
+---
+title: "Lesson 29: The importance of text"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to add important labels and annotations to your charts.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# The importance of text
+
+## What makes a good graphic
+
+These are the pieces of a good graphic: 
+
+* Headline
+* Chatter
+* The main body
+* Annotations
+* Labels
+* Source line
+* Credit line
+
+The first on that list is the first for a reason. The headline is an incredibly important part of any graphic: it's often the first thing a reader will see. It's got to entice people in, tell them a little bit about what they're going to see, and help tell the story. 
+
+The second item is the chatter -- the text underneath that headline. It needs to work with the headline to further the story, drive people toward the point, maybe add some context.
+
+The two bits of text are extremely important. Let's set up a chart and talk about how to do it wrong and how to do it better.
+
+```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggrepel)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(ggrepel)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+```{r text-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+
+winlosslogs <- logs %>% 
+  mutate(
+    wins = case_when(
+      grepl("W", Outcome) ~ 1, 
+      grepl("L", Outcome) ~ 0)
+  )
+    
+ypp <- winlosslogs %>% 
+  group_by(Team, Conference) %>% 
+  summarise(
+    TotalPlays = sum(OffensivePlays), 
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards), 
+    TotalWins = sum(wins)) %>% 
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays)
+
+bigten <- ypp %>% filter(Conference == "Big Ten Conference")
+```
+
+The data and the chart code isn't important for you to follow along. The code is nothing special -- it's taken straight out of the bubble charts lesson. Under the hood, I've loaded up football games from this season and calculated yards per play on offense and defense as well as total wins for every team in college football. I've also filtered out the Big Ten into a dataframe.
+
+Let's bring up the bubble chart with Big Ten teams labeled as a starting place.
+
+```{r bubble1, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  )
+```
+```{r bubble1-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  )
+```
+```{r bubble1-check}
+grade_this_code()
+```
+
+This chart is missing major parts -- required for this class. 
+
+To fix this, we add labels -- `labs`. Each graphic -- regardless of type --needs a title, subtitle, caption, x and y. Your title is your headline. The subtitle is called chatter -- a sentence under the headline that explains a little about the graphic. The caption is where you'll put the source of your data and the credit line -- your name. x and y should be in each `labs`, but sometimes what x and y are is obvious and you can leave them blank. For example: A bar chart with teams on the y axis doesn't need to label them as Teams. It's obvious by the rest of the chart. 
+
+```{r bubble2, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Headline here", 
+    subtitle="This is the chatter. It is chatter. Chatter.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Headline here", 
+    subtitle="This is the chatter. It is chatter. Chatter.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble2-check}
+grade_this_code()
+```
+
+First, let's start with some headline basics:
+
+* Your headline should be about what the chart is about, **not what makes up the chart**. What story is the chart telling? What made it interesting to you? Don't tell me what the stats are, tell me what it says.
+* Your headline should be specific. **Generic headlines are boring and ignored**. 
+* Your headline should, most often, have a verb. It's not a 100 percent requirement, but a headline without a verb means you're trying to be cute and ...
+* Your headline shouldn't be overly cute. Trying to get away with slang, a very Of The Moment cultural reference that will be forgotten soon, or some inside joke is asking for trouble. 
+* Your headline should provoke a reaction. 
+
+Given our graph, here's a few that don't work. 
+
+```{r bubble3, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska's season", 
+    subtitle="Nebraska won three games.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska's season", 
+    subtitle="Nebraska won three games.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble3-check}
+grade_this_code()
+```
+
+The problems here: 
+
+* No verb. 
+* Generic, forgettable, doesn't say anything. 
+* What is this chart about? What does it say? We have no real idea from the headline and chatter.
+* Don't repeat words from the headline in the chatter. Nebraska Nebraska looks bad. Make one of the Huskers if you're going to do this.
+
+Another example:
+
+```{r bubble4, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Offensive yards per play vs defensive yards per play", 
+    subtitle="Nebraska is in the good part of the graph but had a bad season.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Offensive yards per play vs defensive yards per play", 
+    subtitle="Nebraska is in the good part of the graph but had a bad season.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble4-check}
+grade_this_code()
+```
+
+What's wrong here? 
+
+* The headline is about the stats, not the story.
+* The headline lacks a verb. 
+* The headline lacks any interest, really. 
+* The headline at least moves in the direction of what this chart is about, but see the previous two.
+* The chatter adds more flavor to it, but what does "the good part of the graph" even mean? We're leaving the reader with a lot of questions and no real answers. That's bad. 
+
+Let's try to do this better.
+
+```{r bubble5, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble5-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble5-check}
+grade_this_code()
+```
+
+What works here: 
+
+* Makes a strong statement.
+* Headline tells the story. Chatter bolsters it. 
+* Doesn't repeat Nebraska or Huskers. 
+
+Taking time to sharpen your headlines will make your graphics better.
+
+## Annotations
+
+Another important part of a chart -- but not every chart -- is annotation. Sometimes, you need to label something in a chart to help the reader out. It can be a point or series of points. It can be a circle -- like we did in the encircling lesson. Or it can be regions of a chart. Let's return to our bubble chart.
+
+Annotations also help us draw attention to things, or help the reader understand what they're looking at.
+
+I have lines for the average offensive yards per play and average defensive yards per play -- proxies for quality. If your team averages more yards per play on offense, that's good. If they average fewer yards per play on defense, that too is good. So that sets up a situation where we have four corners, anchored by good at both and bad at both. The averages will create lines to divide those four corners up. 
+
+To label them, I'm going to use geom_text and I'm just going to put numbers in the x and the y to move them where I need them. I can get those numbers by looking at the x and y axis of my chart and guessing. After that, it's increasing or decreasing the number, depending on which direction I want to move it around. 
+
+Note here -- I'm only labeling two sections of the chart. There is such a thing as too much. We want to tell the story here with the most efficient use of elements -- text, color, shape. 
+
+```{r bubble6, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble6-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    )
+```
+```{r bubble6-check}
+grade_this_code()
+```
