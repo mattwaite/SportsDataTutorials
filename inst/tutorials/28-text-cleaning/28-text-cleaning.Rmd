@@ -29,7 +29,6 @@ First, you know what you need.
 
 ```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)
-
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
@@ -44,7 +43,7 @@ Now, two examples.
 
 ## Stripping out text
 
-Throughout this class, we've used data from Sports Reference. If you've used their Share > CSV method to copy data from a table, you may have noticed some extra cruft in the player name field. If you haven't seen it, I'll give you an example -- a dataset of NBA players and their advanced metrics.
+Throughout this class, we've used data from Sports Reference. If you've used their Share > CSV method to copy data from a table, you may have noticed some extra cruft in the player name field. If you haven't seen it, I'll give you an example -- a dataset of NBA players and their advanced metrics. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
