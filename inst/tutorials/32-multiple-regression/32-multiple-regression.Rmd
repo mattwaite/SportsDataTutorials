@@ -1,0 +1,294 @@
+---
+title: "Lesson 32: Multiple regression"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to predict something using multiple inputs.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(Hmisc)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Multiple regression
+
+## The basics
+
+In an earlier lesson, we looked at correlations and linear regression to predict how one element of a game would predict the score. But we know that a single variable, in all but the rarest instances, is not going to be that predictive. We need more than one. Enter multiple regression. Multiple regression lets us add -- wait for it -- multiple predictors to our equation to help us get a better fit to reality.
+
+That presents it's own problems. So let's get set up. The dataset we'll use is all college football games since the 2011 season. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+We need the tidyverse and a library called `Hmisc` that we'll use later.
+
+```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(Hmisc)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(Hmisc)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data.
+
+```{r multiple-load-data, message=FALSE, warning=FALSE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
+
+difflogs <- logs %>% mutate(
+  Differential = TeamScore - OpponentScore, 
+  NetYards = OffensiveYards - DefYards, 
+  TurnoverMargin = DefTotalTurnovers - TotalTurnovers)
+
+simplelogs <- difflogs %>% 
+  select_if(is.numeric) %>% 
+  select(-Game, -Season) %>% 
+  select(Differential, NetYards, TurnoverMargin, everything())
+```
+```{r multiple-load-data-exercise, exercise = TRUE}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
+```
+```{r multiple-load-data-exercise-solution}
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
+```
+```{r multiple-load-data-exercise-check}
+grade_this_code()
+```
+
+One way to show how successful a footballl team was for a game is to show the differential between the team's score and the opponent's score. Score a lot more than the opponent = good, score a lot less than the opponent = bad. And, relatively speaking, the more the better. So let's create that differential. Let's also get our net yardage stat back. And because we'll need it later, let's add the turnover margin.
+
+```{r multiple1, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+difflogs <- logs %>% mutate(
+  Differential = TeamScore - OpponentScore, 
+  NetYards = OffensiveYards - DefYards, 
+  TurnoverMargin = DefTotalTurnovers - TotalTurnovers)
+```
+```{r multiple1-solution, exercise.reveal_solution = FALSE}
+difflogs <- logs %>% mutate(
+  Differential = TeamScore - OpponentScore, 
+  NetYards = OffensiveYards - DefYards, 
+  TurnoverMargin = DefTotalTurnovers - TotalTurnovers)
+```
+```{r multiple1-check}
+grade_this_code()
+```
+
+The linear model code we used before is pretty straight forward. Its `field` is predicted by `field`. Here's a simple linear model that looks at predicting a team's point differential by looking at their net yards. 
+
+```{r multiple2, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+yards <- lm(Differential ~ NetYards, data=difflogs)
+summary(yards)
+```
+```{r multiple2-solution, exercise.reveal_solution = FALSE}
+yards <- lm(Differential ~ NetYards, data=difflogs)
+summary(yards)
+```
+```{r multiple2-check}
+grade_this_code()
+```
+
+Remember: There's a lot here, but only some of it we care about. What is the Adjusted R-squared value? What's the p-value and is it less than .05? In this case, we can predict 67 percent of the difference in differential with the net yardage in the game.
+
+### Exercise 1: 
+
+To add more predictors to this mix, we merely add them. But it's not that simple, as you'll see in a moment. So first, let's look at adding how well the turnover margin worked out for a team to our prediction model. We do that with a simple plus.
+
+```{r multiple3, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+model1 <- lm(Differential ~ ???????? + ????????Margin, data=difflogs)
+summary(model1)
+```
+```{r multiple3-solution, exercise.reveal_solution = FALSE}
+model1 <- lm(Differential ~ NetYards + TurnoverMargin, data=difflogs)
+summary(model1)
+```
+```{r multiple3-check}
+grade_this_code()
+```
+
+First things first: What is the adjusted R-squared?
+
+Second: what is the p-value and is it less than .05? 
+
+Third: Compare the residual standard error. We went from 13.12 to 10.55. The meaning of this is both really opaque and also simple -- by adding data, we reduced the amount of error in our model. Residual standard error is the total distance between what our model would predict and what we actually have in the data. So lots of residual error means the distance between reality and our model is wider. So the width of our predictive range in this example shrank while we improved the amount of the difference we could predict. That's good, and not always going to be the case. 
+
+One of the more difficult things to understand about multiple regression is the issue of **multicollinearity**. What that means is that there is significant correlation overlap between two variables -- the two are related to each other as well as to the target output -- and all you are doing by adding both of them is adding error with no real value to the R-squared. In pure statistics, we don't want any multicollinearity at all. Violating that assumption limits the applicability of what you are doing. So if we have some multicollinearity, it limits our scope of application to college football. We can't say this will work for every football league and level everywhere. What we need to do is see how correlated each value is to each other and throw out ones that are highly co-correlated.
+
+Because you might be thinking, why not just include EVERYTHING. Won't that give us the best model? The answer? No. It's just not practical that you'd be able to predict every input value. You don't have God-like vision on a sport. The idea here is to make a model that is highly predictive while requiring the fewest inputs. Less stuff in, less stuff that can go wrong.
+
+To find problems with multicollinearity, we have to create a correlation matrix that shows us how each value is correlated to our outcome variable, but also with each other. We can do that in the `Hmisc` library. We installed it at the beginning, but in case you did not, you can go to the console in R Studio and run `install.packages("Hmisc")`
+
+First, we're going to remove all non-numeric values from our data. There's a whole other set of tools for creating correlations based on categorical data. For now, we're just going to remove them. To do that, we'll use a shortcut called `select_if` that selects columns if they match a criteria -- in this case, they're numeric. And then, there's two columns that are numeric but aren't numbers, per se. They're the Game number (1,2,3,4,5 and so on) and the season (2020, 2021, etc.). Those don't have any meaning, so we'll dump them too. The last select is just reordering the columns for what comes next. We'll end up with a new dataframe called simplelogs.
+
+```{r multiple4, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+simplelogs <- difflogs %>% 
+  select_if(is.numeric) %>% 
+  select(-Game, -Season) %>% 
+  select(Differential, NetYards, TurnoverMargin, everything())
+```
+```{r multiple4-solution, exercise.reveal_solution = FALSE}
+simplelogs <- difflogs %>% 
+  select_if(is.numeric) %>% 
+  select(-Game, -Season) %>% 
+  select(Differential, NetYards, TurnoverMargin, everything())
+```
+```{r multiple4-check}
+grade_this_code()
+```
+
+Before we proceed, what we're looking to do in the next block is follow the Differential column down, looking for correlation values near 1 or -1. Correlations go from -1, meaning perfect negative correlation, to 0, meaning no correlation, to 1, meaning perfect positive correlation. So we're looking for numbers near 1 or -1 for their predictive value. BUT: We then need to see if that value is also highly correlated with something else. If it is, we have a decision to make.
+
+We get our correlation matrix like this:
+
+```{r multiple5, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+cormatrix <- rcorr(as.matrix(simplelogs))
+
+cormatrix$r
+```
+```{r multiple5-solution, exercise.reveal_solution = FALSE}
+cormatrix <- rcorr(as.matrix(simplelogs))
+
+cormatrix$r
+```
+```{r multiple5-check}
+grade_this_code()
+```
+
+Notice right away -- NetYards is highly correlated to differential. But NetYards's also highly correlated with RushingYards, OffensiveYards and DefYards. And that makes sense: those things all feed into NetYards. Including all of these measures would be pointless -- they would add error without adding much in the way of predictive power. 
+
+### Exercise 2: Adding more to the model
+
+We can add more just by simply adding them. Let's add the average yard per play for both offense and defense -- OffenseAvg and DefenseAvg. They're correlated to NetYards, but not as much as you might expect. 
+
+```{r multiple6, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+model3 <- lm(Differential ~ ???????? + ?????????Margin + ???Avg + ????????Avg, data=difflogs)
+summary(model3)
+```
+```{r multiple6-solution, exercise.reveal_solution = FALSE}
+model3 <- lm(Differential ~ NetYards + TurnoverMargin + DefAvg + OffenseAvg, data=difflogs)
+summary(model3)
+```
+```{r multiple6-check}
+grade_this_code()
+```
+
+Go down the list:
+
+What is the Adjusted R-squared now? 
+What is the p-value and is it less than .05?
+What is the Residual standard error? 
+
+## Using our model to predict things
+
+The final thing we can do with this is predict things. Look at our coefficients table. See the Estimates? We can build a formula from that, same as we did with linear regressions.
+
+How does this apply in the real world? Let's pretend for a minute that you are Scott Frost, and you have a mess on your hands. Your job is to win conference titles. To do that, we need to know what attributes of a team should we emphasize. We can do that by looking at what previous Big Ten conference champions looked like.
+
+So if our goal is to predict a conference champion team, we need to know what those teams did. Here's the last four regular season Big Ten conference champions in this dataset. 
+
+```{r multiple7, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+difflogs %>% 
+  filter(Team == "Michigan" & Season == 2021 | Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) %>% 
+  summarise(
+    meanNetYards = mean(NetYards),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanDefAvg = mean(DefAvg),
+    meanOffenseAvg = mean(OffenseAvg)
+  )
+```
+```{r multiple7-solution, exercise.reveal_solution = FALSE}
+difflogs %>% 
+  filter(Team == "Michigan" & Season == 2021 | Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) %>% 
+  summarise(
+    meanNetYards = mean(NetYards),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanDefAvg = mean(DefAvg),
+    meanOffenseAvg = mean(OffenseAvg)
+  )
+```
+```{r multiple7-check}
+grade_this_code()
+```
+
+Now it's just plug and chug. It's the estimate times the actual number of that thing. Then just add them all up with the intercept at the end.
+
+```{r multiple8, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+(0.0551813*172.0816	) + (3.8548574*0.5306122) + (-3.8991399*5.034694) + (3.8612863*6.820408) + 0.5826970
+```
+```{r multiple8-solution, exercise.reveal_solution = FALSE}
+(0.0551813*172.0816	) + (3.8548574*0.5306122) + (-3.8991399*5.034694) + (3.8612863*6.820408) + 0.5826970
+```
+```{r multiple8-check}
+grade_this_code()
+```
+
+So a team with those numbers is going to average scoring almost 19 more points per game than their opponent. Sound like Ohio State in the last three years?
+
+How does that compare to Nebraska this season? 
+
+```{r multiple9, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+difflogs %>% 
+  filter(
+    Team == "Nebraska" & Season == 2021
+    ) %>% 
+  summarise(
+    meanNetYards = mean(NetYards),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanDefAvg = mean(DefAvg),
+    meanOffenseAvg = mean(OffenseAvg)
+  )
+```
+```{r multiple9-solution, exercise.reveal_solution = FALSE}
+difflogs %>% 
+  filter(
+    Team == "Nebraska" & Season == 2021
+    ) %>% 
+  summarise(
+    meanNetYards = mean(NetYards),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanDefAvg = mean(DefAvg),
+    meanOffenseAvg = mean(OffenseAvg)
+  )
+```
+```{r multiple9-check}
+grade_this_code()
+```
+
+Plug and chug:
+
+```{r multiple10, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
+(0.0551813*80.9) + (3.8548574*-0.417) + (-3.8991399*5.42) + (3.8612863*6.5) + 0.5826970
+```
+```{r multiple10-solution, exercise.reveal_solution = FALSE}
+(0.0551813*80.9) + (3.8548574*-0.417) + (-3.8991399*5.42) + (3.8612863*6.5) + 0.5826970
+```
+```{r multiple10-check}
+grade_this_code()
+```
+
+By this model, it predicted we would average outscoring our opponents by a touchdown over the season. Reality? We outscored them by 5.25 on average. And we won three games. Thanks Northwestern!
