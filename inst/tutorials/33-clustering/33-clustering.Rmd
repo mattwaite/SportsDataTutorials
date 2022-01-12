@@ -1,0 +1,276 @@
+---
+title: "Lesson 33: Clustering"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to group like things together with math.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(cluster)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Clustering
+
+## The basics
+
+One common effort in sports is to classify teams and players -- who are this player's peers? What teams are like this one? Who should we compare a player to? Truth is, most sports commentators use nothing more sophisticated that looking at a couple of stats or use the "eye test" to say a player is like this or that. 
+
+There's better ways. 
+
+In this lesson, we're going to use a method that sounds advanced but it really quite simple called k-means clustering. It's based on the concept of the k-nearest neighbor algorithm. You're probably already scared. Don't be. 
+
+Imagine two dots on a scatterplot. If you took a ruler out and measured the distance between those dots, you'd know how far apart they are. In math, that's called the Euclidean distance. It's just the space between them in numbers. Where k-nearest neighbor comes in, you have lots of dots and you want measure the distance between all of them. What does k-means clustering do? It lumps them into groups based on the average distance between them. Players who are good on offense but bad on defense are over here, good offense good defense are over here. And using the Euclidean distance between them, we can decide who is in and who is out of those groups.
+
+For this exercise, I want to look at Bryce McGowens, Nebraska's 5-star and probably the most interesting player on Fred Hoiberg's team. So who does Bryce McGowens compare to? 
+
+To answer this, we'll use k-means clustering. 
+
+First thing we do is load some libraries and set a seed, so if we run this repeatedly, our random numbers are generated from the same base. If you don't have the cluster library, just add it on the console with `install.packages("cluster")`
+
+```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(cluster)
+
+set.seed(1234)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(cluster)
+
+set.seed(1234)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+Let's load the player data from this season. Here it is if you want to try this in your own notebook.
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/players20.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+Now load that data.
+
+```{r cluster-load-data, message=FALSE, warning=FALSE}
+set.seed(1234)
+
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+
+playersselected <- players %>% 
+  filter(MP>0) %>% filter(Pos == "G") %>% 
+  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+  na.omit() 
+
+playersscaled <- playersselected %>% 
+  select(MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+  mutate_all(scale) %>% 
+  na.omit()
+
+clusters <- kmeans(playersscaled, centers = 5, nstart = 25)
+
+playercluster <- data.frame(playersselected, clusters$cluster) 
+
+bm <- playercluster %>% filter(Player == "Bryce McGowens")
+```
+```{r cluster-load-data-exercise, exercise = TRUE}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+```
+```{r cluster-load-data-exercise-solution}
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+```
+```{r cluster-load-data-exercise-check}
+grade_this_code()
+```
+
+To cluster this data properly, we have some work to do.
+
+First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Bryce McGowens is a guard, so let's just look at guards. Third, we want to limit the data to things that make sense to look at for Bryce McGowens -- things like shooting, three point shooting, assists, turnovers and points. 
+
+```{r cluster1, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+playersselected <- players %>% 
+  filter(MP>0) %>% filter(Pos == "G") %>% 
+  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+  na.omit() 
+```
+```{r cluster1-solution, exercise.reveal_solution = FALSE}
+playersselected <- players %>% 
+  filter(MP>0) %>% filter(Pos == "G") %>% 
+  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+  na.omit() 
+```
+```{r cluster1-check}
+grade_this_code()
+```
+
+Now, k-means clustering doesn't work as well with data that can be on different scales. So comparing a percentage to a count metric -- shooting percentage to points -- would create chaos because shooting percentages are a fraction of 1 and points, depending on when they are in the season, could be quite large. So we have to scale each metric -- put them on a similar basis using the distance from the max value as our guide. If this sounds familiar, it is: It's a z-score.
+
+Also, k-means clustering won't work with text data, so we need to create a dataframe that's just the numbers, but scaled. We can do that with another select, and using mutate_all with the scale function. The `na.omit()` means get rid of any blanks, because they too will cause errors. 
+
+```{r cluster2, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+playersscaled <- playersselected %>% 
+  select(MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+  mutate_all(scale) %>% 
+  na.omit()
+```
+```{r cluster2-solution, exercise.reveal_solution = FALSE}
+playersscaled <- playersselected %>% 
+  select(MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+  mutate_all(scale) %>% 
+  na.omit()
+```
+```{r cluster2-check}
+grade_this_code()
+```
+
+With k-means clustering, we decide how many clusters we want. Most often, researchers will try a handful of different cluster numbers and see what works. But there are methods for finding the optimal number. One method is called the Elbow method. One implementation of this, [borrowed from the University of Cincinnati's Business Analytics program](https://uc-r.github.io/kmeans_clustering), does this quite nicely with a graph that will help you decide for yourself. 
+
+All you need to do in this code is change out the data frame -- `playersscaled` in this case -- and run it. 
+
+```{r cluster3, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+# function to compute total within-cluster sum of square 
+wss <- function(k) {
+  kmeans(playersscaled, k, nstart = 10 )$tot.withinss
+}
+
+# Compute and plot wss for k = 1 to k = 15
+k.values <- 1:15
+
+# extract wss for 2-15 clusters
+wss_values <- map_dbl(k.values, wss)
+
+plot(k.values, wss_values,
+       type="b", pch = 19, frame = FALSE, 
+       xlab="Number of clusters K",
+       ylab="Total within-clusters sum of squares")
+```
+```{r cluster3-solution, exercise.reveal_solution = FALSE}
+# function to compute total within-cluster sum of square 
+wss <- function(k) {
+  kmeans(playersscaled, k, nstart = 10 )$tot.withinss
+}
+
+# Compute and plot wss for k = 1 to k = 15
+k.values <- 1:15
+
+# extract wss for 2-15 clusters
+wss_values <- map_dbl(k.values, wss)
+
+plot(k.values, wss_values,
+       type="b", pch = 19, frame = FALSE, 
+       xlab="Number of clusters K",
+       ylab="Total within-clusters sum of squares")
+```
+```{r cluster3-check}
+grade_this_code()
+```
+
+The Elbow method -- so named because you're looking for the "elbow" where the line flattens out. In this case, it looks like a K of 5 is ideal. So let's try that. We're going to use the kmeans function, saving it to an object called clusters. We just need to tell it our dataframe name, how many centers (k) we want, and we'll use a sensible default for how many different configurations to try. 
+
+```{r cluster4, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+clusters <- kmeans(playersscaled, centers = 5, nstart = 25)
+```
+```{r cluster4-solution, exercise.reveal_solution = FALSE}
+clusters <- kmeans(playersscaled, centers = 5, nstart = 25)
+```
+```{r cluster4-check}
+grade_this_code()
+```
+
+Let's look at what we get.
+
+```{r cluster5, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+clusters
+```
+```{r cluster5-solution, exercise.reveal_solution = FALSE}
+clusters
+```
+```{r cluster5-check}
+grade_this_code()
+```
+
+Interpreting this output, the very first thing you need to know is that **the cluster numbers are meaningless**. They aren't ranks. They aren't anything. After you have taken that on board, look at the cluster sizes at the top. Clusters 2 and 5 are pretty large compared to others. That's notable. Then we can look at the cluster means. For reference, 0 is going to be average. So group 1 is above average on minutes played. Group 2 is below, group 5 is slightly above. 
+
+So which group is Bryce McGowens in? Well, first we have to put our data back together again. In clusters, there is a list of cluster assignments in the same order we put them in, but recall we have no names. So we need to re-combine them with our original data. We can do that with the following:
+
+```{r cluster6, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+playercluster <- data.frame(playersselected, clusters$cluster) 
+```
+```{r cluster6-solution, exercise.reveal_solution = FALSE}
+playercluster <- data.frame(playersselected, clusters$cluster) 
+```
+```{r cluster6-check}
+grade_this_code()
+```
+
+Now we have a dataframe called playercluster that has our player names and what cluster they are in. The fastest way to find Bryce McGowens is to double click on the playercluster table in the environment and use the search in the top right of the table. Because this is based on some random selections of points to start the groupings, these may change from person to person, but McGowens is in Group 1 in my data. 
+
+We now have a dataset and can plot it like anything else. Let's get Bryce McGowenss and then plot him against the rest of college basketball on assists versus minutes played. 
+
+```{r cluster7, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+bm <- playercluster %>% filter(Player == "Bryce McGowens")
+
+bm
+```
+```{r cluster7-solution, exercise.reveal_solution = FALSE}
+bm <- playercluster %>% filter(Player == "Bryce McGowens")
+
+bm
+```
+```{r cluster7-check}
+grade_this_code()
+```
+
+So Bryce is in cluster 1, which if you look at our clusters, puts him in the cluster with all above average metrics. What does that look like? Let's look at scoring. 
+
+```{r cluster8, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+ggplot() + 
+  geom_point(data=playercluster, aes(x=MP, y=PTS, color=clusters.cluster)) + 
+  geom_point(data=bm, aes(x=MP, y=PTS), color="red")
+```
+```{r cluster8-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(data=playercluster, aes(x=MP, y=PTS, color=clusters.cluster)) + 
+  geom_point(data=bm, aes(x=MP, y=PTS), color="red")
+```
+```{r cluster8-check}
+grade_this_code()
+```
+
+Not bad, not bad. But who are Bryce McGowens' peers? If we look at the numbers in Group 1, there's 532 of them. So let's limit them to just Big Ten guards. Unfortunately, my scraper didn't quite work and in the place of Conference is the coach's name. So I'm going to have to do this the hard way and make a list of Big Ten teams and filter on that. Then I'll sort by minutes played. 
+
+```{r cluster9, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
+big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
+
+playercluster %>% filter(clusters.cluster == 1) %>% filter(Team %in% big10) %>% arrange(desc(MP))
+```
+```{r cluster9-solution, exercise.reveal_solution = FALSE}
+big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
+
+playercluster %>% filter(clusters.cluster == 1) %>% filter(Team %in% big10) %>% arrange(desc(MP))
+```
+```{r cluster9-check}
+grade_this_code()
+```
+
+So there are the 22 guards most like Bryce McGowens in the Big Ten. We should further limit our number by minutes played, but you can do that on your own another time.

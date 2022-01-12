@@ -81,7 +81,7 @@ logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.cs
 grade_this_code()
 ```
 
-One way to show how successful a footballl team was for a game is to show the differential between the team's score and the opponent's score. Score a lot more than the opponent = good, score a lot less than the opponent = bad. And, relatively speaking, the more the better. So let's create that differential. Let's also get our net yardage stat back. And because we'll need it later, let's add the turnover margin.
+One way to show how successful a football team was for a game is to show the differential between the team's score and the opponent's score. Score a lot more than the opponent = good, score a lot less than the opponent = bad. And, relatively speaking, the more the better. So let's create that differential. Let's also get our net yardage stat back. And because we'll need it later, let's add the turnover margin.
 
 ```{r multiple1, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
 difflogs <- logs %>% mutate(
