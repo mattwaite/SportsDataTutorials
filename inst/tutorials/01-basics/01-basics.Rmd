@@ -11,8 +11,10 @@ description: >
 
 ```{r setup, include=FALSE}
 library(learnr)
+library(gradethis)
+library(tidyverse)
 knitr::opts_chunk$set(echo = FALSE)
-options(tutorial.storage = filesystem_storage("~"))
+tutorial_options(exercise.completion=FALSE)
 ```
 
 ## Starting out
