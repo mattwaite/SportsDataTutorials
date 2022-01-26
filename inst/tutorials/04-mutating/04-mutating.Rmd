@@ -195,7 +195,7 @@ Unfortunately, in this tutorial environment, we don't see the environment. For u
 glimpse(??????)
 ```
 ```{r mutating-player-glimpse-data-solution}
-glimpse(nbaplayers)
+glimpse(players)
 ```
 ```{r mutating-player-glimpse-data-check}
 grade_this_code()
