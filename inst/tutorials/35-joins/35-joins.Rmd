@@ -1,0 +1,232 @@
+---
+title: "Lesson 35: Joins"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to combine two datasets together based on a common field.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(hoopR)
+library(zoo)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Joins
+
+## The basics
+
+Sometimes we have information in two different tables that we need to be in on. For this, we're going to take the stats from a game and join it to the schedule, so the home and away teams have their stats attached to it. How are we going to do that? By using joins -- a powerful tool that solves this problem.
+
+First we're going to load the data.
+
+```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(hoopR)
+library(zoo)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(hoopR)
+library(zoo)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+Now, we need data. In the `hoopR` library, we have access to team box scores and the schedule. This is great if we want to try and predict who is going to win a basketball game based on their stats. We can calculate season metrics up to that point in the schedule and then look at two teams going into the game. 
+
+The problem with the team box scores is that it's just one team. We don't get the home and away teams. The problem with the schedule is we don't know the stats of the teams -- we just know who is the home and the away team. 
+
+In other words, we have data in two different tables and we need it together. Enter joins. 
+
+Let's first get set up with data. This next block will pull the most recent season of men's college basketball data and the schedule. It will also do some quick cleaning of the team box scores to turn numbers into numbers and split the makes vs attempts columns into separate makes and attempts columns. 
+
+
+```{r join-load-data, message=FALSE, warning=FALSE}
+teamgames <- load_mbb_team_box(seasons = most_recent_mbb_season()) %>%
+  separate(field_goals_made_field_goals_attempted, into = c("field_goals_made","field_goals_attempted")) %>%
+  separate(three_point_field_goals_made_three_point_field_goals_attempted, into = c("three_point_field_goals_made","three_point_field_goals_attempted")) %>%
+  separate(free_throws_made_free_throws_attempted, into = c("free_throws_made","free_throws_attempted")) %>%
+  mutate_at(12:35, as.numeric)
+
+schedule <- load_mbb_schedule(seasons = most_recent_mbb_season())
+
+teamstats <- teamgames %>% 
+  group_by(team_short_display_name) %>%
+  mutate(
+    team_score = ((field_goals_made-three_point_field_goals_made) * 2) + (three_point_field_goals_made*3) + free_throws_made,
+    rolling_shooting_percentage = rollmean(lag(field_goal_pct, n=1), k=5, fill=field_goal_pct)
+    ) %>%
+  select(team_short_display_name, team_uid, game_id, game_date, team_score, rolling_shooting_percentage)
+
+home_games <- schedule %>%
+  select(id, home.uid)
+
+away_games <- schedule %>%
+  select(id, away.uid)
+
+home <- home_games %>% inner_join(teamstats, by=c("id"="game_id", "home.uid"="team_uid")) %>% rename(home_team_short_display_name = team_short_display_name, home_team_score=team_score, home_rolling_shooting_percentage = rolling_shooting_percentage)
+
+away <- away_games %>% inner_join(teamstats, by=c("id"="game_id", "away.uid"="team_uid")) %>% rename(away_team_short_display_name = team_short_display_name, away_team_score=team_score, away_rolling_shooting_percentage = rolling_shooting_percentage)
+```
+```{r join-load-data-exercise, exercise = TRUE}
+teamgames <- load_mbb_team_box(seasons = most_recent_mbb_season()) %>%
+  separate(field_goals_made_field_goals_attempted, into = c("field_goals_made","field_goals_attempted")) %>%
+  separate(three_point_field_goals_made_three_point_field_goals_attempted, into = c("three_point_field_goals_made","three_point_field_goals_attempted")) %>%
+  separate(free_throws_made_free_throws_attempted, into = c("free_throws_made","free_throws_attempted")) %>%
+  mutate_at(12:35, as.numeric)
+
+schedule <- load_mbb_schedule(seasons = most_recent_mbb_season())
+```
+```{r join-load-data-exercise-solution}
+teamgames <- load_mbb_team_box(seasons = most_recent_mbb_season()) %>%
+  separate(field_goals_made_field_goals_attempted, into = c("field_goals_made","field_goals_attempted")) %>%
+  separate(three_point_field_goals_made_three_point_field_goals_attempted, into = c("three_point_field_goals_made","three_point_field_goals_attempted")) %>%
+  separate(free_throws_made_free_throws_attempted, into = c("free_throws_made","free_throws_attempted")) %>%
+  mutate_at(12:35, as.numeric)
+
+schedule <- load_mbb_schedule(seasons = most_recent_mbb_season())
+```
+```{r join-load-data-exercise-check}
+grade_this_code()
+```
+
+## Exploring the data
+
+The first thing that we need when joining data together is we need columns in both tables that match each other. Generally speaking, we're looking for ID numbers that uniquely identify things like teams and games. That means we need to first look at our data and see what we have.
+
+Let's first look at the schedule. 
+
+```{r head1-data, exercise=TRUE, exercise.setup = "join-load-data"}
+head(schedule)
+```
+```{r head1-data-solution}
+head(schedule)
+```
+```{r head1-data-check}
+grade_this_code()
+```
+
+If you explore around in that data, you'll see two different kinds of IDs. There's columns that have XXXX.id after them, and some have XXXX.uid after them. The difference is not really that important -- it's unique to the data provider -- but both represent ID numbers for that thing. For example `home.uid` and `away.uid` represent the id numbers of the home and away team. The `id` column is the ID number for this particular game. If we use both, we can get the home team for that specific game -- meaning the home team at that moment. That's important.
+
+Now let's look at the teamgames data, to see if we can find similar id numbers. 
+
+```{r head2-data, exercise=TRUE, exercise.setup = "join-load-data"}
+head(teamgames)
+```
+```{r head2-data-solution}
+head(teamgames)
+```
+```{r head2-data-check}
+grade_this_code()
+```
+
+This sometimes take a little bit of deduction, but if you look, you'll see `game_id`, which appears to match the `id` from the schedule dataset. Because we only have one team here, we won't have `home.uid` or `away.uid` ... but we do have `team_uid`, which appears to match the form of the schedule uids. 
+
+That means we're in business.
+
+## Joining data
+
+Sometimes, you can jump straight to joining data -- your datasets are lean, have no extraneous information and will seamlessly come together without issue. The other 99 percent of the time, your first steps are to thin your data up to just what you need. 
+
+In our case, we're going to do a couple of things. First, we're going to calculate the total number of points the team scored. It's not in the data, but we can calculate it by multiplying three pointers by 3, subtracting threes made from all field goals made and mulitplying that by 2, and then adding in free throws. Then, for future work, we're going to calculate the rolling mean of shooting percentage lagged by a game. In other words, what were the 5 game rolling mean of shooting percentage going into this game. Lastly, we'll use select to get us the six columns we need. 
+
+We'll put all of this into a new dataframe called teamstats.
+
+```{r join1, exercise=TRUE, exercise.setup = "join-load-data", message=FALSE}
+teamstats <- teamgames %>% 
+  group_by(team_short_display_name) %>%
+  mutate(
+    team_score = ((field_goals_made-three_point_field_goals_made) * 2) + (three_point_field_goals_made*3) + free_throws_made,
+    rolling_shooting_percentage = rollmean(lag(field_goal_pct, n=1), k=5, fill=field_goal_pct)
+    ) %>%
+  select(team_short_display_name, team_uid, game_id, game_date, team_score, rolling_shooting_percentage)
+```
+```{r join1-solution, exercise.reveal_solution = FALSE}
+teamstats <- teamgames %>% 
+  group_by(team_short_display_name) %>%
+  mutate(
+    team_score = ((field_goals_made-three_point_field_goals_made) * 2) + (three_point_field_goals_made*3) + free_throws_made,
+    rolling_shooting_percentage = rollmean(lag(field_goal_pct, n=1), k=5, fill=field_goal_pct)
+    ) %>%
+  select(team_short_display_name, team_uid, game_id, game_date, team_score, rolling_shooting_percentage)
+```
+```{r join1-check}
+grade_this_code()
+```
+
+Now we're going to do the same thing with the schedule. However, we have a problem here -- a game has two teams. A home team and an away team. We have no way to know, from our teamstats data, who was the home or away team. To make this work, we need to make two dataframes -- one for home teams and one for away teams. 
+
+```{r join2, exercise=TRUE, exercise.setup = "join-load-data", message=FALSE}
+home_games <- schedule %>%
+  select(id, home.uid)
+
+away_games <- schedule %>%
+  select(id, away.uid)
+```
+```{r join2-solution, exercise.reveal_solution = FALSE}
+home_games <- schedule %>%
+  select(id, home.uid)
+
+away_games <- schedule %>%
+  select(id, away.uid)
+```
+```{r join2-check}
+grade_this_code()
+```
+
+And now, we've arrived at the point where we can join the data. The problem we now face is what *kind* of join do we want to do? There's multiple kinds. The three we'll talk about here are the `left_join`, the `right_join` and the `inner_join`. 
+
+The best way to think about this is to think of your data as two sheets of paper -- the schedule sheet is on the left, the teamstats sheet is on the right. A `left_join` would take all data from the schedule sheet and keep *only* the data that matched from the right sheet. The `right_join` is the opposite -- all teamstats data is kept, and only the matching schedule data is kept.
+
+The `inner_join` keeps only the data where both match. Since we're going to be making models out of this data, we only want the data where both matches, so `inner_join` it is. 
+
+The next issue is the column names are not the same. Joining in dplyr is easiest when the id column names are the same. Alas, we aren't so lucky. So we have to specify which field equals which. And the order matters. 
+
+One last bit of housekeeping -- when the data comes together, we'll need to rename some columns so they are home and away team specific.
+
+Here's what that looks like:
+
+```{r join3, exercise=TRUE, exercise.setup = "join-load-data", message=FALSE}
+home_games %>% 
+  inner_join(teamstats, by=c("id"="game_id", "home.uid"="team_uid")) %>%
+  rename(
+    home_team_short_display_name = team_short_display_name, 
+    home_team_score=team_score, 
+    home_rolling_shooting_percentage = rolling_shooting_percentage
+    )
+```
+```{r join3-solution, exercise.reveal_solution = FALSE}
+home_games %>% 
+  inner_join(teamstats, by=c("id"="game_id", "home.uid"="team_uid")) %>%
+  rename(
+    home_team_short_display_name = team_short_display_name, 
+    home_team_score=team_score, 
+    home_rolling_shooting_percentage = rolling_shooting_percentage
+    )
+```
+```{r join3-check}
+grade_this_code()
+```
+
+Behind the scenes, I've gone ahead and made a home and away dataframe that is the result of the above code, as well as one that does the away side too. 
+
+The last thing we need to do is put it all together. When we have clean data, with matching field names, joins are pretty easy. 
+
+```{r join4, exercise=TRUE, exercise.setup = "join-load-data", message=FALSE}
+home %>% inner_join(away)
+```
+```{r join4-solution, exercise.reveal_solution = FALSE}
+home %>% inner_join(away)
+```
+```{r join4-check}
+grade_this_code()
+```
