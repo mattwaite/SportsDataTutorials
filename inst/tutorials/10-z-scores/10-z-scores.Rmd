@@ -151,7 +151,7 @@ teamtotals <- teamquality %>%
     FGAvg = mean(TeamFGPCT), 
     ReboundAvg = mean(TeamTotalRebounds), 
     OppFGAvg = mean(OpponentFGPCT),
-    OffRebAvg = mean(OpponentTotalRebounds)
+    OppRebAvg = mean(OpponentTotalRebounds)
     ) 
 ```
 ```{r zscore2-check}
