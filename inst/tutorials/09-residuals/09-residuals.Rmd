@@ -78,6 +78,9 @@ penalties <- correlations %>%
     TotalPenalties = Penalties+DefPenalties,
     TotalPenaltyYards = PenaltyYds+DefPenaltyYds
   )
+
+pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
+summary(pfit)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
 correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv")
@@ -207,17 +210,17 @@ So what we can say about this model is that it's statistically insignificant and
 
 ### Exercise 3: Adding residuals and arranging them.
 
-Just like a previous exercise, we'll add precited and residuals to our dataframe. Then we'll arrange it, and use a little select magic to make it easier to read. 
+Just like a previous exercise, we'll add predicted and residuals to our dataframe. Then we'll arrange it, and use a little select magic to make it easier to read. 
 
 ```{r regression4, exercise=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties %>% mutate(predicted = predict(????), residuals = ?????????(pfit))
 
-????????? %>% arrange(desc(?????????)) %>% select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
+????????? %>% arrange(desc(?????????)) %>% select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals)
 ```
 ```{r regression4-solution, exercise.reveal_solution = FALSE}
 penalties <- penalties %>% mutate(predicted = predict(pfit), residuals = residuals(pfit))
 
-penalties %>% arrange(desc(residuals)) %>% select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
+penalties %>% arrange(desc(residuals)) %>% select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals)
 ```
 ```{r regression4-check}
 grade_this_code()
@@ -226,7 +229,7 @@ grade_this_code()
 First, note all of the biggest misses here are all blowout games. The worst games of the 2020 season, the worst being Clemson vs Georgia Tech. The model missed that differential by ... 65 points. The margin of victory? 66 points. In other words, this model is terrible. But let's look at it anyway. 
 
 ```{r correlationchart3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
-penalties <- penalties %>% mutate(predicted = predict(fit), residuals = residuals(fit))
+penalties <- penalties %>% mutate(predicted = predict(pfit), residuals = residuals(pfit))
 
 ggplot(penalties, aes(x=TotalPenaltyYards, y=residuals)) + geom_point()
 ```
