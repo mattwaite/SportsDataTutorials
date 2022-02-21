@@ -114,7 +114,7 @@ waffle(
 )
 ```
 ```{r waffle2-solution, exercise.reveal_solution = FALSE}
-passing <- c("Nebraska"=255, "Mighigan State"=183)
+passing <- c("Nebraska"=255, "Michigan State"=183)
 
 waffle(
         passing, 
