@@ -152,7 +152,7 @@ dw <- nu %>% filter(`FG%` > .75)
 ggplot() + 
   geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
   geom_point(data=nu, aes(x=`FG%`, y=TRB), color="red") + 
-  geom_encircle(data=dw, aes(x=`??%`, y=???), s_shape=1, expand=1, colour="red")
+  geom_encircle(data=dw, aes(x=`FG%`, y=TRB), s_shape=1, expand=1, colour="red")
 ```
 ```{r encircle3-check}
 grade_this_code()
