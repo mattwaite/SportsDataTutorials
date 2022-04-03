@@ -40,7 +40,7 @@ That looks like:
 knitr::include_graphics(rep("images/chartannotated.png"))
 ```
 
-Let's explore fixing up ggplot's output. We'll need a graphic to work with first, so I'm going to use the bubble chart we just worked with in the last lesson. 
+Let's explore fixing up ggplot's output. We'll need a graphic to work with first, so I'm going to use a bubble chart. 
 
 ```{r text-load-data, message=FALSE, warning=FALSE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
@@ -127,7 +127,7 @@ grade_this_code()
 
 The first thing you should do with any chart that isn't a waffle chart -- more on that later -- is remove the default plot look and grey backgound by adding a pre-defined theme. There are two you should use to clean your charts up: `theme_minimal` or `theme_light`. These pre-packaged themes do just that. They make your chart cleaner and easier to read in one swoop. 
 
-**NOTE**: Theming is something you do last. And if you're going to change theme elements, you need to apply your prepackaged theme first, then do your theme customization. Everything in ggplot is rendered in order. If you do custom theming, THEN apply the prepackaged theme, the prepackaged theme will overwrite anything you did. So theme_minimal comes first.
+**NOTE**: Adding a `theme()` is something you do last. And if you're going to change theme elements, you need to **apply your prepackaged theme first**, then do your theme customization. Everything in ggplot is rendered in order. If you do custom theming, THEN apply the prepackaged theme, the prepackaged theme will overwrite anything you did. So `theme_minimal()` or `theme_light()` comes first.
 
 Scroll down here and find the theme_minimal() at the very end. We're just adding it on, like any other part of ggplot.
 
@@ -336,6 +336,80 @@ ggplot() +
 ```{r bubble9-check}
 grade_this_code()
 ```
+One last thing: ggplot, by default, sets the margin for the title and subtitle to the edge of the chart area -- the area were the data appears. It creates an odd spacing where the title is shifted right for little reason. We can fix that too in `theme()`.
+```{r bubble10, exercise=TRUE, exercise.setup = "text-load-data", message=FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank(),
+    plot.title.position = "plot"
+    ) 
+```
+```{r bubble10-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.3) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.863151) + 
+  geom_hline(yintercept = 5.448228) +
+  geom_text(aes(x=7, y=4.2, label="Good Offense, Good Defense"), color="blue") +
+  geom_text(aes(x=5, y=6.6, label="Bad Defense, Bad Offense"), color="blue") +
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  ) + 
+  labs(
+    x="Offensive yards per play", 
+    y="Defensive yards per play", 
+    title="Nebraska was good, except where it mattered", 
+    subtitle="The Huskers offense and defense, on a per play basis, were among the elite in the sport.", 
+    caption="Source: Data Provider | By Your Name"
+    ) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank(),
+    plot.title.position = "plot"
+    ) 
+```
+```{r bubble10-check}
+grade_this_code()
+```
 
 ## Waffle charts require special attention
 
@@ -447,3 +521,13 @@ grade_this_code()
 ```
 
 Note: These finishing touches aren't optional. They're required of every graphic you create for this course.
+
+## One last finishing touch
+
+In your blog post, where you have a block, you need to add a directive to the block about what to display and what *not* to display. We want our readers to only see graphics. We'll link to the code later.
+
+To do that, we need to change each `{r}` bit at the top of each block to this:
+
+`{r message=FALSE, warning=FALSE, echo=FALSE}`
+
+Every block missing this bit will result in losing points. 
