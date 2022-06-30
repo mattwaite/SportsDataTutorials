@@ -12,6 +12,7 @@ description: >
 ```{r setup, include=FALSE}
 library(learnr)
 library(gradethis)
+library(glue)
 library(tidyverse)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
@@ -21,13 +22,9 @@ tutorial_options(exercise.completion=FALSE)
 
 ## The basics
 
-One of the most common data analysis techniques is to look at change over time. The most common way of comparing change over time is through percent change. The math behind calculating percent change is very simple, and you should know it off the top of your head. The easy way to remember it is:
+One of the most common data analysis techniques is to create a new stat out of existing stats provided by a league or sport. More often than not, this is meant to level the playing field, so to speak. It's hard to compare players or teams who have played a different number of games, or appeared for a different number of minutes. Often what we need is a per game or per attempt metric. 
 
-`(new - old) / old` 
-
-Or new minus old divided by old. Your new number minus the old number, the result of which is divided by the old number. To do that in R, we can use `dplyr` and `mutate` to calculate new metrics in a new field using existing fields of data. 
-
-So first we'll import the tidyverse so we can read in our data and begin to work with it.
+First we'll import the tidyverse so we can read in our data and begin to work with it.
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
@@ -39,14 +36,14 @@ library(tidyverse)
 grade_this_code()
 ```
 
-Now you'll need a common and simple dataset of total attendance at NCAA football games over the last few seasons. You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+We're going to look at last season's women's soccer season and ask a couple of questions. You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/attendance.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2021.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,13 +58,35 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
-attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2021.csv")
+
+ruthless <- soccer %>% mutate(
+  gpg = Goals/Games
+) %>% 
+  arrange(desc(gpg)) %>% slice(1)
+
+snipers <- soccer %>%
+  mutate(SoGPct = (SoG/ShAtt)*100
+) %>%
+  arrange(desc(SoGPct)) %>% slice(1)
+
+maxgames <- soccer %>% summarize(max_games = max(Games))
+
+confsnipers <- soccer %>%
+  group_by(Conference) %>%
+  summarize(
+    total_sog = sum(SoG),
+    total_shatt = sum(ShAtt)
+  ) %>%
+  mutate(SoGPct = (total_sog/total_shatt)*100
+) %>%
+  arrange(desc(SoGPct)) %>% slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
-attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2021.csv")
 ```
 ```{r mutating-load-data-exercise-solution}
-attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2021.csv")
 ```
 ```{r mutating-load-data-exercise-check}
 grade_this_code()
@@ -79,152 +98,122 @@ Remember, if you want to see the first six rows -- handy to take a peek at your 
 head(??????)
 ```
 ```{r head-data-solution}
-head(attendance)
+head(soccer)
 ```
 ```{r head-data-check}
 grade_this_code()
 ```
 
-### Exercise 1: Calculating percent change. 
+### Exercise 1: Calculating goals per game 
 
-The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2018\` as the new data, and we'll use \`2017\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year. Similar to summarize, we'll want to give what we create a name using =. 
+The code to calculate anything with mutate is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do goals divided by games -- goals per game -- but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's a Games column, and a Goals column. Then, to help us, we'll use arrange again to sort it, so we get the most ruthless squad over one year. Similar to summarize, we'll want to give what we create a name using =. 
 
-Replace the words in all caps with the correct parts and name the new column we're creating as change. **NOTE: The backticks in the previous paragraph -- the key to the left of the 1 key, NOT the apostrophe -- are very important here.** Column names that start with numbers -- or are numbers -- have to be wrapped in backticks. Otherwise, our code thinks they're numbers, not column names.  
+Replace the words in all caps with the correct parts and name the new column we're creating as gpg. 
 
 ```{r mutate-change, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
 NAMEOFDATA %>%
-  mutate(NEWCOLUMNNAME = (NEWYEAR - OLDYEAR)/OLDYEAR
+  mutate(NEWCOLUMNNAME = GOALSCOLUMN/GAMESCOLUMN
 ) 
 ```
 ```{r mutate-change-solution, exercise.reveal_solution = FALSE}
-attendance %>% mutate(
-  change = (`2018` - `2017`)/`2017`
+soccer %>% mutate(
+  gpg = Goals/Games
 ) 
 ```
 ```{r mutate-change-check}
 grade_this_code()
 ```
 
-What do we see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100.
+Click the black arrow at the top right of the results box to get all the way to the end, where you'll see gpg. 
 
-### Exercise 2: Changing a decimal to a percentage.
+But does this tell us who the most ruthless team is? No. We need to arrange to do that. 
+
+```{r mutate-change2, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
+NAMEOFDATA %>%
+  mutate(NEWCOLUMNNAME = GOALSCOLUMN/GAMESCOLUMN
+) %>% 
+  arrange(desc(gpg))
+```
+```{r mutate-change2-solution, exercise.reveal_solution = FALSE}
+soccer %>% mutate(
+  gpg = Goals/Games
+) %>% 
+  arrange(desc(gpg))
+```
+```{r mutate-change2-check}
+grade_this_code()
+```
+
+```{r ruthless, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
+glue("So in that season, {ruthless$Institution} were the most ruthless team scoring {format(ruthless$gpg, digits=2)} goals per game.")
+```
+
+### Exercise 2: Calculating a percentage.
+
+Another common analysis task is converting two numbers into a percentage. How often do shooters make shots? You can look at made shots, but how then do you compare a player who has played a lot of games to one that hasn't played as many? You don't. That's why you create a percentage to compare the two. 
+
+Sticking with our soccer data, which team was the most accurate when it comes to shots on goal? Who was pressuring the keeper the most? Sure, we could just arrange the shots on goal column and see who was at the top, but how then do you compare a team that shoots a lot with a team who doesn't but is ruthlessly efficient when they do? 
+
+To calculate a percentage, we need to remember a formula: The smaller thing / the total number. The smaller thing is the outcome you're measuring. The total number is all the chances a team or a player had at that thing. For example: Completion percentage. How do you calculate that? You divide completions by the total number of passes thrown. But if you do that, you'll get a number less than 1. That's because it's not yet a percentage like you are accustomed to seeing. To get that, you have to multiply the result of your division by 100. 
+
+To get shots on goal percentage, we're going to do something very similar to the first exercise, but adding in the multiplication. The little thing in this case is `SoG` (short for Shots on Goal). The big thing is `ShAtt` (short for Shot Attempts). 
+
+Let's call our new column SoGPct, short for Shot on Goal Percentage.
 
 ```{r mutate-change-percent, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-NAMEOFDATA %>%
-  mutate(NEWCOLUMNNAME = ((NEWYEAR - OLDYEAR)/OLDYEAR)*???
-) 
+soccer %>%
+  mutate(NEWCOLUMNNAME = (LITTLETHING/BIGTHING)*???
+) %>%
+  arrange(desc(NEWCOLUMNNAME))
 ```
 ```{r mutate-change-percent-solution, exercise.reveal_solution = FALSE}
-attendance %>% mutate(
-  change = ((`2018` - `2017`)/`2017`)*100
-) 
+soccer %>%
+  mutate(SoGPct = (SoG/ShAtt)*100
+) %>%
+  arrange(desc(SoGPct))
 ```
 ```{r mutate-change-percent-check}
 grade_this_code()
 ```
 
-Now, does this ordering do anything for us? No. We want the fastest changing attenance at the top, not an alphabetical listing. Let's fix that with arrange. 
+```{r accurate, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
+glue("Who is putting the most pressure on the keeper shot after shot?  {snipers$Institution}, who are on goal {format(snipers$SoGPct, digits=1)}% of the time.
+     
+     A note about this. Note that {snipers$Institution} played in {snipers$Games} matches. The team that played the most played in {maxgames$max_games}. We'll learn how to deal with that in the next tutorial.")
+``` 
 
-### Exercise 3: Arranging by our new number 
+### Exercise 4: Combining what we know
 
-```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-NAMEOFDATA %>%
-  mutate(NEWCOLUMNNAME = ((NEWYEAR - OLDYEAR)/OLDYEAR)*???
-) %>% arrange(desc(?????))
+With this data, we have every team and their stats. But what if we wanted to know which is the most ruthless conference? Here is an example of how you can use what you learned in the last tutorial with what you learned here.
+
+To take a dataset of every team and get each conference, we need to use group by again. And then, to calculate a percentage for the conference, we need to add up the two pieces we need in summarize *before* we mutate a new column. Let's give our new shots on goal percentage column the same name as the previous exercise. 
+
+```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
+soccer %>%
+  group_by(NOT THE TEAM BUT THE...) %>%
+  summarize(
+    total_sog = sum(???),
+    total_shatt = sum(?????)
+  ) %>%
+  mutate(NEWCOLUMNNAME = (LITTLETHINGINSUMMARIZE/BIGTHINGINSUMMARIZE)*???
+) %>%
+  arrange(desc(NEWCOLUMNNAME))
 ```
-```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE}
-attendance %>% mutate(
-  change = ((`2018` - `2017`)/`2017`)*100
-) %>% arrange(desc(change))
+```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE, warning=FALSE}
+soccer %>%
+  group_by(Conference) %>%
+  summarize(
+    total_sog = sum(SoG),
+    total_shatt = sum(ShAtt)
+  ) %>%
+  mutate(SoGPct = (total_sog/total_shatt)*100
+) %>%
+  arrange(desc(SoGPct))
 ```
 ```{r mutate-change-percent-arrange-check}
 grade_this_code()
 ```
 
-So who had the most growth from 2017 to 2018? Something going on at Georgia Southern. 
-
-## A more complex example
-
-There's metric in basketball that's easy to understand -- shooting percentage. It's the number of shots made divided by the number of shots attempted. Simple, right? Except it's a little too simple. Because what about three point shooters? They tend to be more valuable because the three point shot is worth more. What about players who get to the line? In shooting percentage, free throws are nowhere to be found. 
-
-Basketball nerds, because of these weaknesses, have created a new metric called [True Shooting Percentage](https://en.wikipedia.org/wiki/True_shooting_percentage). True shooting percentage takes into account all aspects of a players shooting to determine who the real shooters are. 
-
-Using `dplyr` and `mutate`, we can calculate true shooting percentage. So let's look at a new dataset, one of every college basketball player's season stats in 2020-21 season. It's a dataset of more than 5,300 players, and we've got 59 variables -- one of them is True Shooting Percentage, but we're going to ignore that. 
-
-You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/players21.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-```
-
-Import it like this:
-
-```{r mutating-load-player-data, message=FALSE, warning=FALSE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
-```
-```{r mutating-load-player-data-exercise, exercise = TRUE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
-```
-```{r mutating-load-player-data-exercise-solution}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players21.csv")
-```
-```{r mutating-load-player-data-exercise-check}
-grade_this_code()
-```
-
-The basic true shooting percentage formula is `(Points / (2*(FieldGoalAttempts + (.44 * FreeThrowAttempts)))) * 100`. Let's talk that through. Points divided by a lot. It's really field goal attempts plus 44 percent of the free throw attempts. Why? Because that's about what a free throw is worth, compared to other ways to score. After adding those things together, you double it. And after you divide points by that number, you multiply the whole lot by 100. 
-
-In our data, we need to be able to find the fields so we can complete the formula. To do that, one way is to use the Environment tab in R Studio. In the Environment tab is a listing of all the data you've imported, and if you click the triangle next to it, it'll list all the field names, giving you a bit of information about each one. 
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/environment.png"))
-```
-
-Unfortunately, in this tutorial environment, we don't see the environment. For us, `glimpse` is going to give us our best view of the data. 
-
-```{r mutating-player-glimpse-data, exercise=TRUE, exercise.setup = "mutating-load-player-data"}
-glimpse(??????)
-```
-```{r mutating-player-glimpse-data-solution}
-glimpse(players)
-```
-```{r mutating-player-glimpse-data-check}
-grade_this_code()
-```
-
-Note from glimpse what columns we need. Points are from a column labeled what? What about Field Goals Attempted and Free Throws Attempted? Look for the \$. Those indicate each **column** name in the dataset. The word or abbreviation next to the \$ is a column name. For instance, MP is Minutes Played. Note which column names have backticks around them. Why? Because they contain symbols. 
-
-### Exercise 4: Calculating true shooting percentage
-
-Once we know the names of the columns we need -- Points, Field Goals Attempted and Free Throws Attempted -- we can turn this into code. And what question does that code ask?
-
-Who had the best true shooting season last year? Replace the words in all caps and the ????? and find out.
-
-```{r mutate-trueshooting, exercise=TRUE, exercise.setup = "mutating-load-player-data", message=FALSE}
-NAMEOFDATA %>%
-  mutate(trueshooting = (POINTSCOLUMNNAME/(2*(FIELDGOALSATTEMPTEDCOLUMNNAME + (.44*FREETHROWSATTEMPTEDCOLUMNNAME))))*100) %>% 
-  arrange(desc(?????))
-```
-```{r mutate-trueshooting-solution, exercise.reveal_solution = FALSE}
-players %>%
-  mutate(trueshooting = (PTS/(2*(FGA + (.44*FTA))))*100) %>%
-  arrange(desc(trueshooting))
-```
-```{r mutate-trueshooting-check}
-grade_this_code()
-```
-
-You'll be forgiven if you did not hear about Weber State's shooting sensation Jake Furgerson. He played in one game for five minutes, took one shot and actually hit it. It happened to be a three pointer, which is one more three pointer than I've hit in college basketball. So props to him. Does that mean he had the best true shooting season in college basketball last year? 
-
-Not hardly. 
-
-We'll talk about how to narrow the pile and filter out data in the next tutorial.
+```{r conf, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
+glue("What conference do you not want to be a keeper?  The {confsnipers$Institution} Conference, who are on goal {format(confsnipers$SoGPct, digits=1)}% of the time.")
+``` 

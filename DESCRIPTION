@@ -1,12 +1,12 @@
 Package: SportsDataTutorials
 Title: The Companion Tutorials To UNL's SPMC 350 Sports Data Analysis Course
-Version: 0.0.0.9000
+Version: 0.0.1.9000
 Authors@R: 
     person(given = "Matt",
            family = "Waite",
            role = c("aut", "cre"),
            email = "matt.waite@unl.edu")
-Description: What the package does (one paragraph).
+Description: Walks students through the skills needed for UNL's SPMC 350 course.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
