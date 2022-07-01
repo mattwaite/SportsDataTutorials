@@ -13,6 +13,7 @@ description: >
 library(learnr)
 library(gradethis)
 library(tidyverse)
+library(glue)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
@@ -27,14 +28,14 @@ You are soon going to discover that long before you can visualize data, **you ne
 
 But what if your visualization library needs one row for each measure? So state, data type and the data. Nebraska, Population, 1,929,000. That's one row. Then the next row is Nebraska, Average Life Expectancy, 76. That's the next row. That's where recasting your data comes in. 
 
-We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of college football attendance to demonstrate. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of NBA offensive ratings. We're going to try and answer some questions about offensive improvement. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/attendance.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/nbalong.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -60,13 +61,20 @@ grade_this_code()
 Now we'll load the data. 
 
 ```{r transforming-load-data, message=FALSE, warning=FALSE}
-attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
+
+nbawide <- nba %>% pivot_wider(names_from = Season, values_from = OffRtg)
+
+tops <- nbawide %>%
+  mutate(Difference = `2021-2022` - `2020-2021`) %>%
+  arrange(desc(Difference)) %>%
+  slice(1)
 ```
 ```{r transforming-load-data-exercise, exercise = TRUE}
-attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
 ```
 ```{r transforming-load-data-exercise-solution}
-attendance <- read_csv("http://mattwaite.github.io/sportsdatafiles/attendance.csv")
+nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
 ```
 ```{r transforming-load-data-exercise-check}
 grade_this_code()
@@ -78,110 +86,82 @@ As per usual, let's take a look at this with head.
 head(??????)
 ```
 ```{r head-data-solution}
-head(attendance)
+head(nba)
 ```
 ```{r head-data-check}
 grade_this_code()
 ```
 
-As you can see, each row represents a school, and then each column represents a year. This is great for calculating the percent change -- we can subtract a column from a column and divide by that column. But later, when we want to chart each school's attendance over the years, we have to have each **row** be one team for one year. Nebraska in 2013, then Nebraska in 2014, and Nebraska in 2015 and so on. 
+As you can see, each row represents one season for one team. The problem we face is if we want to calculate change between years, we can't do that. For mutate to work, the columns have to be side by side. We can't subtract this year from last year if they're on two different *rows*. We can if they're in two different *columns*. 
 
-To do that, we use `pivot_longer` because we're making wide data long. `pivot_longer` is a function, much like `summarize` and `filter` in that it takes input. In this case, pivot_longer needs three things: what columns are getting pivoted, and what we need to name the new columns that are getting pivoted. Those names are called `names_to` and `values_to` because one is going to be a label and one is going to be a ... value. 
+### Exercise 1: Making data wider 
 
-Given our data, we have Institution, Conference, and then a bunch of columns that are years. What we want to see is something like Institution, Conference, Year, Attendance. That way, we get Nebraska, Big Ten, 2017, 12345 on one row. Then the next row is Nebraska, Big Ten, 2018, 12345. And so on. Instead of one row, one institution, it's that each year for each institution is it's own row. If we have six years of data, we have six rows of Nebraska. And six rows of Iowa, god forbid.
+To fix this, we use `pivot_wider` because we're making long data wide.
 
-### Exercise 1: Making data longer 
-
-The hardest part of pivoting longer is telling it which columns to pivot. You spell this out in `cols`. With simpler datasets, you can just say which ones. The columns we want to pivot are the ones with the numbers -- the year columns. There are some shortcuts to help us. Since all of the columns we want to make rows start with 20, we can use that pattern in our `cols` directive . Then we give that column a name -- Year -- and the values for each year need a name too. Those are the attendance figure, so let's call those Attendance. Replace the all caps here and you can see how it works.
-
-```{r pivoting-longer, exercise=TRUE, exercise.setup = "transforming-load-data"}
-NAMEOFDATA %>% pivot_longer(cols = starts_with("20"), names_to = "????", values_to = "??????????")
-```
-```{r pivoting-longer-solution, exercise.reveal_solution = FALSE}
-attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
-```
-```{r pivoting-longer-check}
-grade_this_code()
-```
-
-We've gone from 150 rows to 900, but that's expected when we have 6 years for each team. 
-
-## Making long data wide
-
-We can reverse this process using `pivot_wider`, which makes long data wide.
-
-Why do any of this? 
-
-In some cases, you're going to be given long data - six Nebraskas and six Iowas and six Minnesotas and so on -- and you need to calculate some metric using two of the years -- a percent change for instance. You'll need to make the data wide to do that -- one row of Nebraska with all the data side by side. You might then have to re-lengthen the data now with the percent change. Some projects require you to do all kinds of flexing like this. It just depends on the data.
-
-Fortunately, pivoting wider is easier than pivoting longer. We don't have to specify what columns are going to be pivoted in a cols directive. We do that in `names_from` and `values_from`. And those names and values? Those are actual column names instead of text, so no quote marks.
-
-### Exercise 2: Making long data wide 
-
-Let's assign what we did above and create something called `longdata`. Then we'll use pivot wider to make our long data wide again. To `pivot_wider`, we just need to say where our column names are coming from. The hint for what those columns are called? In this case, look in `pivot_longer`.  
+Making wide data out of long data is relatively simple. `pivot_wider` is a function that takes two inputs -- `names_from` and `values_from`. How do we know which goes in which? When you have three fields like we do, it's pretty easy. The first thing you know is that it's not the name of the team or the player. We know, in the picture in our minds what this should look like, the name is the first thing. That leaves two other things -- the season and the offensive rating. If you think of what would look good as column names -- the headers across the top -- ask yourself, is it the season names -- 2018-2019, 2019-2020, etc. -- or is it **all** the possible combinations of offensive ratings. Go with the one that *isn't* going to create a million columns for the `names_from` bit. 
 
 ```{r pivoting-wider, exercise=TRUE, exercise.setup = "transforming-load-data"}
-???????? <- NAMEOFDATA %>% pivot_longer(cols = starts_with("20"), names_to = "????", values_to = "??????????")
-
-longdata %>% pivot_wider(names_from = ????, values_from = ??????????)
+nba %>% pivot_wider(names_from = ??????, values_from = ??????)
 ```
 ```{r pivoting-wider-solution, exercise.reveal_solution = FALSE}
-longdata <- attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
-
-longdata %>% pivot_wider(names_from = Year, values_from = Attendance)
+nba %>% pivot_wider(names_from = Season, values_from = OffRtg)
 ```
 ```{r pivoting-wider-check}
 grade_this_code()
 ```
 
-And just like that, we're back. 
+You've gone from 240 rows to 30. Why? Because now each row is a team. There are 30 teams in the NBA. And one row has all of the seasons of data for that team, instead of there being eight rows for each team because there's eight seasons and each season for each team is a row.
 
-This matters because certain visualization types need wide or long data. A significant hurdle you will face for the rest of the semester is getting the data in the right format for what you want to do. 
+### Exercise 2: Chaining commands to answer a question
 
-So let me walk you through an example using this data. 
+Now that we have wide data, we can answer this question: Which offense got better the most this season from the previous season? 
 
-Let's look at Nebraska's attendance over the time period. In order to do that, I need long data because that's what the charting library, `ggplot2`, needs. You're going to learn a lot more about ggplot later, so don't worry about that now.
+The first thing we will need to do is save our data into a new dataframe. We do that with a `<-`. We'll save it into a new dataframe called nbawide.
 
+Then, we're going to use mutate to subtract last season's offensive rating -- the points per 100 possessions -- from this season's. **A quirk of dplyr: Because the column names now start with a number -- for example 2019 -- we have to put backticks around the seasons. The backtick says "this is okay."
+
+Finally, we'll arrange to see who was tops.
+
+```{r pivoting-mutate, exercise=TRUE, exercise.setup = "transforming-load-data"}
+nbawide <- nba %>% pivot_wider(names_from = ??????, values_from = ??????)
+
+nbawide %>%
+  mutate(Difference = `?????????` - `?????????`) %>%
+  arrange(desc(COLUMNNAMEFROMMUTATE))
 ```
-longdata <- attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
+```{r pivoting-mutate-solution, exercise.reveal_solution = FALSE}
+nbawide <- nba %>% pivot_wider(names_from = Season, values_from = OffRtg)
 
-nebraska <- longdata %>% filter(Institution == "Nebraska")
-
-ggplot(nebraska, aes(x=Year, y=Attendance, group=1)) + 
-  geom_line() + 
-  scale_y_continuous(labels = scales::comma) + 
-  labs(x="Year", y="Attendance", title="We'll all stick together?", subtitle="It's not as bad as you think -- they widened the seats, cutting the number.", caption="Source: NCAA | By Matt Waite", color = "Outcome") +
-  theme_minimal() + 
-  theme(
-    plot.title = element_text(size = 16, face = "bold"),
-    axis.title = element_text(size = 10),
-    axis.title.y = element_blank(),
-    axis.text = element_text(size = 7),
-    axis.ticks = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank(),
-    legend.position="bottom"
-  )
+nbawide %>%
+  mutate(Difference = `2021-2022` - `2020-2021`) %>%
+  arrange(desc(Difference))
 ```
-```{r longchart, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "transforming-load-data"}
-longdata <- attendance %>% pivot_longer(cols = starts_with("20"), names_to = "Year", values_to = "Attendance")
-
-nebraska <- longdata %>% filter(Institution == "Nebraska")
-
-ggplot(nebraska, aes(x=Year, y=Attendance, group=1)) + 
-  geom_line() + 
-  scale_y_continuous(labels = scales::comma) + 
-  labs(x="Year", y="Attendance", title="We'll all stick together?", subtitle="It's not as bad as you think -- they widened the seats, cutting the number.", caption="Source: NCAA | By Matt Waite", color = "Outcome") +
-  theme_minimal() + 
-  theme(
-    plot.title = element_text(size = 16, face = "bold"),
-    axis.title = element_text(size = 10),
-    axis.title.y = element_blank(),
-    axis.text = element_text(size = 7),
-    axis.ticks = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank(),
-    legend.position="bottom"
-  )
+```{r pivoting-mutate-check}
+grade_this_code()
 ```
 
+```{r topoffense, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "transforming-load-data", results='asis'}
+glue("It was the {tops$Team} who improved the most, getting {format(tops$Difference, digits=2)} points better in one season.")
+```
+
+### Exercise 3: Going back to long
+
+`pivot_longer` is a function, much like `pivot_wider` in that it takes input. In this case, pivot_longer needs *three* things: what columns are getting pivoted, and what we need to name the new columns that are getting pivoted. Those names are called `names_to` and `values_to` because one is going to be a label and one is going to be a ... value. 
+
+Given our data, we have Team and then a bunch of columns that are years. What we want to see is something like Team, Season, OffRtg, just like we had when we started. 
+
+Why are we doing this? In the future, you are going to find the data you need and it is not going to be in the form you want it. You'll have to pivot it, one way or the other. 
+
+The hardest part of pivoting longer is telling it which columns to pivot. You spell this out in `cols`. With simpler datasets, you can just say which ones. The columns we want to pivot are the ones with the numbers -- the year columns. There are some shortcuts to help us. Since all of the columns we want to make rows start with 20, we can use that pattern in our `cols` directive . Then we give that column a name -- Season -- and the values for each year need a name too. Those are the offensive ratings, so let's call those OffRtg. Replace the all caps here and you can see how it works.
+
+```{r pivoting-longer, exercise=TRUE, exercise.setup = "transforming-load-data"}
+nbawide %>% pivot_longer(cols = starts_with("20"), names_to = "??????", values_to = "??????")
+```
+```{r pivoting-longer-solution, exercise.reveal_solution = FALSE}
+nbawide %>% pivot_longer(cols = starts_with("20"), names_to = "Season", values_to = "OffRtg")
+```
+```{r pivoting-longer-check}
+grade_this_code()
+```
+
+We're back to 240 rows. 
