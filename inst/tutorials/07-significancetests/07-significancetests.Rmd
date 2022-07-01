@@ -43,7 +43,7 @@ In statistics, the **null hypothesis** is the opposite of your hypothesis. In th
 
 What we're driving toward is a metric called a p-value, which is the probability that you'd get your sample mean *if the null hypothesis is true.* So in our case, it's the probability we'd see the numbers we get if there was no difference between fans and no fans. If that probability is below .05, then we consider the difference significant and we reject the null hypothesis.
 
-So let's see. We'll need a log of every game last NBA season. In this data, there's a field called COVID, which labels the game as a regular game or a bubble game. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+So let's see. We'll need a log of every game in the covid NBA season. In this data, there's a field called COVID, which labels the game as a regular game or a bubble game. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
@@ -102,72 +102,66 @@ grade_this_code()
 ```
 
 
-### Exercise 1: Mutate a new field and test it.
+### Exercise 1: Let's test.
 
-First, let's just look at scoring. Here's a theory: fans make players nervous. The screaming makes players tense up, and tension makes for bad shooting. An alternative to this: screaming fans make you defend harder. So my hypothesis is that not only is the scoring different, it's lower.
+First, let's just look at shooting Here's a theory: fans make players nervous. The screaming makes players tense up, and tension makes for bad shooting. An alternative to this: screaming fans make you defend harder. So my hypothesis is that not only is the shooting different, it's lower.
 
-First things first, we need to create a new field, called `totalpoints` and add the two bottom line scores together for the Team and the Opponent (look in your head step for the right columns). We'll need this for our t-test, so we're going to make this a new dataframe called `points`.
-
-Typically speaking, with significance tests, the process involves creating two different means and then running a bunch of formulas on them. R makes this easy by giving you a `t.test` function, which does all the work for you. What we have to tell it is what is the value we are testing (hint: we're making that one with mutate), what is our grouping label field (hint: look at the last sentence right before the box where you download the data), and from what data (hint: we're making a new dataframe and the name comes from the previous paragraph).
+Typically speaking, with significance tests, the process involves creating two different means and then running a bunch of formulas on them. R makes this easy by giving you a `t.test` function, which does all the work for you. What we have to tell it is what is the value we are testing (hint: we're looking at team shooting percentage), what is our grouping label field (hint: look at the last sentence right before the box where you download the data), and from what data (hint: look at the loading data step).
 
 ```{r ttest1, exercise=TRUE, exercise.setup = "significance-load-data"}
-?????? <- ???? %>% mutate(??????????? = ????Score + ????????Score)
-
 t.test(???????????? ~ ?????, data=??????)
 ```
 ```{r ttest1-solution, exercise.reveal_solution = FALSE}
-points <- logs %>% mutate(totalpoints = TeamScore + OpponentScore)
-
-t.test(totalpoints ~ COVID, data=points)
+t.test(TeamFGPCT ~ COVID, data=logs)
 ```
 ```{r ttest1-check}
 grade_this_code()
 ```
 
-Now let's talk about the output. I prefer to read these bottom up. So at the bottom, it says that the mean number of points score in an NBA game With Fans is 222.89. The mean scored in games Without Fans is 231.35. That means teams are scoring almost 8.5 points MORE without fans on average. 
+Now let's talk about the output. I prefer to read these bottom up. So at the bottom, it says that the mean field goal percentage in an NBA game With Fans is 46.08 percent. The mean scored in games Without Fans is 46.45 percent. That means teams about a third of a percent BETTER without fans on average. 
 
-But, some games are defenseless track meets, some games are defensive slugfests. We learned that averages can be skewed by extremes. So the next thing we need to look at is the p-value. Remember, this is the probability that we'd get this sample mean -- the without fans mean -- if there was no difference between fans and no fans. 
+But, some games people can't miss, some games players couldn't make a bucket if the hoop was a hula hoop. We learned that averages can be skewed by extremes. So the next thing we need to look at is the **p-value**. Remember, this is the probability that we'd get this sample mean -- the without fans mean -- if there was no difference between fans and no fans. 
 
-The probability? 4.099e-07 or 4.099 x 10 to the -7 power. Don't remember your scientific notation? That's .00000004099. The decimal, seven zeros and the number. 
+The probability? 0.3894 or 38.9 percent. That means in almost 4 in 10 times, we WOULD get this answer.
 
-Remember, if the probability is below .05, then we determine that this number is statistically significant. We'll talk more about statistical significance soon, but in this case, statistical significance means that our hypothesis is correct: points are different without fans than with. And since our hypothesis is correct, we *reject the null hypothesis* and we can confidently say that bubble teams are scoring more than they were when fans packed arenas. 
+Remember, if the probability is below .05, then we determine that this number is statistically significant. We'll talk more about statistical significance soon, but in this case, statistical significance means that our hypothesis is correct: shooting percentages are different without fans than with. 
 
-## Accepting the null hypothesis
+Except, our number is NOT lower than .05. It's considerably higher than that. That means our hypothesis is NOT correct and we have to *accept the null hypothesis.* 
 
-So what does it look like when your hypothesis is wrong? 
+We can safely say that professional basketball players shoot just as well with fans as without. So sit down and eat your popcorn.
 
-Let's test another thing that may have been impacted by bubble games: home court advantage. If you're the home team, but you're not at home, does it affect you? It has to, right? Your fans aren't there. Home and away are just positions on the scoreboard. It can't matter, can it?
+## Rejecting the null hypothesis
 
-My hypothesis is that home court is no longer an advantage, and the home team will score less relative to the away team.
+So what does it look like when your hypothesis is correct? 
 
-### Exercise 2: Does homecourt matter?
+Let's test another thing that may have been impacted by bubble games: the refs. It's almost a feature of sports: Yelling at the refs when they make a call, good or bad. Amazing how often the goodness or badness of the call depends on who you are rooting for. 
 
-First things first: We need to make a dataframe called homecourt where Team is the home team. That's not the easiest thing to do, so I'll give you that one. It's a fancy filter is all. And then we'll create a differential between the home team and away team. If you added two things together to get the total points in a game, to find the difference between them -- the differential -- you'd ...
+My hypothesis is that without fans to yell at refs, they weren't calling fouls like they were when the fans were there to ... ahem ... encourage them to do their jobs.
 
-If home court is an advantage, the differential should average out to be positive -- the home team scores more than the away team. But will our t-test tell us it's significant?
+### Exercise 2: Do people affect the referees?
+
+First things first: We need to make a dataframe called refs where we'll add up the team and the opponent's personal fouls. This will tell is if the refs were more active with people or without. Will our t-test tell us it's significant?
 
 ```{r ttest2, exercise=TRUE, exercise.setup = "significance-load-data"}
-????????? <- logs %>% filter(is.na(HomeAway) == TRUE) %>% mutate(differential = ????????? - ????????????)
+???? <- logs %>% mutate(totalfouls = ????????? + ????????????)
 
-t.test(???????????? ~ ?????, data=?????????)
+t.test(?????????? ~ ?????, data=????)
 ```
 ```{r ttest2-solution, exercise.reveal_solution = FALSE}
-homecourt <- logs %>% filter(is.na(HomeAway) == TRUE) %>% mutate(differential = TeamScore - OpponentScore)
+refs <- logs %>% mutate(totalfouls = TeamPersonalFouls + OpponentPersonalFouls)
 
-t.test(differential ~ COVID, data=homecourt)
+t.test(totalfouls ~ COVID, data=refs)
 ```
 ```{r ttest2-check}
 grade_this_code()
 ```
 
-So again, start at the bottom. With Fans, the home team averages 2.17 more points than the away team. Without fans, they average 1.64 more. 
+So again, start at the bottom. With Fans, refs called about 41 fouls per game. Without fans? More like 46. Without fans, the refs were calling MORE fouls. 
 
-If you are a bad sportswriter or a hack sports talk radio host, you look at this and scream "the bubble killed home court!"
+But is it significant?
 
-But two things: first, the home team is STILL, on average, scoring more than the away team on the whole. 
+Look at the p-value. It's 2.247e-15. Is that less than .05? Depends on if you can remember how to read scientific notation. What that says is the p-value is 2.247 x 10 to the -15 power. Not remembering negative exponents? Take the decimal point and move it 15 places to the left. So point then 14 zeros then 2247 or .000000000000002247. Is that less than .05? Yes. Yes it is.
 
-And two: Look at the p-value. It's .7129. Is that less than .05? No, no it is not. That means we have to **accept the null hypothesis** that there is no difference between fans and no fans when it comes to the difference between the home team and the away team's score.
-
-Now, does this mean that the bubble hasn't impacted the magic of home court? Not necessarily. What it's saying is that the variance between one and the other is too large to be able to say that they're different. It could just be random noise that's causing the difference, and so it's not real. More to the point, it's saying that this metric isn't capable of telling you that there's no home court in the bubble.
+That means we **reject the null hypothesis** that there is no difference between fans and no fans when it comes to the refs calling fouls in NBA games. They absolutely did call more fouls in the bubble without fans. Our hypothesis that the bubble affected refereeing is correct, but our supposition about it is not. I thought they'd back off. Instead, they called more. 
 
 We're going to be analyzing these bubble games for *years* trying to find the true impact of fans.
