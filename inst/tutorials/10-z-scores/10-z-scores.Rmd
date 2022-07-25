@@ -13,6 +13,7 @@ description: >
 library(learnr)
 library(gradethis)
 library(tidyverse)
+library(glue)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
@@ -23,7 +24,7 @@ tutorial_options(exercise.completion=FALSE)
 
 Z-scores are a handy way to standardize numbers so you can compare things across groupings or time. In this class, we may want to compare teams by year, or era. We can use z-scores to answer questions like who was the greatest X of all time, because a z-score can put them in context to their era. 
 
-A z-score is a measure of how a particular stat is from the mean. It's measured in standard deviations from that mean. A standard deviation is a measure of how much variation -- how spread out -- numbers are in a data set. What it means here, with regards to z-scores, is that zero is perfectly average. If it's 1, it's one standard deviation above the mean, and 34 percent of all cases are between 0 and 1. 
+A z-score is a measure of how far a particular stat is from the mean. It's measured in standard deviations from that mean. A standard deviation is a measure of how much variation -- how spread out -- numbers are in a data set. What it means here, with regards to z-scores, is that zero is perfectly average. If it's 1, it's one standard deviation above the mean, and 34 percent of all cases are between 0 and 1. 
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/simulations2.png"))
@@ -31,18 +32,18 @@ knitr::include_graphics(rep("images/simulations2.png"))
 
 If you think of the normal distribution, it means that 84.3 percent of all case are below that 1. If it were -1, it would mean the number is one standard deviation below the mean, and 84.3 percent of cases would be above that -1. So if you have numbers with z-scores of 3 or even 4, that means that number is waaaaaay above the mean.  
 
-So let's use last year's Nebraska basketball team, which if haven't been paying attention to current events, was not good at basketball. 
+So let's use last year's Nebraska volleyball team, which if haven't been paying attention to current events, was very good at volleyball. A few points from legendary. But were they the best Husker team since 2018, when they were also the national semifinalist? 
 
 ## Calculating a Z score in R
 
-For this we'll need the logs of all college basketball games last season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+For this we'll need the season totals for the last four seasons. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/volleyball1812.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -69,90 +70,72 @@ grade_this_code()
 And load the data.
 
 ```{r zscore-load-data, message=FALSE, warning=FALSE, results=FALSE}
-gamelogs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1821.csv")
 
-teamquality <- gamelogs %>% 
-  select(Conference, Team, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
-
-teamtotals <- teamquality %>% 
-  group_by(Conference, Team) %>% 
-  summarise(
-    FGAvg = mean(TeamFGPCT), 
-    ReboundAvg = mean(TeamTotalRebounds), 
-    OppFGAvg = mean(OpponentFGPCT),
-    OppRebAvg = mean(OpponentTotalRebounds)
-    ) 
-
-teamzscore <- teamtotals %>% 
+perset <- seasons %>% 
   mutate(
-    FGzscore = as.numeric(scale(FGAvg, center = TRUE, scale = TRUE)),
-    RebZscore = as.numeric(scale(ReboundAvg, center = TRUE, scale = TRUE)),
-    OppZscore = as.numeric(scale(OppFGAvg, center = TRUE, scale = TRUE)) * -1,
-    OppRebZScore = as.numeric(scale(OppRebAvg, center = TRUE, scale = TRUE)) * -1,
-    TotalZscore = FGzscore + RebZscore + OppZscore + OppRebZScore
-  )  
+    killsperset = Kills/S,
+    digsperset = Digs/S,
+    acesperset = Aces/S
+  ) %>%
+  select(Season, Institution, Conference, killsperset, digsperset, acesperset)
+
+teamzscore <- perset %>%
+  group_by(Season) %>% 
+  mutate(
+    killszscore = as.numeric(scale(killsperset, center = TRUE, scale = TRUE)),
+    aceszscore = as.numeric(scale(acesperset, center = TRUE, scale = TRUE)),
+    digszscore = as.numeric(scale(digsperset, center = TRUE, scale = TRUE)),
+    TotalZscore = killszscore + aceszscore + digszscore
+  ) %>% ungroup() 
 ```
 ```{r zscore-load-data-exercise, exercise = TRUE}
-gamelogs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1821.csv")
 ```
 ```{r zscore-load-data-exercise-solution}
-gamelogs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1821.csv")
 ```
 ```{r zscore-load-data-exercise-check}
 grade_this_code()
 ```
 
-Let's `glimpse` the data because it's very wide and has a lot of columns. 
+Let's `glimpse` the data and see what we've got. 
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "zscore-load-data"}
-glimpse(gamelogs)
+glimpse(seasons)
 ```
 ```{r glimpse-data-solution}
-glimpse(gamelogs)
+glimpse(seasons)
 ```
 ```{r glimpse-data-check}
 grade_this_code()
 ```
 
-The first thing we need to do is select some fields we think represent team quality and a few things to help us keep things straight. So I'm going to pick shooting percentage, rebounding and the opponent version of the same two: 
-
-```{r zscore1, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamquality <- gamelogs %>% 
-  select(Conference, Team, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
-```
-```{r zscore1-solution, exercise.reveal_solution = FALSE}
-teamquality <- gamelogs %>% 
-  select(Conference, Team, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
-```
-```{r zscore1-check}
-grade_this_code()
-```
-
 ### Exercise 1: Preparing data
 
-And since we have individual game data, we need to collapse this into one record for each team. We do that with ... group by. Now recall from many lessons ago -- when you use group by, what you are left with when you are done is what is in group by and what is in summarize. For us to be able to narrow our view to specific conferences, we need to add Conference to our group by along with Team. 
+The first thing we need to do is create some metrics to deal with comparing seasons that include the covid season. Then we'll select some fields we think represent team quality and a few things to help us keep things straight. 
 
-Then, in summarize, we want to make averages of our stats that you can find in the select statement you just ran. 
+Every team plays a different number of sets in a season, and really great teams and really bad teams will play fewer sets than middle of the road teams. And, with the covid season, some teams got just a few matches in, others got more. To be able to work with this, we need to standardize around *per set* metrics. Sets in our data are marked as S. 
+
+To get that, we're going to use mutate to create `killsperset`, `digsperset` and `acesperset`. Then, we're going to use select to get Season, Institution, Conference and our four metrics. 
 
 ```{r zscore2, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamtotals <- teamquality %>% 
-  group_by(Conference, ????) %>% 
-  summarise(
-    FGAvg = mean(????????), 
-    ReboundAvg = mean(?????????????????), 
-    OppFGAvg = mean(Opponent?????),
-    OppRebAvg = mean(OpponentTotal?????????)
-    ) 
+perset <- seasons %>% 
+  mutate(
+    killsperset = ?????/?,
+    digsperset = ????/?,
+    acesperset = ????/?
+  ) %>%
+  select(Season, Institution, Conference, ???????????, ??????????, ??????????)
 ```
 ```{r zscore2-solution, exercise.reveal_solution = FALSE}
-teamtotals <- teamquality %>% 
-  group_by(Conference, Team) %>% 
-  summarise(
-    FGAvg = mean(TeamFGPCT), 
-    ReboundAvg = mean(TeamTotalRebounds), 
-    OppFGAvg = mean(OpponentFGPCT),
-    OppRebAvg = mean(OpponentTotalRebounds)
-    ) 
+perset <- seasons %>% 
+  mutate(
+    killsperset = Kills/S,
+    digsperset = Digs/S,
+    acesperset = Aces/S
+  ) %>%
+  select(Season, Institution, Conference, killsperset, digsperset, acesperset)
 ```
 ```{r zscore2-check}
 grade_this_code()
@@ -160,29 +143,33 @@ grade_this_code()
 
 ## Exercise 2: Create a z-score
 
+The first thing we're going to do is deal with having multiple seasons. We want the z-score to be centered on the average for *that season*, so each Husker team gets ranked against their competition, not all teams in all seasons. That way, we compare how good the 2018 Huskers were compared to 2018 teams, vs 2021 teams, which is impossible. A team from 2018 can't play a team from 2020. How do we make z-scores for each season? Simple: group by. 
+
+Then, we're *NOT* going to use summarize. We'll use mutate. That has the effect of putting all the 2020 teams together in a pile, calculating each teams z-score and then just leaving it there instead of folding it all together into a single number (like summarize would). 
+
 To calculate a z-score in R, the easiest way is to use the `scale` function in base R. To use it, you use `scale(FieldName, center=TRUE, scale=TRUE)`. The center and scale indicate if you want to subtract from the mean and if you want to divide by the standard deviation, respectively. We do.
 
-When we have multiple z-scores, it's pretty standard practice to add them together into a composite score. That's what we're doing at the end here with `TotalZscore`. Note: We have to invert OppZscore and OppRebZScore by multiplying it by a negative 1 because the lower someone's opponent number is, the better. 
+When we have multiple z-scores, it's pretty standard practice to add them together into a composite score. That's what we're doing at the end here with `TotalZscore`. 
 
 ```{r zscore3, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore <- teamtotals %>% 
+teamzscore <- perset %>%
+  group_by(??????) %>% 
   mutate(
-    FGzscore = as.numeric(scale(??Avg, center = TRUE, scale = TRUE)),
-    RebZscore = as.numeric(scale(Rebound???, center = TRUE, scale = TRUE)),
-    OppZscore = as.numeric(scale(Opp?????, center = TRUE, scale = TRUE)) * -1,
-    OppRebZScore = as.numeric(scale(???RebAvg, center = TRUE, scale = TRUE)) * -1,
-    TotalZscore = FGzscore + RebZscore + OppZscore + ????????????
-  )  
+    killszscore = as.numeric(scale(?????perset, center = TRUE, scale = TRUE)),
+    aceszscore = as.numeric(scale(????perset, center = TRUE, scale = TRUE)),
+    digszscore = as.numeric(scale(????perset, center = TRUE, scale = TRUE)),
+    TotalZscore = ?????zscore + ????zscore + ????zscore
+  ) %>% ungroup() 
 ```
 ```{r zscore3-solution, exercise.reveal_solution = FALSE}
-teamzscore <- teamtotals %>% 
+teamzscore <- perset %>%
+  group_by(Season) %>% 
   mutate(
-    FGzscore = as.numeric(scale(FGAvg, center = TRUE, scale = TRUE)),
-    RebZscore = as.numeric(scale(ReboundAvg, center = TRUE, scale = TRUE)),
-    OppZscore = as.numeric(scale(OppFGAvg, center = TRUE, scale = TRUE)) * -1,
-    OppRebZScore = as.numeric(scale(OppRebAvg, center = TRUE, scale = TRUE)) * -1,
-    TotalZscore = FGzscore + RebZscore + OppZscore + OppRebZScore
-  )  
+    killszscore = as.numeric(scale(killsperset, center = TRUE, scale = TRUE)),
+    aceszscore = as.numeric(scale(acesperset, center = TRUE, scale = TRUE)),
+    digszscore = as.numeric(scale(digsperset, center = TRUE, scale = TRUE)),
+    TotalZscore = killszscore + aceszscore + digszscore
+  ) %>% ungroup() 
 ```
 ```{r zscore3-check}
 grade_this_code()
@@ -216,29 +203,33 @@ teamzscore %>% arrange(desc(TotalZscore))
 grade_this_code()
 ```
 
-Don't sleep on the Raiders of Wright State! As anyone who followed the tournament last year knows, you can absolutely snooze on Colgate. Bracket busting a-holes.
+And the greatest volleyball team in the last four years is ... wait what? 
+
+So we have some work to do here if this is the answer we're getting, but what if we look a little closer. 
 
 ### Exercise 4: Filtering to see Nebraska
 
-But closer to home, how is Nebraska doing vs the Big Ten? Because we included Conference in our group by, we can add a filter for the Big Ten before our arrange and get an answer. 
+Closer to home, how is Nebraska doing vs the Big Ten? Because we included Conference in our select, we can add a filter for the Big Ten before our arrange and get an answer. 
 
 ```{r zscore5, exercise=TRUE, exercise.setup = "zscore-load-data"}
 teamzscore %>% 
   filter(Conference == "??? ???") %>% 
   arrange(desc(???????????)) %>%
-  select(Team, TotalZscore)
+  select(Season, Institution, TotalZscore)
 ```
 ```{r zscore5-solution, exercise.reveal_solution = FALSE}
 teamzscore %>% 
   filter(Conference == "Big Ten") %>% 
   arrange(desc(TotalZscore)) %>%
-  select(Team, TotalZscore)
+  select(Season, Institution, TotalZscore)
 ```
 ```{r zscore5-check}
 grade_this_code()
 ```
 
-So, as we can see, with our composite Z Score, Nebraska is ... not good. But it also says our stats were better than our record. Our z-score model here says Nebraska was statistically not the worst team in the conference. 
+So, as we can see, with our composite Z Score, the best Big Ten volleyball since 2018 isn't Nebraska, a two-time national semi-finalist. It isn't Wisconsin who won the natty last year and was a finalist in 2019. It's ... Minnesota? Interesting.
+
+That said, the 2021 Husker team is a bit better than the 2018 team, though each ended just short of a title. 
 
 ## Writing about z-scores
 
