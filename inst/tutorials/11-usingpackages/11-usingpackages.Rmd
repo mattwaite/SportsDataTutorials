@@ -35,7 +35,6 @@ One very promising collection of libraries is something called the [SportsDatave
 * [recruitR, for college sports recruiting](https://saiemgilani.github.io/recruitR/)
 
 Not part of the SportsDataverse, but in the same neighborhood, is [nflfastR](https://www.nflfastr.com/), which can provide NFL play-by-play data. 
-
 Because they're all under development, not all of them can be installed with just a simple `install.packages("something")`. Some require a little work, some require API keys or paid accounts with certain providers.  
 
 The main issue for you is to read the documentation carefully. 
