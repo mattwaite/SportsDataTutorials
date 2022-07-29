@@ -36,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/logs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -63,7 +63,7 @@ grade_this_code()
 And the data.
 
 ```{r step-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
 
 difflogs <- logs %>% 
   mutate(Differential = TeamScore - OpponentScore) %>% 
@@ -72,13 +72,14 @@ difflogs <- logs %>%
 
 bigdiff <- difflogs %>% filter(Conference == "Big Ten")
 nu <- bigdiff %>% filter(Team == "Nebraska")
+ws <- bigdiff %>% filter(Team == "Wisconsin")
 il <- bigdiff %>% filter(Team == "Illinois")
 ```
 ```{r step-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
 ```
 ```{r step-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
 ```
 ```{r step-load-data-exercise-check}
 grade_this_code()
@@ -157,14 +158,16 @@ From this, we can see a handful of teams in the Big Ten had negative point diffe
 
 ### Exercise 5: Using color the right way
 
-How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick two teams to highlight -- Nebraska and Illinois. 
+How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska and the co-champions, Illinois and Wisconsin. 
 
 ```{r step5, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 nu <- bigdiff %>% filter(Team == "Nebraska")
-il <- bigdiff %>% filter(Team == "Illinois")
+ws <- bigdiff %>% filter(Team == "????????")
+il <- bigdiff %>% filter(Team == "????????")
 ```
 ```{r step5-solution, exercise.reveal_solution = FALSE}
 nu <- bigdiff %>% filter(Team == "Nebraska")
+ws <- bigdiff %>% filter(Team == "Wisconsin")
 il <- bigdiff %>% filter(Team == "Illinois")
 ```
 ```{r step5-check}
@@ -177,15 +180,16 @@ Our chart is going to layer bigdiff, nu and il in that order. We put bigdiff fir
 
 The second thing I'm going to add is the annotation layer. In this case, I am adding a text annotation layer, and I can specify where by adding in a x and a y value where I want to put it. This takes some finesse -- trial and error. You use the x and y axis values, guesstimate where you want the center of the words to be and enter those numbers into the x and y values. 
 
-After that, I'm going to add labels and a theme. These too are new. Eventually, every chart we make will include labels and theming. Because step charts are so similar to line charts, we can add new stuff here and your brain won't break (I promise). To get credit for this, you'll need to fill in the `labs` part where there's all caps. 
+After that, I'm going to add labels and a theme. These too are new. Eventually, every chart we make will include labels and theming. Because step charts are so similar to line charts, we can add new stuff here and your brain won't break (I promise). To get credit for this, you'll need to fill in the `labs` part where there's all caps. If you try to check your code against the solution, you'll probably get an error because mine will be different from yours. Don't worry about it. If you get a chart and it looks like a step chart, you're good.
 
 ```{r step6, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 ggplot() + 
   geom_step(data=???????, aes(x=Date, y=???????, group=Team), color="light grey") +
   geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="red") + 
   geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="orange") +
-  annotate("text", x=(as.Date("2021-02-10")), y=-70, label="Nebraska") +
-  annotate("text", x=(as.Date("2021-03-01")), y=330, label="Illinois") +
+  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="black") +
+  annotate("text", x=(as.Date("2022-02-10")), y=-70, label="Nebraska") +
+  annotate("text", x=(as.Date("2022-03-01")), y=330, label="Illinois") +
   labs(
     x="YOU SHOULD CHANGE THIS TO WHAT THE X AXIS IS", 
     y="Cumulative Point Differential", 
@@ -199,8 +203,10 @@ ggplot() +
   geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team), color="light grey") +
   geom_step(data=nu, aes(x=Date, y=CumDiff, group=Team), color="red") + 
   geom_step(data=il, aes(x=Date, y=CumDiff, group=Team), color="orange") +
-  annotate("text", x=(as.Date("2021-02-10")), y=-70, label="Nebraska") +
-  annotate("text", x=(as.Date("2021-03-01")), y=330, label="Illinois") +
+  geom_step(data=ws, aes(x=Date, y=CumDiff, group=Team), color="black") +
+  annotate("text", x=(as.Date("2022-02-10")), y=-100, label="Nebraska") +
+  annotate("text", x=(as.Date("2022-03-01")), y=265, label="Illinois") +
+  annotate("text", x=(as.Date("2022-03-01")), y=100, label="Wisconsin") +
   labs(
     x="Date", 
     y="Cumulative Point Differential", 

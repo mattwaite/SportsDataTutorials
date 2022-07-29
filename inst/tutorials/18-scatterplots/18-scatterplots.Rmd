@@ -21,19 +21,13 @@ tutorial_options(exercise.completion=FALSE)
 
 ## The basics
 
-On the Monday, Sept. 21, 2020 edition of the Pick Six Podcast, Omaha World Herald reporter (now sports editor) Sam McKewon (also a CoJMC alum) talked a little about the Nebraska mens basketball team. Specifically the conversation was about a new roster release, and how the second year of Fred Hoiberg ball was going to look very different, starting with the heights of the players. After a near complete roster turnover, the players on the team now were nearly all taller than 6'4", and one of the shorter ones is penciled in as the starting point guard.
+Scatterplots are very good at showing **relationships between two numbers**. They can help us ask questions of data and find people or teams who are doing better or worse than we would expect, provided there's a strong relationship in the data. 
 
-Why is that important? One reason, McKewon posited, is that teams made a lot of three point shots on Nebraska. In fact, Nebraska finished dead last in the conference in three points shots made against them. McKewon chalked this up to bad perimeter defense, and that Nebraska needed to improve it. Being taller -- or more specifically having the longer arms that go with being taller -- will help with that, McKewon said. 
+If this sounds like the correlations and regressions tutorial, you're right. Scatterplots and regressions fit together like a hand in a glove. Scatterplots help you *see* what the regression is trying to say. 
 
-Better perimeter defense, better team.
+So let's ask a silly question. Nebraska is a volleyball school. We're good at it. We recruit well for it. But is volleyball recruiting as simple as recruiting the tallest athlete and let them pound the ball at shorter athletes? Put more simply: Does height dictate attacking success? Taller athlete, more kills?
 
-Well, we know how the season went: 7 wins, same as the previous year.
-
-But the question before you is this: is what McKewon said true? Does keeping a lid on your opponent's ability to score three pointers mean more wins?
-
-This is what we're going to start to answer today. And we'll do it with scatterplots and regressions. Scatterplots are very good at showing **relationships between two numbers**. 
-
-First, we need libraries and every college basketball game from the 2014-2020 season. Why those seasons? Because the COVID season was wonky and made no sense. To make it make sense, you had to do a ton of twisting and turning and that was pointless. **What we're interested in is less about a specific team and more about a general point: Are these numbers related and by how much? What can they tell you about your team in general?**
+First, we need libraries and every college volleyball player from the last season. **What we're interested in is less about a specific player and more about a general point: Are these numbers related and by how much? What can they tell you about your players in general?**
 
 Here is that data. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
@@ -42,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs1520.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -68,93 +62,60 @@ grade_this_code()
 And the data.
 
 ```{r scatter-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs1520.csv")
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv")
 
-winlosslogs <- logs %>% 
-  mutate(
-    winloss = case_when(
-      grepl("W", W_L) ~ 1, 
-      grepl("L", W_L) ~ 0)
-)
+tall <- players %>% 
+  mutate(height = (12 * feet) + inches)
 
-threes <- winlosslogs %>% 
-  group_by(Team, season) %>% 
-  summarise(
-    Wins = sum(winloss), 
-    TotalOpp3P = sum(Opponent3P)
-    ) %>% na.omit()
-
-shooting <- winlosslogs %>% 
-  group_by(Team, season) %>% 
-  summarise(
-    Wins = sum(winloss), 
-    Shots = sum(TeamFGA),
-    Makes = sum(TeamFG)
-    ) %>% 
-  mutate(AvgShootingPct = Makes/Shots) %>% 
-  na.omit()
+newtall <- tall %>%
+  filter(
+    height > 0 &
+      s > 65
+         )
 ```
 ```{r scatter-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs1520.csv")
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv")
 ```
 ```{r scatter-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs1520.csv")
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv")
 ```
 ```{r scatter-load-data-exercise-check}
 grade_this_code()
 ```
 
-To do this, we need all teams and their season stats. How much, team to team, does a thing matter? That's the question you're going to answer. 
+Let's glimpse it quick to see what we have: 
 
-## Scatterplots chart relationships
-
-In our case, we want to know how much do three point shots made influence wins? How much difference can we explain in wins by knowing how many threes the other team made against you? We're going to total up the number of threes each team allowed and their season wins in one swoop.
-
-To do this, we need to use conditional logic -- `case_when` in this case -- to determine if the team won or lost the game. In this case, we'll create a new column called `winloss`. Case when statements can be read like this: When This is True, Do This. This bit of code -- which you can use in a lot of contexts in this class -- uses the `grepl` function to look for the letter W in the W_L column and, if it finds it, makes winloss 1. If it finds an L, it makes it 0. Sum your winloss column and you have your season win total. The reason we have to use `grepl` to find W or L is because Sports Reference will record overtime wins differently than regular wins. Same with losses. 
-
-```{r scatter1, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-winlosslogs <- logs %>% 
-  mutate(
-    winloss = case_when(
-      grepl("W", W_L) ~ 1, 
-      grepl("L", W_L) ~ 0)
-)
+```{r glimpse-data, exercise=TRUE, exercise.setup = "scatter-load-data"}
+glimpse(???????)
 ```
-```{r scatter1-solution, exercise.reveal_solution = FALSE}
-winlosslogs <- logs %>% 
-  mutate(
-    winloss = case_when(
-      grepl("W", W_L) ~ 1, 
-      grepl("L", W_L) ~ 0)
-)
+```{r glimpse-data-solution}
+glimpse(players)
 ```
-```{r scatter1-check}
+```{r glimpse-data-check}
 grade_this_code()
 ```
 
-Now we can get a dataframe together that gives us the total wins for each team, and the total three point shots made. 
+We now have every player and their season stats. So the question is, how much does does a thing matter? That's the question you're going to answer. 
+
+## Scatterplots chart relationships
+
+In our case, we want to know how much height influence kills? How much difference can we explain in kills by knowing how tall an athlete is? 
+
+The first thing we need to do is turn height into a single number. If you look at the data, you'll see height is expressed in feet and inches. We need to figure out how to put that into one number -- and no 5'11" is not a number. But how do we do that? 
 
 ### Exercise 1: Make your data.
 
-We're going to make a new dataframe we'll call `threes` because that's what we're looking at. In it, we're going to a simple group by and summarize. We'll group it by Team and season (note the capitalization there), and then we'll add up wins and Opponent3P, which are the three point shots made by opponents. The na.omit() function at the end is a function that removes any rows with blank data. There's some bad data in the dataset that ultimately doesn't matter.
+By converting it all to inches and adding them up. We're going to make a new dataframe called `tall`. We have the `feet` and `inches` of every player. How many inches are in a foot?
 
-```{r scatter2, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-?????? <- winlosslogs %>% 
-  group_by(????, ??????) %>% 
-  summarise(
-    Wins = sum(winloss), 
-    TotalOpp3P = sum(??????????)
-    ) %>% na.omit()
+```{r scatter1, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
+???? <- players %>% 
+  mutate(height = (?? * feet) + inches)
 ```
-```{r scatter2-solution, exercise.reveal_solution = FALSE}
-threes <- winlosslogs %>% 
-  group_by(Team, season) %>% 
-  summarise(
-    Wins = sum(winloss), 
-    TotalOpp3P = sum(Opponent3P)
-    ) %>% na.omit()
+```{r scatter1-solution, exercise.reveal_solution = FALSE}
+tall <- players %>% 
+  mutate(height = (12 * feet) + inches)
 ```
-```{r scatter2-check}
+```{r scatter1-check}
 grade_this_code()
 ```
 
@@ -162,144 +123,110 @@ Now we can go to the scatterplot.
 
 ### Exercise 2: Your first scatterplot
 
-With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. `geom_point` works just like other geoms -- we need an x and a y and a data element. In this case, x is our three pointers given up, y is our wins. You can find the names of those things in your summarize step in the previous code block.
+With a scatterplot, we put what predicts the thing on the X axis, and the thing being predicted on the Y axis. `geom_point` works just like other geoms -- we need an x and a y and a data element. In this case, x is our height, y is our kills. 
 
-```{r scatter3, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-ggplot() + geom_point(data=??????, aes(x=??????????, y=????))
+```{r scatter2, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
+ggplot() + 
+  geom_point(data=????, aes(x=??????, y=?????))
 ```
-```{r scatter3-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_point(data=threes, aes(x=TotalOpp3P, y=Wins))
+```{r scatter2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_point(data=tall, aes(x=height, y=kills))
 ```
-```{r scatter3-check}
+```{r scatter2-check}
 grade_this_code()
 ```
 
-Let's talk about this. This seems kind of random, but clustered around the middle. There's not really a clear pattern here. But can we get a better sense of this? 
+Let's talk about this. This ... doesn't seem right. Seems ... really weird, no? 
 
-### Exercise 3: Adding geom_smooth
+We have two problems -- one is obvious, one is not immediately. First, the obvious one: Can you be zero inches tall and ... exist? Let alone play college volleyball? So obviously we have some missing data. The second issue, which is not as obvious, is what else could determine kills? What happens if you're 7 feet tall but ride the bench? Are you still racking up kills? No.
 
-Surprise, the answer is yes, by adding another geom -- `geom_smooth`. It's identical to our `geom_point`, but we add a method to the end, which in this case we're using the linear method or `lm`. When I say identical, I mean identical. The method is the only difference.
+### Exercise 3: Filtering and trying again
+
+Let's fix this by filtering some things out. First, we need to filter out people who have a height of 0. Second, the mean number of sets played by all players who played more than 0 sets is 65. Let's filter only players who played more than 65 sets. We'll call it `newtall`. 
 
 ```{r scatter4, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-ggplot() + 
-  geom_point(data=??????, aes(x=??????????, y=????)) +
-  geom_smooth(data=??????, aes(x=??????????, y=????), method="lm")
+??????? <- tall %>%
+  filter(
+    height > ? &
+      s > ??
+         )
 ```
 ```{r scatter4-solution, exercise.reveal_solution = FALSE}
-ggplot() + 
-  geom_point(data=threes, aes(x=TotalOpp3P, y=Wins)) +
-  geom_smooth(data=threes, aes(x=TotalOpp3P, y=Wins), method="lm")
+newtall <- tall %>%
+  filter(
+    height > 0 &
+      s > 65
+         )
 ```
 ```{r scatter4-check}
 grade_this_code()
 ```
 
-A straight line across is bad. It means there's no pattern here. The numbers don't suggest anything. The dots are very spread out. Which is a clue that you should be asking a question here: how strong of a relationship is this? How much can threes given up explain wins? Can we put some numbers to this?
-
-Of course we can. We can apply a linear model to this -- remember Chapter 9? We're going to create an object called fit, and then we're going to put into that object a linear model -- `lm` -- and the way to read this is "wins are predicted by opponent threes". Then we just want the summary of that model.
+And let's chart that new dataframe. 
 
 ```{r scatter5, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-fit <- lm(Wins ~ TotalOpp3P, data = threes)
-summary(fit)
+ggplot() + 
+  geom_point(data=???????, aes(x=??????, y=?????))
 ```
 ```{r scatter5-solution, exercise.reveal_solution = FALSE}
-fit <- lm(Wins ~ TotalOpp3P, data = threes)
-summary(fit)
+ggplot() + 
+  geom_point(data=newtall, aes(x=height, y=kills))
 ```
 ```{r scatter5-check}
 grade_this_code()
 ```
 
-Remember from Chapter 9: There's just a few things you really need.
+Better, but woof is there a big difference starting around 67 inches -- or about 5'7". There are players who are 5'7" who have zero kills and players the same height with more than 375. There's a player who is 6'10" who has fewer kills than a player who is 5'6". 
 
-The first thing: R-squared. In this case, the Adjusted R-squared value is -0.0004098, which we can interpret as the number of threes the opponent makes predicts about a teeny tiny percent of the variance in wins. Which sounds not great.
-
-Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have 0.7106. Is that more than .05? Yes. Yes it is. So this is random. There's not much of a relationship between the number of threes the opponent makes and the number of wins a team has.
-
-Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for TeamOpp3P is -0.001400. What this model predicts, given that and the intercept of 17.199150, is this: Every team starts with about 17 wins. For every 100 three pointers the other team makes, you lose .14 games off that total. So if you give up 100 threes in a season, you'll be a 17 win team. Give up 200, you're closer to a 16 win team, and so on. How am I doing that? Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of threes given up and b is the intercept. 
-
-Let's use Nebraska as an example. They had 276 threes scored on them in the 2019-2020 season. 
-
-y = -0.001400 * 276 + 17.199150 or 16.8 wins. 
-
-How many wins did Nebraska have? 7. 
-
-What does that mean? It means that as disappointing a season as it was, Nebraska UNDERPERFORMED according to this model. But our R-squared is so small that even if this weren't random, it would be largely pointless. Put another way: more than 99 percent of the difference in wins between teams is predicted by something else.
-
-## Let's see it work
-
-One thing we do know is related is shooting percentage. Shoot better, win games. Simple. But how well does that work?
-
-We could just average together each team's shooting night, but this isn't the same thing as the season shooting average. It's the average of shooting percentages. To get the season average, we have to sum attempts and makes and do the math ourselves. Averaging the percentages will get us close, but be careful when you do things like this that you're describing your number correctly.
-
-Let's do this the hard -- read: correct -- way. We'll do it by firsst grouping by and summarizing, adding up wins, shots attempted and shots made. Then, we mutate an average for the season by dividing the makes by the attempts. 
+So is height predictive? We can add a new geom to this, called `geom_smooth` that will add a regression line -- a prediction line -- that is all but identical to our `geom_point`. The only thing added is the `method="lm"`.
 
 ```{r scatter6, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-shooting <- winlosslogs %>% 
-  group_by(Team, season) %>% 
-  summarise(
-    Wins = sum(winloss), 
-    Shots = sum(TeamFGA),
-    Makes = sum(TeamFG)
-    ) %>% 
-  mutate(AvgShootingPct = Makes/Shots) %>% 
-  na.omit()
+ggplot() + 
+  geom_point(data=newtall, aes(x=height, y=kills)) +
+  geom_smooth(data=newtall, aes(x=height, y=kills), method="lm")
 ```
 ```{r scatter6-solution, exercise.reveal_solution = FALSE}
-shooting <- winlosslogs %>% 
-  group_by(Team, season) %>% 
-  summarise(
-    Wins = sum(winloss), 
-    Shots = sum(TeamFGA),
-    Makes = sum(TeamFG)
-    ) %>% 
-  mutate(AvgShootingPct = Makes/Shots) %>% 
-  na.omit()
+ggplot() + 
+  geom_point(data=newtall, aes(x=height, y=kills)) +
+  geom_smooth(data=newtall, aes(x=height, y=kills), method="lm")
 ```
 ```{r scatter6-check}
 grade_this_code()
 ```
 
-Now we can chart it and see what our relationship looks like.
+A straight line across is bad. It means there's no pattern here. But there is a line that would indicate that height is somewhat predictive. But how predictive? Can we measure that? 
 
-### Exercise 4: A scatterplot that works.
+### Exercise 4: Regressions are back
 
-Everything we need is in the code block above -- the name of the data, the wins come from the summarize, and the shooting percentage name comes from the mutate. 
+Of course we can. We can apply a linear model to this -- remember Chapter 9? We're going to create an object called fit, and then we're going to put into that object a linear model -- `lm` -- and the way to read this is "wins are predicted by opponent threes". Then we just want the summary of that model.
 
 ```{r scatter7, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-ggplot() + 
-  geom_point(data=????????, aes(x=??????????????, y=Wins)) +
-  geom_smooth(data=????????, aes(x=AvgShootingPct, y=????), method="lm")
+fit <- lm(????? ~ ??????, data = newtall)
+summary(fit)
 ```
 ```{r scatter7-solution, exercise.reveal_solution = FALSE}
-ggplot() + 
-  geom_point(data=shooting, aes(x=AvgShootingPct, y=Wins)) +
-  geom_smooth(data=shooting, aes(x=AvgShootingPct, y=Wins), method="lm")
+fit <- lm(kills ~ height, data = newtall)
+summary(fit)
 ```
 ```{r scatter7-check}
 grade_this_code()
 ```
 
-This is what a positive relationship looks like -- sloping up and to the right. The better you shoot, the more you win. If it were reversed -- the better you shot, the fewer wins you got, the line would start at the top left and go down to the right. The direction of the line indicates the relationship between the numbers. 
+Remember from Chapter 9: There's just a few things you really need.
 
-Let's get our linear regression stats. 
+The first thing: R-squared. In this case, the Adjusted R-squared value is 0.3022, which we can interpret as the the height of the player predicts about 30 percent of the variance in kills. 
 
-```{r scatter8, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-shootfit <- lm(Wins ~ AvgShootingPct, data = shooting)
-summary(shootfit)
-```
-```{r scatter8-solution, exercise.reveal_solution = FALSE}
-shootfit <- lm(Wins ~ AvgShootingPct, data = shooting)
-summary(shootfit)
-```
-```{r scatter8-check}
-grade_this_code()
-```
+Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have < 2.2e-16. So it's not random. Height really does impact kills -- but we kinda knew that already. 
 
-The p-value isn't random. The adjusted R-squared is pushing 40 percent. We've got something here. Let's use our coefficents to look at Nebraska's 2019-2020 season (not the COVID season, because all the nunmbers are super weird in that season).
+Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for height is 21.003. What this model predicts, given that and the intercept of -1348.654, is this: Every player starts about 1350 kills in the hole. For every inch they grow, they get 21 kills. Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of threes given up and b is the intercept. 
 
-```
-(153.942 * .405) + -51.155 
-```
+Let's use Madi Kubik as an example. She's 6'3" on the roster, or 75 inches.  
 
-So this model says that based only on Nebraska's shooting percentage, they should have won 11 games. They won 7. So per our model, Nebraska underperformed. Obviously there's room for improvement here, but you can see the power in scatterplots + regression.
+y = 21.003 * 75 - 1348.654 or 226.5 kills. 
+
+How many wins did Kubik have last seaon? 412. 
+
+If we built a model to predict kills based purely on height, we missed Kubik's actual results by almost a factor of 2. Not great. 
+
+**This is an important lesson: Not all scatterplots work. Not all scatterplots tell a clear story. If you try a scatterplot and get this level of inconclusiveness, you need to try something else.**

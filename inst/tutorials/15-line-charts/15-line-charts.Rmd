@@ -34,7 +34,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/logs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,19 +61,19 @@ grade_this_code()
 And the data.
 
 ```{r line-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
 
 nu <- logs %>% filter(Team == "Nebraska")
-msu <- logs %>% filter(Team == "Michigan State")
+il <- logs %>% filter(Team == "Illinois")
 big <- logs %>% filter(Conference == "Big Ten")
 average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
 
 ```
 ```{r line-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
 ```
 ```{r line-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
 ```
 ```{r line-load-data-exercise-check}
 grade_this_code()
@@ -152,19 +152,19 @@ With datasets, we want to invite comparison. So let's answer the question visual
 When you have multiple datasets from the same data, you can add multiple geoms. All you have to do is swap out the data and add a + between them. 
 
 ```{r line3, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-msu <- logs %>% filter(Team == "???????? ?????")
+il <- logs %>% filter(Team == "????????")
 
 ggplot() + 
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="orange") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line3-solution, exercise.reveal_solution = FALSE}
-msu <- logs %>% filter(Team == "Michigan State")
+il <- logs %>% filter(Team == "Illinois")
 
 ggplot() + 
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=il, aes(x=Date, y=TeamFGPCT), color="orange") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line3-check}
@@ -173,7 +173,7 @@ grade_this_code()
 
 When you're doing this on your own in a notebook, REMEMBER COPY AND PASTE IS A THING. Nothing changes except what data you are using and maybe the color. The less typing you're doing, the better.
 
-So visually speaking, the difference between Nebraska and Michigan State's season is that Michigan State stayed mostly on an even keel, and Nebraska went on a two month swoon.
+So visually speaking, the difference between Nebraska and Illinois' season is that Illinois mostly stayed evenly better than Nebraska and Nebraska was a bit more unpredictable from night to night.
 
 ## A lot of lines = context. 
 
@@ -193,7 +193,7 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="orange") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line4-solution, exercise.reveal_solution = FALSE}
@@ -202,14 +202,14 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=il, aes(x=Date, y=TeamFGPCT), color="orange") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line4-check}
 grade_this_code()
 ```
 
-What do we see here? How has Nebraska and Michigan State's season evolved against all the rest of the teams in college basketball?
+What do we see here? How has Nebraska and Illinois' season evolved against all the rest of the teams in college basketball?
 
 ### Exercise 6: Adding the average
 
@@ -233,7 +233,7 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=???, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="orange") +
   geom_line(data=???????, aes(x=Date, y=mean_shooting), color="black") + 
   scale_y_continuous(limits = c(0, .7))
 ```
@@ -243,7 +243,7 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=msu, aes(x=Date, y=TeamFGPCT), color="dark green") +
+  geom_line(data=il, aes(x=Date, y=TeamFGPCT), color="orange") +
   geom_line(data=average, aes(x=Date, y=mean_shooting), color="black") + 
   scale_y_continuous(limits = c(0, .7))
 ```
