@@ -207,4 +207,4 @@ ggplot() +
 grade_this_code()
 ```
 
-Believe it or not, Iowa had the most takeaways in the Big Ten this season. And believe it: Nebraska ended up on the wrong side of the turnover margin again.
+Believe it or not, Iowa had the most takeaways in the Big Ten last season. And believe it: Nebraska ended up on the wrong side of the turnover margin again.
