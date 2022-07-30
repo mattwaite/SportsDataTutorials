@@ -23,7 +23,7 @@ tutorial_options(exercise.completion=FALSE)
 
 Sometimes the easiest way to spot a trend is to chart a bunch of small things side by side. Edward Tufte, one of the most well known data visualization thinkers on the planet, calls this "small multiples" where ggplot calls this a facet wrap or a facet grid, depending. 
 
-One thing we noticed earlier in the semester -- it seems that a lot of teams shoot worse as the season goes on. Do they? We could answer this a number of ways, but the best way to show people would be visually. Let's use Small Multiples.
+Who had the best offense in the Big Ten last season? We could answer this a number of ways, but the best way to show people would be visually. Let's use Small Multiples.
 
 As always, we start with libraries. 
 
@@ -37,14 +37,14 @@ library(tidyverse)
 grade_this_code()
 ```
 
-We're going to use the logs of college basketball games last season. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
+We're going to use the logs of college football games last season. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -58,15 +58,15 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r facet-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 
-big10 <- logs %>% filter(Conference == "Big Ten")
+big10 <- logs %>% filter(Conference == "Big Ten Conference")
 ```
 ```{r facet-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 ```
 ```{r facet-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 ```
 ```{r facet-load-data-exercise-check}
 grade_this_code()
@@ -75,10 +75,10 @@ grade_this_code()
 Let's narrow our pile and look just at the Big Ten.
 
 ```{r facet1, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
-big10 <- logs %>% filter(Conference == "Big Ten")
+big10 <- logs %>% filter(Conference == "Big Ten Conference")
 ```
 ```{r facet1-solution, exercise.reveal_solution = FALSE}
-big10 <- logs %>% filter(Conference == "Big Ten")
+big10 <- logs %>% filter(Conference == "Big Ten Conference")
 ```
 ```{r facet1-check}
 grade_this_code()
@@ -88,23 +88,23 @@ The first thing we can do is look at a line chart, like we have done in previous
 
 ### Exercise 1: Make a line chart
 
-We'll do something simple like a line chart of TeamFGPCT -- team field goal percentage -- and we're going to group on Team.
+We'll do something simple like a line chart of OffenseAvg -- the yards per play on offense -- and we're going to group on Team.
 
 ```{r facet2, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
 ggplot() + 
-  geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
-  scale_y_continuous(limits = c(0, .7))
+  geom_????(data=?????, aes(x=Date, y=?????????, group=????))
 ```
 ```{r facet2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
-  scale_y_continuous(limits = c(0, .7))
+  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team))
 ```
 ```{r facet2-check}
 grade_this_code()
 ```
 
-And, not surprisingly, we get a hairball. We could color certain lines, but that would limit us to focus on one team. **What if we did all of them at once?** We do that with a `facet_wrap`. 
+And, not surprisingly, we get a hairball. Who is the best offense week in and out in the Big Ten? We could color certain lines, but that would limit us to focus on one team. **What if we did all of them at once?** We do that with a `facet_wrap`. 
+
+Will that give us an answer?
 
 ### Exercise 2: The facet wrap
 
@@ -113,13 +113,11 @@ The only thing we MUST pass into a `facet_wrap` is what thing we're going to sep
 ```{r facet3, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
 ggplot() + 
   geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
   facet_wrap(~????)
 ```
 ```{r facet3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
+  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
   facet_wrap(~Team)
 ```
 ```{r facet3-check}
@@ -133,10 +131,10 @@ Answer: Not immediately clear, but we can look at this and analyze it. We could 
 Let's add a line to every chart that's the conference average shooting percentage. 
 
 ```{r facet4, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
-big10 %>% summarise(mean(TeamFGPCT))
+big10 %>% summarise(mean(OffenseAvg))
 ```
 ```{r facet4-solution, exercise.reveal_solution = FALSE}
-big10 %>% summarise(mean(TeamFGPCT))
+big10 %>% summarise(mean(OffenseAvg))
 ```
 ```{r facet4-check}
 grade_this_code()
@@ -148,14 +146,12 @@ Copy that number, and we're going to add it into the facet chart with a `geom_hl
 ggplot() + 
   geom_hline(yintercept=.??????, color="blue") + 
   geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
   facet_wrap(~????)
 ```
 ```{r facet5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=.4446667, color="blue") + 
-  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
+  geom_hline(yintercept=5.668333, color="blue") + 
+  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
   facet_wrap(~Team)
 ```
 ```{r facet5-check}
@@ -174,14 +170,12 @@ Facet grids allow us to put teams on the same plane, versus just repeating them.
 ggplot() + 
   geom_hline(yintercept=.??????, color="blue") + 
   geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
   facet_grid(Team ~ .)
 ```
 ```{r facet6-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=.4446667, color="blue") + 
-  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
+  geom_hline(yintercept=5.668333, color="blue") + 
+  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
   facet_grid(Team ~ .)
 ```
 ```{r facet6-check}
@@ -194,14 +188,12 @@ And here they are next to each other:
 ggplot() + 
   geom_hline(yintercept=.??????, color="blue") + 
   geom_????(data=?????, aes(x=Date, y=?????????, group=????)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
   facet_grid(. ~ Team)
 ```
 ```{r facet7-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=.4446667, color="blue") + 
-  geom_line(data=big10, aes(x=Date, y=TeamFGPCT, group=Team)) + 
-  scale_y_continuous(limits = c(0, .7)) + 
+  geom_hline(yintercept=5.668333, color="blue") + 
+  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
   facet_grid(. ~ Team)
 ```
 ```{r facet7-check}
