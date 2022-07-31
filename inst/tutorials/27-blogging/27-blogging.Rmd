@@ -41,19 +41,19 @@ Before you install Quarto, you should close R Studio. So close R Studio, install
 
 After that, we're ready to start making a blog. To do that, go to File \> New Project and select New Directory (or Version Control if you know what you're doing).
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog1.png"))
 ```
 
 In the Project Type view, find "Quarto Blog". Mine will probably look different than yours, but below is what the line you're looking for looks like.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog2.png"))
 ```
 
 Name the directory you're going to put this into. Keep it simple. Blog is fine. Then decide where on your computer you're going to put it. You should put this where you've been putting all your homework for this class. 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog3.png"))
 ```
 
@@ -108,7 +108,7 @@ To create a post, you're going to first create a folder for it. **The folder nam
 
 After you have created the folder, go to the button next to the create folder button and create a Quarto Document. Name that document index.qmd. **DO NOT NAME IT CAPITAL I INDEX. IT'S LOWER CASE I.**
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog4.png"))
 ```
 
@@ -135,7 +135,7 @@ Now that you have a folder and an index.qmd file with a proper yaml header, you'
 
 While you are creating your site, you're going to want to see it. Quarto will spin up a web server on your computer and render your site in a browser with a button. This will give you the chance to see what it will look like when it is finally published. For this step, you want to Preview your website.
 
-```{r echo=FALSE}
+```{r echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog5.png"))
 ```
 
@@ -155,7 +155,7 @@ For the low low price of nothing, GitHub will host a website for you, and we are
 
 To start, you can click on the plus sign in the top right corner or hit the green new button, depending on what your page looks like vs mine (I'm reasonably active GitHub user, so mine will look different from yours).
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog7.png"))
 ```
 
@@ -179,7 +179,7 @@ In the window that pops up, we need to set the Local Path. **This path needs to 
 
 Click the Choose button and navigate to the folder where your blog project is located. Then, click Clone.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog9.png"))
 ```
 
@@ -209,13 +209,13 @@ If it worked, you should see output in the Background Jobs window, which is in t
 
 Now go to the GitHub Desktop App. You should see something that looks like this, though yours will be different from mine. The important part is you see changes to commit.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog12.png"))
 ```
 
 This is where you will commit files to your repository. GitHub is a two-step process for getting files from your computer to GitHub. The first is committing the files. To do that, add a message in the box next to your avatar (where it says update index.html in the screenshot above). Then click Commit to main (mine says master because it's an older repository before GitHub switched to using main by default). The second step is to push it to GitHub. You do that on the screen that appears after you have committed your files. It should say you have No Local Changes, which is good because you sent them to GitHub. Now click Push origin.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog13.png"))
 ```
 
