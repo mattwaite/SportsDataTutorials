@@ -524,10 +524,4 @@ Note: These finishing touches aren't optional. They're required of every graphic
 
 ## One last finishing touch
 
-In your blog post, where you have a block, you need to add a directive to the block about what to display and what *not* to display. We want our readers to only see graphics. We'll link to the code later.
-
-To do that, we need to change each `{r}` bit at the top of each block to this:
-
-`{r message=FALSE, warning=FALSE, echo=FALSE}`
-
-Every block missing this bit will result in losing points. 
+In your blog post, in your yaml header, you must have the `code-fold: true` bits from the blogging tutorial. If it's missing, you lose points. 

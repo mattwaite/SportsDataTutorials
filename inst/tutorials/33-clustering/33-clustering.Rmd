@@ -59,7 +59,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/players20.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/players22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
