@@ -33,19 +33,11 @@ Here's our requirements:
 
 ## Setup
 
-With those requirements in mind, we're going to use a library called Blogdown, which creates blog posts from R Markdown files, similar to what you've been working with in this book.
+With those requirements in mind, we're going to use a library called Quarto, which supercharges R Markdown to make documents, websites, blogs and books. It's new, and growing, and you can do a lot with it. 
 
-It installs how you think it should. Go into the console in R Studio and run this:
+You'll first go to [Quarto's website](https://quarto.org/docs/get-started/) and wait just one moment before you do anything. 
 
-```
-install.packages('blogdown') 
-```
-
-After that, run this:
-
-```
-blogdown::install_hugo()
-```
+Before you install Quarto, you should close R Studio. So close R Studio, install it, restart R Studio and come back to this tutorial. 
 
 After that, we're ready to start making a blog. To do that, go to File \> New Project and select New Directory (or Version Control if you know what you're doing).
 
@@ -53,145 +45,103 @@ After that, we're ready to start making a blog. To do that, go to File \> New Pr
 knitr::include_graphics(rep("images/blog1.png"))
 ```
 
-In the Project Type view, you may have to scroll down to find "Website using blogdown" but that's your choice. Mine will probably look different than yours, but below is what the line you're looking for looks like.
+In the Project Type view, find "Quarto Blog". Mine will probably look different than yours, but below is what the line you're looking for looks like.
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/blog2.png"))
 ```
 
-And now we've come to our first decision point.
-
-First, name the directory you're going to put this into. Keep it simple. Blog is fine. Then decide where on your computer you're going to put it. Put it somewhere you're going to remember. Don't put it on your Desktop. Put it in a folder. Remember what folder because you're going to need this later.
-
-Now for the big decision: What theme to use. There's four choices, but the default theme is the most fully documented. If you want to use another theme, you'll be better off creating two projects: the one you're going to publish, and the lithium theme you can steal stuff from.
-
-Here's the easiest themes to work with:
-
--   [yihui/hugo-lithium](https://GitHub.com/yihui/hugo-lithium)
--   [yihui/hugo-prose](https://GitHub.com/yihui/hugo-prose)
--   [yihui/hugo-ivy](https://GitHub.com/yihui/hugo-ivy)
--   [yihui/hugo-xmin](https://GitHub.com/yihui/hugo-xmin)
+Name the directory you're going to put this into. Keep it simple. Blog is fine. Then decide where on your computer you're going to put it. You should put this where you've been putting all your homework for this class. 
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/blog3.png"))
 ```
 
-When you hit Create Project, you should get an R Studio screen. You might have a file open called config.yaml. If you don't, open it (you can use the files pane in the bottom right). This file will look different depending on which theme you used. This configuration file needs to have a few things in it. This is the config.yaml for my website, but you should use it as a guide for what yours will need:
+When you hit Create Project, you should get an R Studio screen. You might have two files open -- _quarto.yml and index.qmd. If you don't, open them (you can use the files pane in the bottom right). The important one for now is _quarto.yml. This file will look different depending on some choices you make. 
 
-    baseurl: http://mattwaite.github.io/
-    languageCode: en-us
-    title: Matt Waite's GitHub Site
-    theme: hugo-lithium
-    googleAnalytics: ''
-    disqusShortname: ''
+The choices you need to make: 
 
-    ignoreFiles:
-      - \.Rmd$
-      - \.Rmarkdown$
-      - _cache$
-      - \.knit\.md$
-      - \.utf8\.md$
-    permalinks:
-      post: /:year/:month/:day/:slug/
-    menu:
-      main:
-        - name: About
-          url: /about/
-        - name: GitHub
-          url: https://github.com/mattwaite
-        - name: Twitter
-          url: https://twitter.com/mattwaite
-    params:
-      
-      MathJaxCDN: //cdnjs.cloudflare.com/ajax/libs
-      MathJaxVersion: 2.7.5
-      description: Tools and teaching materials made by Matt Waite of the University of Nebraska-Lincoln
-      favicon: favicon.ico
-      highlightjsCDN: //cdnjs.cloudflare.com/ajax/libs
-      highlightjsLang:
-        - r
-        - yaml
-      highlightjsTheme: GitHub
-      highlightjsVersion: 9.12.0
-      logo:
-        alt: Logo
-        height: 50
-        url: logo.png
-        width: 50
+* The website title should be yours.
+* The Github account (more on this soon) and Twitter handles should be yours.
+* If you want a custom favicon logo, you'll have to include one. You can ignore this for a while. 
+* You should pick a [not-default theme](https://quarto.org/docs/websites/website-blog.html#themes). If you want to have themes for light and dark mode, the code below handles that. If you want just one theme, the default code you get in your _quarto.yml file does that. 
+* Add the execute: freeze bits below to your file. This way, your code only executes when you change it. This will become more important later when you have multiple posts.
 
-The top parts are generally filled in regardless of the theme. You'll obviously want to change the base url and the title. For Google Analytics, you'll add your tracking id there if and when you want to set that up. Leave ignorefiles and permalinks alone. For your menu -- that is up to you. If someone wanting to hire you came across your site, what would you include here? Another thing to change? The description. It will be the text that appears below the name in Google.
+```
+project:
+  type: website
 
-## Seeing your site
+website:
+  title: "Matt Waite's Collection of Miscellany"
+  description: "A blog about random fiddling with code and data."
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/mattwaite
+      - icon: twitter
+        href: https://twitter.com/mattwaite
+  favicon: logo.png
+  
+format:
+  html:
+    theme:
+      light: litera
+      dark: cyborg
+    css: styles.css
 
-While you are creating your site, you're going to want to see it. Now's a good time to introduce serving your site in R Studio so you can see it before you deploy it.
+editor: visual
 
-In the console, type this: `blogdown:: serve_site()` or you can go to Addins > Serve Site.
-
-Now, in the viewer tab on the right, you should see your site.
-
-```{r echo=FALSE}
-knitr::include_graphics(rep("images/blog15.png"))
+execute:
+  freeze: auto
 ```
 
-## Editing existing Markdown content
+## Creating a post
 
-There's two types of files you can work with -- plain Markdown files or R Markdown files. Plain Markdown are generally pages without code. R Markdown are the ones with the code.
+Under the files tab on the lower right, you'll see a folder named posts. In there, you'll find two folders with sample posts in them. There's not much to them, but they're useful to look at before we delete them. 
 
-Let's start with a simple Markdown file -- the homepage of the site. To edit files, use the Files tab. All of the material you'll be editing is in the content folder.
+To create a post, you're going to first create a folder for it. **The folder name matters because it's going to be part of your url.** For this to work your folder name has to do a couple of things: 
+
+* Contain only lowercase letters and dashes instead of spaces. So My Awesome Post will not work. It should be my-awesome-post. 
+* Contain words that are in your post, and would be something people would search for. If your post is about Nebraska women's run into the NCAA Tournament, make sure your post title and folder name contains those words. 
+* In other words, **you need to think about what your post is about before you make this folder**. Can you change it later? Yes. But the sooner you start focusing on a topic the better. 
+
+After you have created the folder, go to the button next to the create folder button and create a Quarto Document. Name that document index.qmd. **DO NOT NAME IT CAPITAL I INDEX. IT'S LOWER CASE I.**
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/blog4.png"))
 ```
 
-Let's start with editing the about.md file. Some templates also have a \_index.md file, which is the static part of the homepage.
+At the top, you will have something called a yaml header, which are things that set up the page. They are quite simple to figure out. Here is an example you should copy and edit for all of your posts. 
 
-```{r, echo=FALSE}
+```
+---
+title: "CHANGE THIS TO BE THE TITLE OF YOUR POST"
+author: "THIS IS YOUR NAME"
+date: '2022-XX-XX'
+categories: [lowercaseword, lowercaseword, lowercaseword]
+image: "image.png"
+format: 
+  html:
+    code-fold: true
+---
+```
+
+For us, the cold-fold bit is important, and it is not standard. This will allow users to see your code that makes your graphics, without displaying it. Users can decide if they want to see the code. 
+
+Now that you have a folder and an index.qmd file with a proper yaml header, you're ready to write your post. This document works just the same as any R Markdown file we've worked with all semester. Create text between code blocks, and your code blocks will execute to produce graphics. 
+
+## Seeing your site
+
+While you are creating your site, you're going to want to see it. Quarto will spin up a web server on your computer and render your site in a browser with a button. This will give you the chance to see what it will look like when it is finally published. For this step, you want to Preview your website.
+
+```{r echo=FALSE}
 knitr::include_graphics(rep("images/blog5.png"))
 ```
 
-At the top, you will have something called a yaml header, which are things that set up the page. They are quite simple to figure out. Here's the yaml header the Ivy theme generates. Obviously, I need to change the author, the date and the title for my site.
-
-    ---
-    author: Yihui Xie
-    date: "2017-08-06"
-    title: About Hugo Ivy
-    ---
-
-Change yours, then change the text below the yaml header, and then save it. Click on the Viewer tab and check out your work.
-
-## Creating a new post in R Markdown
-
-You'll notice in your content folder that there is a folder called post, and in there are multiple posts. Depending on your theme, you might just have folders in post, and you might have some markdown files. They work mostly the same way.
-
-The magic here is how you name them. You'll remember from config.yaml that we have a post url format that goes post / year / month / day / slug. The reason for that is that urls matter for Google. Clean urls with meaningful information in them rank higher.
-
-In the post folder, you'll see the folders are named similarly -- a date separated by dashes followed by a slug -- the headline of your post in all lower case with dashes instead of spaces. So if I were writing a post called "I love sports data", the slug version of that would be i-love-sports-data. If I were writing it on January 10, which I am, my folder would be 2022-01-10-i-love-sports-data.
-
-**NOTE: CAPITALIZATION MATTERS. AS IN, DON'T.** You don't see capitals in URLs, so don't use them.
-
-In the future, when it's time to create a post, the easiest way to do this is to click Addins > New Post. You need to fill out four things on the page: The Title, Author, Date (if you're changing it) and the Format. Be smart about the title -- don't put TEST TEST TEST or TITLE HERE because it will build with that and it's hard to change later. Give some thought to the headline on your post before you hit done. In fact, if you don't know what you're going to call your post, don't make one. You can work in a notebook until you're ready.
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/blog6.png"))
-```
-
-When you're done, hit Done and an RMarkdown file will appear, just as you have been using throughout this book.
-
-The first thing you'll see is the yaml header. Typically, if we've filled out the previous screen correctly, we should be good. But if you need to fix something, you can do it here.
-
-    ---
-    title: "Sports Data Analysis and Visualization"
-    author: "Matt Waite"
-    date: 2019-07-29T21:13:14-05:00
-    categories: ["Books"]
-    tags: ["R", "data", "sports"]
-    ---
-
-Below the yaml header? That's up to you. Go do some of that writing stuff you do.
-
 ## Publishing your site
 
-Blogdown is built on top of the Hugo static site generator. What that means is that Blogdown is going to take your Markdown files and create static html. What does static html mean? It means there's no server creating it on the fly -- that's called dynamic html -- so this can be hosted on the simplest of servers.
+Quarto static site generator. What that means is that Quarto is going to take your Markdown files and create static html. What does static html mean? It means there's no server creating it on the fly -- that's called dynamic html -- so this can be hosted on the simplest of servers. Simple means cheap or even free.
 
 Publishing takes a lot of steps to get set up, but once it is, it's easy.
 
@@ -225,7 +175,9 @@ To work around this, we're going to use GitHub Desktop to manage our interaction
 
 To get your repository into GitHub Desktop, go back to your tab with your GitHub repository in it. Find the Code button and click it. Click on the Open With GitHub Desktop button.
 
-In the window that pops up, we need to set the Local Path. **This path needs to be the same place your blog project is located.** Click the Choose button and navigate to where your blog project is located. Then, just click Clone.
+In the window that pops up, we need to set the Local Path. **This path needs to be the same place your blog project is located.** In other words, there needs to be a folder where you have your Blog folder, and you're going to put it in the containing folder, **NOT IN YOUR BLOG FOLDER**. These two folders need to be side by side with each other in the same folder.
+
+Click the Choose button and navigate to the folder where your blog project is located. Then, click Clone.
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/blog9.png"))
@@ -237,29 +189,25 @@ Let's get your site on the internet.
 
 Switch back to your blog project in R Studio. We're going to output your site and upload it to GitHub.
 
-To do this, we need to change config.yaml. We need to tell your website project that you want to publish to your GitHub folder, not the default.
+To do this, we need to change _quarto.yml. We need to tell your website project that you want to publish to your GitHub folder, not the default.
 
-Open config.yaml in your blog project. Near the top, above ignoreFiles, add this line, replacing yourusername with ... your user name. This says publish to your GitHub project that you put in the same folder as your blog project:
+Open _quarto.yml in your blog project. At the top, add this line, replacing yourusername with ... your user name. This says publish to your GitHub project that you put in the same folder as your blog project:
 
-    publishDir: "../yourusername.github.io"
-
-Save config.yaml.
-
-Once you are ready to build your site, you need to click on the Build tab and then on Build Website.
-
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/blog8.png"))
+```
+project:
+  type: website
+  output-dir: ../YOURUSERNAME.github.io
 ```
 
-If it worked, you should see output in the window that looks something like this (yours will be different from mine):
+Save _quarto.yml.
 
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/blog14.png"))
-```
+Once you are ready to build your site, you need to click on the Render Website button.
+
+If it worked, you should see output in the Background Jobs window, which is in the same window as the Console.
 
 **Step 5**
 
-Now go to the GitHub Desktop App. You should see something that looks like this, though yours will be different from mine.
+Now go to the GitHub Desktop App. You should see something that looks like this, though yours will be different from mine. The important part is you see changes to commit.
 
 ```{r, echo=FALSE}
 knitr::include_graphics(rep("images/blog12.png"))
