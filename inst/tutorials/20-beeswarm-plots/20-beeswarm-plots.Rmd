@@ -143,7 +143,7 @@ You can see that there's a lot of setters who are getting kills, but not a lot. 
 
 So where are the Nebraska players in that mix? 
 
-### Exercise 4: Layering in Nebraska
+### Exercise 3: Filtering for Nebraska
 
 We'll filter players on Nebraska who meet our criteria. 
 
@@ -162,6 +162,8 @@ grade_this_code()
 There's five Huskers who have played in more than 100 sets and who have more than 10 kills. 
 
 But how good are they as killers compared to the rest of college volleyball?  
+
+### Exercise 4: Layering in Nebraska
 
 When you add another beeswarm, we need to pass another element in -- we need to tell it if we're grouping on the x value. Not sure why -- it's a requirement of the library -- but you'll get a warning if you don't. 
 
@@ -192,6 +194,8 @@ grade_this_code()
 ```
 
 Tells you something about Nebraska that one of our *defensive* specialists has among the most kills among her position group.
+
+### Exercise 5: Labeling 
 
 This is where we can use ggrepel. Let's add a text layer and label the dots. 
 

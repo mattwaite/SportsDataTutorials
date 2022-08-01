@@ -102,7 +102,7 @@ logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv"
 grade_this_code()
 ```
 
-To do this, I've got some work to do. First, I need to mutate the outcomes of the games into 1s and 0s so I can add up the wins. We've done this before, so this won't be new to you, just adjusted slightly from basketball data.
+To do this, I've got some work to do. First, I need to mutate the outcomes of the games into 1s and 0s so I can add up the wins. 
 
 ```{r bubble1, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
 winlosslogs <- logs %>% 
