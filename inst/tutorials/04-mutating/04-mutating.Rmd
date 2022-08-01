@@ -182,7 +182,7 @@ glue("Who is putting the most pressure on the keeper shot after shot?  {snipers$
      A note about this. Note that {snipers$Institution} played in {snipers$Games} matches. The team that played the most played in {maxgames$max_games}. We'll learn how to deal with that in the next tutorial.")
 ``` 
 
-### Exercise 4: Combining what we know
+### Exercise 3: Combining what we know
 
 With this data, we have every team and their stats. But what if we wanted to know which is the most ruthless conference? Here is an example of how you can use what you learned in the last tutorial with what you learned here.
 

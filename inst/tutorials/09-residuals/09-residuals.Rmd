@@ -62,7 +62,7 @@ grade_this_code()
 Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE, results=FALSE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 
 residualmodel <- correlations %>% 
   mutate(
@@ -84,10 +84,10 @@ pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
 summary(pfit)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
@@ -121,9 +121,9 @@ summary(fit)
 grade_this_code()
 ```
 
-We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by nearly 50 points (!), and a team has overperformed it by 49 points (!!). The median residual, where half are above and half are below, is just slightly above the fit line. Close here is good. 
+We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by nearly 36 points (!), and a team has overperformed it by 35 points (!!). The median residual, where half are above and half are below, is just slightly above the fit line. Close here is good. 
 
-Next: Look at the Adjusted R-squared value. What that says is that 64 percent of a team's scoring output can be predicted by their net yards.  
+Next: Look at the Adjusted R-squared value. What that says is that 69 percent of a team's scoring output can be predicted by their net yards.  
 
 Last: Look at the p-value. We are looking for a p-value smaller than .05. At .05, we can say that our correlation didn't happen at random. And, in this case, it REALLY didn't happen at random. But if you know a little bit about football, it doesn't surprise you that the more you outgain your opponent, the more you win by. It's an intuitive result.
 
@@ -145,9 +145,7 @@ residualmodel %>% arrange(desc(residuals)) %>% select(Team, Opponent, Result, di
 grade_this_code()
 ```
 
-Looking at this table, what you see here are the teams who scored more than their net yards would indicate. One of them should jump off the page at you.
-
-Remember Nebraska vs Rutgers at the end of the COVID season? We won and everyone was happy and relieved the season was over? We outgained Rutgers by **368 yards** in that game and won by 7. Our model predicted Nebraska should have won that game by **37** points. We should have blown Rutgers out of their own barn. But Rutgers isn't as hard done as Arizona, which should have lost by 48, but ended up losing by 63.  
+Looking at this table, what you see here are the teams who scored more than their net yards would indicate.
 
 But, before we can bestow any validity on this model, we need to see if this linear model is appropriate. We've done that some looking at our p-values and R-squared values. But one more check is to look at the residuals themselves. We do that by plotting the residuals with the predictor. We'll get into plotting soon, but for now just seeing it is enough.
 
@@ -203,9 +201,9 @@ grade_this_code()
 
 So from top to bottom:
 
-* Our min and max go from -67 to positive 65
-* Our adjusted R-squared is ... -0.0008935. Not much at all. 
-* Our p-value is ... 0.8307, which is more than than .05. 
+* Our min and max go from -65 to positive 73
+* Our adjusted R-squared is ... -0.0003596. Not much at all. 
+* Our p-value is ... 0.5244, which is more than than .05. 
 
 So what we can say about this model is that it's statistically insignificant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. 
 
@@ -227,7 +225,7 @@ penalties %>% arrange(desc(residuals)) %>% select(Team, Opponent, Result, differ
 grade_this_code()
 ```
 
-First, note all of the biggest misses here are all blowout games. The worst games of the 2020 season, the worst being Clemson vs Georgia Tech. The model missed that differential by ... 65 points. The margin of victory? 66 points. In other words, this model is terrible. But let's look at it anyway. 
+First, note all of the biggest misses here are all blowout games. The worst games of the 2021 season, the worst being Oklahoma vs Western Carolina. The model missed that differential by ... 73 points. The margin of victory? 76 points. In other words, this model is terrible. But let's look at it anyway. 
 
 ```{r correlationchart3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties %>% mutate(predicted = predict(pfit), residuals = residuals(pfit))
