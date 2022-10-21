@@ -184,7 +184,7 @@ After that, I'm going to add labels and a theme. These too are new. Eventually, 
 
 ```{r step6, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 ggplot() + 
-  geom_step(data=???????, aes(x=Date, y=???????, group=Team), color="light grey") +
+  geom_step(data=bigdiff, aes(x=Date, y=???????, group=Team), color="light grey") +
   geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="red") + 
   geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="orange") +
   geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="black") +
@@ -195,7 +195,8 @@ ggplot() +
     y="Cumulative Point Differential", 
     title="GIVE THIS A HEADLINE: WHAT DOES THE GRAPH SAY?", 
     subtitle="THE SUBTITLE IS THE TEXT UNDER THE HEADLINE: CHANGE THIS TO HELP EXPLAIN YOUR GRAPH", 
-    caption="Source: Sports-Reference.com | By YOUR NAME") +
+    caption="Source: Sports-Reference.com | By YOUR NAME"
+    ) + 
   theme_minimal()
 ```
 ```{r step6-solution, exercise.reveal_solution = FALSE}
@@ -212,7 +213,8 @@ ggplot() +
     y="Cumulative Point Differential", 
     title="Nebraska's season long slide", 
     subtitle="The Huskers started solidly but ended up being outscored by more than any other Big Ten team.", 
-    caption="Source: Sports-Reference.com | By Matt Waite") +
+    caption="Source: Sports-Reference.com | By Matt Waite"
+    ) + 
   theme_minimal()
 ```
 ```{r step6-check}

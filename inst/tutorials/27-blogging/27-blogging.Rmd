@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Building your own blog with blogdown
+# Building your own blog with Quarto
 
 ## The basics
 
