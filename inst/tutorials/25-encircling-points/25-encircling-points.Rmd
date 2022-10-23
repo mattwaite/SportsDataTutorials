@@ -70,7 +70,7 @@ players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv") 
 
 nu <- players %>% filter(Team == "Nebraska Cornhuskers")
 
-dw <- nu %>% filter(`FG%` > .75)
+dw <- nu %>% filter(`FG%` > .67)
 ```
 ```{r encircle-load-data-exercise, exercise = TRUE}
 players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv") %>%
@@ -132,14 +132,14 @@ But what if we could really draw the eye to a dot or group of them? In `ggalt`, 
 
 ### Exercise 3: Our first encircle
 
-Let's draw a circle around, uh, that one guy. I'm being coy here for a reason. Sometimes the group you want to highlight isn't known to you. Sometimes you want to highlight players by some criteria. In our case, if we look at the graph above, we know we have a player who is shooting better than 70 percent (or .7). To show you how, let's use that x axis interpolation as our filter.
+Let's draw a circle around, uh, that one guy. I'm being coy here for a reason. Sometimes the group you want to highlight isn't known to you. Sometimes you want to highlight players by some criteria. In our case, if we look at the graph above, we know we have a player who is shooting better than 65 percent (or .65). To show you how, let's use that x axis interpolation as our filter.
 
 Then we'll add geom_encircle and we'll just copy the data and the aes from our nu geom_point. Then, we need to give the encirclement a shape using s_shape -- which is a number between 0 and 1 -- and then how far away from the dots to draw the circle using expand, which is another number between 0 and 1.
 
 Let's start with `s_shape` 1 and `expand` 1.
 
 ```{r encircle3, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
-dw <- nu %>% filter(`FG%` > .75)
+dw <- nu %>% filter(`FG%` > .67)
 
 ggplot() + 
   geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
@@ -147,7 +147,7 @@ ggplot() +
   geom_encircle(data=dw, aes(x=`??%`, y=???), s_shape=1, expand=1, colour="red")
 ```
 ```{r encircle3-solution, exercise.reveal_solution = FALSE}
-dw <- nu %>% filter(`FG%` > .75)
+dw <- nu %>% filter(`FG%` > .67)
 
 ggplot() + 
   geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
