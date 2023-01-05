@@ -14,6 +14,7 @@ library(learnr)
 library(gradethis)
 library(tidyverse)
 library(ggalt)
+library(ggtext)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
@@ -31,11 +32,13 @@ Let's give it a whirl.
 ```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(ggalt)
+library(ggtext)
 
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
 library(ggalt)
+library(ggtext)
 ```
 ```{r load-tidyverse-check}
 grade_this_code()
@@ -208,3 +211,47 @@ grade_this_code()
 ```
 
 Believe it or not, Iowa had the most takeaways in the Big Ten last season. And believe it: Nebraska ended up on the wrong side of the turnover margin again.
+
+### Exercise 5: Which dot is which? 
+
+One downside to the dumbell chart library is that it doesn't handle legends well. Adding a box to label which is the red dot and which is the green dot and which is the red dot is harder than it should be. An easier way is to use ggtext and make the colors red and green in some text explaining the graphic. 
+
+With ggtext, we need to add `labs` to our chart -- a headline and some chatter, called a `title` and a `subtitle` in ggplot. Then, in the subtitle, we can add some HTML to our text that will turn text red and green to match our `colour_x` and `colour_xend`. 
+
+```{r dumbbell5, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=?????????, 
+    aes(y=reorder(????, ????aways), x=Takeaways, xend=Giveaways),
+    size = 2,
+    colour = "????",
+    colour_x = "?????",
+    colour_xend = "???") +
+  labs(
+    title="Giveaways vs takeaways in the Big Ten", 
+    subtitle = "If <span style = 'color:?????;'>takeaways</span> are on the right, that's good. If <span style = 'color:???;'>giveaways</span> are on the right, that's bad."
+  ) + 
+  theme(
+    plot.subtitle = element_textbox_simple()
+  )
+```
+```{r dumbbell5-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_dumbbell(
+    data=turnovers, 
+    aes(y=reorder(Team, Takeaways), x=Takeaways, xend=Giveaways),
+    size = 2,
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "red") +
+  labs(
+    title="Giveaways vs takeaways in the Big Ten", 
+    subtitle = "If <span style = 'color:green;'>takeaways</span> are on the right, that's good. If <span style = 'color:red;'>giveaways</span> are on the right, that's bad."
+  ) + 
+  theme(
+    plot.subtitle = element_textbox_simple()
+  )
+```
+```{r dumbbell5-check}
+grade_this_code()
+```

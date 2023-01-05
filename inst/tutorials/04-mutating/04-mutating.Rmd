@@ -186,7 +186,9 @@ glue("Who is putting the most pressure on the keeper shot after shot?  {snipers$
 
 With this data, we have every team and their stats. But what if we wanted to know which is the most ruthless conference? Here is an example of how you can use what you learned in the last tutorial with what you learned here.
 
-To take a dataset of every team and get each conference, we need to use group by again. And then, to calculate a percentage for the conference, we need to add up the two pieces we need in summarize *before* we mutate a new column. Let's give our new shots on goal percentage column the same name as the previous exercise. 
+To take a dataset of every team and get each conference, we need to use group by again. And then, to calculate a percentage for the conference, we need to add up the two pieces we need in summarize *before* we mutate a new column. 
+
+We're going to sum the shots on goal and the shot attempts. Then we're going to create a shots on goal percentage -- let's use the shots on goal percentage column name from the previous exercise. 
 
 ```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
 soccer %>%
