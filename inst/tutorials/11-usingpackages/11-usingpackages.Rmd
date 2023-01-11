@@ -62,13 +62,13 @@ Normally, you would be reading the documentation for wehoop or any of the librar
 Here's how to get player box scores for the current season (which are numbered by the year they end in). NOTE: The season is ongoing. What you get will look different what what I get as I'm writing this. If some of this writing looks a little vague, that's why. 
 
 ```{r packages-load-data, message=FALSE, warning=FALSE, results=FALSE}
-playerboxscores <- load_wbb_player_box(seasons = 2022)
+playerboxscores <- load_wbb_player_box(seasons = 2023)
 ```
 ```{r packages-load-data-exercise, exercise = TRUE}
-playerboxscores <- load_wbb_player_box(seasons = 2022)
+playerboxscores <- load_wbb_player_box(seasons = 2023)
 ```
 ```{r packages-load-data-exercise-solution}
-playerboxscores <- load_wbb_player_box(seasons = 2022)
+playerboxscores <- load_wbb_player_box(seasons = 2023)
 ```
 ```{r packages-load-data-exercise-check}
 grade_this_code()
@@ -90,7 +90,7 @@ Without noticing it, you've already seen the magic. You ran that one line of cod
 
 ### Exercise 1: Who has started the most for the Huskers?
 
-If you look at the data, there is one field that is a TRUE/FALSE field of who started the game. If you follow Nebraska Men's Basketball, you know that Fred Hoiberg has experimented with different starting lineups. Has Amy Williams been tinkering too?
+If you look at the data, there is one field that is a TRUE/FALSE field of who started the game. Does Amy Williams tinker with her lineups?
 
 First, since we have box scores for every team, we need to filter to just Nebraska. Then, we're going to use the & sign -- which is a way of saying AND. The filter is the team AND the starting status being true. Then we'll group by the player's name (look at glimpse) and count. This time, we're going to use a shortcut for counting called `tally`. 
 
@@ -121,13 +121,13 @@ The wehoop package also has play by play data in it. A warning -- this step will
 The `load_wbb_pbp` function works very similar to the box scores. You're going to provide the season you want. We want this season.
 
 ```{r packages2-load-data, message=FALSE, warning=FALSE, results=FALSE}
-playbyplay <- load_wbb_pbp(2022)
+playbyplay <- load_wbb_pbp(2023)
 ```
 ```{r packages2-load-data-exercise, exercise = TRUE}
 playbyplay <- load_wbb_pbp(????)
 ```
 ```{r packages2-load-data-exercise-solution, exercise.reveal_solution = FALSE}
-playbyplay <- load_wbb_pbp(2022)
+playbyplay <- load_wbb_pbp(2023)
 ```
 ```{r packages2-load-data-exercise-check}
 grade_this_code()
