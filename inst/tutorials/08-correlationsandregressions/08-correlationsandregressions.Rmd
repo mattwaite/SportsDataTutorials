@@ -35,7 +35,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -62,7 +62,7 @@ grade_this_code()
 To do this, we need all FBS college football teams and their season stats from last year. Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 newcorrelations <- correlations %>%
   mutate(
@@ -70,10 +70,10 @@ newcorrelations <- correlations %>%
   )
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
@@ -122,7 +122,7 @@ correlations %>%
 grade_this_code()
 ```
 
-So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, penalty yards and whether or not the team scores more points than it give up are at 0.5356232. You could say they're 54 percent related in the positive -- sometimes more rushing yards means more points, sometimes there's not. It's about the worst outcome for an argument -- it's 50-50. Run The Damn Ball Guy's attitude is unearned.
+So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, penalty yards and whether or not the team scores more points than it give up are at 0.5307351. You could say they're 53 percent related in the positive -- sometimes more rushing yards means more points, sometimes there's not. It's about the worst outcome for an argument -- it's 50-50. Run The Damn Ball Guy's attitude is unearned.
 
 ### Exercise 2: Correlating rushing yards and the point spread.
 
@@ -191,10 +191,10 @@ grade_this_code()
 There's three things we need here: 
 
 1. First we want to look at the p-value. It's at the bottom right corner of the output. In the case of rushing yards, the p-value is <2.2e-16. Remember your exponential notation? That means the probability this relationship is just random noise is less than .00000000000000022. The threshold we're looking for here is .05. If it's less than .05, then the relationship is considered to be *statistically significant*. **Significance here does not mean it's a big deal. It means it's not random**. That's it. Just that. Not random. So in our case, the relationship between rushing yards and a team's aggregate point differential is **statistically significant**. The differences in score difference and rushing yards is not random. Run The Damn Ball Guy is excited by this, but as we'll see, he shouldn't be.
-2. Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between a teams point spread can be explained by rushing yards. Our correlation coefficient said they're 50 percent related to each other, but rushing yard's ability to explain the difference between point spreads in games? About 25 percent. That means we can explain 25 percent of the difference in score just by looking at a team's rushing yards. That's ... not super conclusive. It's not nothing, but it's not the clattering proof Run The Damn Ball Guy was looking for. Again, we should quit and do literally anything with our life other than talk to Run The Damn Ball Guy.
-3. The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is -19.1275 and the RushingYds coefficient is 0.1284. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is 0.1284 and b is -19.1275. So we would multiply a teams total rushing yards by 0.1284 and then subtract 19.1275 to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that your even close with this? About 25 percent. 
+2. Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between a teams point spread can be explained by rushing yards. Our correlation coefficient said they're 50 percent related to each other, but rushing yard's ability to explain the difference between point spreads in games? About 27 percent. That means we can explain 27 percent of the difference in score just by looking at a team's rushing yards. That's ... not super conclusive. It's not nothing, but it's not the clattering proof Run The Damn Ball Guy was looking for. Again, we should quit and do literally anything with our life other than talk to Run The Damn Ball Guy.
+3. The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is -19.335346 and the RushingYds coefficient is 0.134624. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is 0.134624 and b is -19.335346. So we would multiply a teams total rushing yards by 0.134624 and then subtract 19.335346 to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that your even close with this? About 27 percent. 
 
-What does that mean? Let's use a simple example. Let's say you rush for 100 yards. 100 * .1284 is roughly 13 points. So 100 yards of rushing gets you 13 points ... until you factor in the intercept, which is -19 points. Meaning, according to our model, you rush for 100 yards, you lose by about a touchdown. 
+What does that mean? Let's use a simple example. Let's say you rush for 100 yards. 100 * .134624 is roughly 13.5 points. So 100 yards of rushing gets you 13.5 points ... until you factor in the intercept, which is -19 points. Meaning, according to our model, you rush for 100 yards, you lose by more than a field goal. 
 
 You can see the problem in a graph. On the X axis is rushing yards, on the y is aggregate score. If these elements had a strong relationship, we'd see a clear pattern moving from right to left, sloping up. On the left would be the teams with few rushing yards and a negative point differential. On right would be teams with high rushing yards and positive point differentials. Do you see that below?
 
@@ -229,7 +229,7 @@ newcorrelations %>%
 grade_this_code()
 ```
 
-Answer: 27 percent. 
+Answer: 25 percent. 
 
 Oh no. That's way less correlated than rushing yards.
 
@@ -251,17 +251,17 @@ grade_this_code()
 
 First we check p-value. Same as before: this is really, really, really not random. 
 
-Second, Adjusted R-squared: 0.07226. With rushing yards, we could predict 25 percent of the variation between score margin by looking at a team's rushing yards. But with passing? A whopping 7 percent.
+Second, Adjusted R-squared: 0.06082. With rushing yards, we could predict 25 percent of the variation between score margin by looking at a team's rushing yards. But with passing? A whopping 6 percent.
 
 Ohhh no. What have we done?
 
-Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = 0.061851x - 12.553390`. So if we were applying this, if our team passes for 250 yards, what happens?.  
+Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = 0.057020x - 11.167668`. So if we were applying this, if our team passes for 250 yards, what happens?.  
 
 ```{r calculate, exercise=TRUE}
-0.061851*250 - 12.553390
+0.057020*250 - 11.167668
 ```
 ```{r calculate-solution}
-0.061851*250 - 12.553390
+0.057020*250 - 11.167668
 ```
 ```{r calculate-check}
 grade_this_code()
