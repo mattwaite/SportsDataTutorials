@@ -22,20 +22,20 @@ tutorial_options(exercise.completion=FALSE)
 
 ## The basics
 
-When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is. Take our model at the end of the correlation and regression chapter. Our model predicted Nebraska, given a 5 net yardage margin would beat Iowa by 1.96 points in 2020. They lost by 6. So our residual is -7.96. 
+When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is.  
 
 Residuals can tell you several things, but most important is if a linear model the right model for your data. If the residuals appear to be random, then a linear model is appropriate. If they have a pattern, it means something else is going on in your data and a linear model isn't appropriate. 
 
 Residuals can also tell you who is underperforming and overperforming the model. And the more robust the model -- the better your r-squared value is -- the more meaningful that label of under or overperforming is. 
 
-Let's go back to our net yards model from the previous lesson. We need data from the 2020 college football season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+Let's look at a net yards model from the last lesson. We need data from the 2022 college football season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs20.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -62,7 +62,7 @@ grade_this_code()
 Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE, results=FALSE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 residualmodel <- correlations %>% 
   mutate(
@@ -84,16 +84,16 @@ pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
 summary(pfit)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
 ```
 
-Under the hood, I've gone ahead and made the mutations for you from the last chapter. You can see it in a dataframe called residualmodel.
+Under the hood, I've gone ahead and made the mutations for you. You can see it in a dataframe called residualmodel.
 
 ```{r head-data, exercise=TRUE, exercise.setup = "correlations-load-data"}
 head(residualmodel)
@@ -121,9 +121,9 @@ summary(fit)
 grade_this_code()
 ```
 
-We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by nearly 36 points (!), and a team has overperformed it by 35 points (!!). The median residual, where half are above and half are below, is just slightly above the fit line. Close here is good. 
+We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by nearly 44 points (!), and a team has overperformed it by 43 points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good. 
 
-Next: Look at the Adjusted R-squared value. What that says is that 69 percent of a team's scoring output can be predicted by their net yards.  
+Next: Look at the Adjusted R-squared value. What that says is that 66 percent of a team's scoring output can be predicted by their net yards.  
 
 Last: Look at the p-value. We are looking for a p-value smaller than .05. At .05, we can say that our correlation didn't happen at random. And, in this case, it REALLY didn't happen at random. But if you know a little bit about football, it doesn't surprise you that the more you outgain your opponent, the more you win by. It's an intuitive result.
 
@@ -201,9 +201,9 @@ grade_this_code()
 
 So from top to bottom:
 
-* Our min and max go from -65 to positive 73
-* Our adjusted R-squared is ... -0.0003596. Not much at all. 
-* Our p-value is ... 0.5244, which is more than than .05. 
+* Our min and max go from -75 to positive 70
+* Our adjusted R-squared is ... -0.0005768. Not much at all. 
+* Our p-value is ... 0.8479, which is more than than .05. 
 
 So what we can say about this model is that it's statistically insignificant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. 
 
@@ -225,7 +225,7 @@ penalties %>% arrange(desc(residuals)) %>% select(Team, Opponent, Result, differ
 grade_this_code()
 ```
 
-First, note all of the biggest misses here are all blowout games. The worst games of the 2021 season, the worst being Oklahoma vs Western Carolina. The model missed that differential by ... 73 points. The margin of victory? 76 points. In other words, this model is terrible. But let's look at it anyway. 
+First, note all of the biggest misses here are all blowout games. The worst games of the 2022 season, the worst being Western Kentucky vs FIU. The model missed that differential by ... 73 points. The margin of victory? 73 points. In other words, this model is terrible. But let's look at it anyway. 
 
 ```{r correlationchart3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties %>% mutate(predicted = predict(pfit), residuals = residuals(pfit))
