@@ -27,8 +27,6 @@ In sports, and in this class, we'll be dealing largely with two kinds of data: e
 
 To start with, we need to understand the shape of data. 
 
-> EXERCISE: Try scoring a child's board game. For example, Chutes and Ladders. If you were placed in charge of analytics for the World Series of Chutes and Ladders, what is your event level data? What summary data do you keep? If you've got the game, try it. 
-
 ## Rows and columns
 
 Data, oversimplifying it a bit, is information organized. Generally speaking, it's organized into rows and columns. Rows, generally, are individual elements. A team. A player. A game. Columns, generally, are components of the data, sometimes called variables. So if each row is a player, the first column might be their name. The second is their position. The third is their batting average. And so on. 
@@ -56,12 +54,12 @@ Typically, they'll be one of four types of data:
 
 One good thing about sports is that there's lots of interest in it. And that means there's outlets that put sports data on the internet. Now I'm going to show you a trick to getting it easily. 
 
-The site sports-reference.com takes NCAA (and other league) stats and puts them online. For instance, [here's their page on Nebraska basketball's game logs](https://www.sports-reference.com/cbb/schools/nebraska/2019-gamelogs.html), which you should open now.
+The site sports-reference.com takes NCAA (and other league) stats and puts them online. For instance, [here's their page on Nebraska basketball's game logs](https://www.sports-reference.com/cbb/schools/nebraska/2023-gamelogs.html), which you should open now.
 
 Now, in a new tab, log into Google Docs/Drive and open a new spreadsheet. In the first cell of the first row, copy and paste this formula in:
 
 ```
-=IMPORTHTML("https://www.sports-reference.com/cbb/schools/nebraska/2019-gamelogs.html", "table", 1)
+=IMPORTHTML("https://www.sports-reference.com/cbb/schools/nebraska/2023-gamelogs.html", "table", 1)
 ```
 
 If it worked right, you've got the data from that page in a spreadsheet. 
