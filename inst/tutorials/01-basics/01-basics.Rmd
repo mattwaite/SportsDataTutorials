@@ -105,7 +105,7 @@ You get an error. `non-numeric argument to binary operator` is a rather computer
 
 Let's do something more real and calculate the number of home runs per game the Nebraska baseball team hit this season. To do this, we need to know the number of home runs the team hit and the number of games they played. Then it's just simple division. 
 
-[You can find season stats here](https://huskers.com/sports/baseball/stats/2021) at the bottom of the table in a row labeled Totals. The number of games is in the column named GP-GS, which stands for Games Played - Games Started. See why naming things what they are is a rule in this class?
+[You can find season stats here](https://huskers.com/sports/baseball/stats/2022) at the bottom of the table in a row labeled Totals. The number of games is in the column named GP-GS, which stands for Games Played - Games Started. See why naming things what they are is a rule in this class?
 
 We're going to name the first variable HomeRuns and the second variable Games. **Pay Attention: HomeRuns, not Home Runs. The space will break it.** Set them equal to the numbers you got from the table, then divide HomeRuns by Games.
 
@@ -120,14 +120,14 @@ Games <- ??
 SOMETHING / SOMETHING
 ```
 ```{r variables-one-solution, exercise.reveal_solution = FALSE}
-HomeRuns <- 59
-Games <- 48
+HomeRuns <- 51
+Games <- 53
 HomeRuns / Games
 ```
 ```{r variables-one-check}
 grade_this_code()
 ```
 
-Using some rounding, the Huskers hit 1.2 home runs per game this season. So if you watched a game, chances are you were going to see the Good Guys hit at least one bomb. Some days you get zero, some days you get more than one, but on average, they hit 1.2 per game. 
+Using some rounding, the Huskers hit .96 home runs per game this past season. So if you watched a game, chances are you were going to see the Good Guys hit at least one bomb. Some days you get zero, some days you get more than one, but on average, they hit just about 1 per game. 
 
 This isn't terribly useful just yet. If we wanted to know where the Huskers ranked in college baseball, it would take us forever to look up every team and do this math. But as you now know, variables can hold anything we want to store in them. Soon enough, that HomeRuns value will hold every team in college baseball, and Games will hold the games that every team played. The code doesn't change all that much, but we need to crawl before we walk.
