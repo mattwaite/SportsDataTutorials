@@ -35,7 +35,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -58,11 +58,10 @@ library(tidyverse)
 ```{r load-tidyverse-check}
 grade_this_code()
 ```
-
 Now import the data.
 
 ```{r filtering-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 rushinggames <- nrow(games %>% filter(RushingYds > 250))
 
@@ -76,10 +75,10 @@ toprush <- games %>%
   top_n(1, wt=RushingYds)
 ```
 ```{r filtering-load-data-exercise, exercise = TRUE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r filtering-load-data-exercise-solution}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r filtering-load-data-exercise-check}
 grade_this_code()
@@ -160,7 +159,7 @@ grade_this_code()
 ```
 
 ```{r bigrushers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "filtering-load-data", results='asis'}
-glue("In the Big Ten last year, there were {nrow(bigrush)} games last season where a team ran for more than 250 yards. The next questions an analyst would ask are how many times did those teams win their games and does this hold consistently across seasons? Alas, anther time. We have more filtering to do.")
+glue("In the Big Ten last year, there were {nrow(bigrush)} games last season where a team ran for more than 250 yards. The next questions an analyst would ask are how many times did those teams win their games and does this hold consistently across seasons? Alas, another time. We have more filtering to do.")
 ```
 
 ### Exercise 4: Filtering with a list
