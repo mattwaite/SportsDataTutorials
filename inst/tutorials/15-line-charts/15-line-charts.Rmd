@@ -25,7 +25,7 @@ So far, we've talked about bar charts -- stacked or otherwise -- are good for sh
 
 **Line charts are good for showing change over time.** 
 
-Let's look at how we can answer this question: Why was Nebraska terrible at basketball last season?
+Let's look at how we can answer this question: How is Nebraska's basketball season progressing?
 
 We'll need the logs of every game in college basketball. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
@@ -34,7 +34,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs22.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/logs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,19 +61,19 @@ grade_this_code()
 And the data.
 
 ```{r line-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 
 nu <- logs %>% filter(Team == "Nebraska")
-il <- logs %>% filter(Team == "Illinois")
+pu <- logs %>% filter(Team == "Purdue")
 big <- logs %>% filter(Conference == "Big Ten")
 average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
 
 ```
 ```{r line-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r line-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r line-load-data-exercise-check}
 grade_this_code()
@@ -145,26 +145,26 @@ Note also that our X axis labels are automated. It knows it's a date and it just
 
 ## One line line charts are bad 
 
-With datasets, we want to invite comparison. So let's answer the question visually. Let's put two lines on the same chart. How does Nebraska compare to Michigan State, for example? 
+With datasets, we want to invite comparison. So let's answer the question visually. Let's put two lines on the same chart. How does Nebraska compare to Purdue, for example? 
 
 ### Exercise 4: Adding another line
 
 When you have multiple datasets from the same data, you can add multiple geoms. All you have to do is swap out the data and add a + between them. 
 
 ```{r line3, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-il <- logs %>% filter(Team == "????????")
+pu <- logs %>% filter(Team == "????????")
 
 ggplot() + 
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="orange") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="gold") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line3-solution, exercise.reveal_solution = FALSE}
-il <- logs %>% filter(Team == "Illinois")
+pu <- logs %>% filter(Team == "Purdue")
 
 ggplot() + 
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=il, aes(x=Date, y=TeamFGPCT), color="orange") +
+  geom_line(data=pu, aes(x=Date, y=TeamFGPCT), color="gold") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line3-check}
@@ -193,7 +193,7 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="orange") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="gold") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line4-solution, exercise.reveal_solution = FALSE}
@@ -202,14 +202,14 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=il, aes(x=Date, y=TeamFGPCT), color="orange") +
+  geom_line(data=pu, aes(x=Date, y=TeamFGPCT), color="gold") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line4-check}
 grade_this_code()
 ```
 
-What do we see here? How has Nebraska and Illinois' season evolved against all the rest of the teams in college basketball?
+What do we see here? How has Nebraska and Purdue's season evolved against all the rest of the teams in the Big Ten?
 
 ### Exercise 6: Adding the average
 
@@ -233,7 +233,7 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="orange") +
+  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="gold") +
   geom_line(data=???????, aes(x=Date, y=mean_shooting), color="black") + 
   scale_y_continuous(limits = c(0, .7))
 ```
@@ -243,7 +243,7 @@ big <- logs %>% filter(Conference == "Big Ten")
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=il, aes(x=Date, y=TeamFGPCT), color="orange") +
+  geom_line(data=pu, aes(x=Date, y=TeamFGPCT), color="gold") +
   geom_line(data=average, aes(x=Date, y=mean_shooting), color="black") + 
   scale_y_continuous(limits = c(0, .7))
 ```
