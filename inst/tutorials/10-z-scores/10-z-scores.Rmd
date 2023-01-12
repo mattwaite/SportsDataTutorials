@@ -32,7 +32,7 @@ knitr::include_graphics(rep("images/simulations2.png"))
 
 If you think of the normal distribution, it means that 84.3 percent of all case are below that 1. If it were -1, it would mean the number is one standard deviation below the mean, and 84.3 percent of cases would be above that -1. So if you have numbers with z-scores of 3 or even 4, that means that number is waaaaaay above the mean.  
 
-So let's use last year's Nebraska volleyball team, which if haven't been paying attention to current events, was very good at volleyball. A few points from legendary. But were they the best Husker team since 2018, when they were also the national semifinalist? 
+So let's use 2021's Nebraska volleyball team, which if you weren't paying attention, was very good at volleyball. A few points from legendary. But were they the best Husker team since 2018, when they were also the national semifinalist? 
 
 ## Calculating a Z score in R
 
