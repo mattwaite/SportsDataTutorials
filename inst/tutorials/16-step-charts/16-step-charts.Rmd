@@ -29,7 +29,7 @@ To replicate this, we need cumulative data -- data that is the running total of 
 
 Step charts can be used for all kinds of things -- showing how a player's career has evolved over time, how a team fares over a season, or franchise history. Let's walk through an example. 
 
-Let's look at Fred Hoiberg's team last season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+Let's look at Fred Hoiberg's team last complete season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
