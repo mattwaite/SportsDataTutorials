@@ -36,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -62,7 +62,7 @@ grade_this_code()
 And the data.
 
 ```{r scatter-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv")
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
 
 tall <- players %>% 
   mutate(height = (12 * feet) + inches)
@@ -74,10 +74,10 @@ newtall <- tall %>%
          )
 ```
 ```{r scatter-load-data-exercise, exercise = TRUE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv")
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
 ```
 ```{r scatter-load-data-exercise-solution}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2021.csv")
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
 ```
 ```{r scatter-load-data-exercise-check}
 grade_this_code()
@@ -219,14 +219,14 @@ The first thing: R-squared. In this case, the Adjusted R-squared value is 0.3022
 
 Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have < 2.2e-16. So it's not random. Height really does impact kills -- but we kinda knew that already. 
 
-Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for height is 21.003. What this model predicts, given that and the intercept of -1348.654, is this: Every player starts about 1350 kills in the hole. For every inch they grow, they get 21 kills. Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of threes given up and b is the intercept. 
+Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for height is 21.9140. What this model predicts, given that and the intercept of -1410.6429, is this: Every player starts about 1410 kills in the hole. For every inch they grow, they get 21 kills. Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of threes given up and b is the intercept. 
 
 Let's use Madi Kubik as an example. She's 6'3" on the roster, or 75 inches.  
 
-y = 21.003 * 75 - 1348.654 or 226.5 kills. 
+y = 21.9140 * 75 - 1410.6429 or 233 kills. 
 
-How many wins did Kubik have last seaon? 412. 
+How many wins did Kubik have last seaon? 339. 
 
-If we built a model to predict kills based purely on height, we missed Kubik's actual results by almost a factor of 2. Not great. 
+If we built a model to predict kills based purely on height, we missed Kubik's actual results by more than 100. Not great. 
 
 **This is an important lesson: Not all scatterplots work. Not all scatterplots tell a clear story. If you try a scatterplot and get this level of inconclusiveness, you need to try something else.**
