@@ -43,28 +43,28 @@ grade_this_code()
 
 ## Making waffles with vectors
 
-Let's look at the debacle that was Nebraska vs. Michigan State in fall 2021 in college football. [Here's the box score](https://www.espn.com/college-football/matchup?gameId=401282784), which we'll use for this part of the walkthrough. 
+Let's look at the heartbreak that was Nebraska vs. Wisconsin in fall 2022 in college football. [Here's the box score](https://www.espn.com/college-football/matchup/_/gameId/401405142), which we'll use for this part of the walkthrough. 
 
 Maybe the easiest way to do waffle charts, at least at first, is to make vectors of your data and plug them in. To make a vector, we use the `c` or concatenate function. We did this all the way back in Lesson 1. 
 
 So let's look at offense. Rushing vs passing. 
 
 ```{r waffle-load-data, message=FALSE, warning=FALSE}
-nu <- c("Rushing"=187, "Passing"=255)
-ms <- c("Rushing"=71, "Passing"=183)
+nu <- c("Rushing"=106, "Passing"=65)
+wi <- c("Rushing"=235, "Passing"=83)
 
-passing <- c("Nebraska"=255, "Mighigan State"=183)
+total <- c("Nebraska"=171, "Wisconsin"=318)
 
-nu2 <- c("Rushing"=187, "Passing"=255)
-ms2 <- c("Rushing"=71, "Passing"=183, 188)
+nu2 <- c("Rushing"=106, "Passing"=65, 147)
+wi2 <- c("Rushing"=235, "Passing"=83)
 ```
 ```{r waffle-load-data-exercise, exercise = TRUE}
-nu <- c("Rushing"=187, "Passing"=255)
-ms <- c("Rushing"=71, "Passing"=183)
+nu <- c("Rushing"=106, "Passing"=65)
+wi <- c("Rushing"=235, "Passing"=83)
 ```
 ```{r waffle-load-data-exercise-solution}
-nu <- c("Rushing"=187, "Passing"=255)
-ms <- c("Rushing"=71, "Passing"=183)
+nu <- c("Rushing"=106, "Passing"=65)
+wi <- c("Rushing"=235, "Passing"=83)
 ```
 ```{r waffle-load-data-exercise-check}
 grade_this_code()
@@ -98,30 +98,30 @@ waffle(
 grade_this_code()
 ```
 
-Or, we could make this two teams in the same chart by just changing the vector up. Nebraska had 255 yards passing that night. Michigan State had 183.
+Or, we could make this two teams in the same chart by just changing the vector up. Nebraska had 171 yards that night. Wisconsin had 318.
 
 ### Exercise 2: Two teams, one waffle
 
 ```{r waffle2, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-passing <- c("Nebraska"=???, "???????? ?????"=183)
+total <- c("Nebraska"=???, "?????????"=318)
 
 waffle(
         ???????, 
         rows = 10, 
-        title="Nebraska vs Michigan State: passing", 
+        title="Nebraska vs Wisconsin: total yards", 
         xlab="1 square = 1 yard", 
-        colors = c("red", "dark green")
+        colors = c("red", "black")
 )
 ```
 ```{r waffle2-solution, exercise.reveal_solution = FALSE}
-passing <- c("Nebraska"=255, "Michigan State"=183)
+total <- c("Nebraska"=171, "Wisconsin"=318)
 
 waffle(
-        passing, 
+        total, 
         rows = 10, 
-        title="Nebraska vs Michigan State: passing", 
+        title="Nebraska vs Wisconsin: total yards", 
         xlab="1 square = 1 yard", 
-        colors = c("red", "dark green")
+        colors = c("red", "black")
 )
 ```
 ```{r waffle2-check}
@@ -150,9 +150,9 @@ iron(
         ),
  waffle(??, 
         rows = 10, 
-        title="Michigan State's offense", 
+        title="Wisconsin's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "dark green")
+        colors = c("black", "red")
         )
 )
 ```
@@ -164,11 +164,11 @@ iron(
         xlab="1 square = 1 yard", 
         colors = c("black", "red")
         ),
- waffle(ms, 
+ waffle(wi, 
         rows = 10, 
-        title="Michigan State's offense", 
+        title="Wisconsin's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "dark green")
+        colors = c("black", "red")
         )
 )
 ```
@@ -176,49 +176,49 @@ iron(
 grade_this_code()
 ```
 
-What do you notice about this chart? Notice how the squares aren't the same size? Well, Nebraska out-gained Michigan State by a long way ... AND LOST. So the squares aren't the same size because the numbers aren't the same. 
+What do you notice about this chart? Notice how the squares aren't the same size? Well, Wisconsin out-gained Nebraska by a chunk ... AND ONLY WON BY A POINT. So the squares aren't the same size because the numbers aren't the same. 
 
 ### Exercise 4: Adding padding
 
-We can fix the uneven box sizes by adding an unnamed padding number so the number of yards add up to the same thing. Nebraka's total yards ended up at 442. To make the squares the same, we need to make the total for everyone be 442. To do that, we need to add 188 to Michigan State. REMEMBER: Don't name it or it'll show up in the legend.
+We can fix the uneven box sizes by adding an unnamed padding number so the number of yards add up to the same thing. Wisconsin's total yards ended up at 318. To make the squares the same, we need to make the total for everyone be 318. To do that, we need to add 147 to Nebraska. REMEMBER: Don't name it or it'll show up in the legend.
 
 Now, in our waffle iron, if we don't give that padding a color, we'll get an error. So we need to make it white. Which, given our white background, means it will disappear.
 
 ```{r waffle4, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-nu2 <- c("Rushing"=187, "Passing"=255)
-ms2 <- c("Rushing"=71, "Passing"=183, 188)
+nu2 <- c("Rushing"=106, "Passing"=65, 147)
+wi2 <- c("Rushing"=235, "Passing"=83)
 
 iron(
  waffle(???, 
         rows = 10, 
         title="Nebraska's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "red")
+        colors = c("black", "red", "?????")
         ),
  waffle(???, 
         rows = 10, 
-        title="Michigan State's offense", 
+        title="Wisconsin's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "dark green", "?????")
+        colors = c("black", "red")
         )
 )
 ```
 ```{r waffle4-solution, exercise.reveal_solution = FALSE}
-nu2 <- c("Rushing"=187, "Passing"=255)
-ms2 <- c("Rushing"=71, "Passing"=183, 188)
+nu2 <- c("Rushing"=106, "Passing"=65, 147)
+wi2 <- c("Rushing"=235, "Passing"=83)
 
 iron(
  waffle(nu2, 
         rows = 10, 
         title="Nebraska's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "red")
+        colors = c("black", "red", "white")
         ),
- waffle(ms2, 
+ waffle(wi2, 
         rows = 10, 
-        title="Michigan State's offense", 
+        title="Wisconsin's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "dark green", "white")
+        colors = c("black", "red")
         )
 )
 ```
@@ -231,44 +231,44 @@ grade_this_code()
 One last thing we can do is change the 1 square = 1 yard bit -- which makes the squares really small in this case -- by dividing our vector. Because of how R makes vectors, you can just divide it by a number and R will know to divide the numbers inside the vector by that number. Take what you just did and divide it by 2 and see what happens. Reminder: in R, divide is just the slash.
 
 ```{r waffle5, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-nu2 <- c("Rushing"=187, "Passing"=255)
-ms2 <- c("Rushing"=71, "Passing"=183, 188)
+nu2 <- c("Rushing"=106, "Passing"=65, 147)
+wi2 <- c("Rushing"=235, "Passing"=83)
 
 iron(
  waffle(???/?, 
         rows = 10, 
         title="Nebraska's offense", 
         xlab="1 square = 2 yards", 
-        colors = c("black", "red")
+        colors = c("black", "red", "?????")
         ),
  waffle(???/?, 
         rows = 10, 
-        title="Michigan State's offense", 
+        title="Wisconsin's offense", 
         xlab="1 square = 2 yards", 
-        colors = c("black", "dark green", "?????")
+        colors = c("black", "red")
         )
 )
 ```
 ```{r waffle5-solution, exercise.reveal_solution = FALSE}
-nu2 <- c("Rushing"=187, "Passing"=255)
-ms2 <- c("Rushing"=71, "Passing"=183, 188)
+nu2 <- c("Rushing"=106, "Passing"=65, 147)
+wi2 <- c("Rushing"=235, "Passing"=83)
 
 iron(
  waffle(nu2/2, 
         rows = 10, 
         title="Nebraska's offense", 
         xlab="1 square = 2 yards", 
-        colors = c("black", "red")
+        colors = c("black", "red", "white")
         ),
- waffle(ms2/2, 
+ waffle(wi2/2, 
         rows = 10, 
-        title="Michigan State's offense", 
+        title="Wisconsin's offense", 
         xlab="1 square = 2 yards", 
-        colors = c("black", "dark green", "white")
+        colors = c("black", "red")
         )
 )
 ```
 ```{r waffle5-check}
 grade_this_code()
 ```
-News flash: Nebraska beat Michigan State everywhere but on the scoreboard and Nebraska is changing its fight song to "Everybody Hurts" by REM. 
+News flash: Wisconsin beat Nebraska by one point. 
