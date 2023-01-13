@@ -52,7 +52,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/players22.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/players23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -66,18 +66,18 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And while we're loading it, let's filter out anyone who hasn't played 100 minutes and hasn't pulled down a rebound. 
 
 ```{r encircle-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv") %>% filter(MP > 100 & TRB > 0)
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players23.csv") %>% filter(MP > 100 & TRB > 0)
 
-nu <- players %>% filter(Team == "Nebraska Cornhuskers")
+nu <- players %>% filter(Team == "Nebraska")
 
-dw <- nu %>% filter(`FG%` > .67)
+dw <- nu %>% filter(Player == "Derrick Walker")
 ```
 ```{r encircle-load-data-exercise, exercise = TRUE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv") %>%
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players23.csv") %>%
   filter(MP > 100 & TRB > 0)
 ```
 ```{r encircle-load-data-exercise-solution}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv") %>%
+players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players23.csv") %>%
   filter(MP > 100 & TRB > 0)
 ```
 ```{r encircle-load-data-exercise-check}
@@ -107,14 +107,14 @@ We can see right away that there are some dots at the edges -- lots of rebounds 
 Like we have done in the past, let's make a dataframe of Nebraska players and add a layer to our graph that puts Nebraska's dots in red. While we're at it, we'll make everyone else grey. 
 
 ```{r encircle2, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
-nu <- players %>% filter(Team == "Nebraska Cornhuskers")
+nu <- players %>% filter(Team == "Nebraska")
 
 ggplot() + 
   geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
   geom_point(data=??, aes(x=`??%`, y=???), color="red")
 ```
 ```{r encircle2-solution, exercise.reveal_solution = FALSE}
-nu <- players %>% filter(Team == "Nebraska Cornhuskers")
+nu <- players %>% filter(Team == "Nebraska")
 
 ggplot() + 
   geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
@@ -139,7 +139,7 @@ Then we'll add geom_encircle and we'll just copy the data and the aes from our n
 Let's start with `s_shape` 1 and `expand` 1.
 
 ```{r encircle3, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
-dw <- nu %>% filter(`FG%` > .67)
+dw <- nu %>% filter(Player == "Derrick Walker")
 
 ggplot() + 
   geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
@@ -147,7 +147,7 @@ ggplot() +
   geom_encircle(data=dw, aes(x=`??%`, y=???), s_shape=1, expand=1, colour="red")
 ```
 ```{r encircle3-solution, exercise.reveal_solution = FALSE}
-dw <- nu %>% filter(`FG%` > .67)
+dw <- nu %>% filter(Player == "Derrick Walker")
 
 ggplot() + 
   geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
