@@ -43,12 +43,12 @@ library(gt)
 grade_this_code()
 ```
 
-For the data, I want to look at Nebraska women's basketball, because as of this writing they are on a roll. I want to look at where they rank in the Big Ten in shooting metrics -- both field goal shooting and three point shooting percentages. To get that, I'm going to use wehoop to get team box scores. To start, I need to make a list with Big Ten teams in it, because wehoop doesn't include a conference column to make filtering easy. Then, I need to do some formatting work that we'll get into later in the class, but the short version is I'm splitting the way they handle made shots and attempted shots, turning them into numbers, totalalling them up, calculating the season shooting percentages and then using select to just end with three columns: Team and my two shooting metrics. 
+For the data, I want to look at Nebraska women's basketball. I want to look at where they rank in the Big Ten in shooting metrics -- both field goal shooting and three point shooting percentages. To get that, I'm going to use wehoop to get team box scores. To start, I need to make a list with Big Ten teams in it, because wehoop doesn't include a conference column to make filtering easy. Then, I need to do some formatting work that we'll get into later in the class, but the short version is I'm splitting the way they handle made shots and attempted shots, turning them into numbers, totalalling them up, calculating the season shooting percentages and then using select to just end with three columns: Team and my two shooting metrics. 
 
 ```{r table-load-data, message=FALSE, warning=FALSE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan State", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2022) %>% 
+bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
   filter(team_short_display_name %in% big) %>%
   select(team_short_display_name, field_goals_made_field_goals_attempted, three_point_field_goals_made_three_point_field_goals_attempted) %>%
   separate(field_goals_made_field_goals_attempted, into=c("FG", "FGA")) %>%
@@ -69,7 +69,7 @@ bigwbb <- load_wbb_team_box(seasons = 2022) %>%
 ```{r table-load-data-exercise, exercise = TRUE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan State", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2022) %>% 
+bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
   filter(team_short_display_name %in% big) %>%
   select(team_short_display_name, field_goals_made_field_goals_attempted, three_point_field_goals_made_three_point_field_goals_attempted) %>%
   separate(field_goals_made_field_goals_attempted, into=c("FG", "FGA")) %>%
@@ -90,7 +90,7 @@ bigwbb <- load_wbb_team_box(seasons = 2022) %>%
 ```{r table-load-data-exercise-solution}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan State", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2022) %>% 
+bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
   filter(team_short_display_name %in% big) %>%
   select(team_short_display_name, field_goals_made_field_goals_attempted, three_point_field_goals_made_three_point_field_goals_attempted) %>%
   separate(field_goals_made_field_goals_attempted, into=c("FG", "FGA")) %>%
@@ -169,7 +169,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     ????? = "Does Nebraska have a chance to be special this season?",
-    ???????? = "Amy Williams' team is near the top of a tough conference where it matters most."
+    ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   )
 ```
 ```{r table2-solution, exercise.reveal_solution = FALSE}
@@ -181,7 +181,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   )
 ```
 ```{r table2-check}
@@ -203,7 +203,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     ????? = "Does Nebraska have a chance to be special this season?",
-    ???????? = "Amy Williams' team is near the top of a tough conference where it matters most."
+    ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -221,7 +221,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -247,7 +247,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     ????? = "Does Nebraska have a chance to be special this season?",
-    ???????? = "Amy Williams' team is near the top of a tough conference where it matters most."
+    ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -268,7 +268,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -297,7 +297,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -325,7 +325,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -359,7 +359,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -389,7 +389,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -425,7 +425,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -459,7 +459,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -499,7 +499,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -541,7 +541,7 @@ bigwbb %>%
   ) %>%
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the top of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   ) %>% tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
