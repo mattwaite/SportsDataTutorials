@@ -50,7 +50,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -64,7 +64,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r cowplot-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 totals <- games %>% 
   filter(Conference == "Big Ten Conference") %>% 
@@ -94,10 +94,10 @@ bar2 <- ggplot() +
   coord_flip()
 ```
 ```{r cowplot-load-data-exercise, exercise = TRUE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r cowplot-load-data-exercise-solution}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r cowplot-load-data-exercise-check}
 grade_this_code()
@@ -206,7 +206,7 @@ To make these publishable, we should add headlines, chatter, decent labels, cred
 bar1 <- ggplot() + 
   geom_bar(data=toppass, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
   coord_flip() + 
-  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Michigan State and Nebraska appear on both lists.",  x="", y="Percent change", caption = "") + 
+  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Penn State and Minnesota appear on both lists.",  x="", y="Percent change", caption = "") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -233,7 +233,7 @@ plot_grid(bar1, bar2)
 bar1 <- ggplot() + 
   geom_bar(data=toppass, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
   coord_flip() + 
-  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Michigan State and Nebraska appear on both lists.",  x="", y="Percent change", caption = "") + 
+  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Penn State and Minnesota appear on both lists.",  x="", y="Percent change", caption = "") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -269,7 +269,7 @@ bar1 <- ggplot() +
   geom_bar(data=toppass, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +
   geom_bar(data=nu, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="red") +
   coord_flip() + 
-  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Michigan State and Nebraska appear on both lists.",  x="", y="Percent change", caption = "") + 
+  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Penn State and Minnesota appear on both lists.",  x="", y="Percent change", caption = "") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -302,7 +302,7 @@ bar1 <- ggplot() +
   geom_bar(data=toppass, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +
   geom_bar(data=nu, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="red") +
   coord_flip() + 
-  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Michigan State and Nebraska appear on both lists.",  x="", y="Percent change", caption = "") + 
+  labs(title="The B1G's top passing and rushing offenses", subtitle = "Ohio State, Michigan, Penn State and Minnesota appear on both lists.",  x="", y="Percent change", caption = "") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
