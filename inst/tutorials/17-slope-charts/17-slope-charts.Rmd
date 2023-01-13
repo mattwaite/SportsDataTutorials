@@ -181,7 +181,7 @@ ggplot() +
 grade_this_code()
 ```
 
-Well, we know that the black line is Ohio State, and surprise, they're at the top. But look at Nebraska? As promised -- second most explosive offense in the conference. And three wins. Still makes me want to cry. 
+Well, we know Michigan and Ohio State were top teams in the conference. But where is Nebraska? And what story does this tell? 
 
 ### Exercise 5: Getting creative with spacing and breaks
 
@@ -221,8 +221,9 @@ A ha! Better. We now just have the two years and we have some space to put our t
 
 ### Exercise 6: adding labels
 
-To add the labels, we again need to be a bit clever. We want to label each dot *twice* -- once for 2020 and once for 2021. But our data has both years in it, so we're going to have to do something we don't do a lot of: put a `dplyr` filter into our data= bits. 
-We're going to use a `geom_text`, which will just put text anywhere on your graph. The aes will be the same as the geom_point, except it will have a label in it that we'll set to the Team. Then, for data, we're going to filter our dataframes for the `min(Season)` and the `max(Season)`, which will give us 2020 and 2021 respectively. Then, one last little trick -- we're going to nudge our labels over a little. For our min, we're going to subtract .2 years off our season, which will have the effect of moving the text to the left just a bit. Then, on the max side, we'll nudge it .2 to the right by adding it to the season. 
+To add the labels, we again need to be a bit clever. We want to label each dot *twice* -- once for 2021 and once for 2022. But our data has both years in it, so we're going to have to do something we don't do a lot of: put a `dplyr` filter into our data= bits. 
+
+We're going to use a `geom_text`, which will just put text anywhere on your graph. The aes will be the same as the geom_point, except it will have a label in it that we'll set to the Team. Then, for data, we're going to filter our dataframes for the `min(Season)` and the `max(Season)`, which will give us 2021 and 2022 respectively. Then, one last little trick -- we're going to nudge our labels over a little. For our min, we're going to subtract .2 years off our season, which will have the effect of moving the text to the left just a bit. Then, on the max side, we'll nudge it .2 to the right by adding it to the season. 
 
 To cap it off, we'll add `theme_minimal()` at the end because we want to remove the grey background. 
 
@@ -268,4 +269,4 @@ ggplot() +
 grade_this_code()
 ```
 
-And there you have it. A clean and clear slope chart showing how infuriating last season was. 
+And there you have it. A clean and clear slope chart showing how last season compared to the previous one. 
