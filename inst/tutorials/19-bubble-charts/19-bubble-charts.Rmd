@@ -41,7 +41,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -69,7 +69,7 @@ grade_this_code()
 And the data.
 
 ```{r bubble-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 winlosslogs <- logs %>% 
   mutate(
@@ -93,10 +93,10 @@ ypp <- winlosslogs %>%
 bigten <- ypp %>% filter(Conference == "Big Ten Conference")
 ```
 ```{r bubble-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r bubble-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r bubble-load-data-exercise-check}
 grade_this_code()
@@ -301,8 +301,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
     color="red") + 
-  geom_vline(xintercept = ?.??????) + 
-  geom_hline(yintercept = ?.??????)
+  geom_vline(xintercept = ?.?) + 
+  geom_hline(yintercept = ?.??)
 ```
 ```{r bubble8-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -315,8 +315,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.791851) + 
-  geom_hline(yintercept = 5.664038)
+  geom_vline(xintercept = 5.7) + 
+  geom_hline(yintercept = 5.55)
 ```
 ```{r bubble8-check}
 grade_this_code()
@@ -339,8 +339,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
     color="red") + 
-  geom_vline(xintercept = ?.??????) + 
-  geom_hline(yintercept = ?.??????) +
+  geom_vline(xintercept = ?.?) + 
+  geom_hline(yintercept = ?.??) +
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=????)
@@ -357,8 +357,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.863151) + 
-  geom_hline(yintercept = 5.448228) +
+  geom_vline(xintercept = 5.7) + 
+  geom_hline(yintercept = 5.55) +
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
@@ -368,4 +368,4 @@ ggplot() +
 grade_this_code()
 ```
 
-Well, what do you know about that? Nebraska was ... up there with the conference's best. With three wins. 
+Where is Nebraska? And what story does that tell? 
