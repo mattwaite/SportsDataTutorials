@@ -44,7 +44,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -58,15 +58,15 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r facet-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 big10 <- logs %>% filter(Conference == "Big Ten Conference")
 ```
 ```{r facet-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r facet-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r facet-load-data-exercise-check}
 grade_this_code()
@@ -150,7 +150,7 @@ ggplot() +
 ```
 ```{r facet5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=5.668333, color="blue") + 
+  geom_hline(yintercept=5.485475, color="blue") + 
   geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
   facet_wrap(~Team)
 ```
@@ -174,7 +174,7 @@ ggplot() +
 ```
 ```{r facet6-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=5.668333, color="blue") + 
+  geom_hline(yintercept=5.485475, color="blue") + 
   geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
   facet_grid(Team ~ .)
 ```
@@ -192,7 +192,7 @@ ggplot() +
 ```
 ```{r facet7-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=5.668333, color="blue") + 
+  geom_hline(yintercept=5.485475, color="blue") + 
   geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
   facet_grid(. ~ Team)
 ```
