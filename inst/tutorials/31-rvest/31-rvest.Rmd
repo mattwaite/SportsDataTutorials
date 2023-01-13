@@ -24,7 +24,7 @@ tutorial_options(exercise.completion=FALSE)
 
 All the way back in Lesson 2, we used Google Sheets and importHTML to get our own data out of a website. For me, that's a lot of pointing and clicking and copying and pasting. R has a library that can automate the harvesting of data from HTML on the internet. It's called `rvest`. 
 
-Let's grab [a simple, basic HTML table from College Football Stats](http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html). There's nothing particularly strange about this table -- it's simply formatted and easy to scrape. 
+Let's grab [a simple, basic HTML table from College Football Stats](http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html). There's nothing particularly strange about this table -- it's simply formatted and easy to scrape. 
 
 First we'll need some libraries. We're going to use a library called `rvest`, which you already have installed. But like always, if you are having problems, you can install it by running `install.packages('rvest')` in the console. 
 
@@ -43,7 +43,7 @@ grade_this_code()
 The rvest package has functions that make fetching, reading and parsing HTML simple. The first thing we need to do is specify a url that we're going to scrape.
 
 ```{r rvest-load-data, message=FALSE, warning=FALSE}
-scoringoffenseurl <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 
 scoringoffense <- scoringoffenseurl %>%
   read_html() %>%
@@ -52,21 +52,21 @@ scoringoffense <- scoringoffenseurl %>%
 
 scoring <- scoringoffense[[1]]
 
-scoringoffenseurl20 <- "http://www.cfbstats.com/2020/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl21 <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense20 <- scoringoffenseurl20 %>%
+scoringoffense21 <- scoringoffenseurl21 %>%
   read_html() %>%
   html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
   html_table()
 
-scoringoffense2020 <- scoringoffense20[[1]]
+scoringoffense2021 <- scoringoffense21[[1]]
 
-fixedscoringoffense2020 <- scoringoffense2020 %>% rename(Rank = 1)%>% mutate(YEAR = 2020)
-fixedscoringoffense2021 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = 2021)
+fixedscoringoffense2021 <- scoringoffense2021 %>% rename(Rank = 1)%>% mutate(YEAR = 2021)
+fixedscoringoffense2022 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = 2022)
 
-combined <- bind_rows(fixedscoringoffense2021, fixedscoringoffense2020)
+combined <- bind_rows(fixedscoringoffense2021, fixedscoringoffense2022)
 
-url <- "https://www.sports-reference.com/cbb/seasons/2020-school-stats.html"
+url <- "https://www.sports-reference.com/cbb/seasons/2021-school-stats.html"
 
 stats <- url %>%
   read_html() %>%
@@ -121,10 +121,10 @@ statswithoutgarbage <- statsrenamed %>% filter(Rank != "Rk" & Games != "Overall"
 statswithnumbers <- statswithoutgarbage %>% mutate_at(vars(-School), as.numeric) %>% select(-starts_with("Blank"))
 ```
 ```{r rvest-load-data-exercise, exercise = TRUE}
-scoringoffenseurl <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 ```
 ```{r rvest-load-data-exercise-solution}
-scoringoffenseurl <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 ```
 ```{r rvest-load-data-exercise-check}
 grade_this_code()
@@ -190,27 +190,27 @@ This is a common problem. What if we want to look at every scoring offense going
 
 First, we should note, that the data does not have anything in it to indicate what year it comes from. So we're going to have to add that. And we're going to have to figure out a way to stack two dataframes on top of each other. 
 
-So let's grab 2020.
+So let's grab 2021.
 
 ```{r rvest-load-data2-exercise, exercise = TRUE}
-scoringoffenseurl20 <- "http://www.cfbstats.com/2020/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl21 <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense20 <- scoringoffenseurl20 %>%
+scoringoffense21 <- scoringoffenseurl21 %>%
   read_html() %>%
   html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
   html_table()
 
-scoringoffense2020 <- scoringoffense20[[1]]
+scoringoffense2021 <- scoringoffense21[[1]]
 ```
 ```{r rvest-load-data2-exercise-solution}
-scoringoffenseurl20 <- "http://www.cfbstats.com/2020/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl21 <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense20 <- scoringoffenseurl20 %>%
+scoringoffense21 <- scoringoffenseurl21 %>%
   read_html() %>%
   html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
   html_table()
 
-scoringoffense2020 <- scoringoffense20[[1]]
+scoringoffense2021 <- scoringoffense21[[1]]
 ```
 ```{r rvest-load-data2-exercise-check}
 grade_this_code()
@@ -219,10 +219,10 @@ grade_this_code()
 First, how are we going to know, in the data, which year our data is from? We can use mutate. But we have a problem. Let's look at head again. Notice the first column -- it doesn't have a name. That's bad.
 
 ```{r head-data2, exercise=TRUE, exercise.setup = "rvest-load-data"}
-head(scoringoffense2020)
+head(scoringoffense2021)
 ```
 ```{r head-data2-solution}
-head(scoringoffense2020)
+head(scoringoffense2021)
 ```
 ```{r head-data2-check}
 grade_this_code()
@@ -233,12 +233,12 @@ grade_this_code()
 To fix this all of this, we're going to run two functions -- `rename` and `mutate`. The mutate is easy -- were going to mutate a new column that has the year the data comes from. Rename, to refresh your memory, is rename(NAME WE ARE GIVING THE COLUMN = WHICH COLUMN WE ARE RENAMING). But wait. Doesn't our first column not have a name? How are we going to ... you know ... name it? We can call it by it's position. In this case, it's in position 1. But we have to fix the name issue before we can fix the what-year-is-it problem. We'll also fix our 2021 data while we're at it.
 
 ```{r rvest3, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-fixedscoringoffense2020 <- scoringoffense2020 %>% rename(Rank = 1) %>% mutate(YEAR = ????)
-fixedscoringoffense2021 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = ????)
+fixedscoringoffense2021 <- scoringoffense2021 %>% rename(Rank = 1) %>% mutate(YEAR = ????)
+fixedscoringoffense2022 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = ????)
 ```
 ```{r rvest3-solution, exercise.reveal_solution = FALSE}
-fixedscoringoffense2020 <- scoringoffense2020 %>% rename(Rank = 1)%>% mutate(YEAR = 2020)
-fixedscoringoffense2021 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = 2021)
+fixedscoringoffense2021 <- scoringoffense2021 %>% rename(Rank = 1)%>% mutate(YEAR = 2021)
+fixedscoringoffense2022 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = 2022)
 ```
 ```{r rvest3-check}
 grade_this_code()
@@ -247,10 +247,10 @@ grade_this_code()
 And now, to combine the two tables together length-wise -- we need to make long data -- we'll use a dpylr function called `bind_rows`. The good thing is bind_rows is simple: It's just `bind_rows(dataframe, otherdataframe)` and we can keep putting dataframes in there until we run out. The catch is that they have to have the same columns for it to work. In our case, we have that.
 
 ```{r rvest4, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-combined <- bind_rows(??????????????2021, ??????????????2020)
+combined <- bind_rows(??????????????2021, ??????????????2022)
 ```
 ```{r rvest4-solution, exercise.reveal_solution = FALSE}
-combined <- bind_rows(fixedscoringoffense2021, fixedscoringoffense2020)
+combined <- bind_rows(fixedscoringoffense2021, fixedscoringoffense2022)
 ```
 ```{r rvest4-check}
 grade_this_code()
@@ -276,14 +276,14 @@ Unfortunately, non-standard means there's no one way to do it -- it's going to d
 
 I'll explain.
 
-Let's try to get [college basketball season team stats from Sports Reference](https://www.sports-reference.com/cbb/seasons/2020-school-stats.html). If you look at that page, you'll see the problem right away -- the headers span two rows, and they repeat (i.e. there's conference wins, home wins and away wins, but because the conference, home and away markers are on a different line, R won't know which W is which). That's going to be all kinds of no good. **You can't import that.** Dataframes must have names all in one row. If you have two-line headers, you have a problem you have to fix before you can do anything else with it.
+Let's try to get [college basketball season team stats from Sports Reference](https://www.sports-reference.com/cbb/seasons/2023-school-stats.html). If you look at that page, you'll see the problem right away -- the headers span two rows, and they repeat (i.e. there's conference wins, home wins and away wins, but because the conference, home and away markers are on a different line, R won't know which W is which). That's going to be all kinds of no good. **You can't import that.** Dataframes must have names all in one row. If you have two-line headers, you have a problem you have to fix before you can do anything else with it.
 
 ### Exercise 3: No headers please
 
 First we'll grab the page. But this time, in our `html_table` bits, which we've just merrily been using untouched, we're going to add a switch: We're going to tell it that our table does not have headers by saying `header=FALSE`. 
 
 ```{r rvest5, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-url <- "https://www.sports-reference.com/cbb/seasons/2020-school-stats.html"
+url <- "https://www.sports-reference.com/cbb/seasons/2023-school-stats.html"
 
 stats <- url %>%
   read_html() %>%
@@ -291,7 +291,7 @@ stats <- url %>%
   html_table(header=?????)
 ```
 ```{r rvest5-solution, exercise.reveal_solution = FALSE}
-url <- "https://www.sports-reference.com/cbb/seasons/2020-school-stats.html"
+url <- "https://www.sports-reference.com/cbb/seasons/2023-school-stats.html"
 
 stats <- url %>%
   read_html() %>%
