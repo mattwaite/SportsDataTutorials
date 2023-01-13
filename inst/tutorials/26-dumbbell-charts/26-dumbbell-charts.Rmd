@@ -51,7 +51,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -65,7 +65,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r dumbbell-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 turnovers <- logs %>%
   group_by(Team, Conference) %>% 
@@ -75,10 +75,10 @@ turnovers <- logs %>%
   filter(Conference == "Big Ten Conference")
 ```
 ```{r dumbbell-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r dumbbell-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r dumbbell-load-data-exercise-check}
 grade_this_code()
