@@ -234,7 +234,7 @@ grade_this_code()
 
 There, now we can use reorder.
 
-## Exercise 4: Reordering
+### Exercise 4: Reordering
 
 Our new data has 14 teams in it and only one season, so we can no longer use Season as our x axis label. And we want those institutions not in alphabetical order, but in order of each team's yardspergame 
 
