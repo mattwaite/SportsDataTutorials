@@ -1,6 +1,6 @@
 Package: SportsDataTutorials
 Title: The Companion Tutorials To UNL's SPMC 350 Sports Data Analysis Course
-Version: 0.0.1.9000
+Version: 1.0.0.0000
 Authors@R: 
     person(given = "Matt",
            family = "Waite",
