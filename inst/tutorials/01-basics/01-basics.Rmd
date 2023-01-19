@@ -78,7 +78,7 @@ One of the key concepts of programming that you'll need to learn is that most th
 
 Declaring variables is a pattern. The pattern here is `Name Of The Thing <- Value Of The Thing`. 
 
-Names can be anything you want them to be, but they have to be one word, and it's better if they have no numbers or symbols in it. So you can create a variable called NebraskaWillWinTheNationalTitleThisSeasonScottFrostIsGod if you want. But some questions for you: What is that variable going to contain? Is it obvious by the name? And do you want to try and type that again? How about three more times? Yeah, me neither.
+Names can be anything you want them to be, but they have to be one word, and it's better if they have no numbers or symbols in it. So you can create a variable called NebraskaWillWinTheNationalTitleThisSeasonMattRhuleIsGod if you want. But some questions for you: What is that variable going to contain? Is it obvious by the name? And do you want to try and type that again? How about three more times? Yeah, me neither.
 
 > **5 Rules For Naming Variables**<br>
  1. One word, no spaces.<br>
