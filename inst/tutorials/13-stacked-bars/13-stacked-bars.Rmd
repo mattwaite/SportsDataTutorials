@@ -1,5 +1,5 @@
 ---
-title: "Lesson 13: Stacked bar charts"
+title: "Sports Data Lesson 13: Stacked bar charts"
 output: 
   learnr::tutorial:
     progressive: true

@@ -1,5 +1,5 @@
 ---
-title: "Lesson 22: Tables"
+title: "Sports Data Lesson 22: Tables"
 output: 
   learnr::tutorial:
     progressive: true

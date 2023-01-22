@@ -1,5 +1,5 @@
 ---
-title: "Lesson 23: Faceting"
+title: "Sports Data Lesson 23: Faceting"
 output: 
   learnr::tutorial:
     progressive: true

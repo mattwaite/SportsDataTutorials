@@ -1,5 +1,5 @@
 ---
-title: "Lesson 19: Bubble charts"
+title: "Sports Data Lesson 19: Bubble charts"
 output: 
   learnr::tutorial:
     progressive: true

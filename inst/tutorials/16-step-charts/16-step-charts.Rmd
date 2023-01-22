@@ -1,5 +1,5 @@
 ---
-title: "Lesson 17: Step charts"
+title: "Sports Data Lesson 17: Step charts"
 output: 
   learnr::tutorial:
     progressive: true

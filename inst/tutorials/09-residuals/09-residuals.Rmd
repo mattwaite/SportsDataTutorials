@@ -1,5 +1,5 @@
 ---
-title: "Lesson 9: Residuals"
+title: "Sports Data Lesson 9: Residuals"
 output: 
   learnr::tutorial:
     progressive: true

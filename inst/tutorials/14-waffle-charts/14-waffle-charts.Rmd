@@ -1,5 +1,5 @@
 ---
-title: "Lesson 15: Waffle charts"
+title: "Sports Data Lesson 15: Waffle charts"
 output: 
   learnr::tutorial:
     progressive: true

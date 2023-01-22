@@ -1,5 +1,5 @@
 ---
-title: "Lesson 27: Make your own blog"
+title: "Sports Data Lesson 27: Make your own blog"
 output: 
   learnr::tutorial:
     progressive: true

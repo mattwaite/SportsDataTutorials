@@ -1,5 +1,5 @@
 ---
-title: "Lesson 20: Beeswarm plots"
+title: "Sports Data Lesson 20: Beeswarm plots"
 output: 
   learnr::tutorial:
     progressive: true

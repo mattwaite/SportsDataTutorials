@@ -1,5 +1,5 @@
 ---
-title: "Lesson 28: Text cleaning"
+title: "Sports Data Lesson 28: Text cleaning"
 output: 
   learnr::tutorial:
     progressive: true
