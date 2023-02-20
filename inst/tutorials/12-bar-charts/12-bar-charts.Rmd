@@ -180,7 +180,7 @@ We get ... weirdness. We expected to see bars of different sizes, but we get all
 
 ### Exercise 2: The weight of responsibility
 
-You saw how it was done before. This just adds weight to the aes. The weight is always going to be a number, and our number is the `digsperset`.
+You saw how it was done before. This just adds weight to the aes. The weight is always going to be a number, and our number is the `yardspergame`.
 
 ```{r ggplot-bar2, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
 ggplot() + 
