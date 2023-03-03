@@ -243,7 +243,7 @@ ggplot() +
   geom_text(data=mi %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh %>% filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  scale_x_continuous(breaks=c(2020, 2021), limits=c(2019.5,2021.5)) +
+  scale_x_continuous(breaks=c(2021, 2022), limits=c(2020.5,2022.5))  +
   theme_minimal()
 ```
 ```{r slope6-solution, exercise.reveal_solution = FALSE}
@@ -262,7 +262,7 @@ ggplot() +
   geom_text(data=mi %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh %>% filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  scale_x_continuous(breaks=c(2020, 2021), limits=c(2019.5,2021.5)) +
+  scale_x_continuous(breaks=c(2021, 2022), limits=c(2020.5,2022.5)) +
   theme_minimal()
 ```
 ```{r slope6-check}
