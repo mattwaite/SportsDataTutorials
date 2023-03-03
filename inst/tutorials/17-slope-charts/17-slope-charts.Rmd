@@ -187,7 +187,7 @@ Well, we know Michigan and Ohio State were top teams in the conference. But wher
 
 Now that we have something to work with, it's time to start improving it. It would be nice if the years at the bottom didn't have a lot of meaningless decimals on them -- as in we only have two years -- and also, it would be good to label each team. Maybe we label them on each end of the graph. Given how much space the default ggplot behavior has left us to do that, we're going to need to make some space.
 
-We can do that with some clever manipulations of the x axis. In ggplot, there are all kinds of ways to work with the x and y axis scales. In this case, we have a continuous number on the x axis, so we'll use `scale_x_continuous` and we're going to first set the line breaks manually so there's just 2020 and 2021. Then, we're going to set the limits of our x axis so that it doesn't just default to 2020-2021, but is a little wider so we have extra space. We're going to add a half a year on each side to pad it out. 
+We can do that with some clever manipulations of the x axis. In ggplot, there are all kinds of ways to work with the x and y axis scales. In this case, we have a continuous number on the x axis, so we'll use `scale_x_continuous` and we're going to first set the line breaks manually so there's just 2021 and 2022. Then, we're going to set the limits of our x axis so that it doesn't just default to 2021-2022, but is a little wider so we have extra space. We're going to add a half a year on each side to pad it out. 
 
 ```{r slope5, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
 ggplot() + 
@@ -199,7 +199,7 @@ ggplot() +
   geom_point(data=oh, aes(x=Season, y=YardsPerPlay, group=Team), color="black") +
   geom_line(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
   geom_point(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") + 
-  scale_x_continuous(breaks=c(????, ????), limits=c(2019.5,2021.5)) 
+  scale_x_continuous(breaks=c(????, ????), limits=c(2020.5,2022.5)) 
 ```
 ```{r slope5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -211,7 +211,7 @@ ggplot() +
   geom_point(data=oh, aes(x=Season, y=YardsPerPlay, group=Team), color="black") +
   geom_line(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
   geom_point(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") + 
-  scale_x_continuous(breaks=c(2020, 2021), limits=c(2019.5,2021.5)) 
+  scale_x_continuous(breaks=c(2021, 2022), limits=c(2020.5,2022.5)) 
 ```
 ```{r slope5-check}
 grade_this_code()
