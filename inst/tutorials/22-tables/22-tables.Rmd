@@ -34,10 +34,12 @@ What does this library do? We need the tidyverse and gt to find out.
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
 library(gt)
+library(wehoop)
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
 library(gt)
+library(wehoop)
 ```
 ```{r load-tidyverse-check}
 grade_this_code()
@@ -46,20 +48,18 @@ grade_this_code()
 For the data, I want to look at Nebraska women's basketball. I want to look at where they rank in the Big Ten in shooting metrics -- both field goal shooting and three point shooting percentages. To get that, I'm going to use wehoop to get team box scores. To start, I need to make a list with Big Ten teams in it, because wehoop doesn't include a conference column to make filtering easy. Then, I need to do some formatting work that we'll get into later in the class, but the short version is I'm splitting the way they handle made shots and attempted shots, turning them into numbers, totalalling them up, calculating the season shooting percentages and then using select to just end with three columns: Team and my two shooting metrics. 
 
 ```{r table-load-data, message=FALSE, warning=FALSE}
-big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan State", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
+big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
 bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
   filter(team_short_display_name %in% big) %>%
-  select(team_short_display_name, field_goals_made_field_goals_attempted, three_point_field_goals_made_three_point_field_goals_attempted) %>%
-  separate(field_goals_made_field_goals_attempted, into=c("FG", "FGA")) %>%
-  separate(three_point_field_goals_made_three_point_field_goals_attempted, into=c("ThreesMade", "ThreesAttempted")) %>%
+  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) %>%
   mutate_at(vars(-team_short_display_name), as.numeric) %>%
   group_by(team_short_display_name) %>%
   summarize(
-    TotalFG = sum(FG),
-    TotalFGA = sum(FGA),
-    Total3P = sum(ThreesMade),
-    Total3PA = sum(ThreesAttempted)
+    TotalFG = sum(field_goals_made),
+    TotalFGA = sum(field_goals_attempted),
+    Total3P = sum(three_point_field_goals_made),
+    Total3PA = sum(three_point_field_goals_attempted)
   ) %>%
   mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) %>%
   rename(Team = team_short_display_name) %>%
@@ -67,20 +67,18 @@ bigwbb <- load_wbb_team_box(seasons = 2023) %>%
   arrange(desc(FGPct))
 ```
 ```{r table-load-data-exercise, exercise = TRUE}
-big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan State", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
+big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
 bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
   filter(team_short_display_name %in% big) %>%
-  select(team_short_display_name, field_goals_made_field_goals_attempted, three_point_field_goals_made_three_point_field_goals_attempted) %>%
-  separate(field_goals_made_field_goals_attempted, into=c("FG", "FGA")) %>%
-  separate(three_point_field_goals_made_three_point_field_goals_attempted, into=c("ThreesMade", "ThreesAttempted")) %>%
+  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) %>%
   mutate_at(vars(-team_short_display_name), as.numeric) %>%
   group_by(team_short_display_name) %>%
   summarize(
-    TotalFG = sum(FG),
-    TotalFGA = sum(FGA),
-    Total3P = sum(ThreesMade),
-    Total3PA = sum(ThreesAttempted)
+    TotalFG = sum(field_goals_made),
+    TotalFGA = sum(field_goals_attempted),
+    Total3P = sum(three_point_field_goals_made),
+    Total3PA = sum(three_point_field_goals_attempted)
   ) %>%
   mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) %>%
   rename(Team = team_short_display_name) %>%
@@ -88,20 +86,18 @@ bigwbb <- load_wbb_team_box(seasons = 2023) %>%
   arrange(desc(FGPct))
 ```
 ```{r table-load-data-exercise-solution}
-big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan State", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
+big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
 bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
   filter(team_short_display_name %in% big) %>%
-  select(team_short_display_name, field_goals_made_field_goals_attempted, three_point_field_goals_made_three_point_field_goals_attempted) %>%
-  separate(field_goals_made_field_goals_attempted, into=c("FG", "FGA")) %>%
-  separate(three_point_field_goals_made_three_point_field_goals_attempted, into=c("ThreesMade", "ThreesAttempted")) %>%
+  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) %>%
   mutate_at(vars(-team_short_display_name), as.numeric) %>%
   group_by(team_short_display_name) %>%
   summarize(
-    TotalFG = sum(FG),
-    TotalFGA = sum(FGA),
-    Total3P = sum(ThreesMade),
-    Total3PA = sum(ThreesAttempted)
+    TotalFG = sum(field_goals_made),
+    TotalFGA = sum(field_goals_attempted),
+    Total3P = sum(three_point_field_goals_made),
+    Total3PA = sum(three_point_field_goals_attempted)
   ) %>%
   mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) %>%
   rename(Team = team_short_display_name) %>%
