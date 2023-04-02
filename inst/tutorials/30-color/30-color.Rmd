@@ -1,0 +1,217 @@
+---
+title: "Sports Data Lesson 30: Using color the right way"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how the limited use of color can draw attention and focus your story.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(ggrepel)
+library(ggtext)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Using color
+
+## An introduction
+
+The main focus of this whole class -- indeed the whole sports media major -- is to tell a story. If the chart is not telling a story, then it doesn't serve a purpose and we've failed. And if our chart does tell a story, but the reader can't find it, then that means we've still failed the main purpose. 
+
+Some charts do a lot of work showing the reader what the story is before we even anything to it. Some need more help. One way we can offer that help is to use color. 
+
+Color can be very powerful. It can also ruin a graphic. And the right use of color isn't science -- it's art. That means color has been argued about for centuries, even in the world of graphics. 
+
+The basic rules of color we're going to use are:
+
+1. Limit the number of colors. The fewer the better. If everything is a color, nothing is a color. 
+2. Use contrasting colors to draw attention. A color in a sea of grey stands out. 
+3. Don't abuse color. Choose appropriate colors, avoid the defaults.
+
+Where do these rules come from? Experience of people who have made graphics before. Looking at what has succeeded and what has failed. 
+
+**Rule 1:** Alberto Cairo, a professor in the University of Miami School of Communication and expert in data visualization, wrote in his book The Functional Art that limiting color was "not just a minimalist aesthetic choice, but a practical one. Limiting the amount of colors and different fonts in your graphics will help you create a sense of unity in the composition."
+
+He went on: 
+
+"The best way to disorient your readers is to fill your graphic with objects colored in pure accent tones. Pure colors are uncommon in nature, so limit them to highlight whatever is important in your graphics, and use subdued hues — grays, light blues, and greens — for everything else. In other words: If you know that the brain prioritizes what it pays attention to, prioritize beforehand."
+
+**Rule 2:** Swiss cartographer Eduard Imhof wrote in 1982 his first rule of of color composition: "Pure, bright or very strong colors have loud unbearable effects when they stand unrelieved over large areas adjacent to each other, but extraordinary effects can be achieved when they are used sparingly on or between dull background tones."
+
+**Rule 3:** Edward Tufte, in Envisioning Information, wrote that adding color was the easy part. "The often scant benefits derived from coloring data indicate that putting a good color in a good place is a complex matter. Indeed, so difficult and subtle that avoiding catastrophe becomes the first principle in bringing color to information: Above all, do no harm."
+
+## An example of using color
+
+We're going to build a simple bar chart and layer in come color as an example. A story coming out of of the NCAA tournament in 2023 might be how Big Ten teams again made up a large number of tournament teams but most didn't make it past the second round and Michigan State was the last B1G team dancing. So let's explore that. 
+
+First load the tidyverse.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+And the data. We're going to do four things here: first, we'll load in the season stats for each team in college basketball in 2023. Then we'll filter out Big Ten teams to get us a dataframe of 14 teams called `big`. We'll then filter B1G teams that made the tournament. Lastly, we'll make a dataframe of just Michigan State.  
+
+```{r colors-load-data, message=FALSE, warning=FALSE}
+stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
+
+teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
+
+tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
+
+big <- stats %>% filter(School %in% teams)
+
+dance <- stats %>% filter(School %in% tournament)
+
+mi <- stats %>% filter(School == "Michigan State")
+```
+```{r colors-load-data-exercise, exercise = TRUE}
+stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
+
+teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
+
+tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
+
+big <- stats %>% filter(School %in% teams)
+
+dance <- stats %>% filter(School %in% tournament)
+
+mi <- stats %>% filter(School == "Michigan State")
+```
+```{r colors-load-data-exercise-solution}
+stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
+
+teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
+
+tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
+
+big <- stats %>% filter(School %in% teams)
+
+dance <- stats %>% filter(School %in% tournament)
+
+mi <- stats %>% filter(School == "Michigan State")
+```
+```{r colors-load-data-exercise-check}
+grade_this_code()
+```
+
+And we can see that `big` data with head. The `dance` and mi` dataframes have the same columns. 
+
+```{r head-data, exercise=TRUE, exercise.setup = "colors-load-data"}
+head(big)
+```
+```{r head-data-solution}
+head(big)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+### Exercise 1: Making the first bar
+
+Let's start by making a simple bar chart of `OverallSRS`. It's just a simple rating of each team. We're going to re-order it and coord_flip it like we've done before. 
+
+```{r colors-bar, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, ??????????), weight=??????????)) + 
+  coord_flip()
+```
+```{r colors-bar-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS)) + 
+  coord_flip()
+```
+```{r colors-bar-check}
+grade_this_code()
+```
+
+Now we've got a base. 
+
+### Exercise 2: Using color to reduce attention
+
+Let's make that base fade into the background by changing the color to light grey. With bar charts, we're changing the `fill`. Changing the `color` will only change the outline of the bar. 
+
+```{r colors-bar2, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, ??????????), weight=??????????), fill="????? ????") + 
+  coord_flip()
+```
+```{r colors-bar2-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="light grey") + 
+  coord_flip()
+```
+```{r colors-bar2-check}
+grade_this_code()
+```
+
+Now we can add layers.
+
+### Exercise 3: More layers, more colors
+
+Now we're going to add in `dance` and `mi` to our chart. We want them to stand out from the rest of the B1G, so we're going to made `dance` dark grey and we'll use Michigan State's hex code to shade them in. 
+
+```{r colors-bar3, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="????? ????") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="???? ????") +  
+  geom_bar(data=??, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +    
+  coord_flip()
+```
+```{r colors-bar3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="light grey") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="dark grey") +  
+  geom_bar(data=mi, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +    
+  coord_flip()
+```
+```{r colors-bar3-check}
+grade_this_code()
+```
+
+See how you can now see who the tournament teams were, and where Michigan State ranked in the conference? Odd to see they were the last team out of the tournament with much higher-rated teams, no? That's often where stories lie.
+
+We've got one last color-based thing to do -- get rid of the grey background.
+
+### Exercise 4: Getting out of the way of our colors
+
+`ggplot` by default adds a grey background to every chart. I don't know why, but it's there. That grey takes away from our contrast and makes the reader's eye wander more. We want to draw attention to our shapes, and use color to draw the eye to the shape we want them to see. Something that impacts that is bad, so we want to get rid of it. 
+
+The fastest way is to use pre-made themes. The two that come in the most handy are `theme_minimal` and `theme_light`, both of which ditch the grey background. 
+
+Let's use `theme_minimal` here. 
+
+```{r colors-bar4, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="????? ????") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="???? ????") +  
+  geom_bar(data=??, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +  
+  theme_???????() + 
+  coord_flip()
+```
+```{r colors-bar4-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="light grey") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="dark grey") +  
+  geom_bar(data=mi, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") + 
+  theme_minimal() + 
+  coord_flip()
+```
+```{r colors-bar4-check}
+grade_this_code()
+```
+
+This chart has some work left -- headlines, some text to explain the dark grey bars, the axis labels are garbage -- but this chart tells a story and our reader can find it. 

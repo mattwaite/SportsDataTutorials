@@ -1,5 +1,5 @@
 ---
-title: "Sports Data Lesson 31: Rvest"
+title: "Sports Data Lesson 32: Rvest"
 output: 
   learnr::tutorial:
     progressive: true
