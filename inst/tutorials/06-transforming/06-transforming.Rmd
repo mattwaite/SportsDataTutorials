@@ -24,11 +24,11 @@ tutorial_options(exercise.completion=FALSE)
 
 Sometimes long data needs to be wide, and sometimes wide data needs to be long. I'll explain.
 
-You are soon going to discover that long before you can visualize data, **you need to have it in a form that the visualization library can deal with**. One of the ways that isn't immediately obvious is **how your data is cast**. Most of the data you will encounter will be **wide -- each row will represent a single entity with multiple measures for that entity**. So think of states. Your row of your dataset could have the state name, population, average life expectancy and other demographic data. 
+You are soon going to discover that long before you can visualize data, **you need to have it in a form that the visualization library can deal with**. One of the ways that isn't immediately obvious is **how your data is cast**. Most of the data you will encounter will be **wide -- each row will represent a single entity with multiple measures for that entity**. So think of teams. The row of your dataset could have the team name, wins this season, wins last season, wins the season before that and so on. 
 
-But what if your visualization library needs one row for each measure? So state, data type and the data. Nebraska, Population, 1,929,000. That's one row. Then the next row is Nebraska, Average Life Expectancy, 76. That's the next row. That's where recasting your data comes in. 
+But what if your visualization library needs one row for each measure? So team, season and the wins. Nebraska, 2022, 4. That's one row. Then the next row is Nebraska, 2021, 3. That's the next row. That's where recasting your data comes in. 
 
-We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of NBA offensive ratings. We're going to try and answer some questions about offensive improvement. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of NBA per-game statistics. We're going to try and answer some questions about offensive improvement. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
@@ -63,10 +63,10 @@ Now we'll load the data.
 ```{r transforming-load-data, message=FALSE, warning=FALSE}
 nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
 
-nbawide <- nba %>% pivot_wider(names_from = Season, values_from = OffRtg)
+nbawide <- nba %>% pivot_wider(names_from = Season, values_from = PTS)
 
 tops <- nbawide %>%
-  mutate(Difference = `2021-2022` - `2020-2021`) %>%
+  mutate(Difference = `2023` - `2022`) %>%
   arrange(desc(Difference)) %>%
   slice(1)
 ```
@@ -98,19 +98,19 @@ As you can see, each row represents one season for one team. The problem we face
 
 To fix this, we use `pivot_wider` because we're making long data wide.
 
-Making wide data out of long data is relatively simple. `pivot_wider` is a function that takes two inputs -- `names_from` and `values_from`. How do we know which goes in which? When you have three fields like we do, it's pretty easy. The first thing you know is that it's not the name of the team or the player. We know, in the picture in our minds what this should look like, the name is the first thing. That leaves two other things -- the season and the offensive rating. If you think of what would look good as column names -- the headers across the top -- ask yourself, is it the season names -- 2018-2019, 2019-2020, etc. -- or is it **all** the possible combinations of offensive ratings. Go with the one that *isn't* going to create a million columns for the `names_from` bit. 
+Making wide data out of long data is relatively simple. `pivot_wider` is a function that takes two inputs -- `names_from` and `values_from`. How do we know which goes in which? When you have three fields like we do, it's pretty easy. The first thing you know is that it's not the name of the team or the player. We know, in the picture in our minds what this should look like, the name is the first thing. That leaves two other things -- the season and the offensive rating. If you think of what would look good as column names -- the headers across the top -- ask yourself, is it the season names -- 2019, 2020, etc. -- or is it **all** the possible combinations of offensive ratings. Go with the one that *isn't* going to create a million columns for the `names_from` bit. 
 
 ```{r pivoting-wider, exercise=TRUE, exercise.setup = "transforming-load-data"}
 nba %>% pivot_wider(names_from = ??????, values_from = ??????)
 ```
 ```{r pivoting-wider-solution, exercise.reveal_solution = FALSE}
-nba %>% pivot_wider(names_from = Season, values_from = OffRtg)
+nba %>% pivot_wider(names_from = Season, values_from = PTS)
 ```
 ```{r pivoting-wider-check}
 grade_this_code()
 ```
 
-You've gone from 240 rows to 30. Why? Because now each row is a team. There are 30 teams in the NBA. And one row has all of the seasons of data for that team, instead of there being eight rows for each team because there's eight seasons and each season for each team is a row.
+You've gone from 270 rows to 30. Why? Because now each row is a team. There are 30 teams in the NBA. And one row has all of the seasons of data for that team, instead of there being eight rows for each team because there's eight seasons and each season for each team is a row.
 
 ### Exercise 2: Chaining commands to answer a question
 
@@ -118,7 +118,7 @@ Now that we have wide data, we can answer this question: Which offense got bette
 
 The first thing we will need to do is save our data into a new dataframe. We do that with a `<-`. We'll save it into a new dataframe called nbawide.
 
-Then, we're going to use mutate to subtract last season's offensive rating -- the points per 100 possessions -- from this season's. **A quirk of dplyr: Because the column names now start with a number -- for example 2019 -- we have to put backticks around the seasons. The backtick says "this is okay."
+Then, we're going to use mutate to subtract last season's points per game from this season's. **A quirk of dplyr: Because the column names now start with a number -- for example 2019 -- we have to put backticks around the seasons. The backtick says "this is okay."
 
 Finally, we'll arrange to see who was tops.
 
@@ -126,14 +126,14 @@ Finally, we'll arrange to see who was tops.
 nbawide <- nba %>% pivot_wider(names_from = ??????, values_from = ??????)
 
 nbawide %>%
-  mutate(Difference = `?????????` - `?????????`) %>%
+  mutate(Difference = `????` - `????`) %>%
   arrange(desc(COLUMNNAMEFROMMUTATE))
 ```
 ```{r pivoting-mutate-solution, exercise.reveal_solution = FALSE}
-nbawide <- nba %>% pivot_wider(names_from = Season, values_from = OffRtg)
+nbawide <- nba %>% pivot_wider(names_from = Season, values_from = PTS)
 
 nbawide %>%
-  mutate(Difference = `2021-2022` - `2020-2021`) %>%
+  mutate(Difference = `2023` - `2022`) %>%
   arrange(desc(Difference))
 ```
 ```{r pivoting-mutate-check}
@@ -148,7 +148,7 @@ glue("It was the {tops$Team} who improved the most, getting {format(tops$Differe
 
 `pivot_longer` is a function, much like `pivot_wider` in that it takes input. In this case, pivot_longer needs *three* things: what columns are getting pivoted, and what we need to name the new columns that are getting pivoted. Those names are called `names_to` and `values_to` because one is going to be a label and one is going to be a ... value. 
 
-Given our data, we have Team and then a bunch of columns that are years. What we want to see is something like Team, Season, OffRtg, just like we had when we started. 
+Given our data, we have Team and then a bunch of columns that are years. What we want to see is something like Team, Season, PTS, just like we had when we started. 
 
 Why are we doing this? In the future, you are going to find the data you need and it is not going to be in the form you want it. You'll have to pivot it, one way or the other. 
 
@@ -158,10 +158,10 @@ The hardest part of pivoting longer is telling it which columns to pivot. You sp
 nbawide %>% pivot_longer(cols = starts_with("20"), names_to = "??????", values_to = "??????")
 ```
 ```{r pivoting-longer-solution, exercise.reveal_solution = FALSE}
-nbawide %>% pivot_longer(cols = starts_with("20"), names_to = "Season", values_to = "OffRtg")
+nbawide %>% pivot_longer(cols = starts_with("20"), names_to = "Season", values_to = "PTS")
 ```
 ```{r pivoting-longer-check}
 grade_this_code()
 ```
 
-We're back to 240 rows. 
+We're back to 270 rows. 
