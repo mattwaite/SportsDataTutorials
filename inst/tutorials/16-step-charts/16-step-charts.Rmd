@@ -36,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs22.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/logs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -63,7 +63,7 @@ grade_this_code()
 And the data.
 
 ```{r step-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 
 difflogs <- logs %>% 
   mutate(Differential = TeamScore - OpponentScore) %>% 
@@ -158,7 +158,7 @@ From this, we can see a handful of teams in the Big Ten had negative point diffe
 
 ### Exercise 5: Using color the right way
 
-How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska and the co-champions, Illinois and Wisconsin. 
+How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska, Illinois and Wisconsin. 
 
 ```{r step5, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 nu <- bigdiff %>% filter(Team == "Nebraska")
@@ -221,4 +221,4 @@ ggplot() +
 grade_this_code()
 ```
 
-This is a decent looking chart. Depressing, but it tells a story. 
+This is a decent looking chart.
