@@ -59,7 +59,7 @@ grade_this_code()
 
 Normally, you would be reading the documentation for wehoop or any of the libraries in the Sportsdataverse, but some of them are a little thin (and hey, they're free, so I'm not complaining). The best part of [the documentation](https://wehoop.sportsdataverse.org/index.html) for wehoop is in the functional reference, which is a road map to everything it can do. One of the more interesting things to me with wehoop, cfbfastR and hoopR is play-by-play data. But that data gets very large, very fast. Let's sstart with something smaller, like player box scores. 
 
-Here's how to get player box scores for the current season (which are numbered by the year they end in). NOTE: The season is ongoing. What you get will look different what what I get as I'm writing this. If some of this writing looks a little vague, that's why. 
+Here's how to get player box scores for the most recent season (which are numbered by the year they end in). 
 
 ```{r packages-load-data, message=FALSE, warning=FALSE, results=FALSE}
 playerboxscores <- load_wbb_player_box(seasons = 2023)
@@ -169,4 +169,4 @@ playbyplay %>%
 grade_this_code()
 ```
 
-The most common plays -- defensive rebounds and free throws. But if you look at basketball stats, that makes sense. There's a lot more defensive rebounds than offensive. There's a lot more missed three than made ones, typically. But as Nebraska goes further on this run, you now have the ability to get very granular data to analyze how Amy Williams and the team are doing it. 
+The most common plays -- defensive rebounds and free throws. But if you look at basketball stats, that makes sense. There's a lot more defensive rebounds than offensive. There's a lot more missed threes than made ones, typically. But as Nebraska goes further on this run, you now have the ability to get very granular data to analyze how Amy Williams and the team are doing it. 
