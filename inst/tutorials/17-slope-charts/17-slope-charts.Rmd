@@ -23,9 +23,11 @@ A line chart, as we learned, shows change over time, with the date on the x-axis
 
 But with some fiddling with lines and points, you can create a new chart type that does show change over two time periods quite well: A slope chart. 
 
-Think of a slope chart like the meme you see online: How is started vs how it's going. For example, did you know Nebraska had the second most explosive offense in the Big Ten last season? 
+Think of a slope chart like the meme you see online: How is started vs how it's going. For example, did you know Nebraska had the second most explosive offense in the Big Ten in 2021? 
 
-It's true. I'll show you. You're going to need a dataset I created that has two seasons of Yards Per Play data on offense. This is the total yards gained divided by the total number of plays. For each team, there's two rows -- one in 2020 and one in 2021. 
+It's true. I'll show you. But what happened in 2022?
+
+You're going to need a dataset I created that has two seasons of Yards Per Play data on offense. This is the total yards gained divided by the total number of plays. For each team, there's two rows -- one in 2021 and one in 2022. 
 
 **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
