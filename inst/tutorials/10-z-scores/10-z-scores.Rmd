@@ -43,7 +43,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/volleyball1821.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/volleyball1822.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -70,7 +70,7 @@ grade_this_code()
 And load the data.
 
 ```{r zscore-load-data, message=FALSE, warning=FALSE, results=FALSE}
-seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1821.csv")
+seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
 
 perset <- seasons %>% 
   mutate(
@@ -78,7 +78,7 @@ perset <- seasons %>%
     digsperset = Digs/S,
     acesperset = Aces/S
   ) %>%
-  select(Season, Institution, Conference, killsperset, digsperset, acesperset)
+  select(Season, Team, Conference, killsperset, digsperset, acesperset)
 
 teamzscore <- perset %>%
   group_by(Season) %>% 
@@ -90,10 +90,10 @@ teamzscore <- perset %>%
   ) %>% ungroup() 
 ```
 ```{r zscore-load-data-exercise, exercise = TRUE}
-seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1821.csv")
+seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
 ```
 ```{r zscore-load-data-exercise-solution}
-seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1821.csv")
+seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
 ```
 ```{r zscore-load-data-exercise-check}
 grade_this_code()
@@ -126,7 +126,7 @@ perset <- seasons %>%
     digsperset = ????/?,
     acesperset = ????/?
   ) %>%
-  select(Season, Institution, Conference, ???????????, ??????????, ??????????)
+  select(Season, Team, Conference, ???????????, ??????????, ??????????)
 ```
 ```{r zscore2-solution, exercise.reveal_solution = FALSE}
 perset <- seasons %>% 
@@ -135,7 +135,7 @@ perset <- seasons %>%
     digsperset = Digs/S,
     acesperset = Aces/S
   ) %>%
-  select(Season, Institution, Conference, killsperset, digsperset, acesperset)
+  select(Season, Team, Conference, killsperset, digsperset, acesperset)
 ```
 ```{r zscore2-check}
 grade_this_code()
@@ -215,13 +215,13 @@ Closer to home, how is Nebraska doing vs the Big Ten? Because we included Confer
 teamzscore %>% 
   filter(Conference == "??? ???") %>% 
   arrange(desc(???????????)) %>%
-  select(Season, Institution, TotalZscore)
+  select(Season, Team, TotalZscore)
 ```
 ```{r zscore5-solution, exercise.reveal_solution = FALSE}
 teamzscore %>% 
   filter(Conference == "Big Ten") %>% 
   arrange(desc(TotalZscore)) %>%
-  select(Season, Institution, TotalZscore)
+  select(Season, Team, TotalZscore)
 ```
 ```{r zscore5-check}
 grade_this_code()
