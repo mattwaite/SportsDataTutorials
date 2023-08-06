@@ -25,7 +25,7 @@ So far, we've talked about bar charts -- stacked or otherwise -- are good for sh
 
 **Line charts are good for showing change over time.** 
 
-Let's look at how we can answer this question: How is Nebraska's basketball season progressing?
+Let's look at how we can answer this question: Did last season's Nebraska's basketball season progress?
 
 We'll need the logs of every game in college basketball. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
