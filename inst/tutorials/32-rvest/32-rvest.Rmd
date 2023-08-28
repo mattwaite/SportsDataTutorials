@@ -45,37 +45,37 @@ The rvest package has functions that make fetching, reading and parsing HTML sim
 ```{r rvest-load-data, message=FALSE, warning=FALSE}
 scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense <- scoringoffenseurl %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
+scoringoffense <- scoringoffenseurl |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="content"]/div[2]/table') |>
   html_table()
 
 scoring <- scoringoffense[[1]]
 
 scoringoffenseurl21 <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense21 <- scoringoffenseurl21 %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
+scoringoffense21 <- scoringoffenseurl21 |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="content"]/div[2]/table') |>
   html_table()
 
 scoringoffense2021 <- scoringoffense21[[1]]
 
-fixedscoringoffense2021 <- scoringoffense2021 %>% rename(Rank = 1)%>% mutate(YEAR = 2021)
-fixedscoringoffense2022 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = 2022)
+fixedscoringoffense2021 <- scoringoffense2021 |> rename(Rank = 1)|> mutate(YEAR = 2021)
+fixedscoringoffense2022 <- scoring |> rename(Rank = 1) |> mutate(YEAR = 2022)
 
 combined <- bind_rows(fixedscoringoffense2021, fixedscoringoffense2022)
 
 url <- "https://www.sports-reference.com/cbb/seasons/2021-school-stats.html"
 
-stats <- url %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="basic_school_stats"]') %>%
+stats <- url |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="basic_school_stats"]') |>
   html_table(header=FALSE)
 
 stats <- stats[[1]]
 
-statsrenamed <- stats %>% 
+statsrenamed <- stats |> 
   rename(
     Rank=X1, 
     School=X2, 
@@ -116,9 +116,9 @@ statsrenamed <- stats %>%
     Turnovers=X37, 
     PersonalFouls=X38)
 
-statswithoutgarbage <- statsrenamed %>% filter(Rank != "Rk" & Games != "Overall") 
+statswithoutgarbage <- statsrenamed |> filter(Rank != "Rk" & Games != "Overall") 
 
-statswithnumbers <- statswithoutgarbage %>% mutate_at(vars(-School), as.numeric) %>% select(-starts_with("Blank"))
+statswithnumbers <- statswithoutgarbage |> mutate_at(vars(-School), as.numeric) |> select(-starts_with("Blank"))
 ```
 ```{r rvest-load-data-exercise, exercise = TRUE}
 scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
@@ -141,15 +141,15 @@ When you have simple tables, the code is very simple. You create a variable to r
 Watch the video, go to the URL we're scraping and copy the XPath for the table. Paste it into the code below.
 
 ```{r rvest1, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-scoringoffense <- scoringoffenseurl %>%
-  read_html() %>%
-  html_nodes(xpath = '???????????????????????????????') %>%
+scoringoffense <- scoringoffenseurl |>
+  read_html() |>
+  html_nodes(xpath = '???????????????????????????????') |>
   html_table()
 ```
 ```{r rvest1-solution, exercise.reveal_solution = FALSE}
-scoringoffense <- scoringoffenseurl %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
+scoringoffense <- scoringoffenseurl |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="content"]/div[2]/table') |>
   html_table()
 ```
 ```{r rvest1-check}
@@ -195,9 +195,9 @@ So let's grab 2021.
 ```{r rvest-load-data2-exercise, exercise = TRUE}
 scoringoffenseurl21 <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense21 <- scoringoffenseurl21 %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
+scoringoffense21 <- scoringoffenseurl21 |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="content"]/div[2]/table') |>
   html_table()
 
 scoringoffense2021 <- scoringoffense21[[1]]
@@ -205,9 +205,9 @@ scoringoffense2021 <- scoringoffense21[[1]]
 ```{r rvest-load-data2-exercise-solution}
 scoringoffenseurl21 <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
 
-scoringoffense21 <- scoringoffenseurl21 %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="content"]/div[2]/table') %>%
+scoringoffense21 <- scoringoffenseurl21 |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="content"]/div[2]/table') |>
   html_table()
 
 scoringoffense2021 <- scoringoffense21[[1]]
@@ -233,12 +233,12 @@ grade_this_code()
 To fix this all of this, we're going to run two functions -- `rename` and `mutate`. The mutate is easy -- were going to mutate a new column that has the year the data comes from. Rename, to refresh your memory, is rename(NAME WE ARE GIVING THE COLUMN = WHICH COLUMN WE ARE RENAMING). But wait. Doesn't our first column not have a name? How are we going to ... you know ... name it? We can call it by it's position. In this case, it's in position 1. But we have to fix the name issue before we can fix the what-year-is-it problem. We'll also fix our 2021 data while we're at it.
 
 ```{r rvest3, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-fixedscoringoffense2021 <- scoringoffense2021 %>% rename(Rank = 1) %>% mutate(YEAR = ????)
-fixedscoringoffense2022 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = ????)
+fixedscoringoffense2021 <- scoringoffense2021 |> rename(Rank = 1) |> mutate(YEAR = ????)
+fixedscoringoffense2022 <- scoring |> rename(Rank = 1) |> mutate(YEAR = ????)
 ```
 ```{r rvest3-solution, exercise.reveal_solution = FALSE}
-fixedscoringoffense2021 <- scoringoffense2021 %>% rename(Rank = 1)%>% mutate(YEAR = 2021)
-fixedscoringoffense2022 <- scoring %>% rename(Rank = 1) %>% mutate(YEAR = 2022)
+fixedscoringoffense2021 <- scoringoffense2021 |> rename(Rank = 1)|> mutate(YEAR = 2021)
+fixedscoringoffense2022 <- scoring |> rename(Rank = 1) |> mutate(YEAR = 2022)
 ```
 ```{r rvest3-check}
 grade_this_code()
@@ -285,17 +285,17 @@ First we'll grab the page. But this time, in our `html_table` bits, which we've 
 ```{r rvest5, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
 url <- "https://www.sports-reference.com/cbb/seasons/2023-school-stats.html"
 
-stats <- url %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="basic_school_stats"]') %>%
+stats <- url |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="basic_school_stats"]') |>
   html_table(header=?????)
 ```
 ```{r rvest5-solution, exercise.reveal_solution = FALSE}
 url <- "https://www.sports-reference.com/cbb/seasons/2023-school-stats.html"
 
-stats <- url %>%
-  read_html() %>%
-  html_nodes(xpath = '//*[@id="basic_school_stats"]') %>%
+stats <- url |>
+  read_html() |>
+  html_nodes(xpath = '//*[@id="basic_school_stats"]') |>
   html_table(header=FALSE)
 ```
 ```{r rvest5-check}
@@ -319,7 +319,7 @@ So, that's not ideal. We have headers and data mixed together, and our columns a
 Note, this is nothing special, it's just a lot of code and kind of tedious. I'm just going through each field and naming it what it is. While I'm at it, **I am removing any special characters, spaces or anything that would make R throw a fit.** So no dashes, percent signs, no columns that start with number.
 
 ```{r rvest6, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-statsrenamed <- stats %>% 
+statsrenamed <- stats |> 
   rename(
     Rank=X1, 
     School=X2, 
@@ -361,7 +361,7 @@ statsrenamed <- stats %>%
     PersonalFouls=X38)
 ```
 ```{r rvest6-solution, exercise.reveal_solution = FALSE}
-statsrenamed <- stats %>% 
+statsrenamed <- stats |> 
   rename(
     Rank=X1, 
     School=X2, 
@@ -421,11 +421,11 @@ grade_this_code()
 From that, I can see that in my Rank column, I have a row that has "Rk" in it. I don't want that. Then, in my Games column, along with several others, I have "Overall" in a row. Don't want that either. With filters so far, we've been using mostly == and greater than/less than. The opposite of == is !=, or does not equal. In other words, keep everything EXCEPT this.
 
 ```{r rvest7, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-statswithoutgarbage <- statsrenamed %>% 
+statswithoutgarbage <- statsrenamed |> 
   filter(Rank != "Rk" & Games != "Overall") 
 ```
 ```{r rvest7-solution, exercise.reveal_solution = FALSE}
-statswithoutgarbage <- statsrenamed %>% 
+statswithoutgarbage <- statsrenamed |> 
   filter(Rank != "Rk" & Games != "Overall") 
 ```
 ```{r rvest7-check}
@@ -439,13 +439,13 @@ One last thing: Who needs columns called Blank1, Blank2, Blank3, etc?
 Here's what it looks like:
 
 ```{r rvest8, exercise=TRUE, exercise.setup = "rvest-load-data", message=FALSE}
-statswithnumbers <- statswithoutgarbage %>% 
-  mutate_at(vars(-School), as.numeric) %>% 
+statswithnumbers <- statswithoutgarbage |> 
+  mutate_at(vars(-School), as.numeric) |> 
   select(-starts_with("Blank"))
 ```
 ```{r rvest8-solution, exercise.reveal_solution = FALSE}
-statswithnumbers <- statswithoutgarbage %>% 
-  mutate_at(vars(-School), as.numeric) %>% 
+statswithnumbers <- statswithoutgarbage |> 
+  mutate_at(vars(-School), as.numeric) |> 
   select(-starts_with("Blank"))
 ```
 ```{r rvest8-check}

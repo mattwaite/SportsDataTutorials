@@ -77,21 +77,21 @@ set.seed(1234)
 
 players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
 
-playersselected <- players %>% 
-  filter(MP>0) %>% filter(Pos == "G") %>% 
-  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+playersselected <- players |> 
+  filter(MP>0) |> filter(Pos == "G") |> 
+  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) |> 
   na.omit() 
 
-playersscaled <- playersselected %>% 
-  select(MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
-  mutate_all(scale) %>% 
+playersscaled <- playersselected |> 
+  select(MP, `FG%`, `3P%`, AST, TOV, PTS) |> 
+  mutate_all(scale) |> 
   na.omit()
 
 clusters <- kmeans(playersscaled, centers = 5, nstart = 25)
 
 playercluster <- data.frame(playersselected, clusters$cluster) 
 
-bm <- playercluster %>% filter(Player == "Bryce McGowens")
+bm <- playercluster |> filter(Player == "Bryce McGowens")
 ```
 ```{r cluster-load-data-exercise, exercise = TRUE}
 players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
@@ -108,15 +108,15 @@ To cluster this data properly, we have some work to do.
 First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Bryce McGowens is a guard, so let's just look at guards. Third, we want to limit the data to things that make sense to look at for Bryce McGowens -- things like shooting, three point shooting, assists, turnovers and points. 
 
 ```{r cluster1, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
-playersselected <- players %>% 
-  filter(MP>0) %>% filter(Pos == "G") %>% 
-  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+playersselected <- players |> 
+  filter(MP>0) |> filter(Pos == "G") |> 
+  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) |> 
   na.omit() 
 ```
 ```{r cluster1-solution, exercise.reveal_solution = FALSE}
-playersselected <- players %>% 
-  filter(MP>0) %>% filter(Pos == "G") %>% 
-  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
+playersselected <- players |> 
+  filter(MP>0) |> filter(Pos == "G") |> 
+  select(Player, Team, Pos, MP, `FG%`, `3P%`, AST, TOV, PTS) |> 
   na.omit() 
 ```
 ```{r cluster1-check}
@@ -128,15 +128,15 @@ Now, k-means clustering doesn't work as well with data that can be on different 
 Also, k-means clustering won't work with text data, so we need to create a dataframe that's just the numbers, but scaled. We can do that with another select, and using mutate_all with the scale function. The `na.omit()` means get rid of any blanks, because they too will cause errors. 
 
 ```{r cluster2, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
-playersscaled <- playersselected %>% 
-  select(MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
-  mutate_all(scale) %>% 
+playersscaled <- playersselected |> 
+  select(MP, `FG%`, `3P%`, AST, TOV, PTS) |> 
+  mutate_all(scale) |> 
   na.omit()
 ```
 ```{r cluster2-solution, exercise.reveal_solution = FALSE}
-playersscaled <- playersselected %>% 
-  select(MP, `FG%`, `3P%`, AST, TOV, PTS) %>% 
-  mutate_all(scale) %>% 
+playersscaled <- playersselected |> 
+  select(MP, `FG%`, `3P%`, AST, TOV, PTS) |> 
+  mutate_all(scale) |> 
   na.omit()
 ```
 ```{r cluster2-check}
@@ -228,12 +228,12 @@ Now we have a dataframe called playercluster that has our player names and what 
 We now have a dataset and can plot it like anything else. Let's get Bryce McGowenss and then plot him against the rest of college basketball on assists versus minutes played. 
 
 ```{r cluster7, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
-bm <- playercluster %>% filter(Player == "Bryce McGowens")
+bm <- playercluster |> filter(Player == "Bryce McGowens")
 
 bm
 ```
 ```{r cluster7-solution, exercise.reveal_solution = FALSE}
-bm <- playercluster %>% filter(Player == "Bryce McGowens")
+bm <- playercluster |> filter(Player == "Bryce McGowens")
 
 bm
 ```
@@ -262,12 +262,12 @@ Not bad, not bad. But who are Bryce McGowens' peers? If we look at the numbers i
 ```{r cluster9, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
 big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
 
-playercluster %>% filter(clusters.cluster == 1) %>% filter(Team %in% big10) %>% arrange(desc(MP))
+playercluster |> filter(clusters.cluster == 1) |> filter(Team %in% big10) |> arrange(desc(MP))
 ```
 ```{r cluster9-solution, exercise.reveal_solution = FALSE}
 big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
 
-playercluster %>% filter(clusters.cluster == 1) %>% filter(Team %in% big10) %>% arrange(desc(MP))
+playercluster |> filter(clusters.cluster == 1) |> filter(Team %in% big10) |> arrange(desc(MP))
 ```
 ```{r cluster9-check}
 grade_this_code()

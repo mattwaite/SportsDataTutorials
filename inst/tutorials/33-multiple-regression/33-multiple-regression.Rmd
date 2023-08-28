@@ -61,14 +61,14 @@ And the data.
 ```{r multiple-load-data, message=FALSE, warning=FALSE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
 
-difflogs <- logs %>% mutate(
+difflogs <- logs |> mutate(
   Differential = TeamScore - OpponentScore, 
   NetYards = OffensiveYards - DefYards, 
   TurnoverMargin = DefTotalTurnovers - TotalTurnovers)
 
-simplelogs <- difflogs %>% 
-  select_if(is.numeric) %>% 
-  select(-Game, -Season) %>% 
+simplelogs <- difflogs |> 
+  select_if(is.numeric) |> 
+  select(-Game, -Season) |> 
   select(Differential, NetYards, TurnoverMargin, everything())
 ```
 ```{r multiple-load-data-exercise, exercise = TRUE}
@@ -84,13 +84,13 @@ grade_this_code()
 One way to show how successful a football team was for a game is to show the differential between the team's score and the opponent's score. Score a lot more than the opponent = good, score a lot less than the opponent = bad. And, relatively speaking, the more the better. So let's create that differential. Let's also get our net yardage stat back. And because we'll need it later, let's add the turnover margin.
 
 ```{r multiple1, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
-difflogs <- logs %>% mutate(
+difflogs <- logs |> mutate(
   Differential = TeamScore - OpponentScore, 
   NetYards = OffensiveYards - DefYards, 
   TurnoverMargin = DefTotalTurnovers - TotalTurnovers)
 ```
 ```{r multiple1-solution, exercise.reveal_solution = FALSE}
-difflogs <- logs %>% mutate(
+difflogs <- logs |> mutate(
   Differential = TeamScore - OpponentScore, 
   NetYards = OffensiveYards - DefYards, 
   TurnoverMargin = DefTotalTurnovers - TotalTurnovers)
@@ -146,15 +146,15 @@ To find problems with multicollinearity, we have to create a correlation matrix 
 First, we're going to remove all non-numeric values from our data. There's a whole other set of tools for creating correlations based on categorical data. For now, we're just going to remove them. To do that, we'll use a shortcut called `select_if` that selects columns if they match a criteria -- in this case, they're numeric. And then, there's two columns that are numeric but aren't numbers, per se. They're the Game number (1,2,3,4,5 and so on) and the season (2020, 2021, etc.). Those don't have any meaning, so we'll dump them too. The last select is just reordering the columns for what comes next. We'll end up with a new dataframe called simplelogs.
 
 ```{r multiple4, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
-simplelogs <- difflogs %>% 
-  select_if(is.numeric) %>% 
-  select(-Game, -Season) %>% 
+simplelogs <- difflogs |> 
+  select_if(is.numeric) |> 
+  select(-Game, -Season) |> 
   select(Differential, NetYards, TurnoverMargin, everything())
 ```
 ```{r multiple4-solution, exercise.reveal_solution = FALSE}
-simplelogs <- difflogs %>% 
-  select_if(is.numeric) %>% 
-  select(-Game, -Season) %>% 
+simplelogs <- difflogs |> 
+  select_if(is.numeric) |> 
+  select(-Game, -Season) |> 
   select(Differential, NetYards, TurnoverMargin, everything())
 ```
 ```{r multiple4-check}
@@ -212,8 +212,8 @@ How does this apply in the real world? Let's pretend for a minute that you are S
 So if our goal is to predict a conference champion team, we need to know what those teams did. Here's the last four regular season Big Ten conference champions in this dataset. 
 
 ```{r multiple7, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
-difflogs %>% 
-  filter(Team == "Michigan" & Season == 2021 | Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) %>% 
+difflogs |> 
+  filter(Team == "Michigan" & Season == 2021 | Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) |> 
   summarise(
     meanNetYards = mean(NetYards),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -222,8 +222,8 @@ difflogs %>%
   )
 ```
 ```{r multiple7-solution, exercise.reveal_solution = FALSE}
-difflogs %>% 
-  filter(Team == "Michigan" & Season == 2021 | Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) %>% 
+difflogs |> 
+  filter(Team == "Michigan" & Season == 2021 | Team == "Ohio State" & Season == 2020 | Team == "Ohio State" & Season == 2019 | Team == "Ohio State" & Season == 2018) |> 
   summarise(
     meanNetYards = mean(NetYards),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -252,10 +252,10 @@ So a team with those numbers is going to average scoring almost 19 more points p
 How does that compare to Nebraska this season? 
 
 ```{r multiple9, exercise=TRUE, exercise.setup = "multiple-load-data", message=FALSE}
-difflogs %>% 
+difflogs |> 
   filter(
     Team == "Nebraska" & Season == 2021
-    ) %>% 
+    ) |> 
   summarise(
     meanNetYards = mean(NetYards),
     meanTurnoverMargin = mean(TurnoverMargin),
@@ -264,10 +264,10 @@ difflogs %>%
   )
 ```
 ```{r multiple9-solution, exercise.reveal_solution = FALSE}
-difflogs %>% 
+difflogs |> 
   filter(
     Team == "Nebraska" & Season == 2021
-    ) %>% 
+    ) |> 
   summarise(
     meanNetYards = mean(NetYards),
     meanTurnoverMargin = mean(TurnoverMargin),

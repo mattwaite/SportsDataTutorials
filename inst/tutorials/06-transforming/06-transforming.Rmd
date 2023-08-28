@@ -63,11 +63,11 @@ Now we'll load the data.
 ```{r transforming-load-data, message=FALSE, warning=FALSE}
 nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
 
-nbawide <- nba %>% pivot_wider(names_from = Season, values_from = PTS)
+nbawide <- nba |> pivot_wider(names_from = Season, values_from = PTS)
 
-tops <- nbawide %>%
-  mutate(Difference = `2023` - `2022`) %>%
-  arrange(desc(Difference)) %>%
+tops <- nbawide |>
+  mutate(Difference = `2023` - `2022`) |>
+  arrange(desc(Difference)) |>
   slice(1)
 ```
 ```{r transforming-load-data-exercise, exercise = TRUE}
@@ -101,10 +101,10 @@ To fix this, we use `pivot_wider` because we're making long data wide.
 Making wide data out of long data is relatively simple. `pivot_wider` is a function that takes two inputs -- `names_from` and `values_from`. How do we know which goes in which? When you have three fields like we do, it's pretty easy. The first thing you know is that it's not the name of the team or the player. We know, in the picture in our minds what this should look like, the name is the first thing. That leaves two other things -- the season and the offensive rating. If you think of what would look good as column names -- the headers across the top -- ask yourself, is it the season names -- 2019, 2020, etc. -- or is it **all** the possible combinations of offensive ratings. Go with the one that *isn't* going to create a million columns for the `names_from` bit. 
 
 ```{r pivoting-wider, exercise=TRUE, exercise.setup = "transforming-load-data"}
-nba %>% pivot_wider(names_from = ??????, values_from = ??????)
+nba |> pivot_wider(names_from = ??????, values_from = ??????)
 ```
 ```{r pivoting-wider-solution, exercise.reveal_solution = FALSE}
-nba %>% pivot_wider(names_from = Season, values_from = PTS)
+nba |> pivot_wider(names_from = Season, values_from = PTS)
 ```
 ```{r pivoting-wider-check}
 grade_this_code()
@@ -123,17 +123,17 @@ Then, we're going to use mutate to subtract last season's points per game from t
 Finally, we'll arrange to see who was tops.
 
 ```{r pivoting-mutate, exercise=TRUE, exercise.setup = "transforming-load-data"}
-nbawide <- nba %>% pivot_wider(names_from = ??????, values_from = ??????)
+nbawide <- nba |> pivot_wider(names_from = ??????, values_from = ??????)
 
-nbawide %>%
-  mutate(Difference = `????` - `????`) %>%
+nbawide |>
+  mutate(Difference = `????` - `????`) |>
   arrange(desc(COLUMNNAMEFROMMUTATE))
 ```
 ```{r pivoting-mutate-solution, exercise.reveal_solution = FALSE}
-nbawide <- nba %>% pivot_wider(names_from = Season, values_from = PTS)
+nbawide <- nba |> pivot_wider(names_from = Season, values_from = PTS)
 
-nbawide %>%
-  mutate(Difference = `2023` - `2022`) %>%
+nbawide |>
+  mutate(Difference = `2023` - `2022`) |>
   arrange(desc(Difference))
 ```
 ```{r pivoting-mutate-check}
@@ -155,10 +155,10 @@ Why are we doing this? In the future, you are going to find the data you need an
 The hardest part of pivoting longer is telling it which columns to pivot. You spell this out in `cols`. With simpler datasets, you can just say which ones. The columns we want to pivot are the ones with the numbers -- the year columns. There are some shortcuts to help us. Since all of the columns we want to make rows start with 20, we can use that pattern in our `cols` directive . Then we give that column a name -- Season -- and the values for each year need a name too. Those are the offensive ratings, so let's call those OffRtg. Replace the all caps here and you can see how it works.
 
 ```{r pivoting-longer, exercise=TRUE, exercise.setup = "transforming-load-data"}
-nbawide %>% pivot_longer(cols = starts_with("20"), names_to = "??????", values_to = "??????")
+nbawide |> pivot_longer(cols = starts_with("20"), names_to = "??????", values_to = "??????")
 ```
 ```{r pivoting-longer-solution, exercise.reveal_solution = FALSE}
-nbawide %>% pivot_longer(cols = starts_with("20"), names_to = "Season", values_to = "PTS")
+nbawide |> pivot_longer(cols = starts_with("20"), names_to = "Season", values_to = "PTS")
 ```
 ```{r pivoting-longer-check}
 grade_this_code()

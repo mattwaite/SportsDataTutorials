@@ -95,15 +95,15 @@ If you look at the data, there is one field that is a TRUE/FALSE field of who st
 First, since we have box scores for every team, we need to filter to just Nebraska. Then, we're going to use the & sign -- which is a way of saying AND. The filter is the team AND the starting status being true. Then we'll group by the player's name (look at glimpse) and count. This time, we're going to use a shortcut for counting called `tally`. 
 
 ```{r starters, exercise=TRUE, exercise.setup = "packages-load-data"}
-playerboxscores %>% 
-  filter(team_short_display_name == "?????????" & starter == ????) %>% 
-  group_by(???????_???????_????) %>% 
+playerboxscores |> 
+  filter(team_short_display_name == "?????????" & starter == ????) |> 
+  group_by(???????_???????_????) |> 
   tally(sort=TRUE) 
 ```
 ```{r starters-solution, exercise.reveal_solution = FALSE}
-playerboxscores %>% 
-  filter(team_short_display_name == "Nebraska" & starter == TRUE) %>% 
-  group_by(athlete_display_name) %>% 
+playerboxscores |> 
+  filter(team_short_display_name == "Nebraska" & starter == TRUE) |> 
+  group_by(athlete_display_name) |> 
   tally(sort=TRUE) 
 ```
 ```{r starters-check}
@@ -154,15 +154,15 @@ For now, let's try something simple -- what's the most common shooting play for 
 Like the box scores, we're going to start with a filter. We're going to use both & and |. The | means OR. So we want shooting plays AND where the home team OR the away time is Nebraska. After that, it's group by and tally. 
 
 ```{r playbyplay, exercise=TRUE, exercise.setup = "packages2-load-data"}
-?????????? %>% 
-  filter(shooting_play == ???? & home_team_name == "?????????" | away_team_name == "????????") %>% 
-  group_by(text) %>% 
+?????????? |> 
+  filter(shooting_play == ???? & home_team_name == "?????????" | away_team_name == "????????") |> 
+  group_by(text) |> 
   tally(sort=TRUE)
 ```
 ```{r playbyplay-solution, exercise.reveal_solution = FALSE}
-playbyplay %>% 
-  filter(shooting_play == TRUE & home_team_name == "Nebraska" | away_team_name == "Nebraska") %>% 
-  group_by(text) %>% 
+playbyplay |> 
+  filter(shooting_play == TRUE & home_team_name == "Nebraska" | away_team_name == "Nebraska") |> 
+  group_by(text) |> 
   tally(sort=TRUE)
 ```
 ```{r playbyplay-check}

@@ -64,10 +64,10 @@ And the data.
 ```{r scatter-load-data, message=FALSE, warning=FALSE}
 players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
 
-tall <- players %>% 
+tall <- players |> 
   mutate(height = (12 * feet) + inches)
 
-newtall <- tall %>%
+newtall <- tall |>
   filter(
     height > 0 &
       s > 65
@@ -108,11 +108,11 @@ The first thing we need to do is turn height into a single number. If you look a
 By converting it all to inches and adding them up. We're going to make a new dataframe called `tall`. We have the `feet` and `inches` of every player. How many inches are in a foot?
 
 ```{r scatter1, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-???? <- players %>% 
+???? <- players |> 
   mutate(height = (?? * feet) + inches)
 ```
 ```{r scatter1-solution, exercise.reveal_solution = FALSE}
-tall <- players %>% 
+tall <- players |> 
   mutate(height = (12 * feet) + inches)
 ```
 ```{r scatter1-check}
@@ -146,14 +146,14 @@ We have two problems -- one is obvious, one is not immediately. First, the obvio
 Let's fix this by filtering some things out. First, we need to filter out people who have a height of 0. Second, the mean number of sets played by all players who played more than 0 sets is 65. Let's filter only players who played more than 65 sets. We'll call it `newtall`. 
 
 ```{r scatter4, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-??????? <- tall %>%
+??????? <- tall |>
   filter(
     height > ? &
       s > ??
          )
 ```
 ```{r scatter4-solution, exercise.reveal_solution = FALSE}
-newtall <- tall %>%
+newtall <- tall |>
   filter(
     height > 0 &
       s > 65

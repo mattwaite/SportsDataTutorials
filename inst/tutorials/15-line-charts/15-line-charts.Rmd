@@ -63,10 +63,10 @@ And the data.
 ```{r line-load-data, message=FALSE, warning=FALSE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 
-nu <- logs %>% filter(Team == "Nebraska")
-pu <- logs %>% filter(Team == "Purdue")
-big <- logs %>% filter(Conference == "Big Ten")
-average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
+nu <- logs |> filter(Team == "Nebraska")
+pu <- logs |> filter(Team == "Purdue")
+big <- logs |> filter(Conference == "Big Ten")
+average <- logs |> group_by(Date) |> summarise(mean_shooting=mean(TeamFGPCT))
 
 ```
 ```{r line-load-data-exercise, exercise = TRUE}
@@ -84,10 +84,10 @@ grade_this_code()
 This data has every game from every team in it, so we need to use filtering to limit it, because we just want to look at Nebraska. If you don't remember, flip back to lesson 5. Let's make a new dataframe called nu for Nebraska's games.
 
 ```{r nu, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-?? <- logs %>% filter(Team == "????????")
+?? <- logs |> filter(Team == "????????")
 ```
 ```{r nu-solution, exercise.reveal_solution = FALSE}
-nu <- logs %>% filter(Team == "Nebraska")
+nu <- logs |> filter(Team == "Nebraska")
 ```
 ```{r nu-check}
 grade_this_code()
@@ -152,7 +152,7 @@ With datasets, we want to invite comparison. So let's answer the question visual
 When you have multiple datasets from the same data, you can add multiple geoms. All you have to do is swap out the data and add a + between them. 
 
 ```{r line3, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-pu <- logs %>% filter(Team == "????????")
+pu <- logs |> filter(Team == "????????")
 
 ggplot() + 
   geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
@@ -160,7 +160,7 @@ ggplot() +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line3-solution, exercise.reveal_solution = FALSE}
-pu <- logs %>% filter(Team == "Purdue")
+pu <- logs |> filter(Team == "Purdue")
 
 ggplot() + 
   geom_line(data=nu, aes(x=Date, y=TeamFGPCT), color="red") + 
@@ -188,7 +188,7 @@ An important thing to know is that geoms render in the order that they appear. T
 NOTE: When you have more than one thing in a dataframe -- teams, players, whatever -- and you're making a line chart out of it, you need to add the `group` to the aesthetic. In this case, the group is the Team.
 
 ```{r line4, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-big <- logs %>% filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten MBB")
 
 ggplot() + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
@@ -197,7 +197,7 @@ ggplot() +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line4-solution, exercise.reveal_solution = FALSE}
-big <- logs %>% filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten MBB")
 
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
@@ -216,10 +216,10 @@ What do we see here? How has Nebraska and Purdue's season evolved against all th
 But how does that compare to the average? We can add that pretty easily by creating a new dataframe with it and add another geom_line. 
 
 ```{r average, exercise=TRUE, exercise.setup = "line-load-data"}
-average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
+average <- logs |> group_by(Date) |> summarise(mean_shooting=mean(TeamFGPCT))
 ```
 ```{r average-solution}
-average <- logs %>% group_by(Date) %>% summarise(mean_shooting=mean(TeamFGPCT))
+average <- logs |> group_by(Date) |> summarise(mean_shooting=mean(TeamFGPCT))
 ```
 ```{r average-check}
 grade_this_code()
@@ -228,7 +228,7 @@ grade_this_code()
 And now we have another geom_line to add. 
 
 ```{r line5, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-big <- logs %>% filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten MBB")
 
 ggplot() + 
   geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
@@ -238,7 +238,7 @@ ggplot() +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line5-solution, exercise.reveal_solution = FALSE}
-big <- logs %>% filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten MBB")
 
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +

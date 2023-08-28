@@ -71,26 +71,26 @@ And the data.
 ```{r bubble-load-data, message=FALSE, warning=FALSE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
-winlosslogs <- logs %>% 
+winlosslogs <- logs |> 
   mutate(
     wins = case_when(
       grepl("W", Outcome) ~ 1, 
       grepl("L", Outcome) ~ 0)
   )
     
-ypp <- winlosslogs %>% 
-  group_by(Team, Conference) %>% 
+ypp <- winlosslogs |> 
+  group_by(Team, Conference) |> 
   summarise(
     TotalPlays = sum(OffensivePlays), 
     TotalYards = sum(OffensiveYards), 
     DefensivePlays = sum(DefPlays), 
     DefensiveYards = sum(DefYards), 
-    TotalWins = sum(wins)) %>% 
+    TotalWins = sum(wins)) |> 
   mutate(
     OffensiveYPP = TotalYards/TotalPlays, 
     DefensiveYPP = DefensiveYards/DefensivePlays)
 
-bigten <- ypp %>% filter(Conference == "Big Ten Conference")
+bigten <- ypp |> filter(Conference == "Big Ten Conference")
 ```
 ```{r bubble-load-data-exercise, exercise = TRUE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
@@ -105,7 +105,7 @@ grade_this_code()
 To do this, I've got some work to do. First, I need to mutate the outcomes of the games into 1s and 0s so I can add up the wins. 
 
 ```{r bubble1, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-winlosslogs <- logs %>% 
+winlosslogs <- logs |> 
   mutate(
     wins = case_when(
       grepl("W", Outcome) ~ 1, 
@@ -113,7 +113,7 @@ winlosslogs <- logs %>%
 )
 ```
 ```{r bubble1-solution, exercise.reveal_solution = FALSE}
-winlosslogs <- logs %>% 
+winlosslogs <- logs |> 
   mutate(
     wins = case_when(
       grepl("W", Outcome) ~ 1, 
@@ -131,27 +131,27 @@ My football logs data has the yards per play of each game, and I could average t
 I'm going to give you the data. It's pretty straightforward. We're making a new dataframe called ypp. It's going to group and sum wins, plays and yards -- offensive and defensive -- so we can divide them and get the season long yards per play on both offense and defense.
 
 ```{r bubble2, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-ypp <- winlosslogs %>% 
-  group_by(Team, Conference) %>% 
+ypp <- winlosslogs |> 
+  group_by(Team, Conference) |> 
   summarise(
     TotalPlays = sum(OffensivePlays), 
     TotalYards = sum(OffensiveYards), 
     DefensivePlays = sum(DefPlays), 
     DefensiveYards = sum(DefYards), 
-    TotalWins = sum(wins)) %>% 
+    TotalWins = sum(wins)) |> 
   mutate(
     OffensiveYPP = TotalYards/TotalPlays, 
     DefensiveYPP = DefensiveYards/DefensivePlays)
 ```
 ```{r bubble2-solution, exercise.reveal_solution = FALSE}
-ypp <- winlosslogs %>% 
-  group_by(Team, Conference) %>% 
+ypp <- winlosslogs |> 
+  group_by(Team, Conference) |> 
   summarise(
     TotalPlays = sum(OffensivePlays), 
     TotalYards = sum(OffensiveYards), 
     DefensivePlays = sum(DefPlays), 
     DefensiveYards = sum(DefYards), 
-    TotalWins = sum(wins)) %>% 
+    TotalWins = sum(wins)) |> 
   mutate(
     OffensiveYPP = TotalYards/TotalPlays, 
     DefensiveYPP = DefensiveYards/DefensivePlays)
@@ -231,7 +231,7 @@ Better?
 And by now, you now know to add in the Big Ten as a layer, I would hope.
 
 ```{r bubble6, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-bigten <- ypp %>% filter(Conference == "??? ??? ?????????")
+bigten <- ypp |> filter(Conference == "??? ??? ?????????")
 
 ggplot() + 
   geom_point(
@@ -245,7 +245,7 @@ ggplot() +
     color="red")
 ```
 ```{r bubble6-solution, exercise.reveal_solution = FALSE}
-bigten <- ypp %>% filter(Conference == "Big Ten Conference")
+bigten <- ypp |> filter(Conference == "Big Ten Conference")
 
 ggplot() + 
   geom_point(
@@ -269,16 +269,16 @@ It's clearer where Big Ten teams are. But which Big Ten team is which?
 Let's add some things to this chart to help us out. First, let's add lines that show us the average of all teams for those two metrics. So first, we need to calculate those. Because I have grouped data, it's going to require me to ungroup it so I can get just the total average of those two numbers. 
 
 ```{r bubble7, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-ypp %>% 
-  ungroup() %>% 
+ypp |> 
+  ungroup() |> 
   summarise(
     offense = mean(OffensiveYPP), 
     defense = mean(DefensiveYPP)
     )
 ```
 ```{r bubble7-solution, exercise.reveal_solution = FALSE}
-ypp %>% 
-  ungroup() %>% 
+ypp |> 
+  ungroup() |> 
   summarise(
     offense = mean(OffensiveYPP), 
     defense = mean(DefensiveYPP)

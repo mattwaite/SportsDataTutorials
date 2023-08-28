@@ -173,8 +173,8 @@ Another step. But the legend is annoying. And trying to find which red is Alabam
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
-  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
   scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
   scale_y_reverse() 
 ```
@@ -182,8 +182,8 @@ ggplot() +
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
-  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
   scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
   scale_y_reverse() 
 ```
@@ -197,8 +197,8 @@ Better, but the legend is still there. We can drop it in a theme directive by sa
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
-  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
   scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
   scale_y_reverse() +
   labs(title="Georgia is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
@@ -212,8 +212,8 @@ ggplot() +
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
-  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
   scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
   scale_y_reverse() +
   labs(title="Georgia is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
@@ -233,8 +233,8 @@ And the last thing: anyone else annoyed at 7.5th place on the left? We can fix t
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
-  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
   scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
   scale_x_continuous(breaks=c(13,14,15,16,17)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +
@@ -249,8 +249,8 @@ ggplot() +
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  geom_text(data = rankings %>% filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
-  geom_text(data = rankings %>% filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
+  geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
+  geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
   scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
   scale_x_continuous(breaks=c(13,14,15,16,17)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +

@@ -75,18 +75,18 @@ And the data.
 ```{r ggplot-load-data, message=FALSE, warning=FALSE}
 seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
 
-huskers <- seasons %>%
+huskers <- seasons |>
   mutate(
     yardspergame = OffensiveYards/Games
-  ) %>% 
+  ) |> 
   filter(
     Team == "Nebraska"
   )
 
-big10 <- seasons %>%
+big10 <- seasons |>
   mutate(
     yardspergame = OffensiveYards/Games
-  ) %>% 
+  ) |> 
   filter(
     Conference == "Big Ten Conference" &
       Season == "2022"
@@ -123,19 +123,19 @@ Now that we're set up, when making graphics, you're rarely ever going straight f
 To do this, we're going to do a few things we've done before -- we're going to mutate a new column calculating total offensive yards per game so we can compare season to season (including the COVID season) and then we'll use filter to get just Nebraska. We'll put that into a new dataframe called `huskers`.
 
 ```{r ggplot-top, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
-??????? <- ??????? %>%
+??????? <- ??????? |>
   mutate(
     yardspergame = ????????????/?????
-  ) %>% 
+  ) |> 
   filter(
     ???? == "Nebraska"
   ) 
 ```
 ```{r ggplot-top-solution, exercise.reveal_solution = FALSE}
-huskers <- seasons %>%
+huskers <- seasons |>
   mutate(
     yardspergame = OffensiveYards/Games
-  ) %>% 
+  ) |> 
   filter(
     Team == "Nebraska"
   )
@@ -209,20 +209,20 @@ To change the order of the bars, we have to `reorder` it. With `reorder`, we fir
 First, let's get a dataset of every Big Ten team in 2022 instead of just Nebraska. 
 
 ```{r ggplot-bar3, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
-big10 <- seasons %>%
+big10 <- seasons |>
   mutate(
     yardspergame = ????????????/Games
-  ) %>% 
+  ) |> 
   filter(
     Conference == "??? ??? ?????????" &
       Season == "????"
   )
 ```
 ```{r ggplot-bar3-solution, exercise.reveal_solution = FALSE}
-big10 <- seasons %>%
+big10 <- seasons |>
   mutate(
     yardspergame = OffensiveYards/Games
-  ) %>% 
+  ) |> 
   filter(
     Conference == "Big Ten Conference" &
       Season == "2022"

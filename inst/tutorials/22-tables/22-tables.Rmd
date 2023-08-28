@@ -50,58 +50,58 @@ For the data, I want to look at Nebraska women's basketball. I want to look at w
 ```{r table-load-data, message=FALSE, warning=FALSE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
-  filter(team_short_display_name %in% big) %>%
-  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) %>%
-  mutate_at(vars(-team_short_display_name), as.numeric) %>%
-  group_by(team_short_display_name) %>%
+bigwbb <- load_wbb_team_box(seasons = 2023) |> 
+  filter(team_short_display_name %in% big) |>
+  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
+  mutate_at(vars(-team_short_display_name), as.numeric) |>
+  group_by(team_short_display_name) |>
   summarize(
     TotalFG = sum(field_goals_made),
     TotalFGA = sum(field_goals_attempted),
     Total3P = sum(three_point_field_goals_made),
     Total3PA = sum(three_point_field_goals_attempted)
-  ) %>%
-  mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) %>%
-  rename(Team = team_short_display_name) %>%
-  select(Team, FGPct, ThreePct) %>%
+  ) |>
+  mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) |>
+  rename(Team = team_short_display_name) |>
+  select(Team, FGPct, ThreePct) |>
   arrange(desc(FGPct))
 ```
 ```{r table-load-data-exercise, exercise = TRUE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
-  filter(team_short_display_name %in% big) %>%
-  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) %>%
-  mutate_at(vars(-team_short_display_name), as.numeric) %>%
-  group_by(team_short_display_name) %>%
+bigwbb <- load_wbb_team_box(seasons = 2023) |> 
+  filter(team_short_display_name %in% big) |>
+  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
+  mutate_at(vars(-team_short_display_name), as.numeric) |>
+  group_by(team_short_display_name) |>
   summarize(
     TotalFG = sum(field_goals_made),
     TotalFGA = sum(field_goals_attempted),
     Total3P = sum(three_point_field_goals_made),
     Total3PA = sum(three_point_field_goals_attempted)
-  ) %>%
-  mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) %>%
-  rename(Team = team_short_display_name) %>%
-  select(Team, FGPct, ThreePct) %>%
+  ) |>
+  mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) |>
+  rename(Team = team_short_display_name) |>
+  select(Team, FGPct, ThreePct) |>
   arrange(desc(FGPct))
 ```
 ```{r table-load-data-exercise-solution}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2023) %>% 
-  filter(team_short_display_name %in% big) %>%
-  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) %>%
-  mutate_at(vars(-team_short_display_name), as.numeric) %>%
-  group_by(team_short_display_name) %>%
+bigwbb <- load_wbb_team_box(seasons = 2023) |> 
+  filter(team_short_display_name %in% big) |>
+  select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
+  mutate_at(vars(-team_short_display_name), as.numeric) |>
+  group_by(team_short_display_name) |>
   summarize(
     TotalFG = sum(field_goals_made),
     TotalFGA = sum(field_goals_attempted),
     Total3P = sum(three_point_field_goals_made),
     Total3PA = sum(three_point_field_goals_attempted)
-  ) %>%
-  mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) %>%
-  rename(Team = team_short_display_name) %>%
-  select(Team, FGPct, ThreePct) %>%
+  ) |>
+  mutate(FGPct = TotalFG/TotalFGA, ThreePct = Total3P/Total3PA) |>
+  rename(Team = team_short_display_name) |>
+  select(Team, FGPct, ThreePct) |>
   arrange(desc(FGPct))
 ```
 ```{r table-load-data-exercise-check}
@@ -111,10 +111,10 @@ grade_this_code()
 We've used head a bunch of times in this series to see data, but gt makes this super easy too. 
 
 ```{r gt-data, exercise=TRUE, exercise.setup = "table-load-data"}
-bigwbb %>% gt()
+bigwbb |> gt()
 ```
 ```{r gt-data-solution}
-bigwbb %>% gt()
+bigwbb |> gt()
 ```
 ```{r gt-data-check}
 grade_this_code()
@@ -122,23 +122,23 @@ grade_this_code()
 
 So there you have it. You made a table. You're done, right? 
 
-`gt` has a mountain of customization options. The good news is that it works in a very familiar pattern -- we start with data and we use %>% to pipe to the next thing.
+`gt` has a mountain of customization options. The good news is that it works in a very familiar pattern -- we start with data and we use |> to pipe to the next thing.
 
 ### Exercise 1: Making headers into real words
 
 We'll start with fixing headers. What we have isn't bad, but they aren't good either. Let's fix that. The way this works is we need to tell `cols_label` what columns we want to change and what we want to change them into.
 
 ```{r table1, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     ????? = "Shooting Percentage",
     ???????? = "Three Point Percentage"
   )
 ```
 ```{r table1-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
@@ -157,24 +157,24 @@ Now we can start working with styling.
 The truth is most of your code in tables is going to be dedicated to styling specific things. The first thing we need: A headline and some chatter. They're required parts of a graphic -- we'll talk more about that soon -- so they're a good place to start. We do that with `tab_header` and in there we need a title and subtitle.
 
 ```{r table2, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     ????? = "Shooting Percentage",
     ???????? = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     ????? = "Does Nebraska have a chance to be special this season?",
     ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
   )
 ```
 ```{r table2-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
@@ -191,37 +191,37 @@ We have a headline and some chatter, but ... gross. Centered? The extra lines? N
 We can style individual elements using `tab_style`. First, let's make the main headline -- the `title` -- bold and left aligned. Then, we can left align the `subtitle`, but leave it normal weight (i.e. not bold).
 
 ```{r table3, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     ????? = "Shooting Percentage",
     ???????? = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     ????? = "Does Nebraska have a chance to be special this season?",
     ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
   )
 ```
 ```{r table3-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
   )
@@ -235,43 +235,43 @@ grade_this_code()
 The next item on the required elements list: Source and credit lines. In `gt`, those are called `tab_source_notes`:
 
 ```{r table4, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     ????? = "Shooting Percentage",
     ???????? = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     ????? = "Does Nebraska have a chance to be special this season?",
     ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   ???_??????_????(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
   )
 ```
 ```{r table4-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
   )
@@ -285,25 +285,25 @@ grade_this_code()
 We can do a lot with `tab_style`. For instance, we can make the headers bold and reduce the size a bit to reduce font congestion in the area.
 
 ```{r table5, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
@@ -313,25 +313,25 @@ bigwbb %>%
    ) 
 ```
 ```{r table5-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
@@ -347,63 +347,63 @@ grade_this_code()
 Next up: There's a lot of lines in this that don't need to be there. `gt` has some tools to get rid of them easily and add in some other readability improvements: `opt_row_striping` and `opt_table_lines`.
 
 ```{r table6, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
        cell_borders(sides = "bottom", weight = px(3)),
        cell_text(weight = "bold", size=12)
      )
-   ) %>%
-  opt_row_striping() %>% 
+   ) |>
+  opt_row_striping() |> 
   opt_table_lines("none")
 ```
 ```{r table6-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
        cell_borders(sides = "bottom", weight = px(3)),
        cell_text(weight = "bold", size=12)
      )
-   ) %>%
-  opt_row_striping() %>% 
+   ) |>
+  opt_row_striping() |> 
   opt_table_lines("none")
 ```
 ```{r table6-check}
@@ -413,68 +413,68 @@ grade_this_code()
 We're in pretty good shape here, but look closer. What else makes this table sub-par? How about the formatting of the percent change? We can fix that with a formatter.
 
 ```{r table7, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
        cell_borders(sides = "bottom", weight = px(3)),
        cell_text(weight = "bold", size=12)
      )
-   ) %>%
-  opt_row_striping() %>% 
-  opt_table_lines("none") %>%
+   ) |>
+  opt_row_striping() |> 
+  opt_table_lines("none") |>
     fmt_percent(
     columns = c(FGPct, ThreePct),
     decimals = 1
   )
 ```
 ```{r table7-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
        cell_borders(sides = "bottom", weight = px(3)),
        cell_text(weight = "bold", size=12)
      )
-   ) %>%
-  opt_row_striping() %>% 
-  opt_table_lines("none") %>%
+   ) |>
+  opt_row_striping() |> 
+  opt_table_lines("none") |>
     fmt_percent(
     columns = c(FGPct, ThreePct),
     decimals = 1
@@ -487,38 +487,38 @@ grade_this_code()
 Throughout this series, we've been using color and other signals to highlight things. With a little `tab_style` magic, we can change individual rows and add color. The last `tab_style` block here will first pass off the styles we want to use -- we're going to make the rows red and the text white -- and then for locations we specify where with a simple filter. What that means is that any rows we can address with logic -- all rows with a value greater than X, for example -- we can change the styling. 
 
 ```{r table8, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
        cell_borders(sides = "bottom", weight = px(3)),
        cell_text(weight = "bold", size=12)
      )
-   ) %>%
-  opt_row_striping() %>% 
-  opt_table_lines("none") %>%
+   ) |>
+  opt_row_striping() |> 
+  opt_table_lines("none") |>
     fmt_percent(
     columns = c(FGPct, ThreePct),
     decimals = 1
-  ) %>%
+  ) |>
   tab_style(
     style = list(
       cell_fill(color = "red"),
@@ -529,38 +529,38 @@ bigwbb %>%
   )
 ```
 ```{r table8-solution, exercise.reveal_solution = FALSE}
-bigwbb %>% 
-  gt() %>% 
+bigwbb |> 
+  gt() |> 
   cols_label(
     FGPct = "Shooting Percentage",
     ThreePct = "Three Point Percentage"
-  ) %>%
+  ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
     subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
-  ) %>% tab_style(
+  ) |> tab_style(
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
-  ) %>%
+  ) |>
   tab_source_note(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
-  ) %>%
+  ) |>
   tab_style(
      locations = cells_column_labels(columns = everything()),
      style = list(
        cell_borders(sides = "bottom", weight = px(3)),
        cell_text(weight = "bold", size=12)
      )
-   ) %>%
-  opt_row_striping() %>% 
-  opt_table_lines("none") %>%
+   ) |>
+  opt_row_striping() |> 
+  opt_table_lines("none") |>
     fmt_percent(
     columns = c(FGPct, ThreePct),
     decimals = 1
-  ) %>%
+  ) |>
   tab_style(
     style = list(
       cell_fill(color = "red"),

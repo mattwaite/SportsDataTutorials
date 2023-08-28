@@ -66,24 +66,24 @@ And load it.
 ```{r cowplot-load-data, message=FALSE, warning=FALSE}
 games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
-totals <- games %>% 
-  filter(Conference == "Big Ten Conference") %>% 
-  group_by(Team) %>% 
+totals <- games |> 
+  filter(Conference == "Big Ten Conference") |> 
+  group_by(Team) |> 
   summarize(
     TotalRushes = sum(RushingAtt),
     TotalRushYds = sum(RushingYds),
     TotalPasses = sum(PassingAtt),
     TotalPassYds = sum(PassingYds)
-  ) %>%
+  ) |>
   mutate(
     RushingAvg = TotalRushYds/TotalRushes,
     PassingAvg = TotalPassYds/TotalPasses
   ) 
 
-toppass <- totals %>% top_n(5, wt=PassingAvg)
-toprush <- totals %>% top_n(5, wt=RushingAvg)
+toppass <- totals |> top_n(5, wt=PassingAvg)
+toprush <- totals |> top_n(5, wt=RushingAvg)
 
-nu <- totals %>% filter(Team == "Nebraska")
+nu <- totals |> filter(Team == "Nebraska")
 
 bar1 <- ggplot() + 
   geom_bar(data=toppass, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
@@ -106,40 +106,40 @@ grade_this_code()
 For this, we're going to total up the rushing yards and attempts for each game, as well as the passing yards and attempts, to get a top 5 list of the best rushing and passing offenseses in the Big Ten last season.
 
 ```{r cowolot1, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
-totals <- games %>% 
-  filter(Conference == "Big Ten Conference") %>% 
-  group_by(Team) %>% 
+totals <- games |> 
+  filter(Conference == "Big Ten Conference") |> 
+  group_by(Team) |> 
   summarize(
     TotalRushes = sum(RushingAtt),
     TotalRushYds = sum(RushingYds),
     TotalPasses = sum(PassingAtt),
     TotalPassYds = sum(PassingYds)
-  ) %>%
+  ) |>
   mutate(
     RushingAvg = TotalRushYds/TotalRushes,
     PassingAvg = TotalPassYds/TotalPasses
   ) 
 
-toppass <- totals %>% top_n(5, wt=PassingAvg)
-toprush <- totals %>% top_n(5, wt=RushingAvg)
+toppass <- totals |> top_n(5, wt=PassingAvg)
+toprush <- totals |> top_n(5, wt=RushingAvg)
 ```
 ```{r cowolot1-solution, exercise.reveal_solution = FALSE}
-totals <- games %>% 
-  filter(Conference == "Big Ten Conference") %>% 
-  group_by(Team) %>% 
+totals <- games |> 
+  filter(Conference == "Big Ten Conference") |> 
+  group_by(Team) |> 
   summarize(
     TotalRushes = sum(RushingAtt),
     TotalRushYds = sum(RushingYds),
     TotalPasses = sum(PassingAtt),
     TotalPassYds = sum(PassingYds)
-  ) %>%
+  ) |>
   mutate(
     RushingAvg = TotalRushYds/TotalRushes,
     PassingAvg = TotalPassYds/TotalPasses
   ) 
 
-toppass <- totals %>% top_n(5, wt=PassingAvg)
-toprush <- totals %>% top_n(5, wt=RushingAvg)
+toppass <- totals |> top_n(5, wt=PassingAvg)
+toprush <- totals |> top_n(5, wt=RushingAvg)
 ```
 ```{r cowolot1-check}
 grade_this_code()
@@ -263,7 +263,7 @@ grade_this_code()
 What's missing here? Color. Our eyes aren't drawn to anything (except maybe the top and bottom). So we need to help that. **A bar chart without context or color to draw attention to something isn't much of a bar chart**. Same with a line chart -- if your line chart has one line, no context, no color, it's going to fare poorly. To get some color and context in this, we're going to focus on ... a local team ... and add another geom_bar to our two bar charts using that data. We can then assign that one bar a color.
 
 ```{r cowolot6, exercise=TRUE, exercise.setup = "cowplot-load-data", message=FALSE}
-nu <- totals %>% filter(Team == "Nebraska")
+nu <- totals |> filter(Team == "Nebraska")
 
 bar1 <- ggplot() + 
   geom_bar(data=toppass, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +
@@ -296,7 +296,7 @@ bar2 <- ggplot() +
 plot_grid(bar1, bar2) 
 ```
 ```{r cowolot6-solution, exercise.reveal_solution = FALSE}
-nu <- totals %>% filter(Team == "Nebraska")
+nu <- totals |> filter(Team == "Nebraska")
 
 bar1 <- ggplot() + 
   geom_bar(data=toppass, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +

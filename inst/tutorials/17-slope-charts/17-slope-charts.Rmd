@@ -65,11 +65,11 @@ And the data.
 ```{r slope-load-data, message=FALSE, warning=FALSE}
 yardsperplay <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballslope.csv")
 
-nu <- yardsperplay %>% filter(Team == "Nebraska")
-oh <- yardsperplay %>% filter(Team == "Ohio State")
-mi <- yardsperplay %>% filter(Team == "Michigan")
+nu <- yardsperplay |> filter(Team == "Nebraska")
+oh <- yardsperplay |> filter(Team == "Ohio State")
+mi <- yardsperplay |> filter(Team == "Michigan")
 
-big <- yardsperplay %>% 
+big <- yardsperplay |> 
   filter(Conference == "Big Ten Conference")
 ```
 ```{r slope-load-data-exercise, exercise = TRUE}
@@ -88,11 +88,11 @@ grade_this_code()
 Our data is in pretty good shape already. The problem is, there's just too much of it. And, given that 2020 was the covid season, there's a *lot* of weirdness in there too. So let's first filter our data so we only have the Big Ten, and we're going to put that in a dataframe called `big`. 
 
 ```{r slope1, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
-??? <- yardsperplay %>% 
+??? <- yardsperplay |> 
   filter(Conference == "??? ??? ??????????")
 ```
 ```{r slope1-solution, exercise.reveal_solution = FALSE}
-big <- yardsperplay %>% 
+big <- yardsperplay |> 
   filter(Conference == "Big Ten Conference")
 ```
 ```{r slope1-check}
@@ -138,14 +138,14 @@ Well, we got something. But where is Nebraska? And who is that so far ahead of e
 Well, I said Nebraska had the second most explosive offense, so we should use filtering to find Nebraska first. Then, I have to believe Ohio State is always near the top in this, so let's find them too. But Michigan won the conference last season, so we should throw them in too. 
 
 ```{r slope3, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
-nu <- yardsperplay %>% filter(Team == "????????")
-oh <- yardsperplay %>% filter(Team == "???? ?????")
-mi <- yardsperplay %>% filter(Team == "????????")
+nu <- yardsperplay |> filter(Team == "????????")
+oh <- yardsperplay |> filter(Team == "???? ?????")
+mi <- yardsperplay |> filter(Team == "????????")
 ```
 ```{r slope3-solution, exercise.reveal_solution = FALSE}
-nu <- yardsperplay %>% filter(Team == "Nebraska")
-oh <- yardsperplay %>% filter(Team == "Ohio State")
-mi <- yardsperplay %>% filter(Team == "Michigan")
+nu <- yardsperplay |> filter(Team == "Nebraska")
+oh <- yardsperplay |> filter(Team == "Ohio State")
+mi <- yardsperplay |> filter(Team == "Michigan")
 ```
 ```{r slope3-check}
 grade_this_code()
@@ -239,12 +239,12 @@ ggplot() +
   geom_point(data=oh, aes(x=Season, y=YardsPerPlay, group=Team), color="black") +
   geom_line(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
   geom_point(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
-  geom_text(data=nu %>% filter(Season == max(??????)), aes(x=Season + .2, y=YardsPerPlay+.1, group=Team, label=????)) + 
-  geom_text(data=nu %>% filter(Season == min(??????)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=????)) + 
-  geom_text(data=mi %>% filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  geom_text(data=mi %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  geom_text(data=oh %>% filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  geom_text(data=oh %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=nu |> filter(Season == max(??????)), aes(x=Season + .2, y=YardsPerPlay+.1, group=Team, label=????)) + 
+  geom_text(data=nu |> filter(Season == min(??????)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=????)) + 
+  geom_text(data=mi |> filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=mi |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=oh |> filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=oh |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
   scale_x_continuous(breaks=c(2021, 2022), limits=c(2020.5,2022.5))  +
   theme_minimal()
 ```
@@ -258,12 +258,12 @@ ggplot() +
   geom_point(data=oh, aes(x=Season, y=YardsPerPlay, group=Team), color="black") +
   geom_line(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
   geom_point(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
-  geom_text(data=nu %>% filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay+.1, group=Team, label=Team)) + 
-  geom_text(data=nu %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  geom_text(data=mi %>% filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  geom_text(data=mi %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  geom_text(data=oh %>% filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  geom_text(data=oh %>% filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=nu |> filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay+.1, group=Team, label=Team)) + 
+  geom_text(data=nu |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=mi |> filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=mi |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=oh |> filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
+  geom_text(data=oh |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
   scale_x_continuous(breaks=c(2021, 2022), limits=c(2020.5,2022.5)) +
   theme_minimal()
 ```

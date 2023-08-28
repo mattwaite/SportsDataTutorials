@@ -143,12 +143,12 @@ My hypothesis is that without fans to yell at refs, they weren't calling fouls l
 First things first: We need to make a dataframe called refs where we'll add up the team and the opponent's personal fouls. This will tell is if the refs were more active with people or without. Will our t-test tell us it's significant?
 
 ```{r ttest2, exercise=TRUE, exercise.setup = "significance-load-data"}
-???? <- logs %>% mutate(totalfouls = ????????? + ????????????)
+???? <- logs |> mutate(totalfouls = ????????? + ????????????)
 
 t.test(?????????? ~ ?????, data=????)
 ```
 ```{r ttest2-solution, exercise.reveal_solution = FALSE}
-refs <- logs %>% mutate(totalfouls = TeamPersonalFouls + OpponentPersonalFouls)
+refs <- logs |> mutate(totalfouls = TeamPersonalFouls + OpponentPersonalFouls)
 
 t.test(totalfouls ~ COVID, data=refs)
 ```

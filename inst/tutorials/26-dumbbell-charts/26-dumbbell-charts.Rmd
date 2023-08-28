@@ -67,11 +67,11 @@ And load it.
 ```{r dumbbell-load-data, message=FALSE, warning=FALSE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
-turnovers <- logs %>%
-  group_by(Team, Conference) %>% 
+turnovers <- logs |>
+  group_by(Team, Conference) |> 
   summarise(
     Giveaways = sum(TotalTurnovers), 
-    Takeaways = sum(DefTotalTurnovers)) %>%
+    Takeaways = sum(DefTotalTurnovers)) |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r dumbbell-load-data-exercise, exercise = TRUE}
@@ -103,19 +103,19 @@ For this example, let's look at the difference between a team's giveaways -- tur
 To get this, we're going to add up all offensive turnovers and defensive turnovers for a team in a season and take a look at where they come out. Remember: TotalTurnovers is giving the ball away (bad turnovers) and DefTotalTurnovers is takeaways, good turnovers. To make this readable, I'm going to focus on the Big Ten.
 
 ```{r dumbbell1, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
-turnovers <- ???? %>%
-  group_by(Team, Conference) %>% 
+turnovers <- ???? |>
+  group_by(Team, Conference) |> 
   summarise(
     Giveaways = sum(?????Turnovers), 
-    Takeaways = sum(????????Turnovers)) %>%
+    Takeaways = sum(????????Turnovers)) |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r dumbbell1-solution, exercise.reveal_solution = FALSE}
-turnovers <- logs %>%
-  group_by(Team, Conference) %>% 
+turnovers <- logs |>
+  group_by(Team, Conference) |> 
   summarise(
     Giveaways = sum(TotalTurnovers), 
-    Takeaways = sum(DefTotalTurnovers)) %>%
+    Takeaways = sum(DefTotalTurnovers)) |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r dumbbell1-check}

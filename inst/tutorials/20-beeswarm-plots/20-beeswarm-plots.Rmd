@@ -72,9 +72,9 @@ players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_voll
 
 set.seed(1234)
 
-activeplayers <- players %>% filter(s>75 & kills > 10 & is.na(pos) == FALSE)
+activeplayers <- players |> filter(s>75 & kills > 10 & is.na(pos) == FALSE)
 
-nu <- activeplayers %>% 
+nu <- activeplayers |> 
   filter(team == "Nebraska Cornhuskers")
 ```
 ```{r beeswarm-load-data-exercise, exercise = TRUE}
@@ -106,14 +106,14 @@ We know this data has a lot of players who didn't play, so let's get rid of them
 Recall in an earlier lesson, we used `filter` to get rid of players who don't play much. Let's do that again, dumping everyone who hasn't played 75 sets -- `s` in the data -- and we're going to get rid of every player with 10 or fewer kills. Believe it or not, there are players who have appeared in 75 sets who didn't rack up a single kill. We'll name our dataframe activeplayers.
 
 ```{r beeswarm2, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
-????????????? <- ??????? %>% 
+????????????? <- ??????? |> 
   filter(
     s > ?? & 
       kills > ?? & 
       is.na(pos) == FALSE)
 ```
 ```{r beeswarm2-solution, exercise.reveal_solution = FALSE}
-activeplayers <- players %>% 
+activeplayers <- players |> 
   filter(
     s>100 & 
       kills > 10 & 
@@ -148,11 +148,11 @@ So where are the Nebraska players in that mix?
 We'll filter players on Nebraska who meet our criteria. 
 
 ```{r beeswarm6, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
-nu <- activeplayers %>% 
+nu <- activeplayers |> 
   filter(team == "???????? ???????????")
 ```
 ```{r beeswarm6-solution, exercise.reveal_solution = FALSE}
-nu <- activeplayers %>% 
+nu <- activeplayers |> 
   filter(team == "Nebraska Cornhuskers")
 ```
 ```{r beeswarm6-check}

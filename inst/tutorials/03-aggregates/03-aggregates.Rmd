@@ -113,16 +113,16 @@ volleyballplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_w
 
 nplayers <- nrow(volleyballplayers)
 
-avgsets <- volleyballplayers %>%
-  group_by(pos) %>%
+avgsets <- volleyballplayers |>
+  group_by(pos) |>
   summarise(
     count = n(),
     mean_sets = mean(s),
     median_sets = median(s)
-  ) %>%
-  arrange(desc(mean_sets)) %>% slice(1)
+  ) |>
+  arrange(desc(mean_sets)) |> slice(1)
 
-killsleader <- volleyballplayers %>% arrange(desc(kills)) %>% slice(1)
+killsleader <- volleyballplayers |> arrange(desc(kills)) |> slice(1)
 ```
 
 ```{r load-data-exercise, exercise = TRUE}
@@ -193,7 +193,7 @@ glue("What if we wanted to know how many players there were by position, i.e. ho
 
 **The secret to writing code is that much of it is a pattern.** The building blocks largely stay the same. With the tidyverse, this is *especially* true.
 
-To accomplish our goal, we start with the name of the data we created before. The same name we used in `head()` and `glipse()`. We'll take that data and we'll introduce a new operator: `%>%`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." So the start of our pattern is `data %>%` which you can read as `data and now we'll do this`.
+To accomplish our goal, we start with the name of the data we created before. The same name we used in `head()` and `glipse()`. We'll take that data and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." So the start of our pattern is `data |>` which you can read as `data and now we'll do this`.
 
 The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need to put something in the parenthesis**. But unlike `head()` and `glimpse()`, this time the something comes from that first row of head. We are grouping data by one of the pieces of the data -- a field. *If we're trying to group by position*, which field looks like it holds the position name? Let's use head again and take a look at the very top row in bold.
 
@@ -218,16 +218,16 @@ After we group our data together by the thing we want to group it by, we need to
 Here's the pattern. **You fill in where there are all capitals with what needs to be there.** What you fill in are the two hints from above.
 
 ```{r group-by, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-NAMEOFDATA %>%
-  group_by(NAMEOFFIELD) %>%
+NAMEOFDATA |>
+  group_by(NAMEOFFIELD) |>
   summarise(
     total = n()
   ) 
 ```
 
 ```{r group-by-solution, exercise.reveal_solution = FALSE}
-volleyballplayers %>%
-  group_by(pos) %>%
+volleyballplayers |>
+  group_by(pos) |>
   summarise(
     total = n()
   ) 
@@ -248,20 +248,20 @@ In this case, we wanted to group together positions, signified by the field name
 And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This %\>% and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. In arrange, we need to tell it what we are arranging by. **If you have group_by, then whatever you are arranging by will *always* come from inside summarize.** The pattern looks like this:
 
 ```{r group-by-2, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-volleyballplayers %>%
-  group_by(???) %>%
+volleyballplayers |>
+  group_by(???) |>
   summarise(
     total = n()
-  ) %>% 
+  ) |> 
   arrange(desc(?????))
 ```
 
 ```{r group-by-2-solution, exercise.reveal_solution = FALSE}
-volleyballplayers %>%
-  group_by(pos) %>%
+volleyballplayers |>
+  group_by(pos) |>
   summarise(
     total = n()
-  ) %>% 
+  ) |> 
   arrange(desc(total))
 ```
 
@@ -280,20 +280,20 @@ What is the most common position in volleyball? If you look at the row with the 
 We can, if we want, group by more than one thing. Which team has the most of a single position? To do that, we can group by the team and position in the data:
 
 ```{r group-by-3, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-volleyballplayers %>%
-  group_by(????, ???) %>%
+volleyballplayers |>
+  group_by(????, ???) |>
   summarise(
     total = n()
-  ) %>% 
+  ) |> 
   arrange(desc(?????))
 ```
 
 ```{r group-by-3-solution, exercise.reveal_solution = FALSE}
-volleyballplayers %>%
-  group_by(team, pos) %>%
+volleyballplayers |>
+  group_by(team, pos) |>
   summarise(
     total = n()
-  ) %>% 
+  ) |> 
   arrange(desc(total))
 ```
 
@@ -316,24 +316,24 @@ Sticking with our NCAA volleyball player data, we can calculate any number of me
 Let's look just a the number of sets (s) each position gets. **In summarize, what you do left of the equal sign is giving something a name**. We should name our new columns what they are: `mean_sets` and `median_sets`. Then let's arrange it by the average number of sets (hint: that wording, average number of sets, is a trick. You arrange by the name of a column created in summarize).
 
 ```{r group-by-4, exercise=TRUE, exercise.setup = "load-data"}
-???????? %>%
-  group_by(???) %>%
+???????? |>
+  group_by(???) |>
   summarise(
     count = n(),
     ????????? = mean(?),
     ??????????? = median(?)
-  ) %>%
+  ) |>
   arrange(desc(?????????))
 ```
 
 ```{r group-by-4-solution, exercise.reveal_solution = FALSE}
-volleyballplayers %>%
-  group_by(pos) %>%
+volleyballplayers |>
+  group_by(pos) |>
   summarise(
     count = n(),
     mean_sets = mean(s),
     median_sets = median(s)
-  ) %>%
+  ) |>
   arrange(desc(mean_sets))
 ```
 
@@ -356,11 +356,11 @@ One thing to keep in mind is this: You can use any of these verbs -- group_by, s
 First let's get the most kills.
 
 ```{r group-by-5, exercise=TRUE, exercise.setup = "load-data"}
-volleyballplayers %>% arrange(desc(?????))
+volleyballplayers |> arrange(desc(?????))
 ```
 
 ```{r group-by-5-solution, exercise.reveal_solution = FALSE}
-volleyballplayers %>% arrange(desc(kills))
+volleyballplayers |> arrange(desc(kills))
 ```
 
 ```{r group-by-5-check}
@@ -370,11 +370,11 @@ grade_this_code()
 Now we can get the least by removing desc() and just doing arrange by our field name.
 
 ```{r group-by-6, exercise=TRUE, exercise.setup = "load-data"}
-volleyballplayers %>% arrange(?????)
+volleyballplayers |> arrange(?????)
 ```
 
 ```{r group-by-6-solution, exercise.reveal_solution = FALSE}
-volleyballplayers %>% arrange(kills)
+volleyballplayers |> arrange(kills)
 ```
 
 ```{r group-by-6-check}
@@ -398,26 +398,26 @@ There's a ton of things we can do in summarize -- we'll work with more of them a
 Which position in the NCAA generates the most points? And what is the highest and lowest point total for that position? And how wide is the spread between points? We can find that with `sum` to add up the points to get the total points, `min` to find the minimum points, `max` to find the maximum points and `sd` to find the standard deviation in the numbers.
 
 ```{r group-by-7, exercise=TRUE, exercise.setup = "load-data"}
-volleyballplayers %>% 
-  group_by(???) %>% 
+volleyballplayers |> 
+  group_by(???) |> 
   summarise(
     total = sum(pts), 
     avg_points = mean(pts), 
     min_points = min(pts),
     max_points = max(pts),
-    stdev_points = sd(pts)) %>% 
+    stdev_points = sd(pts)) |> 
   arrange(desc(total))
 ```
 
 ```{r group-by-7-solution, exercise.reveal_solution = FALSE}
-volleyballplayers %>% 
-  group_by(pos) %>% 
+volleyballplayers |> 
+  group_by(pos) |> 
   summarise(
     total = sum(pts), 
     avg_points = mean(pts), 
     min_points = min(pts),
     max_points = max(pts),
-    stdev_points = sd(pts)) %>% 
+    stdev_points = sd(pts)) |> 
   arrange(desc(total))
 ```
 

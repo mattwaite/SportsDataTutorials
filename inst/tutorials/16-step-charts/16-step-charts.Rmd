@@ -65,15 +65,15 @@ And the data.
 ```{r step-load-data, message=FALSE, warning=FALSE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 
-difflogs <- logs %>% 
-  mutate(Differential = TeamScore - OpponentScore) %>% 
-  group_by(Team) %>% 
+difflogs <- logs |> 
+  mutate(Differential = TeamScore - OpponentScore) |> 
+  group_by(Team) |> 
   mutate(CumDiff = cumsum(Differential))
 
-bigdiff <- difflogs %>% filter(Conference == "Big Ten")
-nu <- bigdiff %>% filter(Team == "Nebraska")
-ws <- bigdiff %>% filter(Team == "Wisconsin")
-il <- bigdiff %>% filter(Team == "Illinois")
+bigdiff <- difflogs |> filter(Conference == "Big Ten")
+nu <- bigdiff |> filter(Team == "Nebraska")
+ws <- bigdiff |> filter(Team == "Wisconsin")
+il <- bigdiff |> filter(Team == "Illinois")
 ```
 ```{r step-load-data-exercise, exercise = TRUE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
@@ -93,15 +93,15 @@ The first step to making a step chart is that we need to calculate our rolling c
 
 
 ```{r step1, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-???????? <- logs %>% 
-  mutate(Differential = TeamScore - OpponentScore) %>% 
-  group_by(????) %>% 
+???????? <- logs |> 
+  mutate(Differential = TeamScore - OpponentScore) |> 
+  group_by(????) |> 
   mutate(CumDiff = ??????(Differential))
 ```
 ```{r step1-solution, exercise.reveal_solution = FALSE}
-difflogs <- logs %>% 
-  mutate(Differential = TeamScore - OpponentScore) %>% 
-  group_by(Team) %>% 
+difflogs <- logs |> 
+  mutate(Differential = TeamScore - OpponentScore) |> 
+  group_by(Team) |> 
   mutate(CumDiff = cumsum(Differential))
 ```
 ```{r step1-check}
@@ -115,10 +115,10 @@ And now we have the same data, but each team has a rolling cumulative value for 
 Now that we have the cumulative sum for each, let's filter it down to just Big Ten teams. Let's create a new dataframe called bigdiff -- for Big Ten differential. 
 
 ```{r step2, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-??????? <- difflogs %>% filter(Conference == "??? ???")
+??????? <- difflogs |> filter(Conference == "??? ???")
 ```
 ```{r step2-solution, exercise.reveal_solution = FALSE}
-bigdiff <- difflogs %>% filter(Conference == "Big Ten")
+bigdiff <- difflogs |> filter(Conference == "Big Ten")
 ```
 ```{r step2-check}
 grade_this_code()
@@ -161,14 +161,14 @@ From this, we can see a handful of teams in the Big Ten had negative point diffe
 How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska, Illinois and Wisconsin. 
 
 ```{r step5, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-nu <- bigdiff %>% filter(Team == "Nebraska")
-ws <- bigdiff %>% filter(Team == "????????")
-il <- bigdiff %>% filter(Team == "????????")
+nu <- bigdiff |> filter(Team == "Nebraska")
+ws <- bigdiff |> filter(Team == "????????")
+il <- bigdiff |> filter(Team == "????????")
 ```
 ```{r step5-solution, exercise.reveal_solution = FALSE}
-nu <- bigdiff %>% filter(Team == "Nebraska")
-ws <- bigdiff %>% filter(Team == "Wisconsin")
-il <- bigdiff %>% filter(Team == "Illinois")
+nu <- bigdiff |> filter(Team == "Nebraska")
+ws <- bigdiff |> filter(Team == "Wisconsin")
+il <- bigdiff |> filter(Team == "Illinois")
 ```
 ```{r step5-check}
 grade_this_code()

@@ -64,7 +64,7 @@ To do this, we need all FBS college football teams and their season stats from l
 ```{r correlations-load-data, message=FALSE, warning=FALSE}
 correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
-newcorrelations <- correlations %>%
+newcorrelations <- correlations |>
   mutate(
     differential = TeamScore - OpponentScore
   )
@@ -107,13 +107,13 @@ In R, there is a `cor` function, and it works much the same as `mean` or `median
 
 ```{r correlation1, exercise=TRUE, exercise.setup = "correlations-load-data"}
 
-??????????? %>% 
+??????????? |> 
   summarise(
     pearson = cor(TeamScore, ??????????, method="pearson")
     )
 ```
 ```{r correlation1-solution, exercise.reveal_solution = FALSE}
-correlations %>% 
+correlations |> 
   summarise(
     pearson = cor(TeamScore, RushingYds, method="pearson")
     )
@@ -134,24 +134,24 @@ We're going to create a new dataframe called `newcorrelations` and in it, we nee
 
 ```{r correlation2, exercise=TRUE, exercise.setup = "correlations-load-data"}
 
-?????????????? <- correlations %>%
+?????????????? <- correlations |>
   mutate(
     differential = ????????? - ????????????
   )
 
 
-???????????????? %>% 
+???????????????? |> 
   summarise(
     correlation = cor(differential, ???????????, method="pearson")
     )
 ```
 ```{r correlation2-solution, exercise.reveal_solution = FALSE}
-newcorrelations <- correlations %>%
+newcorrelations <- correlations |>
   mutate(
     differential = TeamScore - OpponentScore
   )
 
-newcorrelations %>% 
+newcorrelations |> 
   summarise(
     correlation = cor(differential, RushingYds, method="pearson")
     )
@@ -218,11 +218,11 @@ The good news is that our newcorrelations dataframe has everything we need.
 Just run your correlations like before, swapping out rushing yards for passing yards.
 
 ```{r regression2, exercise=TRUE, exercise.setup = "correlations-load-data"}
-newcorrelations %>% 
+newcorrelations |> 
   summarise(correlation = cor(differential, ????????, method="pearson"))
 ```
 ```{r regression2-solution, exercise.reveal_solution = FALSE}
-newcorrelations %>% 
+newcorrelations |> 
   summarise(correlation = cor(differential, PassingYds, method="pearson"))
 ```
 ```{r regression2-check}

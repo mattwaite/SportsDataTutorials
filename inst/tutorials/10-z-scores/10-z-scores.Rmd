@@ -72,22 +72,22 @@ And load the data.
 ```{r zscore-load-data, message=FALSE, warning=FALSE, results=FALSE}
 seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
 
-perset <- seasons %>% 
+perset <- seasons |> 
   mutate(
     killsperset = Kills/S,
     digsperset = Digs/S,
     acesperset = Aces/S
-  ) %>%
+  ) |>
   select(Season, Team, Conference, killsperset, digsperset, acesperset)
 
-teamzscore <- perset %>%
-  group_by(Season) %>% 
+teamzscore <- perset |>
+  group_by(Season) |> 
   mutate(
     killszscore = as.numeric(scale(killsperset, center = TRUE, scale = TRUE)),
     aceszscore = as.numeric(scale(acesperset, center = TRUE, scale = TRUE)),
     digszscore = as.numeric(scale(digsperset, center = TRUE, scale = TRUE)),
     TotalZscore = killszscore + aceszscore + digszscore
-  ) %>% ungroup() 
+  ) |> ungroup() 
 ```
 ```{r zscore-load-data-exercise, exercise = TRUE}
 seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
@@ -120,21 +120,21 @@ Every team plays a different number of sets in a season, and really great teams 
 To get that, we're going to use mutate to create `killsperset`, `digsperset` and `acesperset`. Then, we're going to use select to get Season, Institution, Conference and our four metrics. 
 
 ```{r zscore2, exercise=TRUE, exercise.setup = "zscore-load-data"}
-perset <- seasons %>% 
+perset <- seasons |> 
   mutate(
     killsperset = ?????/?,
     digsperset = ????/?,
     acesperset = ????/?
-  ) %>%
+  ) |>
   select(Season, Team, Conference, ???????????, ??????????, ??????????)
 ```
 ```{r zscore2-solution, exercise.reveal_solution = FALSE}
-perset <- seasons %>% 
+perset <- seasons |> 
   mutate(
     killsperset = Kills/S,
     digsperset = Digs/S,
     acesperset = Aces/S
-  ) %>%
+  ) |>
   select(Season, Team, Conference, killsperset, digsperset, acesperset)
 ```
 ```{r zscore2-check}
@@ -152,24 +152,24 @@ To calculate a z-score in R, the easiest way is to use the `scale` function in b
 When we have multiple z-scores, it's pretty standard practice to add them together into a composite score. That's what we're doing at the end here with `TotalZscore`. 
 
 ```{r zscore3, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore <- perset %>%
-  group_by(??????) %>% 
+teamzscore <- perset |>
+  group_by(??????) |> 
   mutate(
     killszscore = as.numeric(scale(?????perset, center = TRUE, scale = TRUE)),
     aceszscore = as.numeric(scale(????perset, center = TRUE, scale = TRUE)),
     digszscore = as.numeric(scale(????perset, center = TRUE, scale = TRUE)),
     TotalZscore = ?????zscore + ????zscore + ????zscore
-  ) %>% ungroup() 
+  ) |> ungroup() 
 ```
 ```{r zscore3-solution, exercise.reveal_solution = FALSE}
-teamzscore <- perset %>%
-  group_by(Season) %>% 
+teamzscore <- perset |>
+  group_by(Season) |> 
   mutate(
     killszscore = as.numeric(scale(killsperset, center = TRUE, scale = TRUE)),
     aceszscore = as.numeric(scale(acesperset, center = TRUE, scale = TRUE)),
     digszscore = as.numeric(scale(digsperset, center = TRUE, scale = TRUE)),
     TotalZscore = killszscore + aceszscore + digszscore
-  ) %>% ungroup() 
+  ) |> ungroup() 
 ```
 ```{r zscore3-check}
 grade_this_code()
@@ -194,10 +194,10 @@ A way to interpret this data -- a team at zero is precisely average. The larger 
 So who were the best teams in the country last season? Arrange can tell us. We just made a composite z-score -- a total if you will. Let's use that in arrange to see who is the best by our measure.
 
 ```{r zscore4, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore %>% arrange(desc(???????????))
+teamzscore |> arrange(desc(???????????))
 ```
 ```{r zscore4-solution, exercise.reveal_solution = FALSE}
-teamzscore %>% arrange(desc(TotalZscore))
+teamzscore |> arrange(desc(TotalZscore))
 ```
 ```{r zscore4-check}
 grade_this_code()
@@ -212,15 +212,15 @@ So we have some work to do here if this is the answer we're getting, but what if
 Closer to home, how is Nebraska doing vs the Big Ten? Because we included Conference in our select, we can add a filter for the Big Ten before our arrange and get an answer. 
 
 ```{r zscore5, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore %>% 
-  filter(Conference == "??? ???") %>% 
-  arrange(desc(???????????)) %>%
+teamzscore |> 
+  filter(Conference == "??? ???") |> 
+  arrange(desc(???????????)) |>
   select(Season, Team, TotalZscore)
 ```
 ```{r zscore5-solution, exercise.reveal_solution = FALSE}
-teamzscore %>% 
-  filter(Conference == "Big Ten") %>% 
-  arrange(desc(TotalZscore)) %>%
+teamzscore |> 
+  filter(Conference == "Big Ten") |> 
+  arrange(desc(TotalZscore)) |>
   select(Season, Team, TotalZscore)
 ```
 ```{r zscore5-check}

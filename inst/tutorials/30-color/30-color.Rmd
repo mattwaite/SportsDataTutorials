@@ -72,11 +72,11 @@ teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illino
 
 tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
 
-big <- stats %>% filter(School %in% teams)
+big <- stats |> filter(School %in% teams)
 
-dance <- stats %>% filter(School %in% tournament)
+dance <- stats |> filter(School %in% tournament)
 
-mi <- stats %>% filter(School == "Michigan State")
+mi <- stats |> filter(School == "Michigan State")
 ```
 ```{r colors-load-data-exercise, exercise = TRUE}
 stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
@@ -85,11 +85,11 @@ teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illino
 
 tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
 
-big <- stats %>% filter(School %in% teams)
+big <- stats |> filter(School %in% teams)
 
-dance <- stats %>% filter(School %in% tournament)
+dance <- stats |> filter(School %in% tournament)
 
-mi <- stats %>% filter(School == "Michigan State")
+mi <- stats |> filter(School == "Michigan State")
 ```
 ```{r colors-load-data-exercise-solution}
 stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
@@ -98,11 +98,11 @@ teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illino
 
 tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
 
-big <- stats %>% filter(School %in% teams)
+big <- stats |> filter(School %in% teams)
 
-dance <- stats %>% filter(School %in% tournament)
+dance <- stats |> filter(School %in% tournament)
 
-mi <- stats %>% filter(School == "Michigan State")
+mi <- stats |> filter(School == "Michigan State")
 ```
 ```{r colors-load-data-exercise-check}
 grade_this_code()

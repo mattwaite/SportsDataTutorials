@@ -60,27 +60,27 @@ Your first task is to import the data. For this exercise, you need to simply run
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
 soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv")
 
-ruthless <- soccer %>% mutate(
+ruthless <- soccer |> mutate(
   gpg = Goals/Games
-) %>% 
-  arrange(desc(gpg)) %>% slice(1)
+) |> 
+  arrange(desc(gpg)) |> slice(1)
 
-snipers <- soccer %>%
+snipers <- soccer |>
   mutate(SoGPct = (SoG/ShAtt)*100
-) %>%
-  arrange(desc(SoGPct)) %>% slice(1)
+) |>
+  arrange(desc(SoGPct)) |> slice(1)
 
-maxgames <- soccer %>% summarize(max_games = max(Games))
+maxgames <- soccer |> summarize(max_games = max(Games))
 
-confsnipers <- soccer %>%
-  group_by(Conference) %>%
+confsnipers <- soccer |>
+  group_by(Conference) |>
   summarize(
     total_sog = sum(SoG),
     total_shatt = sum(ShAtt)
-  ) %>%
+  ) |>
   mutate(SoGPct = (total_sog/total_shatt)*100
-) %>%
-  arrange(desc(SoGPct)) %>% slice(1)
+) |>
+  arrange(desc(SoGPct)) |> slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
 soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv")
@@ -111,12 +111,12 @@ The code to calculate anything with mutate is pretty simple. Remember, with `sum
 Replace the words in all caps with the correct parts and name the new column we're creating as gpg. 
 
 ```{r mutate-change, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-NAMEOFDATA %>%
+NAMEOFDATA |>
   mutate(NEWCOLUMNNAME = GOALSCOLUMN/GAMESCOLUMN
 ) 
 ```
 ```{r mutate-change-solution, exercise.reveal_solution = FALSE}
-soccer %>% mutate(
+soccer |> mutate(
   gpg = Goals/Games
 ) 
 ```
@@ -129,15 +129,15 @@ Click the black arrow at the top right of the results box to get all the way to 
 But does this tell us who the most ruthless team is? No. We need to arrange to do that. 
 
 ```{r mutate-change2, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-NAMEOFDATA %>%
+NAMEOFDATA |>
   mutate(NEWCOLUMNNAME = GOALSCOLUMN/GAMESCOLUMN
-) %>% 
+) |> 
   arrange(desc(gpg))
 ```
 ```{r mutate-change2-solution, exercise.reveal_solution = FALSE}
-soccer %>% mutate(
+soccer |> mutate(
   gpg = Goals/Games
-) %>% 
+) |> 
   arrange(desc(gpg))
 ```
 ```{r mutate-change2-check}
@@ -161,15 +161,15 @@ To get shots on goal percentage, we're going to do something very similar to the
 Let's call our new column SoGPct, short for Shot on Goal Percentage.
 
 ```{r mutate-change-percent, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
-soccer %>%
+soccer |>
   mutate(NEWCOLUMNNAME = (LITTLETHING/BIGTHING)*???
-) %>%
+) |>
   arrange(desc(NEWCOLUMNNAME))
 ```
 ```{r mutate-change-percent-solution, exercise.reveal_solution = FALSE}
-soccer %>%
+soccer |>
   mutate(SoGPct = (SoG/ShAtt)*100
-) %>%
+) |>
   arrange(desc(SoGPct))
 ```
 ```{r mutate-change-percent-check}
@@ -191,25 +191,25 @@ To take a dataset of every team and get each conference, we need to use group by
 We're going to sum the shots on goal and the shot attempts. Then we're going to create a shots on goal percentage -- let's use the shots on goal percentage column name from the previous exercise. 
 
 ```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
-soccer %>%
-  group_by(NOT THE TEAM BUT THE...) %>%
+soccer |>
+  group_by(NOT THE TEAM BUT THE...) |>
   summarize(
     total_sog = sum(???),
     total_shatt = sum(?????)
-  ) %>%
+  ) |>
   mutate(NEWCOLUMNNAME = (LITTLETHINGINSUMMARIZE/BIGTHINGINSUMMARIZE)*???
-) %>%
+) |>
   arrange(desc(NEWCOLUMNNAME))
 ```
 ```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE, warning=FALSE}
-soccer %>%
-  group_by(Conference) %>%
+soccer |>
+  group_by(Conference) |>
   summarize(
     total_sog = sum(SoG),
     total_shatt = sum(ShAtt)
-  ) %>%
+  ) |>
   mutate(SoGPct = (total_sog/total_shatt)*100
-) %>%
+) |>
   arrange(desc(SoGPct))
 ```
 ```{r mutate-change-percent-arrange-check}

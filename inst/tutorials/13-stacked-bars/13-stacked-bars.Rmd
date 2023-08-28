@@ -59,14 +59,14 @@ And the data.
 ```{r stacked-load-data, message=FALSE, warning=FALSE}
 football <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
-big <- football %>% 
-  group_by(Conference, Team) %>% 
+big <- football |> 
+  group_by(Conference, Team) |> 
   summarise(
     SeasonRushingYards = sum(RushingYds),
     SeasonPassingYards = sum(PassingYds),
-  ) %>% filter(Conference == "Big Ten Conference")
+  ) |> filter(Conference == "Big Ten Conference")
 
-bigwide <- big %>% 
+bigwide <- big |> 
   pivot_longer(
     cols=starts_with("Season"), 
     names_to="Type", 
@@ -103,21 +103,21 @@ So to make this chart, we have to just add one thing to a bar chart like we did 
 We have game data, and we need season data. To get that, we need to do some group by and sum work. And since we're only interested in the Big Ten, we have some filtering to do too. For this, we're going to measure offensive production by rushing yards and passing yards. So if we have all the games a team played, and the rushing and passing yards for each of those games, what we need to do to get the season totals is just add them up. We'll put all of that into a new dataframe called big
 
 ```{r stacked-big, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
-??? <- football %>% 
-  group_by(Conference, Team) %>% 
+??? <- football |> 
+  group_by(Conference, Team) |> 
   summarise(
     SeasonRushingYards = sum(??????????),
     SeasonPassingYards = sum(??????????)
-  ) %>% 
+  ) |> 
   filter(Conference == "Big Ten Conference")
 ```
 ```{r stacked-big-solution, exercise.reveal_solution = FALSE}
-big <- football %>% 
-  group_by(Conference, Team) %>% 
+big <- football |> 
+  group_by(Conference, Team) |> 
   summarise(
     SeasonRushingYards = sum(RushingYds),
     SeasonPassingYards = sum(PassingYds)
-  ) %>% 
+  ) |> 
   filter(Conference == "Big Ten Conference")
 ```
 ```{r stacked-big-check}
@@ -145,14 +145,14 @@ Remember transforming data? Lesson 6? This is where that work is going to pay of
 We're going to save this work to a new dataframe called bigwide. 
 
 ```{r stacked-pivot, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
-??????? <- ??? %>% 
+??????? <- ??? |> 
   pivot_longer(
     cols=starts_with("??????"), 
     names_to="Type", 
     values_to="Yards")
 ```
 ```{r stacked-pivot-solution, exercise.reveal_solution = FALSE}
-bigwide <- big %>% 
+bigwide <- big |> 
   pivot_longer(
     cols=starts_with("Season"), 
     names_to="Type", 

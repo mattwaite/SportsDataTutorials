@@ -60,7 +60,7 @@ And load it.
 ```{r facet-load-data, message=FALSE, warning=FALSE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
-big10 <- logs %>% filter(Conference == "Big Ten Conference")
+big10 <- logs |> filter(Conference == "Big Ten Conference")
 ```
 ```{r facet-load-data-exercise, exercise = TRUE}
 logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
@@ -75,10 +75,10 @@ grade_this_code()
 Let's narrow our pile and look just at the Big Ten.
 
 ```{r facet1, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
-big10 <- logs %>% filter(Conference == "Big Ten Conference")
+big10 <- logs |> filter(Conference == "Big Ten Conference")
 ```
 ```{r facet1-solution, exercise.reveal_solution = FALSE}
-big10 <- logs %>% filter(Conference == "Big Ten Conference")
+big10 <- logs |> filter(Conference == "Big Ten Conference")
 ```
 ```{r facet1-check}
 grade_this_code()
@@ -131,10 +131,10 @@ Answer: Not immediately clear, but we can look at this and analyze it. We could 
 Let's add a line to every chart that's the conference average shooting percentage. 
 
 ```{r facet4, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
-big10 %>% summarise(mean(OffenseAvg))
+big10 |> summarise(mean(OffenseAvg))
 ```
 ```{r facet4-solution, exercise.reveal_solution = FALSE}
-big10 %>% summarise(mean(OffenseAvg))
+big10 |> summarise(mean(OffenseAvg))
 ```
 ```{r facet4-check}
 grade_this_code()

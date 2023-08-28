@@ -105,10 +105,10 @@ No really. That's it. So we're looking for `\\\\.*`. That'll find two backslashe
 To find something in text, we'll use a function called `gsub`. The pattern in `gsub` is `pattern, what we want to replace it with, what column this can all be found in`. So in our example, the pattern is `\\\\.*`, what we want to replace it with is ... nothing, and this is all in the Player column. 
 
 ```{r cleaning1, exercise=TRUE, exercise.setup = "cleaning-load-data", message=FALSE}
-nbaplayers %>% mutate(Player=gsub("??????","",??????))
+nbaplayers |> mutate(Player=gsub("??????","",??????))
 ```
 ```{r cleaning1-solution, exercise.reveal_solution = FALSE}
-nbaplayers %>% mutate(Player=gsub("\\\\.*","",Player))
+nbaplayers |> mutate(Player=gsub("\\\\.*","",Player))
 ```
 ```{r cleaning1-check}
 grade_this_code()
@@ -176,10 +176,10 @@ For this, we're going to use a `tidyr` function called `separate` to split colum
 Let's use that comma to split the player and the rest. With separate, the pattern is separate WHAT, into WHAT, by WHAT. So we're going to separate Player into Player and School, and we're going to separate it by the comma.
 
 ```{r cleaning2, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
-kills %>% separate(Player, into=c("??????", "??????"), sep=",") 
+kills |> separate(Player, into=c("??????", "??????"), sep=",") 
 ```
 ```{r cleaning2-solution, exercise.reveal_solution = FALSE}
-kills %>% separate(Player, into=c("Player", "School"), sep=",") 
+kills |> separate(Player, into=c("Player", "School"), sep=",") 
 ```
 ```{r cleaning2-check}
 grade_this_code()
@@ -194,13 +194,13 @@ Now, let's get the conference separated.
 A problem is going to crop up here -- the paren is a special character, so we have to escape it with the `\\`. 
 
 ```{r cleaning3, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
-kills %>% 
-  separate(Player, into=c("??????", "??????"), sep=",") %>%
+kills |> 
+  separate(Player, into=c("??????", "??????"), sep=",") |>
   separate(School, into=c("School", "Conference"), sep="??(") 
 ```
 ```{r cleaning3-solution, exercise.reveal_solution = FALSE}
-kills %>% 
-  separate(Player, into=c("Player", "School"), sep=",") %>%
+kills |> 
+  separate(Player, into=c("Player", "School"), sep=",") |>
   separate(School, into=c("School", "Conference"), sep="\\(")
 ```
 ```{r cleaning3-check}
@@ -214,19 +214,19 @@ Uh oh. Says we have problems in rows 15, 42 and 83. What are they? The NCAA has 
 Well, we can fix that with some gsub and we'll use a switch called `fixed`, which when set to TRUE it means this literal string, no special characters.
 
 ```{r cleaning4, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
-kills %>% 
-  separate(Player, into=c("??????", "??????"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+kills |> 
+  separate(Player, into=c("??????", "??????"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
   separate(School, into=c("School", "Conference"), sep="??(") 
 ```
 ```{r cleaning4-solution, exercise.reveal_solution = FALSE}
-kills %>% 
-  separate(Player, into=c("Player", "School"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
+kills |> 
+  separate(Player, into=c("Player", "School"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
   separate(School, into=c("School", "Conference"), sep="\\(")
 ```
 ```{r cleaning4-check}
@@ -240,21 +240,21 @@ One last thing: see the trailing paren?
 Believe it or not the trailing paren is NOT a special character. We can use mutate and gsub to replace ) with nothing. 
 
 ```{r cleaning5, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
-kills %>% 
-  separate(Player, into=c("??????", "??????"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
-  separate(School, into=c("School", "Conference"), sep="??(") %>% 
+kills |> 
+  separate(Player, into=c("??????", "??????"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
+  separate(School, into=c("School", "Conference"), sep="??(") |> 
   mutate(Conference=gsub("?", "", Conference))
 ```
 ```{r cleaning5-solution, exercise.reveal_solution = FALSE}
-kills %>% 
-  separate(Player, into=c("Player", "School"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
-  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
+kills |> 
+  separate(Player, into=c("Player", "School"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
+  separate(School, into=c("School", "Conference"), sep="\\(") |> 
   mutate(Conference=gsub(")", "", Conference))
 ```
 ```{r cleaning5-check}
@@ -270,25 +270,25 @@ Now, what should we do about Ht? 6-2 is not going to tell me much when I want to
 Separate again comes to the rescue.
 
 ```{r cleaning6, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
-kills %>% 
-  separate(Player, into=c("Player", "School"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
-  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
-  mutate(Conference=gsub(")", "", Conference)) %>%
-  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
+kills |> 
+  separate(Player, into=c("Player", "School"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
+  separate(School, into=c("School", "Conference"), sep="\\(") |> 
+  mutate(Conference=gsub(")", "", Conference)) |>
+  separate(Ht, into=c("Feet", "Inches"), sep="-") |>
   mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches))
 ```
 ```{r cleaning6-solution, exercise.reveal_solution = FALSE}
-kills %>% 
-  separate(Player, into=c("Player", "School"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
-  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
-  mutate(Conference=gsub(")", "", Conference)) %>%
-  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
+kills |> 
+  separate(Player, into=c("Player", "School"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
+  separate(School, into=c("School", "Conference"), sep="\\(") |> 
+  mutate(Conference=gsub(")", "", Conference)) |>
+  separate(Ht, into=c("Feet", "Inches"), sep="-") |>
   mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches))
 ```
 ```{r cleaning6-check}
@@ -298,27 +298,27 @@ grade_this_code()
 But how do we turn that into a height? Math! Check the last mutate.
 
 ```{r cleaning7, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
-kills %>% 
-  separate(Player, into=c("Player", "School"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
-  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
-  mutate(Conference=gsub(")", "", Conference)) %>%
-  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
-  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
+kills |> 
+  separate(Player, into=c("Player", "School"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
+  separate(School, into=c("School", "Conference"), sep="\\(") |> 
+  mutate(Conference=gsub(")", "", Conference)) |>
+  separate(Ht, into=c("Feet", "Inches"), sep="-") |>
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) |>
   mutate(Height = (Feet*12)+Inches)
 ```
 ```{r cleaning7-solution, exercise.reveal_solution = FALSE}
-kills %>% 
-  separate(Player, into=c("Player", "School"), sep=",") %>% 
-  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) %>%
-  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) %>%
-  separate(School, into=c("School", "Conference"), sep="\\(") %>% 
-  mutate(Conference=gsub(")", "", Conference)) %>%
-  separate(Ht, into=c("Feet", "Inches"), sep="-") %>%
-  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
+kills |> 
+  separate(Player, into=c("Player", "School"), sep=",") |> 
+  mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
+  mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
+  mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
+  separate(School, into=c("School", "Conference"), sep="\\(") |> 
+  mutate(Conference=gsub(")", "", Conference)) |>
+  separate(Ht, into=c("Feet", "Inches"), sep="-") |>
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) |>
   mutate(Height = (Feet*12)+Inches)
 ```
 ```{r cleaning7-check}
