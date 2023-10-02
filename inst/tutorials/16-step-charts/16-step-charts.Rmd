@@ -72,14 +72,14 @@ difflogs <- logs |>
 
 bigdiff <- difflogs |> filter(Conference == "Big Ten")
 nu <- bigdiff |> filter(Team == "Nebraska")
-ws <- bigdiff |> filter(Team == "Wisconsin")
-il <- bigdiff |> filter(Team == "Illinois")
+pu <- bigdiff |> filter(Team == "Purdue")
+id <- bigdiff |> filter(Team == "Indiana")
 ```
 ```{r step-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r step-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs22.csv")
+logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r step-load-data-exercise-check}
 grade_this_code()
@@ -158,17 +158,17 @@ From this, we can see a handful of teams in the Big Ten had negative point diffe
 
 ### Exercise 5: Using color the right way
 
-How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska, Illinois and Wisconsin. 
+How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska, Purdue and Indiana 
 
 ```{r step5, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 nu <- bigdiff |> filter(Team == "Nebraska")
-ws <- bigdiff |> filter(Team == "????????")
-il <- bigdiff |> filter(Team == "????????")
+pu <- bigdiff |> filter(Team == "????????")
+id <- bigdiff |> filter(Team == "????????")
 ```
 ```{r step5-solution, exercise.reveal_solution = FALSE}
 nu <- bigdiff |> filter(Team == "Nebraska")
-ws <- bigdiff |> filter(Team == "Wisconsin")
-il <- bigdiff |> filter(Team == "Illinois")
+pu <- bigdiff |> filter(Team == "Purdue")
+id <- bigdiff |> filter(Team == "Indiana")
 ```
 ```{r step5-check}
 grade_this_code()
@@ -176,7 +176,7 @@ grade_this_code()
 
 Let's introduce a couple of new things here. First, note when I take the color OUT of the aesthetic, the legend disappears. 
 
-Our chart is going to layer bigdiff, nu and il in that order. We put bigdiff first because order matters and the first geom goes on the bottom.
+Our chart is going to layer bigdiff, nu, pu and id in that order. We put bigdiff first because order matters and the first geom goes on the bottom.
 
 The second thing I'm going to add is the annotation layer. In this case, I am adding a text annotation layer, and I can specify where by adding in a x and a y value where I want to put it. This takes some finesse -- trial and error. You use the x and y axis values, guesstimate where you want the center of the words to be and enter those numbers into the x and y values. 
 
@@ -186,10 +186,11 @@ After that, I'm going to add labels and a theme. These too are new. Eventually, 
 ggplot() + 
   geom_step(data=bigdiff, aes(x=Date, y=???????, group=Team), color="light grey") +
   geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="red") + 
-  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="orange") +
   geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="black") +
-  annotate("text", x=(as.Date("2022-02-10")), y=-70, label="Nebraska") +
-  annotate("text", x=(as.Date("2022-03-01")), y=330, label="Illinois") +
+  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="darkred") +
+  annotate("text", x=(as.Date("2023-01-15")), y=-70, label="Nebraska") +
+  annotate("text", x=(as.Date("2023-03-01")), y=250, label="Indiana") +
+  annotate("text", x=(as.Date("2023-03-01")), y=350, label="Purdue") +
   labs(
     x="YOU SHOULD CHANGE THIS TO WHAT THE X AXIS IS", 
     y="Cumulative Point Differential", 
@@ -203,11 +204,11 @@ ggplot() +
 ggplot() + 
   geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team), color="light grey") +
   geom_step(data=nu, aes(x=Date, y=CumDiff, group=Team), color="red") + 
-  geom_step(data=il, aes(x=Date, y=CumDiff, group=Team), color="orange") +
-  geom_step(data=ws, aes(x=Date, y=CumDiff, group=Team), color="black") +
-  annotate("text", x=(as.Date("2022-02-10")), y=-100, label="Nebraska") +
-  annotate("text", x=(as.Date("2022-03-01")), y=265, label="Illinois") +
-  annotate("text", x=(as.Date("2022-03-01")), y=100, label="Wisconsin") +
+  geom_step(data=pu, aes(x=Date, y=CumDiff, group=Team), color="black") +
+  geom_step(data=id, aes(x=Date, y=CumDiff, group=Team), color="darkred") +
+  annotate("text", x=(as.Date("2023-01-15")), y=-70, label="Nebraska") +
+  annotate("text", x=(as.Date("2023-03-01")), y=250, label="Indiana") +
+  annotate("text", x=(as.Date("2023-03-01")), y=350, label="Purdue") +
   labs(
     x="Date", 
     y="Cumulative Point Differential", 
