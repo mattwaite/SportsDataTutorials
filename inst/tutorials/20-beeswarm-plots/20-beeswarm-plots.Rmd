@@ -72,10 +72,10 @@ players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_voll
 
 set.seed(1234)
 
-activeplayers <- players |> filter(s>75 & kills > 10 & is.na(pos) == FALSE)
+activeplayers <- players |> filter(s > 75 & kills > 10 & is.na(pos) == FALSE)
 
 nu <- activeplayers |> 
-  filter(team == "Nebraska Cornhuskers")
+  filter(team == "Nebraska Huskers")
 ```
 ```{r beeswarm-load-data-exercise, exercise = TRUE}
 players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
@@ -115,7 +115,7 @@ Recall in an earlier lesson, we used `filter` to get rid of players who don't pl
 ```{r beeswarm2-solution, exercise.reveal_solution = FALSE}
 activeplayers <- players |> 
   filter(
-    s>100 & 
+    s > 75 & 
       kills > 10 & 
       is.na(pos) == FALSE)
 ```
@@ -145,21 +145,21 @@ So where are the Nebraska players in that mix?
 
 ### Exercise 3: Filtering for Nebraska
 
-We'll filter players on Nebraska who meet our criteria. 
+We'll filter players on Nebraska who meet our criteria. Weirdly, this is the only dataset we have that calls Nebraska the Huskers, so be mindful of that when you filter. 
 
 ```{r beeswarm6, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 nu <- activeplayers |> 
-  filter(team == "???????? ???????????")
+  filter(team == "???????? ???????")
 ```
 ```{r beeswarm6-solution, exercise.reveal_solution = FALSE}
 nu <- activeplayers |> 
-  filter(team == "Nebraska Cornhuskers")
+  filter(team == "Nebraska Huskers")
 ```
 ```{r beeswarm6-check}
 grade_this_code()
 ```
 
-There's five Huskers who have played in more than 100 sets and who have more than 10 kills. 
+There's six Huskers who have played in more than 75 sets and who have more than 10 kills. 
 
 But how good are they as killers compared to the rest of college volleyball?  
 
@@ -171,22 +171,18 @@ When you add another beeswarm, we need to pass another element in -- we need to 
 ggplot() + 
   geom_beeswarm(
     data=????????????, 
-    groupOnX=TRUE, 
     aes(x=???, y=?????), color="grey") + 
   geom_beeswarm(
     data=??, 
-    groupOnX=TRUE, 
     aes(x=???, y=?????), color="red")
 ```
 ```{r beeswarm7-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_beeswarm(
     data=activeplayers, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="grey") + 
   geom_beeswarm(
     data=nu, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="red")
 ```
 ```{r beeswarm7-check}
@@ -203,11 +199,9 @@ This is where we can use ggrepel. Let's add a text layer and label the dots.
 ggplot() + 
   geom_beeswarm(
     data=???????????, 
-    groupOnX=TRUE, 
     aes(x=???, y=?????), color="grey") + 
   geom_beeswarm(
     data=??, 
-    groupOnX=TRUE, 
     aes(x=???, y=?????), color="red") + 
   geom_text_repel(
     data=nu, 
@@ -217,11 +211,9 @@ ggplot() +
 ggplot() + 
   geom_beeswarm(
     data=activeplayers, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="grey") + 
   geom_beeswarm(
     data=nu, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
@@ -243,11 +235,9 @@ There's not a lot to change from our example to see what they do.
 ggplot() + 
   geom_quasirandom(
     data=activeplayers, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="grey") + 
   geom_quasirandom(
     data=nu, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
@@ -257,11 +247,9 @@ ggplot() +
 ggplot() + 
   geom_quasirandom(
     data=activeplayers, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="grey") + 
   geom_quasirandom(
     data=nu, 
-    groupOnX=TRUE, 
     aes(x=pos, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
