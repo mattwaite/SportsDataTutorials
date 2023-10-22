@@ -1,0 +1,448 @@
+---
+title: "Sports Data Lesson 24: Arranging plots"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to make multiple charts into one graphic.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(patchwork)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+# Arranging multiple plots together
+
+## The basics
+
+Sometimes you have two or three (or more) charts that by themselves aren't very exciting and are really just one chart that you need to merge together. It would be nice to be able to arrange them programmatically and not have to mess with it in Adobe Illustrator.
+
+Good news.
+
+There is.
+
+It's called `patchwork`, and it's pretty easy to use. You installed patchwork way back in the beginning, but if you're having problems just go to the console in R Studio and run `install.packages("patchwork")`. 
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+library(patchwork)
+
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+library(patchwork)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+We'll use the college football game data we've used before. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+```
+
+And load it.
+
+```{r patchwork-load-data, message=FALSE, warning=FALSE}
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+
+totals <- games |> 
+  filter(Conference == "Big Ten Conference") |> 
+  group_by(Team) |> 
+  summarize(
+    TotalRushes = sum(RushingAtt),
+    TotalRushYds = sum(RushingYds),
+    TotalPasses = sum(PassingAtt),
+    TotalPassYds = sum(PassingYds)
+  ) |>
+  mutate(
+    RushingAvg = TotalRushYds/TotalRushes,
+    PassingAvg = TotalPassYds/TotalPasses
+  ) 
+
+nu <- totals |> filter(Team == "Nebraska")
+
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip()
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  coord_flip()
+```
+```{r patchwork-load-data-exercise, exercise = TRUE}
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+```
+```{r patchwork-load-data-exercise-solution}
+games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+```
+```{r patchwork-load-data-exercise-check}
+grade_this_code()
+```
+
+For this, we're going to total up the rushing yards and attempts for each game, as well as the passing yards and attempts, to get a top 5 list of the best rushing and passing offeneses in the Big Ten last season.
+
+```{r patchwork1, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+totals <- games |> 
+  filter(Conference == "Big Ten Conference") |> 
+  group_by(Team) |> 
+  summarize(
+    TotalRushes = sum(RushingAtt),
+    TotalRushYds = sum(RushingYds),
+    TotalPasses = sum(PassingAtt),
+    TotalPassYds = sum(PassingYds)
+  ) |>
+  mutate(
+    RushingAvg = TotalRushYds/TotalRushes,
+    PassingAvg = TotalPassYds/TotalPasses
+  ) 
+```
+```{r patchwork1-solution, exercise.reveal_solution = FALSE}
+totals <- games |> 
+  filter(Conference == "Big Ten Conference") |> 
+  group_by(Team) |> 
+  summarize(
+    TotalRushes = sum(RushingAtt),
+    TotalRushYds = sum(RushingYds),
+    TotalPasses = sum(PassingAtt),
+    TotalPassYds = sum(PassingYds)
+  ) |>
+  mutate(
+    RushingAvg = TotalRushYds/TotalRushes,
+    PassingAvg = TotalPassYds/TotalPasses
+  ) 
+```
+```{r patchwork1-check}
+grade_this_code()
+```
+
+
+### Exercise 1: Making bar charts into objects
+
+Okay, now to do this I need to **save my plots to an object**. We do this the same way we save things to a dataframe -- with the arrow aka the assignment operator. We'll make two identical bar charts, both using the `totals` dataframe. One with be the best passing team by average and one will be the best rushing by average. We'll call them bar1 and bar2.
+
+```{r patchwork2, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+???? <- ggplot() + 
+  geom_bar(data=???????, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) + 
+  coord_flip()
+
+???? <- ggplot() + 
+  geom_bar(data=???????, aes(x=reorder(Team, RushingAvg), weight=RushingAvg)) + 
+  coord_flip()
+```
+```{r patchwork2-solution, exercise.reveal_solution = FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip()
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg)) +
+  coord_flip()
+```
+```{r patchwork2-check}
+grade_this_code()
+```
+
+### Exercise 2: Making two charts into one plot
+
+With patchwork, we can use some basic symbols to lay out plots. Because we have two plots, all we need to do is use a `+` to add our two plots together. Remember what you named them above?
+
+```{r patchwork3, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+???? + ????
+```
+```{r patchwork3-solution, exercise.reveal_solution = FALSE}
+bar1 + bar2 
+```
+```{r patchwork3-check}
+grade_this_code()
+```
+
+### Exercise 3: Making two charts into one plot, but stacked
+
+We can also stack them on top of each other with /.
+
+```{r patchwork4, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+???? / ????
+```
+```{r patchwork4-solution, exercise.reveal_solution = FALSE}
+bar1 / bar2
+```
+```{r patchwork4-check}
+grade_this_code()
+```
+
+## Moving toward publication
+
+To make these publishable, we should add headlines, chatter, decent labels, credit lines, etc. But to do this, we have to do a little thinking. It's easiest to think about what things go on individual charts and which things go on the whole plot. Things that go on individual charts: x and y axis labels and pre-made themes. Things that go on the whole plot: title, subtitle, caption and the theming necessary to make those look good.
+
+Let's just start with labels and a pre-set theme on each plot.
+
+```{r patchwork5, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal() 
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2 
+```
+```{r patchwork5-solution, exercise.reveal_solution = FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal() 
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2 
+```
+```{r patchwork5-check}
+grade_this_code()
+```
+
+### Exercise 4: Annotating your plots
+
+What's missing here? To publish this, we need a headline, chatter, source line and credit line (aka title, subtitle and caption). With patchwork, we have to add these to the plot itself -- *not* to the individual charts. You do that with `plot_annotation`, which works very similarly to labs that we've used all along. 
+
+```{r patchwork6, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal()
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2 + 
+  ????_?????????(
+    title = "This is a title and we need to tell a story with it",
+    subtitle = "This is the subtitle and we need to add context to the chart here.",
+    caption = "Source: Sports Reference | By Matt Waite"
+  )
+```
+```{r patchwork6-solution, exercise.reveal_solution = FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal() 
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2  + 
+  plot_annotation(
+    title = "This is a title and we need to tell a story with it",
+    subtitle = "This is the subtitle and we need to add context to the chart here.",
+    caption = "Source: Sports Reference | By Matt Waite"
+  )
+```
+```{r patchwork6-check}
+grade_this_code()
+```
+
+Now, we need to add some theming to those plot text elements. To do that, we use `&` and add theme. Don't worry much about what goes in the theme for now -- we'll cover that in finishing touches. For now, just know we're going to make the title/headline bold and bigger, the subtitle/chatter a little smaller. The important part right now is that you know this is possible and this is how you do it.
+
+```{r patchwork7, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal() 
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2 + 
+  plot_annotation(
+    title = "This is a title and we need to tell a story with it",
+    subtitle = "This is the subtitle and we need to add context to the chart here.",
+    caption = "Source: Sports Reference | By Matt Waite"
+  )  & 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+```{r patchwork7-solution, exercise.reveal_solution = FALSE}
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal() 
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2  + 
+  plot_annotation(
+    title = "This is a title and we need to tell a story with it",
+    subtitle = "This is the subtitle and we need to add context to the chart here.",
+    caption = "Source: Sports Reference | By Matt Waite"
+  ) & 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+```{r patchwork7-check}
+grade_this_code()
+```
+
+## One last thing: Drawing attention.
+
+The last thing we're missing is color. Our eyes aren't drawn to anything (except maybe the top and bottom). So we need to help that. **A bar chart without context or color to draw attention to something isn't much of a bar chart**. Same with a line chart -- if your line chart has one line, no context, no color, it's going to fare poorly. To get some color and context in this, we're going to focus on ... a local team ... and add another geom_bar to our two bar charts using that data. We can then assign that one bar a color.
+
+```{r patchwork8, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
+nu <- totals |> filter(Team == "Nebraska")
+
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="red") + 
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal() 
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="red") + 
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2  + 
+  plot_annotation(
+    title = "This is a title and we need to tell a story with it",
+    subtitle = "This is the subtitle and we need to add context to the chart here.",
+    caption = "Source: Sports Reference | By Matt Waite"
+  ) & 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+```{r patchwork8-solution, exercise.reveal_solution = FALSE}
+nu <- totals |> filter(Team == "Nebraska")
+
+bar1 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="red") + 
+  coord_flip() + 
+  labs(
+    x="", 
+    y="Average passing yards"
+    ) + 
+  theme_minimal() 
+
+bar2 <- ggplot() + 
+  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="red") + 
+  coord_flip() +  
+  labs(
+    x="", 
+    y="Average rushing yards") + 
+  theme_minimal()
+
+bar1 + bar2  + 
+  plot_annotation(
+    title = "This is a title and we need to tell a story with it",
+    subtitle = "This is the subtitle and we need to add context to the chart here.",
+    caption = "Source: Sports Reference | By Matt Waite"
+  ) & 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+```{r patchwork8-check}
+grade_this_code()
+```
+
+THREE GAMES. We won only THREE games last season. HOW? Might have something to do with not being able to run the ball. 
