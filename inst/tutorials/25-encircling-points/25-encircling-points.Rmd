@@ -68,7 +68,7 @@ And while we're loading it, let's filter out anyone who hasn't played 100 minute
 ```{r encircle-load-data, message=FALSE, warning=FALSE}
 players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players23.csv") |> filter(MP > 100 & TRB > 0)
 
-nu <- players |> filter(Team == "Nebraska")
+nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
 dw <- nu |> filter(Player == "Derrick Walker")
 ```
@@ -107,14 +107,14 @@ We can see right away that there are some dots at the edges -- lots of rebounds 
 Like we have done in the past, let's make a dataframe of Nebraska players and add a layer to our graph that puts Nebraska's dots in red. While we're at it, we'll make everyone else grey. 
 
 ```{r encircle2, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
-nu <- players |> filter(Team == "Nebraska")
+nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
 ggplot() + 
   geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
   geom_point(data=??, aes(x=`??%`, y=???), color="red")
 ```
 ```{r encircle2-solution, exercise.reveal_solution = FALSE}
-nu <- players |> filter(Team == "Nebraska")
+nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
 ggplot() + 
   geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
