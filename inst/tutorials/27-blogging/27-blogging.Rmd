@@ -213,7 +213,7 @@ Now go to the GitHub Desktop App. You should see something that looks like this,
 knitr::include_graphics(rep("images/blog12.png"))
 ```
 
-This is where you will commit files to your repository. GitHub is a two-step process for getting files from your computer to GitHub. The first is committing the files. To do that, add a message in the box next to your avatar (where it says update index.html in the screenshot above). Then click Commit to main (mine says master because it's an older repository before GitHub switched to using main by default). The second step is to push it to GitHub. You do that on the screen that appears after you have committed your files. It should say you have No Local Changes, which is good because you sent them to GitHub. Now click Push origin.
+This is where you will commit files to your repository. GitHub is a two-step process for getting files from your computer to GitHub. The first is committing the files. To do that, add a message in the box next to your avatar (where it says Summary (required)). Then click Commit to main (mine says master because it's an older repository before GitHub switched to using main by default). The second step is to push it to GitHub. You do that on the screen that appears after you have committed your files. It should say you have No Local Changes, which is good because you sent them to GitHub. Now click Push origin (or, if this is the first time, it might say Publish Branch).
 
 ```{r, echo=FALSE, out.width = "100%"}
 knitr::include_graphics(rep("images/blog13.png"))
