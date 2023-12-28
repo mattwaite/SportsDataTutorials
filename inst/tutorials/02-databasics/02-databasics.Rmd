@@ -31,11 +31,16 @@ To start with, we need to understand the shape of data.
 
 Data, oversimplifying it a bit, is information organized. Generally speaking, it's organized into rows and columns. Rows, generally, are individual elements. A team. A player. A game. Columns, generally, are components of the data, sometimes called variables. So if each row is a player, the first column might be their name. The second is their position. The third is their batting average. And so on. 
 
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/data1.png"))
-```
+![](images/data1.png){width="100%"}
 
 One of the critical components of data analysis, especially for beginners, is having a mental picture of your data. What does each row mean? What does each column in each row signify? How many rows do you have? How many columns? 
+
+## Column names
+
+An absolutely essential concept you need to understand for the whole course is that **every column has a name**. For your data to be valid, those names have to be the first row, and the first row only. 
+
+![](images/columnnames.png){width="100%"}
+So the names of every team in this dataset are in the Team column. Want to know who had the most kills per set in college volleyball? You'll need the KillsPerSet column name. Looking at that first row for those names is something you're going to do over and over again. 
 
 ## Types
 
@@ -68,9 +73,7 @@ If it worked right, you've got the data from that page in a spreadsheet.
 
 The first thing we need to do is recognize that we don't have data, really. We have the results of a formula. You can tell by putting your cursor on that field, where you'll see the formula again. This is where you'd look:
 
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/clean1.png"))
-```
+![](images/clean1.png){width="100%"}
 
 The solution is easy:
 
@@ -80,9 +83,7 @@ Edit > Paste Special > Values Only or type command/control shift v
 
 You can verify that it worked by looking in that same row 1 column A, where you'll see the formula is gone.
 
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/clean2.png"))
-```
+![](images/clean2.png){width="100%"}
 
 Now you have data, but your headers are all wrong. You want your headers to be one line -- not two, like they have. And the header names repeat -- first for our team, then for theirs. So you have to change each header name to be UsORB or TeamORB and OpponentORB instead of just ORB.
 
@@ -92,8 +93,6 @@ But what if you had hundreds of repeating headers like that? Deleting them would
 
 You can use sorting to get rid of anything that's not data. So click on Data > Sort Range. You'll want to check the "Data has header row" field. Then hit Sort.
 
-```{r, echo=FALSE}
-knitr::include_graphics(rep("images/clean3.png"))
-```
+![](images/clean3.png){width="100%"}
 
 Now all you need to do is search through the data for where your junk data -- extra headers, blanks, etc. -- got sorted and delete it. After you've done that, you can export it for use in R. Go to File > Download as > Comma Separated Values. Remember to put it in the same directory as your R Notebook file so you can import the data easily.
