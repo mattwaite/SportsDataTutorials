@@ -78,7 +78,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -95,12 +95,12 @@ So step 2, after setting up our libraries, is most often going to be importing d
 The code looks *something* like this, but hold off doing anything just yet:
 
 ```         
-volleyballplayers <- read_csv("~/Box/SportsData/ncaa_womens_volleyball_playerstats_2022.csv")
+volleyballplayers <- read_csv("~/Box/SportsData/ncaa_womens_volleyball_playerstats_2023.csv")
 ```
 
 Let's unpack that.
 
-The first part -- volleyballplayers -- is the name of your variable. A variable is just a name of a thing that stores stuff. In this case, our variable is a data frame, which is R's way of storing data (technically it's a tibble, which is the tidyverse way of storing data, but the differences aren't important and people use them interchangeably). **We can call this whatever we want, with a few exceptions.** I always want to name data frames after what is in it. In this case, we're going to import a dataset of volleyball players. Variable names, by convention are one word all lower case. **You can end a variable with a number, but you can't start one with a number**.
+The first part -- volleyballplayers -- is the **name of your variable**. A variable is just a name of a thing that stores stuff. In this case, our variable is a data frame, which is R's way of storing data (technically it's a tibble, which is the tidyverse way of storing data, but the differences aren't important and people use them interchangeably). **We can call this whatever we want, with a few exceptions.** I always want to name data frames after what is in it. In this case, we're going to import a dataset of volleyball players. Variable names, by convention are one word all lower case. **You can end a variable with a number, but you can't start one with a number**.
 
 The \<- bit is the variable assignment operator. It's how we know we're assigning something to a word. Think of the arrow as saying "Take everything on the right of this arrow and stuff it into the thing on the left." So we're creating an empty vessel called `volleyballplayers` and stuffing all this data into it.
 
@@ -109,7 +109,7 @@ The `read_csv` bits are pretty obvious, except for one thing. What happens in th
 Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r load-data, message=FALSE, warning=FALSE}
-volleyballplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+volleyballplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 
 nplayers <- nrow(volleyballplayers)
 
@@ -126,11 +126,11 @@ killsleader <- volleyballplayers |> arrange(desc(kills)) |> slice(1)
 ```
 
 ```{r load-data-exercise, exercise = TRUE}
-volleyballplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+volleyballplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 ```
 
 ```{r load-data-exercise-solution}
-volleyballplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+volleyballplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 ```
 
 ```{r load-data-exercise-check}
@@ -144,7 +144,7 @@ Now we can inspect the data we imported. What does it look like? What's in it? W
 To do that, we use `head()` and **put the name of the variable we created above between the parenthesis** to show the headers and **the first six rows of data**.
 
 ```{r head-data, exercise=TRUE, exercise.setup = "load-data"}
-head(??????)
+head(_____)
 ```
 
 ```{r head-data-solution, exercise.reveal_solution = FALSE}
@@ -166,7 +166,7 @@ Let's look at this. As you can see by the data, we have six players, **which is 
 Why do this? Why use head? It gives us a glimpse of the data. Which ... conveniently ... is also a way to look at your data, and it works the same way as `head()`
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
-glimpse(??????)
+glimpse(____)
 ```
 
 ```{r glimpse-data-solution, exercise.reveal_solution = FALSE}
@@ -198,7 +198,7 @@ To accomplish our goal, we start with the name of the data we created before. Th
 The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need to put something in the parenthesis**. But unlike `head()` and `glimpse()`, this time the something comes from that first row of head. We are grouping data by one of the pieces of the data -- a field. *If we're trying to group by position*, which field looks like it holds the position name? Let's use head again and take a look at the very top row in bold.
 
 ```{r head-review, exercise=TRUE, exercise.setup = "load-data"}
-head(??????)
+head(____)
 ```
 
 ```{r head-review-solution, exercise.reveal_solution = FALSE}
@@ -218,8 +218,8 @@ After we group our data together by the thing we want to group it by, we need to
 Here's the pattern. **You fill in where there are all capitals with what needs to be there.** What you fill in are the two hints from above.
 
 ```{r group-by, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
-NAMEOFDATA |>
-  group_by(NAMEOFFIELD) |>
+____ |>
+  group_by(____) |>
   summarise(
     total = n()
   ) 
@@ -238,7 +238,7 @@ grade_this_code()
 ```
 
 ::: {#group-by-hint}
-**Hint:** The name of your data is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top.
+**Hint:** The name of your data -- the first thing you need -- is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top. It's a column name.
 :::
 
 In this case, we wanted to group together positions, signified by the field name `pos`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](http://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are.
@@ -249,11 +249,11 @@ And when we run that, we get a list of positions with a count next to them. But 
 
 ```{r group-by-2, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
 volleyballplayers |>
-  group_by(???) |>
+  group_by(____) |>
   summarise(
     total = n()
   ) |> 
-  arrange(desc(?????))
+  arrange(desc(____))
 ```
 
 ```{r group-by-2-solution, exercise.reveal_solution = FALSE}
@@ -281,11 +281,11 @@ We can, if we want, group by more than one thing. Which team has the most of a s
 
 ```{r group-by-3, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
 volleyballplayers |>
-  group_by(????, ???) |>
+  group_by(____, ____) |>
   summarise(
     total = n()
   ) |> 
-  arrange(desc(?????))
+  arrange(desc(____))
 ```
 
 ```{r group-by-3-solution, exercise.reveal_solution = FALSE}
@@ -316,14 +316,14 @@ Sticking with our NCAA volleyball player data, we can calculate any number of me
 Let's look just a the number of sets (s) each position gets. **In summarize, what you do left of the equal sign is giving something a name**. We should name our new columns what they are: `mean_sets` and `median_sets`. Then let's arrange it by the average number of sets (hint: that wording, average number of sets, is a trick. You arrange by the name of a column created in summarize).
 
 ```{r group-by-4, exercise=TRUE, exercise.setup = "load-data"}
-???????? |>
-  group_by(???) |>
+_____ |>
+  group_by(___) |>
   summarise(
     count = n(),
-    ????????? = mean(?),
-    ??????????? = median(?)
+    ____ = mean(____),
+    ____ = median(____)
   ) |>
-  arrange(desc(?????????))
+  arrange(desc(____))
 ```
 
 ```{r group-by-4-solution, exercise.reveal_solution = FALSE}
@@ -356,7 +356,7 @@ One thing to keep in mind is this: You can use any of these verbs -- group_by, s
 First let's get the most kills.
 
 ```{r group-by-5, exercise=TRUE, exercise.setup = "load-data"}
-volleyballplayers |> arrange(desc(?????))
+volleyballplayers |> arrange(desc(____))
 ```
 
 ```{r group-by-5-solution, exercise.reveal_solution = FALSE}
@@ -370,7 +370,7 @@ grade_this_code()
 Now we can get the least by removing desc() and just doing arrange by our field name.
 
 ```{r group-by-6, exercise=TRUE, exercise.setup = "load-data"}
-volleyballplayers |> arrange(?????)
+volleyballplayers |> arrange(____)
 ```
 
 ```{r group-by-6-solution, exercise.reveal_solution = FALSE}
@@ -399,7 +399,7 @@ Which position in the NCAA generates the most points? And what is the highest an
 
 ```{r group-by-7, exercise=TRUE, exercise.setup = "load-data"}
 volleyballplayers |> 
-  group_by(???) |> 
+  group_by(____) |> 
   summarise(
     total = sum(pts), 
     avg_points = mean(pts), 
