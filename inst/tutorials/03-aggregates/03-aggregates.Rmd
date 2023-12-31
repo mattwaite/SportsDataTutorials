@@ -195,7 +195,17 @@ glue("What if we wanted to know how many players there were by position, i.e. ho
 
 To accomplish our goal, we start with the name of the data we created before. The same name we used in `head()` and `glipse()`. We'll take that data and we'll introduce a new operator: `|>`. The best way to read that operator, in my opinion, is to interpret that as "and then do this." So the start of our pattern is `data |>` which you can read as `data and now we'll do this`.
 
-The this, in our case, is `group_by()`. Like `head()` and `glimpse()`, **we need to put something in the parenthesis**. But unlike `head()` and `glimpse()`, this time the something comes from that first row of head. We are grouping data by one of the pieces of the data -- a field. *If we're trying to group by position*, which field looks like it holds the position name? Let's use head again and take a look at the very top row in bold.
+The this, in our case, is `group_by()`.
+
+It's important to understand in your mind what `group_by` is doing. It might be easiest to think about it like a package of Skittles. Your data, when you first get it, is like a pack of Skittles -- all mixed up. What `group_by` does is comes along and puts them in little piles. Here's an bag of Skittles dumped out.
+
+![Ungrouped data](images/IMG_1345.png){width="100%"}
+
+Now, using `group_by`, we can put them into piles. With Skittles, we group them by color. With sports data, we could do this with teams, players, games, seasons, positions -- the list is endless. But notice -- all of those things are names. They aren't numbers. Rarely ever will you group something by a statistic.
+
+![Grouped data](images/IMG_1347.png){alt="Grouped data" width="100%"}
+
+Like `head()` and `glimpse()`, **we need to put something in the parenthesis in group_by()**. But unlike `head()` and `glimpse()`, this time the something comes from that **first row of our data**. We are grouping data by one of the pieces of the data -- a field, or column. *If we're trying to group by position*, which field or column in our data looks like it holds the position name? Let's use head again and take a look at the very top row in bold.
 
 ```{r head-review, exercise=TRUE, exercise.setup = "load-data"}
 head(____)
@@ -215,7 +225,7 @@ That block of code you just ran has two hints for the code block you'll have to 
 
 After we group our data together by the thing we want to group it by, we need to count how many things are in each group. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want to summarize. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something.
 
-Here's the pattern. **You fill in where there are all capitals with what needs to be there.** What you fill in are the two hints from above.
+Here's the pattern. **You fill in where there are blanks.** What you fill in are the two hints from above.
 
 ```{r group-by, exercise=TRUE, exercise.setup = "load-data", message=FALSE}
 ____ |>
