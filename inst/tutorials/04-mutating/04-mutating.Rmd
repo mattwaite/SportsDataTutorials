@@ -43,7 +43,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv",
+  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -58,7 +58,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv")
+soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
 
 ruthless <- soccer |> mutate(
   gpg = Goals/Games
@@ -83,10 +83,10 @@ confsnipers <- soccer |>
   arrange(desc(SoGPct)) |> slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv")
+soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
 ```
 ```{r mutating-load-data-exercise-solution}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2022.csv")
+soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
 ```
 ```{r mutating-load-data-exercise-check}
 grade_this_code()
@@ -106,13 +106,13 @@ grade_this_code()
 
 ### Exercise 1: Calculating goals per game 
 
-The code to calculate anything with mutate is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do goals divided by games -- goals per game -- but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's a Games column, and a Goals column. Then, to help us, we'll use arrange again to sort it, so we get the most ruthless squad over one year. Similar to summarize, we'll want to give what we create a name using =. 
+The code to calculate anything with mutate is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, **we're trying to do goals divided by games** -- goals per game -- but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's a Games column, and a Goals column. Then, to help us, we'll use arrange again to sort it, so we get the most ruthless squad over one year. Similar to summarize, we'll want to give what we create a name using =. 
 
-Replace the words in all caps with the correct parts and name the new column we're creating as gpg. 
+Replace the words in the blanks with the correct parts and **name the new column we're creating as gpg**. 
 
 ```{r mutate-change, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-NAMEOFDATA |>
-  mutate(NEWCOLUMNNAME = GOALSCOLUMN/GAMESCOLUMN
+____ |>
+  mutate(____ = ____/____
 ) 
 ```
 ```{r mutate-change-solution, exercise.reveal_solution = FALSE}
@@ -129,8 +129,8 @@ Click the black arrow at the top right of the results box to get all the way to 
 But does this tell us who the most ruthless team is? No. We need to arrange to do that. 
 
 ```{r mutate-change2, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE}
-NAMEOFDATA |>
-  mutate(NEWCOLUMNNAME = GOALSCOLUMN/GAMESCOLUMN
+____ |>
+  mutate(____ = ____/____
 ) |> 
   arrange(desc(gpg))
 ```
@@ -154,17 +154,17 @@ Another common analysis task is converting two numbers into a percentage. How of
 
 Sticking with our soccer data, which team was the most accurate when it comes to shots on goal? Who was pressuring the keeper the most? Sure, we could just arrange the shots on goal column and see who was at the top, but how then do you compare a team that shoots a lot with a team who doesn't but is ruthlessly efficient when they do? 
 
-To calculate a percentage, we need to remember a formula: The smaller thing / the total number. The smaller thing is the outcome you're measuring. The total number is all the chances a team or a player had at that thing. For example: Completion percentage. How do you calculate that? You divide completions by the total number of passes thrown. But if you do that, you'll get a number less than 1. That's because it's not yet a percentage like you are accustomed to seeing. To get that, you have to multiply the result of your division by 100. 
+**To calculate a percentage, we need to remember a formula: The smaller thing / the total number.** The smaller thing is the outcome you're measuring. The total number is all the chances a team or a player had at that thing. For example: Completion percentage. How do you calculate that? You divide completions by the total number of passes thrown. But if you do that, you'll get a number less than 1. That's because it's not yet a percentage like you are accustomed to seeing. To get that, you have to multiply the result of your division by 100. 
 
-To get shots on goal percentage, we're going to do something very similar to the first exercise, but adding in the multiplication. The little thing in this case is `SoG` (short for Shots on Goal). The big thing is `ShAtt` (short for Shot Attempts). 
+To get shots on goal percentage, we're going to do something very similar to the first exercise, but adding in the multiplication. **The little thing in this case is `SoG` (short for Shots on Goal). The big thing is `ShAtt` (short for Shot Attempts).** 
 
-Let's call our new column SoGPct, short for Shot on Goal Percentage.
+**Let's call our new column SoGPct, short for Shot on Goal Percentage.**
 
 ```{r mutate-change-percent, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
 soccer |>
-  mutate(NEWCOLUMNNAME = (LITTLETHING/BIGTHING)*???
+  mutate(____ = (____/____)*____
 ) |>
-  arrange(desc(NEWCOLUMNNAME))
+  arrange(desc(____))
 ```
 ```{r mutate-change-percent-solution, exercise.reveal_solution = FALSE}
 soccer |>
@@ -184,22 +184,24 @@ glue("Who is putting the most pressure on the keeper shot after shot?  {snipers$
 
 ### Exercise 3: Combining what we know
 
-With this data, we have every team and their stats. But what if we wanted to know which is the most ruthless conference? Here is an example of how you can use what you learned in the last tutorial with what you learned here.
+With this data, we have every team and their stats. **But what if we wanted to know which is the most ruthless conference?** Here is an example of how you can use what you learned in the last tutorial with what you learned here.
 
-To take a dataset of every team and get each conference, we need to use group by again. And then, to calculate a percentage for the conference, we need to add up the two pieces we need in summarize *before* we mutate a new column. 
+To take a dataset of every team and get each conference, we need to use group by again. Remember the package of Skittles and putting them in piles? What we're doing is putting teams into piles based on something you're going to have to fill in. 
 
-We're going to sum the shots on goal and the shot attempts. Then we're going to create a shots on goal percentage -- let's use the shots on goal percentage column name from the previous exercise. 
+Then, to calculate a percentage for the conference, we need to add up the two pieces we need in summarize *before* we mutate a new column. We're going to sum the shots on goal and the shot attempts. You've used those two columns before -- look at your previous work.
+
+Then we're going to create a shots on goal percentage -- call it SoGPct. To make that percentage, you only have what you made in summarize to work with. What you made is what you named. What you named is always left of the =.
 
 ```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
 soccer |>
-  group_by(NOT THE TEAM BUT THE...) |>
+  group_by(____) |>
   summarize(
-    total_sog = sum(???),
-    total_shatt = sum(?????)
+    total_sog = sum(____),
+    total_shatt = sum(____)
   ) |>
-  mutate(NEWCOLUMNNAME = (LITTLETHINGINSUMMARIZE/BIGTHINGINSUMMARIZE)*???
+  mutate(____ = (____/____)*___
 ) |>
-  arrange(desc(NEWCOLUMNNAME))
+  arrange(desc(____))
 ```
 ```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE, warning=FALSE}
 soccer |>
