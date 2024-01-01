@@ -26,7 +26,9 @@ More often than not, we have more data than we want. Sometimes we need to be rid
 
 **Filtering creates a subset of the data based on criteria**. All records where the count is greater than 10. All records that match "Nebraska". Something like that. 
 
-**Selecting simply returns only the fields named**. So if you only want to see School and Attendance, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error.  
+**Selecting simply returns only the fields named**. So if you only want to see Team and TeamFGA, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error.  
+
+In short: **filter limits the number of rows, select limits the number of columns**.
 
 Let's work on some examples using college football game data from last season. You can download the data here if you want to use it in your own notebook -- and this is the same data we used in the mutating tutorial, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
@@ -35,7 +37,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,7 +63,7 @@ grade_this_code()
 Now import the data.
 
 ```{r filtering-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 
 rushinggames <- nrow(games |> filter(RushingYds > 250))
 
@@ -75,10 +77,10 @@ toprush <- games |>
   top_n(1, wt=RushingYds)
 ```
 ```{r filtering-load-data-exercise, exercise = TRUE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r filtering-load-data-exercise-solution}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r filtering-load-data-exercise-check}
 grade_this_code()
@@ -93,7 +95,7 @@ So if you want to see Nebraska, what would you do?
 First, let's use head to give us a peek at the data. This data's layout is ... not great ... so you're going to want to scroll all the way to the right to see the most useful columns for this exercise.
 
 ```{r head-data, exercise=TRUE, exercise.setup = "filtering-load-data"}
-head(?????)
+head(____)
 ```
 ```{r head-data-solution}
 head(games)
@@ -107,7 +109,7 @@ Now that we can see the column names, we now know Team is where the names of the
 ### Exercise 1: Dear Old Nebraska U 
 
 ```{r filtering-nebraska, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA |> filter(NAMEOFCOLUMN == "????????")
+____ |> filter(____ == "____")
 ```
 ```{r filtering-nebraska-solution}
 games |> filter(Team == "Nebraska")
@@ -122,10 +124,10 @@ And what do you see? All of Nebraska's games last season. As much as we want to 
 
 There's a certain strain of football fan around these parts that is absolutely obsessed with the past (cough cough cough) I mean running the ball. To this fan, run the ball = win. So what if we wanted to see games where teams ran for more than 250 yards?
 
-To do this, we need to know which column is rushing yards and we need to think about operators. We want more than 250 yards. Another name for more than, which you learned in math class in the third grade, is greater than. There's a symbol for that.
+**To do this, we need to know which column is rushing yards** and we need to think about operators. We want more than 250 yards. Another name for more than, which you learned in math class in the third grade, is greater than. There's a symbol for that.
 
 ```{r filtering-rushers, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA |> filter(NAMEOFRUSHINGYARDSCOLUMN > ???)
+____ |> filter(____ > ___)
 ```
 ```{r filtering-rushers-solution}
 games |> filter(RushingYds > 250)
@@ -145,9 +147,9 @@ Note: The conference name *must* be exact. B1G or Big Ten won't work. You have t
 ### Exercise 3: B1G rushers
 
 ```{r filtering-big, exercise=TRUE, exercise.setup = "filtering-load-data"}
-NAMEOFDATA |> 
-  filter(NAMEOFRUSHINGYARDSCOLUMN > ???) |> 
-  filter(NAMEOFCONFERENCECOLUMN == "??????????????????")
+____ |> 
+  filter(____ > ____) |> 
+  filter(____ == "____")
 ```
 ```{r filtering-big-solution}
 games |> 
@@ -201,7 +203,7 @@ With a list, we can use the %in% operator. It does what you think it does -- it 
 ```{r filtering-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
 powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
-NAMEOFDATA |> filter(?????????? %in% ??????)
+____ |> filter(____ %in% ____)
 ```
 ```{r filtering-power-solution}
 powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
@@ -221,9 +223,9 @@ So now we have our Power Five list. What if we just wanted to see team names, co
 ```{r selecting-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
 powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
-NAMEOFDATA |> 
-  filter(???? %in% ??????) |> 
-  select(????, ??????????, ??????????)
+____ |> 
+  filter(____ %in% ____) |> 
+  select(____, ____, ____)
 ```
 ```{r selecting-power-solution}
 powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
@@ -249,11 +251,11 @@ So what are the top rushing games by Power Five schools? All we're doing here is
 ```{r selecting-top-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
 powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
-NAMEOFDATA |> 
-  filter(???? %in% ??????) |> 
-  select(????, ??????????, ??????????) |>
-  arrange(desc(NAMEOFRUSHINGYARDSCOLUMN)) |> 
-  top_n(??, wt=NAMEOFRUSHINGYARDSCOLUMN)
+____ |> 
+  filter(____ %in% ____) |> 
+  select(____, ____, ____) |>
+  arrange(desc(____)) |> 
+  top_n(____, wt=____)
 ```
 ```{r selecting-top-power-solution, exercise.reveal_solution = FALSE}
 powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")

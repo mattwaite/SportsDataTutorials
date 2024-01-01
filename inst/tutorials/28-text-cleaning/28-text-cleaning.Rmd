@@ -50,7 +50,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -64,13 +64,13 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Now load it.
 
 ```{r cleaning-load-data, message=FALSE, warning=FALSE}
-nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+nbaplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
 ```
 ```{r cleaning-load-data-exercise, exercise = TRUE}
-nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+nbaplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
 ```
 ```{r cleaning-load-data-exercise-solution}
-nbaplayers <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+nbaplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
 ```
 ```{r cleaning-load-data-exercise-check}
 grade_this_code()
@@ -127,7 +127,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/killsperset.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/killsperset.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -141,13 +141,13 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Let's import it and take a look.
 
 ```{r cleaning2-load-data, message=FALSE, warning=FALSE}
-kills <- read_csv("http://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+kills <- read_csv("https://mattwaite.github.io/sportsdatafiles/killsperset.csv")
 ```
 ```{r cleaning2-load-data-exercise, exercise = TRUE}
-kills <- read_csv("http://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+kills <- read_csv("https://mattwaite.github.io/sportsdatafiles/killsperset.csv")
 ```
 ```{r cleaning2-load-data-exercise-solution}
-kills <- read_csv("http://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+kills <- read_csv("https://mattwaite.github.io/sportsdatafiles/killsperset.csv")
 ```
 ```{r cleaning2-load-data-exercise-check}
 grade_this_code()

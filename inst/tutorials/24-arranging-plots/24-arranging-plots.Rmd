@@ -50,7 +50,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -64,7 +64,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r patchwork-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 totals <- games |> 
   filter(Conference == "Big Ten Conference") |> 
@@ -91,10 +91,10 @@ bar2 <- ggplot() +
   coord_flip()
 ```
 ```{r patchwork-load-data-exercise, exercise = TRUE}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r patchwork-load-data-exercise-solution}
-games <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r patchwork-load-data-exercise-check}
 grade_this_code()

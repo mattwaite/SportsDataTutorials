@@ -66,7 +66,7 @@ grade_this_code()
 And the data. We're going to do four things here: first, we'll load in the season stats for each team in college basketball in 2023. Then we'll filter out Big Ten teams to get us a dataframe of 14 teams called `big`. We'll then filter B1G teams that made the tournament. Lastly, we'll make a dataframe of just Michigan State.  
 
 ```{r colors-load-data, message=FALSE, warning=FALSE}
-stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
+stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats23.csv")
 
 teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
 
@@ -79,7 +79,7 @@ dance <- stats |> filter(School %in% tournament)
 mi <- stats |> filter(School == "Michigan State")
 ```
 ```{r colors-load-data-exercise, exercise = TRUE}
-stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
+stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats23.csv")
 
 teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
 
@@ -92,7 +92,7 @@ dance <- stats |> filter(School %in% tournament)
 mi <- stats |> filter(School == "Michigan State")
 ```
 ```{r colors-load-data-exercise-solution}
-stats <- read_csv("http://mattwaite.github.io/sportsdatafiles/stats23.csv")
+stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats23.csv")
 
 teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
 

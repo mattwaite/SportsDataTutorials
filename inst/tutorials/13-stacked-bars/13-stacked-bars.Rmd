@@ -30,7 +30,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -57,7 +57,7 @@ grade_this_code()
 And the data.
 
 ```{r stacked-load-data, message=FALSE, warning=FALSE}
-football <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 big <- football |> 
   group_by(Conference, Team) |> 
@@ -73,10 +73,10 @@ bigwide <- big |>
     values_to="Yards")
 ```
 ```{r stacked-load-data-exercise, exercise = TRUE}
-football <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r stacked-load-data-exercise-solution}
-football <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r stacked-load-data-exercise-check}
 grade_this_code()

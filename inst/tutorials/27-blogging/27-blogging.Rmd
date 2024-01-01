@@ -219,4 +219,4 @@ This is where you will commit files to your repository. GitHub is a two-step pro
 knitr::include_graphics(rep("images/blog13.png"))
 ```
 
-In a few minutes, you should be able to go to username.github.io in a browser and you'll see your site. [Here's mine](http://mattwaite.github.io/).
+In a few minutes, you should be able to go to username.github.io in a browser and you'll see your site. [Here's mine](https://mattwaite.github.io/).

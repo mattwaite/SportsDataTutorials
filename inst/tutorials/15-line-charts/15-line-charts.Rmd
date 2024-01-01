@@ -34,7 +34,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs23.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/logs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,7 +61,7 @@ grade_this_code()
 And the data.
 
 ```{r line-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
 
 nu <- logs |> filter(Team == "Nebraska")
 pu <- logs |> filter(Team == "Purdue")
@@ -70,10 +70,10 @@ average <- logs |> group_by(Date) |> summarise(mean_shooting=mean(TeamFGPCT))
 
 ```
 ```{r line-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r line-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r line-load-data-exercise-check}
 grade_this_code()

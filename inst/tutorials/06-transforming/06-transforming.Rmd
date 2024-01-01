@@ -35,7 +35,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/nbalong.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/nbalong.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,7 +61,7 @@ grade_this_code()
 Now we'll load the data. 
 
 ```{r transforming-load-data, message=FALSE, warning=FALSE}
-nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
+nba <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbalong.csv")
 
 nbawide <- nba |> pivot_wider(names_from = Season, values_from = PTS)
 
@@ -71,10 +71,10 @@ tops <- nbawide |>
   slice(1)
 ```
 ```{r transforming-load-data-exercise, exercise = TRUE}
-nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
+nba <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbalong.csv")
 ```
 ```{r transforming-load-data-exercise-solution}
-nba <- read_csv("http://mattwaite.github.io/sportsdatafiles/nbalong.csv")
+nba <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbalong.csv")
 ```
 ```{r transforming-load-data-exercise-check}
 grade_this_code()

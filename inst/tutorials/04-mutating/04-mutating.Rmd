@@ -43,7 +43,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -58,7 +58,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
 
 ruthless <- soccer |> mutate(
   gpg = Goals/Games
@@ -83,10 +83,10 @@ confsnipers <- soccer |>
   arrange(desc(SoGPct)) |> slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
 ```
 ```{r mutating-load-data-exercise-solution}
-soccer <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
 ```
 ```{r mutating-load-data-exercise-check}
 grade_this_code()

@@ -52,7 +52,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/players23.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/players23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -66,18 +66,18 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And while we're loading it, let's filter out anyone who hasn't played 100 minutes and hasn't pulled down a rebound. 
 
 ```{r encircle-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players23.csv") |> filter(MP > 100 & TRB > 0)
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players23.csv") |> filter(MP > 100 & TRB > 0)
 
 nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
 dw <- nu |> filter(Player == "Derrick Walker")
 ```
 ```{r encircle-load-data-exercise, exercise = TRUE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players23.csv") |>
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players23.csv") |>
   filter(MP > 100 & TRB > 0)
 ```
 ```{r encircle-load-data-exercise-solution}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players23.csv") |>
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players23.csv") |>
   filter(MP > 100 & TRB > 0)
 ```
 ```{r encircle-load-data-exercise-check}

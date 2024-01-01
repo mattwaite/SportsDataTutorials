@@ -59,7 +59,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/players22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/players22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -75,7 +75,7 @@ Now load that data.
 ```{r cluster-load-data, message=FALSE, warning=FALSE}
 set.seed(1234)
 
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players22.csv")
 
 playersselected <- players |> 
   filter(MP>0) |> filter(Pos == "G") |> 
@@ -94,10 +94,10 @@ playercluster <- data.frame(playersselected, clusters$cluster)
 bm <- playercluster |> filter(Player == "Bryce McGowens")
 ```
 ```{r cluster-load-data-exercise, exercise = TRUE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players22.csv")
 ```
 ```{r cluster-load-data-exercise-solution}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/players22.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players22.csv")
 ```
 ```{r cluster-load-data-exercise-check}
 grade_this_code()

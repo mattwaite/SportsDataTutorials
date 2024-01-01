@@ -35,7 +35,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -62,7 +62,7 @@ grade_this_code()
 To do this, we need all FBS college football teams and their season stats from last year. Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 newcorrelations <- correlations |>
   mutate(
@@ -70,10 +70,10 @@ newcorrelations <- correlations |>
   )
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()

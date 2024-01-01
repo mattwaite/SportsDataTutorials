@@ -36,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballslope.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballslope.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -63,7 +63,7 @@ grade_this_code()
 And the data.
 
 ```{r slope-load-data, message=FALSE, warning=FALSE}
-yardsperplay <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballslope.csv")
+yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope.csv")
 
 nu <- yardsperplay |> filter(Team == "Nebraska")
 oh <- yardsperplay |> filter(Team == "Ohio State")
@@ -73,10 +73,10 @@ big <- yardsperplay |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r slope-load-data-exercise, exercise = TRUE}
-yardsperplay <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballslope.csv")
+yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope.csv")
 ```
 ```{r slope-load-data-exercise-solution}
-yardsperplay <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballslope.csv")
+yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope.csv")
 ```
 ```{r slope-load-data-exercise-check}
 grade_this_code()

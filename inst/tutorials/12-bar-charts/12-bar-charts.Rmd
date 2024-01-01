@@ -30,12 +30,12 @@ With `ggplot2`, we dive into the world of programmatic data visualization. The `
 * facets - which means how we might graph many elements of the same dataset in the same space
 * layers - which means how we might lay multiple geometries over top of each other to reveal new information.
 
-Hadley Wickham, who is behind all of the libraries we have used in this course to date, wrote about his layered grammar of graphics in [this 2009 paper that is worth your time to read](http://byrneslab.net/classes/biol607/readings/wickham_layered-grammar.pdf). 
+Hadley Wickham, who is behind all of the libraries we have used in this course to date, wrote about his layered grammar of graphics in [this 2009 paper that is worth your time to read](https://byrneslab.net/classes/biol607/readings/wickham_layered-grammar.pdf). 
 
 Here are some `ggplot2` resources you'll want to keep handy: 
 
-* [The ggplot documentation](http://ggplot2.tidyverse.org/reference/index.html)
-* [The ggplot cookbook](http://www.cookbook-r.com/Graphs/)
+* [The ggplot documentation](https://ggplot2.tidyverse.org/reference/index.html)
+* [The ggplot cookbook](https://www.cookbook-r.com/Graphs/)
 
 Let's dive in using data on college football since 2018. Why 2018? Uh, no local reason. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will write the code that adds necessary and required parts to finish it. 
 
@@ -46,7 +46,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/cfb1822.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/cfb1822.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -73,7 +73,7 @@ grade_this_code()
 And the data.
 
 ```{r ggplot-load-data, message=FALSE, warning=FALSE}
-seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
 
 huskers <- seasons |>
   mutate(
@@ -93,10 +93,10 @@ big10 <- seasons |>
   )
 ```
 ```{r ggplot-load-data-exercise, exercise = TRUE}
-seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
 ```
 ```{r ggplot-load-data-exercise-solution}
-seasons <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
 ```
 ```{r ggplot-load-data-exercise-check}
 grade_this_code()

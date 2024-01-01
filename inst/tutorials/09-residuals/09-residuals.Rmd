@@ -35,7 +35,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -62,7 +62,7 @@ grade_this_code()
 Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE, results=FALSE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 
 residualmodel <- correlations |> 
   mutate(
@@ -84,10 +84,10 @@ pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
 summary(pfit)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()

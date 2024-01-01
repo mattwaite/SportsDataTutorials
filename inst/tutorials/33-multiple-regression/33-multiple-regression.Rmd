@@ -31,7 +31,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -59,7 +59,7 @@ grade_this_code()
 And the data.
 
 ```{r multiple-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
 
 difflogs <- logs |> mutate(
   Differential = TeamScore - OpponentScore, 
@@ -72,10 +72,10 @@ simplelogs <- difflogs |>
   select(Differential, NetYards, TurnoverMargin, everything())
 ```
 ```{r multiple-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
 ```
 ```{r multiple-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv")
 ```
 ```{r multiple-load-data-exercise-check}
 grade_this_code()

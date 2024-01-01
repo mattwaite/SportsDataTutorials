@@ -23,7 +23,7 @@ tutorial_options(exercise.completion=FALSE)
 
 Step charts are **a method of showing progress** toward a total number They combine showing change over time -- **cumulative change over time** -- with magnitude. They're good at inviting comparison. 
 
-There's great examples out there. First is the Washignton Post looking at [Lebron passing Jordan's career point total](https://www.washingtonpost.com/graphics/sports/lebron-james-michael-jordan-nba-scoring-list/?utm_term=.481074150849). Another is John Burn-Murdoch's work at the Financial Times (which is paywalled) about soccer stars. [Here's an example of his work outside the paywall](http://johnburnmurdoch.github.io/projects/goal-lines/CL/).
+There's great examples out there. First is the Washignton Post looking at [Lebron passing Jordan's career point total](https://www.washingtonpost.com/graphics/sports/lebron-james-michael-jordan-nba-scoring-list/?utm_term=.481074150849). Another is John Burn-Murdoch's work at the Financial Times (which is paywalled) about soccer stars. [Here's an example of his work outside the paywall](https://johnburnmurdoch.github.io/projects/goal-lines/CL/).
 
 To replicate this, we need cumulative data -- data that is the running total of data at a given point. So think of it this way -- Nebraska scores 50 points in a basketball game and then 50 more the next, their cumulative total at two games is 100 points. 
 
@@ -36,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/logs23.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/logs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -63,7 +63,7 @@ grade_this_code()
 And the data.
 
 ```{r step-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
 
 difflogs <- logs |> 
   mutate(Differential = TeamScore - OpponentScore) |> 
@@ -76,10 +76,10 @@ pu <- bigdiff |> filter(Team == "Purdue")
 id <- bigdiff |> filter(Team == "Indiana")
 ```
 ```{r step-load-data-exercise, exercise = TRUE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r step-load-data-exercise-solution}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
 ```
 ```{r step-load-data-exercise-check}
 grade_this_code()

@@ -43,7 +43,7 @@ knitr::include_graphics(rep("images/chartannotated.png"))
 Let's explore fixing up ggplot's output. We'll need a graphic to work with first, so I'm going to use a bubble chart. 
 
 ```{r text-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 
 winlosslogs <- logs |> 
   mutate(
@@ -193,7 +193,7 @@ grade_this_code()
 
 Compare that to your previous chart. Easier to read, right?
 
-We're off to a good start, but our text has no real hierarchy. We want our headline to stand out more. So let's change that. When it comes to changing text, the place to do that is in the theme element. [There are a lot of ways to modify the theme](http://ggplot2.tidyverse.org/reference/theme.html). 
+We're off to a good start, but our text has no real hierarchy. We want our headline to stand out more. So let's change that. When it comes to changing text, the place to do that is in the theme element. [There are a lot of ways to modify the theme](https://ggplot2.tidyverse.org/reference/theme.html). 
 
 We'll start easy. Let's make the headline bigger and bold. Scroll down here under theme_minimal and you'll see what I've done.
 

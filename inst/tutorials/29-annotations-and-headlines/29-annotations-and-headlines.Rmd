@@ -51,7 +51,7 @@ grade_this_code()
 ```
 
 ```{r text-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("http://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
 
 winlosslogs <- logs |> 
   mutate(

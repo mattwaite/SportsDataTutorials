@@ -47,7 +47,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/cfbranking22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,13 +61,13 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Now let's load it.
 
 ```{r bump-load-data, message=FALSE, warning=FALSE}
-rankings <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
 ```
 ```{r bump-load-data-exercise, exercise = TRUE}
-rankings <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
 ```
 ```{r bump-load-data-exercise-solution}
-rankings <- read_csv("http://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
 ```
 ```{r bump-load-data-exercise-check}
 grade_this_code()

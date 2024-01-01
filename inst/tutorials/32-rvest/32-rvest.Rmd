@@ -24,7 +24,7 @@ tutorial_options(exercise.completion=FALSE)
 
 All the way back in Lesson 2, we used Google Sheets and importHTML to get our own data out of a website. For me, that's a lot of pointing and clicking and copying and pasting. R has a library that can automate the harvesting of data from HTML on the internet. It's called `rvest`. 
 
-Let's grab [a simple, basic HTML table from College Football Stats](http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html). There's nothing particularly strange about this table -- it's simply formatted and easy to scrape. 
+Let's grab [a simple, basic HTML table from College Football Stats](https://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html). There's nothing particularly strange about this table -- it's simply formatted and easy to scrape. 
 
 First we'll need some libraries. We're going to use a library called `rvest`, which you already have installed. But like always, if you are having problems, you can install it by running `install.packages('rvest')` in the console. 
 
@@ -43,7 +43,7 @@ grade_this_code()
 The rvest package has functions that make fetching, reading and parsing HTML simple. The first thing we need to do is specify a url that we're going to scrape.
 
 ```{r rvest-load-data, message=FALSE, warning=FALSE}
-scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl <- "https://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 
 scoringoffense <- scoringoffenseurl |>
   read_html() |>
@@ -52,7 +52,7 @@ scoringoffense <- scoringoffenseurl |>
 
 scoring <- scoringoffense[[1]]
 
-scoringoffenseurl21 <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl21 <- "https://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 
 scoringoffense21 <- scoringoffenseurl21 |>
   read_html() |>
@@ -121,10 +121,10 @@ statswithoutgarbage <- statsrenamed |> filter(Rank != "Rk" & Games != "Overall")
 statswithnumbers <- statswithoutgarbage |> mutate_at(vars(-School), as.numeric) |> select(-starts_with("Blank"))
 ```
 ```{r rvest-load-data-exercise, exercise = TRUE}
-scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl <- "https://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 ```
 ```{r rvest-load-data-exercise-solution}
-scoringoffenseurl <- "http://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl <- "https://www.cfbstats.com/2022/leader/national/team/offense/split01/category09/sort01.html"
 ```
 ```{r rvest-load-data-exercise-check}
 grade_this_code()
@@ -193,7 +193,7 @@ First, we should note, that the data does not have anything in it to indicate wh
 So let's grab 2021.
 
 ```{r rvest-load-data2-exercise, exercise = TRUE}
-scoringoffenseurl21 <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl21 <- "https://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
 
 scoringoffense21 <- scoringoffenseurl21 |>
   read_html() |>
@@ -203,7 +203,7 @@ scoringoffense21 <- scoringoffenseurl21 |>
 scoringoffense2021 <- scoringoffense21[[1]]
 ```
 ```{r rvest-load-data2-exercise-solution}
-scoringoffenseurl21 <- "http://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
+scoringoffenseurl21 <- "https://www.cfbstats.com/2021/leader/national/team/offense/split01/category09/sort01.html"
 
 scoringoffense21 <- scoringoffenseurl21 |>
   read_html() |>

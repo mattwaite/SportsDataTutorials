@@ -36,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -68,7 +68,7 @@ grade_this_code()
 And the data.
 
 ```{r beeswarm-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
 
 set.seed(1234)
 
@@ -78,10 +78,10 @@ nu <- activeplayers |>
   filter(team == "Nebraska Huskers")
 ```
 ```{r beeswarm-load-data-exercise, exercise = TRUE}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
 ```
 ```{r beeswarm-load-data-exercise-solution}
-players <- read_csv("http://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
 ```
 ```{r beeswarm-load-data-exercise-check}
 grade_this_code()
