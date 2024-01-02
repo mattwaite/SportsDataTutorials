@@ -116,7 +116,6 @@ grade_this_code()
 In R, there is a `cor` function, and it works much the same as `mean` or `median`. So we want to see if `TeamScore` is correlated with `RushingYds`, which should be pretty self explanatory. We do that by referencing those two fields and specifying we want a `pearson` correlation. The number we get back is the correlation coefficient.
 
 ```{r correlation1, exercise=TRUE, exercise.setup = "correlations-load-data"}
-
 ____ |> 
   summarise(
     pearson = cor(TeamScore, ____, method="pearson")
@@ -145,7 +144,6 @@ Fine, let's test this.
 We're going to create a new dataframe called `newcorrelations` and in it, we need to mutate a new field called `differential`. The score differential is the point spread. I leave it to you to figure out how to calculate the point spread.
 
 ```{r correlation2, exercise=TRUE, exercise.setup = "correlations-load-data"}
-
 ____ <- correlations |>
   mutate(
     differential = ____ - ____
@@ -235,7 +233,6 @@ So instead of looking at rushing yards, let's look at passing yards. Can we do b
 ### Exercise 4: A second correlation
 
 The good news is that our newcorrelations dataframe has everything we need.
-
 
 Just run your correlations like before, swapping out rushing yards for passing yards.
 
