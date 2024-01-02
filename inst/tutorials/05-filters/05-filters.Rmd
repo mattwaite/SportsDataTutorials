@@ -246,7 +246,7 @@ One last little dplyr trick that's nice to have in the toolbox is a shortcut for
 
 ### Exercise 6: Top N lists
 
-So what are the top rushing games by Power Five schools? All we're doing here is chaining commands together with what we've already got. We're *filtering* by our list of Power Five conferences, we're *selecting* the three fields we need. Now we'll introduce the new function: `top_n`. The `top_n` function just takes a number and a weight, abbreviated wt. So we want a top 10 list? Take what you did above and just add an arrange and then a `top_n` to the end with a number inside the ().
+So what are the top rushing games by Power Five schools? All we're doing here is chaining commands together with what we've already got. We're *filtering* by our list of Power Five conferences, we're *selecting* the three fields we need -- Team, Conference and the rushing yards column. Now we'll introduce the new function: `top_n`. The `top_n` function just takes a number and a weight, abbreviated wt. So we want a top 10 list? The number is pretty obvious. The weight is the column we're ranking on -- the rushing yards.
 
 ```{r selecting-top-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
 powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
