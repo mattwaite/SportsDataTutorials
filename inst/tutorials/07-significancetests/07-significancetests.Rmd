@@ -92,7 +92,7 @@ grade_this_code()
 As per usual, let's take a look at this with head.
 
 ```{r head-data, exercise=TRUE, exercise.setup = "significance-load-data"}
-head(????)
+head(____)
 ```
 ```{r head-data-solution}
 head(logs)
@@ -109,7 +109,7 @@ First, let's just look at shooting Here's a theory: fans make players nervous. T
 Typically speaking, with significance tests, the process involves creating two different means and then running a bunch of formulas on them. R makes this easy by giving you a `t.test` function, which does all the work for you. What we have to tell it is what is the value we are testing (hint: we're looking at team shooting percentage), what is our grouping label field (hint: look at the last sentence right before the box where you download the data), and from what data (hint: look at the loading data step).
 
 ```{r ttest1, exercise=TRUE, exercise.setup = "significance-load-data"}
-t.test(???????????? ~ ?????, data=??????)
+t.test(____ ~ ____, data=____)
 ```
 ```{r ttest1-solution, exercise.reveal_solution = FALSE}
 t.test(TeamFGPCT ~ COVID, data=logs)
@@ -143,9 +143,9 @@ My hypothesis is that without fans to yell at refs, they weren't calling fouls l
 First things first: We need to make a dataframe called refs where we'll add up the team and the opponent's personal fouls. This will tell is if the refs were more active with people or without. Will our t-test tell us it's significant?
 
 ```{r ttest2, exercise=TRUE, exercise.setup = "significance-load-data"}
-???? <- logs |> mutate(totalfouls = ????????? + ????????????)
+____ <- logs |> mutate(totalfouls = ____ + ____)
 
-t.test(?????????? ~ ?????, data=????)
+t.test(____ ~ ____, data=____)
 ```
 ```{r ttest2-solution, exercise.reveal_solution = FALSE}
 refs <- logs |> mutate(totalfouls = TeamPersonalFouls + OpponentPersonalFouls)
