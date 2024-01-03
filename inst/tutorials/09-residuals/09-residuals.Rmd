@@ -28,14 +28,14 @@ Residuals can tell you several things, but most important is if a linear model t
 
 Residuals can also tell you who is underperforming and overperforming the model. And the more robust the model -- the better your r-squared value is -- the more meaningful that label of under or overperforming is. 
 
-Let's look at a net yards model from the last lesson. We need data from the 2022 college football season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+Let's look at a net yards model from the last lesson. We need data from the last college football season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -62,7 +62,7 @@ grade_this_code()
 Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE, results=FALSE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 
 residualmodel <- correlations |> 
   mutate(
@@ -82,12 +82,16 @@ penalties <- correlations |>
 
 pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
 summary(pfit)
+
+penresid <- penalties |> mutate(predicted = predict(pfit), residuals = residuals(pfit))
+
+pensort <- penresid |> arrange(desc(residuals)) |> select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals) |> slice(1)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
@@ -110,8 +114,8 @@ grade_this_code()
 Just like the headline says, it's time to create a linear model like we did in the last lesson. We'll create a linear model object called fit, and we'll use our residualmodel dataframe. In the model, we'll say that differential is approximately modeled by NetYards.
 
 ```{r regression1, exercise=TRUE, exercise.setup = "correlations-load-data"}
-??? <- lm(differential ~ ???????, data = ?????????????)
-summary(???)
+____ <- lm(differential ~ ____, data = ____)
+summary(____)
 ```
 ```{r regression1-solution, exercise.reveal_solution = FALSE}
 fit <- lm(differential ~ NetYards, data = residualmodel)
@@ -121,9 +125,11 @@ summary(fit)
 grade_this_code()
 ```
 
-We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by nearly 44 points (!), and a team has overperformed it by 43 points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good. 
-
-Next: Look at the Adjusted R-squared value. What that says is that 66 percent of a team's scoring output can be predicted by their net yards.  
+```{r residuals1, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
+glue("We've seen this output before, but let's review because if you are using scatterplots to make a point, you should do this. First, note the Min and Max residual at the top. A team has underperformed the model by nearly {format(min(fit$residuals),digits=1)} points (!), and a team has overperformed it by {format(max(fit$residuals),digits=1)} points (!!). The median residual, where half are above and half are below, is just slightly below the fit line. Close here is good.
+     
+Next: Look at the Adjusted R-squared value. What that says is that {format(summary(fit)$r.squared*100, digits=1)} percent of a team's scoring output can be predicted by their net yards.")
+```
 
 Last: Look at the p-value. We are looking for a p-value smaller than .05. At .05, we can say that our correlation didn't happen at random. And, in this case, it REALLY didn't happen at random. But if you know a little bit about football, it doesn't surprise you that the more you outgain your opponent, the more you win by. It's an intuitive result.
 
@@ -188,8 +194,8 @@ grade_this_code()
 For this we'll make an object called pfit -- for penalty fit -- similar to what we did before. This time, we'll say differential is approximately modeled by TotalPenaltyYards. 
 
 ```{r regression3, exercise=TRUE, exercise.setup = "correlations-load-data"}
-pfit <- lm(???????????? ~ ?????????????????, data = penalties)
-summary(????)
+pfit <- lm(____ ~ ____, data = penalties)
+summary(____)
 ```
 ```{r regression3-solution, exercise.reveal_solution = FALSE}
 pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
@@ -199,13 +205,15 @@ summary(pfit)
 grade_this_code()
 ```
 
-So from top to bottom:
+```{r residuals2, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
+glue("So from top to bottom:
 
-* Our min and max go from -75 to positive 70
-* Our adjusted R-squared is ... -0.0005768. Not much at all. 
-* Our p-value is ... 0.8479, which is more than than .05. 
+* Our min and max go from {format(min(pfit$residuals),digits=1)} to positive {format(max(pfit$residuals),digits=1)}
+* Our adjusted R-squared is ... {format(summary(pfit)$r.squared, digits=5)}. Not much at all. 
+* Our p-value is ... {summary(pfit)$coefficients[, \"Pr(>|t|)\"][2]}, which is more than than .05.")
+```
 
-So what we can say about this model is that it's statistically insignificant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. 
+So what we can say about this model is that it's statistically significant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. 
 
 ### Exercise 3: Adding residuals and arranging them.
 
@@ -225,7 +233,9 @@ penalties |> arrange(desc(residuals)) |> select(Team, Opponent, Result, differen
 grade_this_code()
 ```
 
-First, note all of the biggest misses here are all blowout games. The worst games of the 2022 season, the worst being Western Kentucky vs FIU. The model missed that differential by ... 73 points. The margin of victory? 73 points. In other words, this model is terrible. But let's look at it anyway. 
+```{r residuals3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
+glue("First, note all of the biggest misses here are all blowout games. The worst games of the season, the worst being {pensort$Team} vs {pensort$Opponent}. The model missed that differential by ... {format(pensort$residuals, digits=1)} points. The margin of victory? {format(pensort$differential, digits=1)} points. In other words, this model is terrible. But let's look at it anyway.")
+```
 
 ```{r correlationchart3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties |> mutate(predicted = predict(pfit), residuals = residuals(pfit))
