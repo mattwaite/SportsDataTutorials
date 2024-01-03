@@ -32,7 +32,7 @@ knitr::include_graphics(rep("images/simulations2.png"))
 
 If you think of the normal distribution, it means that 84.3 percent of all case are below that 1. If it were -1, it would mean the number is one standard deviation below the mean, and 84.3 percent of cases would be above that -1. So if you have numbers with z-scores of 3 or even 4, that means that number is waaaaaay above the mean.  
 
-So let's use 2021's Nebraska volleyball team, which if you weren't paying attention, was very good at volleyball. A few points from legendary. But were they the best Husker team since 2018, when they were also the national semifinalist? 
+So let's use 2023's Nebraska volleyball team, which if you weren't paying attention, was very good at volleyball. A two matches away from legendary. But were they the best Husker team since 2018, when they were also the national semifinalist? 
 
 ## Calculating a Z score in R
 
@@ -43,7 +43,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/volleyball1822.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -70,7 +70,7 @@ grade_this_code()
 And load the data.
 
 ```{r zscore-load-data, message=FALSE, warning=FALSE, results=FALSE}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv")
 
 perset <- seasons |> 
   mutate(
@@ -90,10 +90,10 @@ teamzscore <- perset |>
   ) |> ungroup() 
 ```
 ```{r zscore-load-data-exercise, exercise = TRUE}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv")
 ```
 ```{r zscore-load-data-exercise-solution}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1822.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv")
 ```
 ```{r zscore-load-data-exercise-check}
 grade_this_code()
@@ -122,11 +122,11 @@ To get that, we're going to use mutate to create `killsperset`, `digsperset` and
 ```{r zscore2, exercise=TRUE, exercise.setup = "zscore-load-data"}
 perset <- seasons |> 
   mutate(
-    killsperset = ?????/?,
-    digsperset = ????/?,
-    acesperset = ????/?
+    killsperset = ____/____,
+    digsperset = ____/____,
+    acesperset = ____/____
   ) |>
-  select(Season, Team, Conference, ???????????, ??????????, ??????????)
+  select(Season, Team, Conference, ____, ____, ____)
 ```
 ```{r zscore2-solution, exercise.reveal_solution = FALSE}
 perset <- seasons |> 
@@ -143,7 +143,7 @@ grade_this_code()
 
 ## Exercise 2: Create a z-score
 
-The first thing we're going to do is deal with having multiple seasons. We want the z-score to be centered on the average for *that season*, so each Husker team gets ranked against their competition, not all teams in all seasons. That way, we compare how good the 2018 Huskers were compared to 2018 teams, vs 2021 teams, which is impossible. A team from 2018 can't play a team from 2020. How do we make z-scores for each season? Simple: group by. 
+The first thing we're going to do is deal with having multiple seasons. We want the z-score to be centered on the average for *that season*, so each Husker team gets ranked against their competition, not all teams in all seasons. That way, we compare how good the 2018 Huskers were compared to 2018 teams, vs 2021 teams, which is impossible. A team from 2018 can't play a team from 2021 or 2022 or 2023. How do we make z-scores for each season? Simple: group by. 
 
 Then, we're *NOT* going to use summarize. We'll use mutate. That has the effect of putting all the 2020 teams together in a pile, calculating each teams z-score and then just leaving it there instead of folding it all together into a single number (like summarize would). 
 
@@ -153,12 +153,12 @@ When we have multiple z-scores, it's pretty standard practice to add them togeth
 
 ```{r zscore3, exercise=TRUE, exercise.setup = "zscore-load-data"}
 teamzscore <- perset |>
-  group_by(??????) |> 
+  group_by(____) |> 
   mutate(
-    killszscore = as.numeric(scale(?????perset, center = TRUE, scale = TRUE)),
-    aceszscore = as.numeric(scale(????perset, center = TRUE, scale = TRUE)),
-    digszscore = as.numeric(scale(????perset, center = TRUE, scale = TRUE)),
-    TotalZscore = ?????zscore + ????zscore + ????zscore
+    killszscore = as.numeric(scale(____perset, center = TRUE, scale = TRUE)),
+    aceszscore = as.numeric(scale(____perset, center = TRUE, scale = TRUE)),
+    digszscore = as.numeric(scale(____perset, center = TRUE, scale = TRUE)),
+    TotalZscore = ____zscore + ____zscore + ____zscore
   ) |> ungroup() 
 ```
 ```{r zscore3-solution, exercise.reveal_solution = FALSE}
@@ -175,7 +175,7 @@ teamzscore <- perset |>
 grade_this_code()
 ```
 
-So now we have a dataframe called `teamzscore` that has 353 basketball teams with Z scores. What does it look like? 
+So now we have a dataframe called `teamzscore` that has all teams from the 2018-2023 seasons with Z scores. What does it look like? 
 
 ```{r head-data, exercise=TRUE, exercise.setup = "zscore-load-data"}
 head(teamzscore)
@@ -194,7 +194,7 @@ A way to interpret this data -- a team at zero is precisely average. The larger 
 So who were the best teams in the country last season? Arrange can tell us. We just made a composite z-score -- a total if you will. Let's use that in arrange to see who is the best by our measure.
 
 ```{r zscore4, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore |> arrange(desc(???????????))
+teamzscore |> arrange(desc(____))
 ```
 ```{r zscore4-solution, exercise.reveal_solution = FALSE}
 teamzscore |> arrange(desc(TotalZscore))
@@ -213,8 +213,8 @@ Closer to home, how is Nebraska doing vs the Big Ten? Because we included Confer
 
 ```{r zscore5, exercise=TRUE, exercise.setup = "zscore-load-data"}
 teamzscore |> 
-  filter(Conference == "??? ???") |> 
-  arrange(desc(???????????)) |>
+  filter(Conference == "____") |> 
+  arrange(desc(____)) |>
   select(Season, Team, TotalZscore)
 ```
 ```{r zscore5-solution, exercise.reveal_solution = FALSE}
@@ -227,9 +227,9 @@ teamzscore |>
 grade_this_code()
 ```
 
-So, as we can see, with our composite Z Score, the best Big Ten volleyball since 2018 isn't Nebraska, a two-time national semi-finalist. It isn't Wisconsin who won the natty last year and was a finalist in 2019. It's ... Minnesota? Interesting.
+So, as we can see, with our composite Z Score, the best Big Ten volleyball since 2018 isn't Nebraska, a three-time national semi-finalist. It isn't Wisconsin who won the natty over us and was a finalist in 2019. It's ... Minnesota? Interesting.
 
-That said, the 2021 Husker team is a bit better than the 2018 team, though each ended just short of a title. 
+The 2023 Huskers are the ... 48th best Big Ten team since 2018? Hmmm. Maybe our composite score needs some work. 
 
 ## Writing about z-scores
 
