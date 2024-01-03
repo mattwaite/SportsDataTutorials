@@ -140,12 +140,16 @@ Then, let's arrange it by residuals so see see the worst misses, and then use se
 ```{r regression2, exercise=TRUE, exercise.setup = "correlations-load-data"}
 residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
 
-residualmodel |> arrange(desc(residuals)) |> select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
+residualmodel |> 
+  arrange(desc(residuals)) |> 
+  select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
 ```
 ```{r regression2-solution, exercise.reveal_solution = FALSE}
 residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
 
-residualmodel |> arrange(desc(residuals)) |> select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
+residualmodel |> 
+  arrange(desc(residuals)) |> 
+  select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
 ```
 ```{r regression2-check}
 grade_this_code()
@@ -220,9 +224,9 @@ So what we can say about this model is that it's statistically significant and u
 Just like a previous exercise, we'll add predicted and residuals to our dataframe. Then we'll arrange it, and use a little select magic to make it easier to read. 
 
 ```{r regression4, exercise=TRUE, exercise.setup = "correlations-load-data"}
-penalties <- penalties |> mutate(predicted = predict(????), residuals = ?????????(pfit))
+penalties <- penalties |> mutate(predicted = predict(____), residuals = ____(pfit))
 
-????????? |> arrange(desc(?????????)) |> select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals)
+____ |> arrange(desc(____)) |> select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals)
 ```
 ```{r regression4-solution, exercise.reveal_solution = FALSE}
 penalties <- penalties |> mutate(predicted = predict(pfit), residuals = residuals(pfit))
