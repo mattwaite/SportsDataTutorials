@@ -37,7 +37,7 @@ Here are some `ggplot2` resources you'll want to keep handy:
 * [The ggplot documentation](https://ggplot2.tidyverse.org/reference/index.html)
 * [The ggplot cookbook](https://www.cookbook-r.com/Graphs/)
 
-Let's dive in using data on college football since 2018. Why 2018? Uh, no local reason. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will write the code that adds necessary and required parts to finish it. 
+Let's dive in using data on college softball in 2023. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will write the code that adds necessary and required parts to finish it. 
 
 **For purposes of this exercise, you don't need to download this. The data is included here if you want to try this in your own notebook.**
 
@@ -46,7 +46,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/cfb1822.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_softball_2023.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -73,30 +73,23 @@ grade_this_code()
 And the data.
 
 ```{r ggplot-load-data, message=FALSE, warning=FALSE}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
+softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_2023.csv")
 
-huskers <- seasons |>
-  mutate(
-    yardspergame = OffensiveYards/Games
-  ) |> 
+huskers <- softball |>
   filter(
-    Team == "Nebraska"
+    Institution == "Nebraska"
   )
 
-big10 <- seasons |>
-  mutate(
-    yardspergame = OffensiveYards/Games
-  ) |> 
+big10 <- softball |> 
   filter(
-    Conference == "Big Ten Conference" &
-      Season == "2022"
+    Conference == "Big Ten"
   )
 ```
 ```{r ggplot-load-data-exercise, exercise = TRUE}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
+softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_2023.csv")
 ```
 ```{r ggplot-load-data-exercise-solution}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfb1822.csv")
+softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_2023.csv")
 ```
 ```{r ggplot-load-data-exercise-check}
 grade_this_code()
@@ -107,10 +100,10 @@ And let's get a glimpse of the data to remind us what is all there.
 Let's `glimpse` the data because it's wide and has a lot of columns. 
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "ggplot-load-data"}
-glimpse(seasons)
+glimpse(softball)
 ```
 ```{r glimpse-data-solution}
-glimpse(seasons)
+glimpse(softball)
 ```
 ```{r glimpse-data-check}
 grade_this_code()
@@ -120,137 +113,120 @@ Now that we're set up, when making graphics, you're rarely ever going straight f
 
 ### Exercise 1: Set up your data. 
 
-To do this, we're going to do a few things we've done before -- we're going to mutate a new column calculating total offensive yards per game so we can compare season to season (including the COVID season) and then we'll use filter to get just Nebraska. We'll put that into a new dataframe called `huskers`.
+To do this, we're going to do a few things we've done before. We're going to filter all the softball teams in Division I down to just the Big Ten. We'll put that into a new dataframe called `big10`.
 
 ```{r ggplot-top, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
-??????? <- ??????? |>
-  mutate(
-    yardspergame = ????????????/?????
-  ) |> 
+____ <- ____ |> 
   filter(
-    ???? == "Nebraska"
-  ) 
+    Conference == "____"
+  )
 ```
 ```{r ggplot-top-solution, exercise.reveal_solution = FALSE}
-huskers <- seasons |>
-  mutate(
-    yardspergame = OffensiveYards/Games
-  ) |> 
+big10 <- softball |> 
   filter(
-    Team == "Nebraska"
+    Conference == "Big Ten"
   )
 ```
 ```{r ggplot-top-check}
 grade_this_code()
 ```
 
-And we can check that it all worked by doing glimpse again on on our new dataframe.
-
-```{r glimpse2-data, exercise=TRUE, exercise.setup = "ggplot-load-data"}
-glimpse(?????)
-```
-```{r glimpse2-data-solution}
-glimpse(huskers)
-```
-```{r glimpse2-data-check}
-grade_this_code()
-```
+Now, we should have 14 teams that we can look at. That's far more manageable than 306 -- the number of softball teams in Division I. 
 
 ## The bar chart
 
 The easiest thing we can do is create a simple bar chart of our data. **Bar charts show magnitude. They invite you to compare how much more or less one thing is compared to others.**
 
-We could, for instance, create a bar chart of the yards per game. We might be asking the question: Which Scott Frost offense was the most effective? To do that, we simply tell `ggplot2` what our dataset is, what element of the data we want to make the bar chart out of (which is the aesthetic), and the geometry type (which is the geom). It looks like this:
+We could, for instance, create a bar chart of home runs each team hit. We might be asking the question: Which Big Ten team relies on the long ball to score runs? To do that, we simply tell `ggplot2` what our dataset is, what element of the data we want to make the bar chart out of (which is the aesthetic), and the geometry type (which is the geom). It looks like this:
 
-`ggplot() + geom_bar(data=huskers, aes(x=Season))` 
+`ggplot() + geom_bar(data=big10, aes(x=Institution))` 
 
 We start with `ggplot()` which is creating a blank canvas for us to work in. The `geom_bar()` is the geometry -- the form the data will take. We will learn many geometries over the next several lessons. `huskers` is our data, `aes` means aesthetics, `x=Season` explicitly tells `ggplot2` that our x value -- our horizontal value -- is the Season field from the data. Why season? We want one bar per season, no? Put the season on the x axis is what that is saying. And what do we get when we run that? 
 
 ```{r ggplot-bar1, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
-ggplot() + geom_bar(data=huskers, aes(x=Season))
+ggplot() + geom_bar(data=big10, aes(x=Institution))
 ```
 ```{r ggplot-bar1-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_bar(data=huskers, aes(x=Season))
+ggplot() + geom_bar(data=big10, aes(x=Institution))
 ```
 ```{r ggplot-bar1-check}
 grade_this_code()
 ```
 
-We get ... weirdness. We expected to see bars of different sizes, but we get all with a count of 1. What gives? Well, this is the default behavior. What we have here is something called a histogram, where `ggplot2` helpfully counted up the number of times the Season appears and made bars as long as the count. Since we only have one record per Season, the count is always 1. How do we fix this? By adding `weight` to our aesthetic. 
+We get ... weirdness. We expected to see bars of different sizes, but we get all with a count of 1. What gives? Well, this is the default behavior. What we have here is something called a histogram, where `ggplot2` helpfully counted up the number of times the Institution appears and made bars as long as the count. Since we only have one record per Institution, the count is always 1. How do we fix this? By adding `weight` to our aesthetic. 
 
 ### Exercise 2: The weight of responsibility
 
-You saw how it was done before. This just adds weight to the aes. The weight is always going to be a number, and our number is the `yardspergame`.
+You saw how it was done before. This just adds weight to the aes. The weight is always going to be a number, and our number is the column for home runs.
 
 ```{r ggplot-bar2, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=huskers, aes(x=Season, weight=??????????))
+  geom_bar(data=big10, aes(x=Institution, weight=____))
 ```
 ```{r ggplot-bar2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=huskers, aes(x=Season, weight=yardspergame))
+  geom_bar(data=big10, aes(x=Institution, weight=HR))
 ```
 ```{r ggplot-bar2-check}
 grade_this_code()
 ```
 
-Now we get bars of different sizes, and you can clearly see a difference between seasons. 
+Now we get bars of different sizes, and you can clearly see a difference between teams. 
 
 Let's work on a different version of this to see if we can find a clearer story.
 
-### Exercise 3: New data
+### Exercise 3: Reordering
 
-`ggplot2`'s default behavior is to sort the data by the x axis variable. It's in alphabetical order -- that's ... weirdly ... why our seasons were in the correct order. 
+`ggplot2`'s default behavior is to sort the data by the x axis variable. It's in alphabetical order. Rarely ever is that useful. 
 
-But what happens when that isn't quite the case. 
-
-To change the order of the bars, we have to `reorder` it. With `reorder`, we first have to tell `ggplot` what we are reordering, and then we have to tell it HOW we are reordering it. So it's reorder(FIELD, SORTFIELD). 
-
-First, let's get a dataset of every Big Ten team in 2022 instead of just Nebraska. 
+To change the order of the bars, we have to `reorder` it. With `reorder`, we first have to tell `ggplot` what we are reordering, and then we have to tell it HOW we are reordering it. Nearly 99 times out of 100, that HOW we're reordering it is going to be the number. So it's reorder(FIELD, SORTFIELD). So let's put the bars in order of how many home runs they hit.
 
 ```{r ggplot-bar3, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
-big10 <- seasons |>
-  mutate(
-    yardspergame = ????????????/Games
-  ) |> 
-  filter(
-    Conference == "??? ??? ?????????" &
-      Season == "????"
-  )
+ggplot() + 
+  geom_bar(data=big10, aes(x=reorder(Institution, ____), weight=____))
 ```
 ```{r ggplot-bar3-solution, exercise.reveal_solution = FALSE}
-big10 <- seasons |>
-  mutate(
-    yardspergame = OffensiveYards/Games
-  ) |> 
-  filter(
-    Conference == "Big Ten Conference" &
-      Season == "2022"
-  )
+ggplot() + 
+  geom_bar(data=big10, aes(x=reorder(Institution, HR), weight=HR))
 ```
 ```{r ggplot-bar3-check}
 grade_this_code()
 ```
 
-There, now we can use reorder.
+There, now our bars are in some kind of order.
 
-### Exercise 4: Reordering
+### Exercise 4: Layering
 
-Our new data has 14 teams in it and only one season, so we can no longer use Season as our x axis label. And we want those institutions not in alphabetical order, but in order of each team's yardspergame 
+Our data has 14 teams in it but what if we wanted to focus on one team? We can use layering for that. 
+First, we need to make a dataframe of one. Let's focus on Nebraska for ... reasons. The, we just add another geom_bar to our chart.
+
+To our new geom, we're going to add one new thing -- a fill. Let's make the color red. Again. For reasons. 
 
 ```{r ggplot-bar4, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
+huskers <- softball |>
+  filter(
+    Institution == "Nebraska"
+  )
+
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(????, ???????????), weight=???????????))
+  geom_bar(data=big10, aes(x=reorder(____, ____), weight=____)) + 
+  geom_bar(data=huskers, aes(x=reorder(____, ____), weight=____), fill="____")   
 ```
 ```{r ggplot-bar4-solution, exercise.reveal_solution = FALSE}
+huskers <- softball |>
+  filter(
+    Institution == "Nebraska"
+  )
+
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(Team, yardspergame), weight=yardspergame)) 
+  geom_bar(data=big10, aes(x=reorder(Institution, HR), weight=HR)) +
+  geom_bar(data=huskers, aes(x=reorder(Institution, HR), weight=HR), fill="red")
 ```
 ```{r ggplot-bar4-check}
 grade_this_code()
 ```
 
-Better. And look who is dead last in the conference in offensive yards. Good. Rot there. 
+Where Nebraska ranks is pretty clear now, eh?
 
 ## One last trick: coord flip
 
@@ -260,12 +236,14 @@ Sometimes, we don't want vertical bars. Maybe we think this would look better ho
 
 ```{r ggplot-bar5, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(Team, ??????????), weight=??????????)) +
-  ?????_????()
+  geom_bar(data=big10, aes(x=reorder(Institution, HR), weight=HR)) +
+  geom_bar(data=huskers, aes(x=reorder(Institution, HR), weight=HR), fill="red") +
+  ____()
 ```
 ```{r ggplot-bar5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(Team, yardspergame), weight=yardspergame)) +
+  geom_bar(data=big10, aes(x=reorder(Institution, HR), weight=HR)) +
+  geom_bar(data=huskers, aes(x=reorder(Institution, HR), weight=HR), fill="red") + 
   coord_flip()
 ```
 ```{r ggplot-bar5-check}
