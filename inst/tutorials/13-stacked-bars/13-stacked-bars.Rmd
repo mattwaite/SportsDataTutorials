@@ -30,7 +30,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -57,7 +57,7 @@ grade_this_code()
 And the data.
 
 ```{r stacked-load-data, message=FALSE, warning=FALSE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 
 big <- football |> 
   group_by(Conference, Team) |> 
@@ -73,10 +73,10 @@ bigwide <- big |>
     values_to="Yards")
 ```
 ```{r stacked-load-data-exercise, exercise = TRUE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r stacked-load-data-exercise-solution}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r stacked-load-data-exercise-check}
 grade_this_code()
@@ -85,7 +85,7 @@ grade_this_code()
 What we have here is every game in college football in 2022. Let's quick take a glimpse.
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "stacked-load-data"}
-glimpse(??????????)
+glimpse(____)
 ```
 ```{r glimpse-data-solution}
 glimpse(football)
@@ -103,11 +103,11 @@ So to make this chart, we have to just add one thing to a bar chart like we did 
 We have game data, and we need season data. To get that, we need to do some group by and sum work. And since we're only interested in the Big Ten, we have some filtering to do too. For this, we're going to measure offensive production by rushing yards and passing yards. So if we have all the games a team played, and the rushing and passing yards for each of those games, what we need to do to get the season totals is just add them up. We'll put all of that into a new dataframe called big
 
 ```{r stacked-big, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
-??? <- football |> 
+____ <- football |> 
   group_by(Conference, Team) |> 
   summarise(
-    SeasonRushingYards = sum(??????????),
-    SeasonPassingYards = sum(??????????)
+    SeasonRushingYards = sum(____),
+    SeasonPassingYards = sum(____)
   ) |> 
   filter(Conference == "Big Ten Conference")
 ```
@@ -145,9 +145,9 @@ Remember transforming data? Lesson 6? This is where that work is going to pay of
 We're going to save this work to a new dataframe called bigwide. 
 
 ```{r stacked-pivot, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
-??????? <- ??? |> 
+____ <- ____ |> 
   pivot_longer(
-    cols=starts_with("??????"), 
+    cols=starts_with("____"), 
     names_to="Type", 
     values_to="Yards")
 ```
@@ -180,7 +180,7 @@ Building on what we learned in the last chapter, we know we can turn this into a
 
 ```{r stacked-plot1, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=???????, aes(x=????, weight=Yards, fill=????)) + 
+  geom_bar(data=____, aes(x=____, weight=Yards, fill=____)) + 
   coord_flip()
 ```
 ```{r stacked-plot1-solution, exercise.reveal_solution = FALSE}
@@ -200,7 +200,7 @@ There's a couple of things, one of which we'll deal with now: The ordering is al
 
 ```{r stacked-plot2, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=???????, aes(x=reorder(????, ?????), weight=Yards, fill=????)) + 
+  geom_bar(data=____, aes(x=reorder(____, ____), weight=Yards, fill=____)) + 
   coord_flip()
 ```
 ```{r stacked-plot2-solution, exercise.reveal_solution = FALSE}
@@ -212,4 +212,4 @@ ggplot() +
 grade_this_code()
 ```
 
-And just like that ... Michigan and Ohio State are out on top. Where is Nebraska?
+And just like that ... Ohio State and Penn State are out on top. Where is Nebraska?
