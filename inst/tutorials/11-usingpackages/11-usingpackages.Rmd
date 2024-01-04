@@ -62,13 +62,13 @@ Normally, you would be reading the documentation for wehoop or any of the librar
 Here's how to get player box scores for the most recent season (which are numbered by the year they end in). 
 
 ```{r packages-load-data, message=FALSE, warning=FALSE, results=FALSE}
-playerboxscores <- load_wbb_player_box(seasons = 2023)
+playerboxscores <- load_wbb_player_box(seasons = 2024)
 ```
 ```{r packages-load-data-exercise, exercise = TRUE}
-playerboxscores <- load_wbb_player_box(seasons = 2023)
+playerboxscores <- load_wbb_player_box(seasons = 2024)
 ```
 ```{r packages-load-data-exercise-solution}
-playerboxscores <- load_wbb_player_box(seasons = 2023)
+playerboxscores <- load_wbb_player_box(seasons = 2024)
 ```
 ```{r packages-load-data-exercise-check}
 grade_this_code()
@@ -96,8 +96,8 @@ First, since we have box scores for every team, we need to filter to just Nebras
 
 ```{r starters, exercise=TRUE, exercise.setup = "packages-load-data"}
 playerboxscores |> 
-  filter(team_short_display_name == "?????????" & starter == ????) |> 
-  group_by(???????_???????_????) |> 
+  filter(team_short_display_name == "____" & starter == ____) |> 
+  group_by(____) |> 
   tally(sort=TRUE) 
 ```
 ```{r starters-solution, exercise.reveal_solution = FALSE}
@@ -121,13 +121,13 @@ The wehoop package also has play by play data in it. A warning -- this step will
 The `load_wbb_pbp` function works very similar to the box scores. You're going to provide the season you want. We want this season.
 
 ```{r packages2-load-data, message=FALSE, warning=FALSE, results=FALSE}
-playbyplay <- load_wbb_pbp(2023)
+playbyplay <- load_wbb_pbp(2024)
 ```
 ```{r packages2-load-data-exercise, exercise = TRUE}
-playbyplay <- load_wbb_pbp(????)
+playbyplay <- load_wbb_pbp(____)
 ```
 ```{r packages2-load-data-exercise-solution, exercise.reveal_solution = FALSE}
-playbyplay <- load_wbb_pbp(2023)
+playbyplay <- load_wbb_pbp(2024)
 ```
 ```{r packages2-load-data-exercise-check}
 grade_this_code()
@@ -154,8 +154,8 @@ For now, let's try something simple -- what's the most common shooting play for 
 Like the box scores, we're going to start with a filter. We're going to use both & and |. The | means OR. So we want shooting plays AND where the home team OR the away time is Nebraska. After that, it's group by and tally. 
 
 ```{r playbyplay, exercise=TRUE, exercise.setup = "packages2-load-data"}
-?????????? |> 
-  filter(shooting_play == ???? & home_team_name == "?????????" | away_team_name == "????????") |> 
+____ |> 
+  filter(shooting_play == ____ & home_team_name == "____" | away_team_name == "____") |> 
   group_by(text) |> 
   tally(sort=TRUE)
 ```
@@ -169,4 +169,4 @@ playbyplay |>
 grade_this_code()
 ```
 
-The most common plays -- defensive rebounds and free throws. But if you look at basketball stats, that makes sense. There's a lot more defensive rebounds than offensive. There's a lot more missed threes than made ones, typically. But as Nebraska goes further on this run, you now have the ability to get very granular data to analyze how Amy Williams and the team are doing it. 
+The most common plays -- missed shots and made free throws. But if you look at basketball stats, that makes sense. There's a lot more defensive rebounds than offensive. There's a lot more missed threes than made ones, typically. But as Nebraska goes further on this run, you now have the ability to get very granular data to analyze how Amy Williams and the team are doing it. 
