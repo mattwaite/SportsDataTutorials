@@ -27,8 +27,6 @@ So let's introduce a better way: The Waffle Chart. Some call it a square pie cha
 
 **A waffle chart is designed to show you parts of the whole -- proportionality**. How many yards on offense come from rushing or passing. How many singles, doubles, triples and home runs make up a teams hits. How many shots a basketball team takes are two pointers versus three pointers. 
 
-First, the waffle library should be installed, but any time you run across a library you don't have, you can go to the console in R Studio and run something like this: `install.packages("waffle")`
-
 Now load it. For this exercise, we don't need the tidyverse. 
 
 ```{r load-waffle, exercise=TRUE}
@@ -43,9 +41,11 @@ grade_this_code()
 
 ## Making waffles with vectors
 
-Let's look at the heartbreak that was Nebraska vs. Wisconsin in fall 2022 in college football. [Here's the box score](https://www.espn.com/college-football/matchup/_/gameId/401405142), which we'll use for this part of the walkthrough. 
+Let's look at the heartbreak that was Nebraska vs. Wisconsin in fall 2022 in college football. A standout heartbreak in a decade of heartbreaks. [Here's the box score](https://www.espn.com/college-football/matchup/_/gameId/401405142), which we'll use for this part of the walkthrough. 
 
-Maybe the easiest way to do waffle charts, at least at first, is to make vectors of your data and plug them in. To make a vector, we use the `c` or concatenate function. We did this all the way back in Lesson 1. 
+Just remember -- we lost this game by 1 point.
+
+The easiest way to do waffle charts is to make vectors of your data and plug them in. To make a vector, we use the `c` or concatenate function. We did this all the way back in Lesson 1. 
 
 So let's look at offense. Rushing vs passing. 
 
@@ -78,8 +78,8 @@ The waffle library can break this down in a way that's easier on the eyes than a
 
 ```{r waffle, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
 waffle(
-        ??, 
-        rows = ??, 
+        ____, 
+        rows = ____, 
         title="Nebraska's offense", 
         xlab="1 square = 1 yard", 
         colors = c("black", "red")
@@ -103,10 +103,10 @@ Or, we could make this two teams in the same chart by just changing the vector u
 ### Exercise 2: Two teams, one waffle
 
 ```{r waffle2, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-total <- c("Nebraska"=???, "?????????"=318)
+total <- c("Nebraska"=____, "____"=318)
 
 waffle(
-        ???????, 
+        ____, 
         rows = 10, 
         title="Nebraska vs Wisconsin: total yards", 
         xlab="1 square = 1 yard", 
@@ -132,7 +132,7 @@ No matter how you look at this game, it just comes back to heartache.
 
 ## Two waffles = waffle iron
 
-What does it look like if we compare the two teams using the two vectors in the same chart? To do that -- and I am not making this up -- you have to create a waffle iron. Get it? Waffle charts? Iron? 
+What does it look like if we compare the two teams using the two vectors in the same chart? To do that -- and I am not making this up -- you have to create a waffle iron. Get it? Waffle charts? Iron?
 
 ### Exercise 3: The waffle iron
 
@@ -142,13 +142,13 @@ In this block, we're going to use the first vectors we made with nu and ms. You'
 
 ```{r waffle3, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
 iron(
- waffle(??, 
+ waffle(____, 
         rows = 10, 
         title="Nebraska's offense", 
         xlab="1 square = 1 yard", 
         colors = c("black", "red")
         ),
- waffle(??, 
+ waffle(____, 
         rows = 10, 
         title="Wisconsin's offense", 
         xlab="1 square = 1 yard", 
@@ -189,13 +189,13 @@ nu2 <- c("Rushing"=106, "Passing"=65, 147)
 wi2 <- c("Rushing"=235, "Passing"=83)
 
 iron(
- waffle(???, 
+ waffle(____, 
         rows = 10, 
         title="Nebraska's offense", 
         xlab="1 square = 1 yard", 
-        colors = c("black", "red", "?????")
+        colors = c("black", "red", "____")
         ),
- waffle(???, 
+ waffle(____, 
         rows = 10, 
         title="Wisconsin's offense", 
         xlab="1 square = 1 yard", 
@@ -235,13 +235,13 @@ nu2 <- c("Rushing"=106, "Passing"=65, 147)
 wi2 <- c("Rushing"=235, "Passing"=83)
 
 iron(
- waffle(???/?, 
+ waffle(____/____, 
         rows = 10, 
         title="Nebraska's offense", 
         xlab="1 square = 2 yards", 
-        colors = c("black", "red", "?????")
+        colors = c("black", "red", "____")
         ),
- waffle(???/?, 
+ waffle(____/____, 
         rows = 10, 
         title="Wisconsin's offense", 
         xlab="1 square = 2 yards", 
@@ -271,4 +271,5 @@ iron(
 ```{r waffle5-check}
 grade_this_code()
 ```
-News flash: Wisconsin beat Nebraska by one point. 
+
+News flash: Wisconsin beat Nebraska by one point. One. 
