@@ -25,7 +25,7 @@ So far, we've talked about bar charts -- stacked or otherwise -- are good for sh
 
 **Line charts are good for showing change over time.** 
 
-Let's look at how we can answer this question: Did last season's Nebraska's basketball season progress?
+Let's look at how we can answer this question: How is this season's Nebraska's basketball season progressing?
 
 We'll need the logs of every game in college basketball. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
@@ -34,7 +34,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/logs23.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/logs24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,7 +61,7 @@ grade_this_code()
 And the data.
 
 ```{r line-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
 
 nu <- logs |> filter(Team == "Nebraska")
 pu <- logs |> filter(Team == "Purdue")
@@ -70,10 +70,10 @@ average <- logs |> group_by(Date) |> summarise(mean_shooting=mean(TeamFGPCT))
 
 ```
 ```{r line-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
 ```
 ```{r line-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
 ```
 ```{r line-load-data-exercise-check}
 grade_this_code()
@@ -84,7 +84,7 @@ grade_this_code()
 This data has every game from every team in it, so we need to use filtering to limit it, because we just want to look at Nebraska. If you don't remember, flip back to lesson 5. Let's make a new dataframe called nu for Nebraska's games.
 
 ```{r nu, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-?? <- logs |> filter(Team == "????????")
+____ <- logs |> filter(Team == "____")
 ```
 ```{r nu-solution, exercise.reveal_solution = FALSE}
 nu <- logs |> filter(Team == "Nebraska")
@@ -112,7 +112,7 @@ Because this data has just Nebraska data in it, the dates are formatted correctl
 Line charts, unlike bar charts, do have a y-axis. So in our ggplot step, we have to define what our x and y axes are. In this case, the x axis is our Date -- *the most common x axis in line charts is going to be a date of some variety* -- and y in this case is up to us. We've seen from previous walkthroughs that how well a team shoots the ball has a lot to do with how well a team does in a season, so let's chart that. 
 
 ```{r line1, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-ggplot() + geom_line(data=??, aes(x=????, y=????FGPCT))
+ggplot() + geom_line(data=____, aes(x=____, y=____FGPCT))
 ```
 ```{r line1-solution, exercise.reveal_solution = FALSE}
 ggplot() + geom_line(data=nu, aes(x=Date, y=TeamFGPCT))
@@ -121,7 +121,7 @@ ggplot() + geom_line(data=nu, aes(x=Date, y=TeamFGPCT))
 grade_this_code()
 ```
 
-See some problems here? The first you'll probably see is the long COVID pause the team had to take. The real problem, though is that the Y axis doesn't start with zero. 
+See some problems here? Whatever you came up with, the real problem is that the Y axis doesn't start with zero. 
 
 ### Exercise 3: Zeroing your axes
 
@@ -129,7 +129,7 @@ Using a non-zero axis makes a line chart look more dramatic than it is. To make 
 
 ```{r line2, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
 ggplot() + 
-  geom_line(data=??, aes(x=????, y=????FGPCT)) +
+  geom_line(data=____, aes(x=____, y=____FGPCT)) +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line2-solution, exercise.reveal_solution = FALSE}
@@ -152,11 +152,11 @@ With datasets, we want to invite comparison. So let's answer the question visual
 When you have multiple datasets from the same data, you can add multiple geoms. All you have to do is swap out the data and add a + between them. 
 
 ```{r line3, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-pu <- logs |> filter(Team == "????????")
+pu <- logs |> filter(Team == "____")
 
 ggplot() + 
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="gold") +
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT), color="gold") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line3-solution, exercise.reveal_solution = FALSE}
@@ -188,16 +188,16 @@ An important thing to know is that geoms render in the order that they appear. T
 NOTE: When you have more than one thing in a dataframe -- teams, players, whatever -- and you're making a line chart out of it, you need to add the `group` to the aesthetic. In this case, the group is the Team.
 
 ```{r line4, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-big <- logs |> filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten")
 
 ggplot() + 
-  geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="gold") +
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT, group=Team), color="____") +
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT), color="gold") +
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line4-solution, exercise.reveal_solution = FALSE}
-big <- logs |> filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten")
 
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
@@ -228,17 +228,17 @@ grade_this_code()
 And now we have another geom_line to add. 
 
 ```{r line5, exercise=TRUE, exercise.setup = "line-load-data", message=FALSE}
-big <- logs |> filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten")
 
 ggplot() + 
-  geom_line(data=???, aes(x=Date, y=TeamFGPCT, group=Team), color="????") +
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="red") + 
-  geom_line(data=??, aes(x=Date, y=TeamFGPCT), color="gold") +
-  geom_line(data=???????, aes(x=Date, y=mean_shooting), color="black") + 
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT, group=Team), color="____") +
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT), color="red") + 
+  geom_line(data=____, aes(x=Date, y=TeamFGPCT), color="gold") +
+  geom_line(data=____, aes(x=Date, y=mean_shooting), color="black") + 
   scale_y_continuous(limits = c(0, .7))
 ```
 ```{r line5-solution, exercise.reveal_solution = FALSE}
-big <- logs |> filter(Conference == "Big Ten MBB")
+big <- logs |> filter(Conference == "Big Ten")
 
 ggplot() + 
   geom_line(data=big, aes(x=Date, y=TeamFGPCT, group=Team), color="grey") +
