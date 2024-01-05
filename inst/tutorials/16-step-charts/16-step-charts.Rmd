@@ -91,7 +91,6 @@ Here we're going to look at the scoring differential of teams. If you score more
 
 The first step to making a step chart is that we need to calculate our rolling cumulative value. To do that, we'll create a new dataframe called difflogs -- for differential logs, since we have game log data. Then, we'll group it by the Team. After that, we're going to *mutate* using a new function called `cumsum` or cumulative sum -- the sum for each game as we go forward. So game 1's cumsum is the differential of that game. Game 2's cumsum is Game 1 + Game 2. Game 3 is Game 1 + 2 + 3 and so on. When you group by and *don't* summarize, it's like putting all your data into little piles -- your groups -- and doing something to each thing in the pile. Then, when you're done, you put the things back. Where group by and summarize creates one row per group, group by *without* summarize leaves you with the same number you started with. It's a subtle thing, but important. 
 
-
 ```{r step1, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 ____ <- logs |> 
   mutate(Differential = TeamScore - OpponentScore) |> 
