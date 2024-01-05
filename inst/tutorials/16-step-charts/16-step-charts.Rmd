@@ -29,14 +29,14 @@ To replicate this, we need cumulative data -- data that is the running total of 
 
 Step charts can be used for all kinds of things -- showing how a player's career has evolved over time, how a team fares over a season, or franchise history. Let's walk through an example. 
 
-Let's look at Fred Hoiberg's last complete season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+Let's look at Fred Hoiberg's current season. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
 ```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
 library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/logs23.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/logs24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -63,7 +63,7 @@ grade_this_code()
 And the data.
 
 ```{r step-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
 
 difflogs <- logs |> 
   mutate(Differential = TeamScore - OpponentScore) |> 
@@ -76,10 +76,10 @@ pu <- bigdiff |> filter(Team == "Purdue")
 id <- bigdiff |> filter(Team == "Indiana")
 ```
 ```{r step-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
 ```
 ```{r step-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
 ```
 ```{r step-load-data-exercise-check}
 grade_this_code()
@@ -93,10 +93,10 @@ The first step to making a step chart is that we need to calculate our rolling c
 
 
 ```{r step1, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-???????? <- logs |> 
+____ <- logs |> 
   mutate(Differential = TeamScore - OpponentScore) |> 
-  group_by(????) |> 
-  mutate(CumDiff = ??????(Differential))
+  group_by(____) |> 
+  mutate(CumDiff = ____(Differential))
 ```
 ```{r step1-solution, exercise.reveal_solution = FALSE}
 difflogs <- logs |> 
@@ -115,7 +115,7 @@ And now we have the same data, but each team has a rolling cumulative value for 
 Now that we have the cumulative sum for each, let's filter it down to just Big Ten teams. Let's create a new dataframe called bigdiff -- for Big Ten differential. 
 
 ```{r step2, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-??????? <- difflogs |> filter(Conference == "??? ???")
+____ <- difflogs |> filter(Conference == "____")
 ```
 ```{r step2-solution, exercise.reveal_solution = FALSE}
 bigdiff <- difflogs |> filter(Conference == "Big Ten")
@@ -131,7 +131,7 @@ Now we've got what we need to make a graphic.
 The step chart is it's own geom -- `geom_step` -- so we can employ it just like we have the others. It works almost exactly the same as a line chart, but it uses the cumulative number instead of a regular value and, as the name implies, creates a step like shape to the line instead of a curve.
 
 ```{r step3, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-ggplot() + geom_????(data=???????, aes(x=Date, y=???????, group=Team))
+ggplot() + ____(data=____, aes(x=Date, y=____, group=Team))
 ```
 ```{r step3-solution, exercise.reveal_solution = FALSE}
 ggplot() + geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team))
@@ -145,7 +145,7 @@ grade_this_code()
 Let's try a different element of the aesthetic: color, but this time *inside the aesthetic*. Last time, we did the color outside. When you put it inside, you pass it a column name and ggplot will color each line based on what thing that is, and it will create a legend that labels each line that thing. 
 
 ```{r step4, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-ggplot() + geom_????(data=???????, aes(x=Date, y=???????, group=Team, color=Team))
+ggplot() + ____(data=____, aes(x=Date, y=____, group=Team, color=Team))
 ```
 ```{r step4-solution, exercise.reveal_solution = FALSE}
 ggplot() + geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team, color=Team))
@@ -154,16 +154,16 @@ ggplot() + geom_step(data=bigdiff, aes(x=Date, y=CumDiff, group=Team, color=Team
 grade_this_code()
 ```
 
-From this, we can see a handful of teams in the Big Ten had negative point differentials last season. But which is which? And which one is Nebraska? Too many colors and it's too hard to tell. This is a lesson: *We use color to highlight.* When everything is a color, nothing is highlighted. We use color sparingly.
+From this, we can see a handful of teams in the Big Ten aren't doing so great. But which is which? And which one is Nebraska? Too many colors and it's too hard to tell. This is a lesson: *We use color to highlight.* When everything is a color, nothing is highlighted. We use color sparingly.
 
 ### Exercise 5: Using color the right way
 
-How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska, Purdue and Indiana 
+How do we sort this out? Layering and annotations. We've used layering before. Annotations, while new, will make sense in a minute. First, let's pick three teams to highlight -- Nebraska, Purdue and Indiana. 
 
 ```{r step5, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 nu <- bigdiff |> filter(Team == "Nebraska")
-pu <- bigdiff |> filter(Team == "????????")
-id <- bigdiff |> filter(Team == "????????")
+pu <- bigdiff |> filter(Team == "____")
+id <- bigdiff |> filter(Team == "____")
 ```
 ```{r step5-solution, exercise.reveal_solution = FALSE}
 nu <- bigdiff |> filter(Team == "Nebraska")
@@ -184,13 +184,13 @@ After that, I'm going to add labels and a theme. These too are new. Eventually, 
 
 ```{r step6, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
 ggplot() + 
-  geom_step(data=bigdiff, aes(x=Date, y=???????, group=Team), color="light grey") +
-  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="red") + 
-  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="black") +
-  geom_step(data=??, aes(x=Date, y=CumDiff, group=Team), color="darkred") +
-  annotate("text", x=(as.Date("2023-01-15")), y=-70, label="Nebraska") +
-  annotate("text", x=(as.Date("2023-03-01")), y=250, label="Indiana") +
-  annotate("text", x=(as.Date("2023-03-01")), y=350, label="Purdue") +
+  geom_step(data=bigdiff, aes(x=Date, y=____, group=Team), color="light grey") +
+  geom_step(data=____, aes(x=Date, y=CumDiff, group=Team), color="red") + 
+  geom_step(data=____, aes(x=Date, y=CumDiff, group=Team), color="black") +
+  geom_step(data=____, aes(x=Date, y=CumDiff, group=Team), color="darkred") +
+  annotate("text", x=(as.Date("2023-12-15")), y=98, label="Nebraska") +
+  annotate("text", x=(as.Date("2023-12-15")), y=185, label="Purdue") +
+  annotate("text", x=(as.Date("2023-12-15")), y=20, label="Indiana") +
   labs(
     x="YOU SHOULD CHANGE THIS TO WHAT THE X AXIS IS", 
     y="Cumulative Point Differential", 
@@ -206,9 +206,9 @@ ggplot() +
   geom_step(data=nu, aes(x=Date, y=CumDiff, group=Team), color="red") + 
   geom_step(data=pu, aes(x=Date, y=CumDiff, group=Team), color="black") +
   geom_step(data=id, aes(x=Date, y=CumDiff, group=Team), color="darkred") +
-  annotate("text", x=(as.Date("2023-01-15")), y=-70, label="Nebraska") +
-  annotate("text", x=(as.Date("2023-03-01")), y=250, label="Indiana") +
-  annotate("text", x=(as.Date("2023-03-01")), y=350, label="Purdue") +
+  annotate("text", x=(as.Date("2023-12-15")), y=98, label="Nebraska") +
+  annotate("text", x=(as.Date("2023-12-15")), y=185, label="Purdue") +
+  annotate("text", x=(as.Date("2023-12-15")), y=20, label="Indiana") +
   labs(
     x="Date", 
     y="Cumulative Point Differential", 
