@@ -62,7 +62,7 @@ grade_this_code()
 And the data.
 
 ```{r scatter-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 
 tall <- players |> 
   mutate(height = (12 * feet) + inches)
@@ -72,12 +72,27 @@ newtall <- tall |>
     height > 0 &
       s > 65
          )
+
+fit <- lm(kills ~ height, data = newtall)
+
+nu <- newtall |> 
+  filter(team == "Nebraska Huskers") |> 
+  arrange(desc(kills)) |> 
+  slice(1)
+
+m <- round(fit$coefficients[2])
+x <- nu$height
+b <- round(fit$coefficients[1])
+
+result <- (m*x) + b
+
+missed <- nu$kills - result 
 ```
 ```{r scatter-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 ```
 ```{r scatter-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 ```
 ```{r scatter-load-data-exercise-check}
 grade_this_code()
@@ -86,7 +101,7 @@ grade_this_code()
 Let's glimpse it quick to see what we have: 
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "scatter-load-data"}
-glimpse(???????)
+glimpse(____)
 ```
 ```{r glimpse-data-solution}
 glimpse(players)
@@ -108,8 +123,8 @@ The first thing we need to do is turn height into a single number. If you look a
 By converting it all to inches and adding them up. We're going to make a new dataframe called `tall`. We have the `feet` and `inches` of every player. How many inches are in a foot?
 
 ```{r scatter1, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-???? <- players |> 
-  mutate(height = (?? * feet) + inches)
+____ <- players |> 
+  mutate(height = (____ * feet) + inches)
 ```
 ```{r scatter1-solution, exercise.reveal_solution = FALSE}
 tall <- players |> 
@@ -127,7 +142,7 @@ With a scatterplot, we put what predicts the thing on the X axis, and the thing 
 
 ```{r scatter2, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
 ggplot() + 
-  geom_point(data=????, aes(x=??????, y=?????))
+  geom_point(data=____, aes(x=____, y=____))
 ```
 ```{r scatter2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -146,10 +161,10 @@ We have two problems -- one is obvious, one is not immediately. First, the obvio
 Let's fix this by filtering some things out. First, we need to filter out people who have a height of 0. Second, the mean number of sets played by all players who played more than 0 sets is 65. Let's filter only players who played more than 65 sets. We'll call it `newtall`. 
 
 ```{r scatter4, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-??????? <- tall |>
+____ <- tall |>
   filter(
-    height > ? &
-      s > ??
+    height > ____ &
+      s > ____
          )
 ```
 ```{r scatter4-solution, exercise.reveal_solution = FALSE}
@@ -167,7 +182,7 @@ And let's chart that new dataframe.
 
 ```{r scatter5, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
 ggplot() + 
-  geom_point(data=???????, aes(x=??????, y=?????))
+  geom_point(data=____, aes(x=____, y=____))
 ```
 ```{r scatter5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -202,7 +217,7 @@ A straight line across is bad. It means there's no pattern here. But there is a 
 Of course we can. We can apply a linear model to this -- remember Chapter 9? We're going to create an object called fit, and then we're going to put into that object a linear model -- `lm` -- and the way to read this is "wins are predicted by opponent threes". Then we just want the summary of that model.
 
 ```{r scatter7, exercise=TRUE, exercise.setup = "scatter-load-data", message=FALSE}
-fit <- lm(????? ~ ??????, data = newtall)
+fit <- lm(____ ~ ____, data = newtall)
 summary(fit)
 ```
 ```{r scatter7-solution, exercise.reveal_solution = FALSE}
@@ -213,20 +228,22 @@ summary(fit)
 grade_this_code()
 ```
 
-Remember from Chapter 9: There's just a few things you really need.
+```{r rsquared, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "scatter-load-data", results='asis'}
+glue("Remember from Chapter 9: There's just a few things you really need.
 
-The first thing: R-squared. In this case, the Adjusted R-squared value is 0.3022, which we can interpret as the the height of the player predicts about 30 percent of the variance in kills. 
+The first thing: R-squared. In this case, the Adjusted R-squared value is {summary(fit)$r.squared}, which we can interpret as the the height of the player predicts about {format(summary(fit)$r.squared, digits=1)} percent of the variance in kills. 
 
 Second: The P-value. We want anything less than .05. If it's above .05, the difference between them is not statistically significant -- it's probably explained by random chance. In our case, we have < 2.2e-16. So it's not random. Height really does impact kills -- but we kinda knew that already. 
 
-Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for height is 21.9140. What this model predicts, given that and the intercept of -1410.6429, is this: Every player starts about 1410 kills in the hole. For every inch they grow, they get 21 kills. Remember your algebra and y = mx + b. In this case, y is the wins, m is the coefficient, x is the number of threes given up and b is the intercept. 
+Normally, we'd stop here, but let's look at the third element: The coefficient. In this case, the coefficient for height is {format(fit$coefficients[2], digits=2)}. What this model predicts, given that and the intercept of {fit$coefficients[1]}, is this: Every player starts with about {format(fit$coefficients[1],digits=1)} kills. For every inch they grow, they get {format(fit$coefficients[2], digits=1)} kills. Remember your algebra and y = mx + b. In this case, y is the kills, m is the coefficient, x is the height and b is the intercept. 
 
-Let's use Madi Kubik as an example. She's 6'3" on the roster, or 75 inches.  
+Let's use {nu$full_name} as an example. She's {nu$feet} feet {nu$inches} inches on the roster, or {nu$height} inches.  
 
-y = 21.9140 * 75 - 1410.6429 or 233 kills. 
+y = {format(fit$coefficients[2], digits=1)} * {nu$height} {format(fit$coefficients[1],digits=1)} or {result} kills. 
 
-How many wins did Kubik have last seaon? 339. 
+How many wins did {nu$last_name} have last seaon? {nu$kills}. 
 
-If we built a model to predict kills based purely on height, we missed Kubik's actual results by more than 100. Not great. 
+If we built a model to predict kills based purely on height, we missed {nu$last_name}'s actual results by {missed}. Not great.")
+```
 
 **This is an important lesson: Not all scatterplots work. Not all scatterplots tell a clear story. If you try a scatterplot and get this level of inconclusiveness, you need to try something else.**
