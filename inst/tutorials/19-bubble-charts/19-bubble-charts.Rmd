@@ -41,7 +41,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -69,7 +69,7 @@ grade_this_code()
 And the data.
 
 ```{r bubble-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 
 winlosslogs <- logs |> 
   mutate(
@@ -93,10 +93,10 @@ ypp <- winlosslogs |>
 bigten <- ypp |> filter(Conference == "Big Ten Conference")
 ```
 ```{r bubble-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r bubble-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r bubble-load-data-exercise-check}
 grade_this_code()
@@ -184,7 +184,7 @@ Let's add the size element. From our data work above, we want to add the column 
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????)
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____)
     )
 ```
 ```{r bubble4-solution, exercise.reveal_solution = FALSE}
@@ -208,8 +208,8 @@ But we can make this more readable by adding an `alpha` element outside the aest
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????),
-    alpha = ??) + 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____),
+    alpha = ____) + 
   scale_size(range = c(3, 8), name="Wins")
 ```
 ```{r bubble5-solution, exercise.reveal_solution = FALSE}
@@ -231,17 +231,17 @@ Better?
 And by now, you now know to add in the Big Ten as a layer, I would hope.
 
 ```{r bubble6, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-bigten <- ypp |> filter(Conference == "??? ??? ?????????")
+bigten <- ypp |> filter(Conference == "____ ____ ____")
 
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
     color="red")
 ```
 ```{r bubble6-solution, exercise.reveal_solution = FALSE}
@@ -294,15 +294,15 @@ Now we can use those averages to add two more geoms -- geom_vline and geom_hline
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
     color="red") + 
-  geom_vline(xintercept = ?.?) + 
-  geom_hline(yintercept = ?.??)
+  geom_vline(xintercept = ____) + 
+  geom_hline(yintercept = ____)
 ```
 ```{r bubble8-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -315,8 +315,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.7) + 
-  geom_hline(yintercept = 5.55)
+  geom_vline(xintercept = 5.74034) + 
+  geom_hline(yintercept = 5.589481)
 ```
 ```{r bubble8-check}
 grade_this_code()
@@ -332,18 +332,18 @@ Now it's time for ggrepel. What ggrepel does is help us label the dots without o
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=?????????), 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
     color="red") + 
-  geom_vline(xintercept = ?.?) + 
-  geom_hline(yintercept = ?.??) +
+  geom_vline(xintercept = ____) + 
+  geom_hline(yintercept = ____) +
   geom_text_repel(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, label=????)
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=____)
   )
 ```
 ```{r bubble9-solution, exercise.reveal_solution = FALSE}
@@ -357,8 +357,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.7) + 
-  geom_hline(yintercept = 5.55) +
+  geom_vline(xintercept = 5.74034) + 
+  geom_hline(yintercept = 5.589481) +
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
