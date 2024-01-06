@@ -36,7 +36,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -68,7 +68,7 @@ grade_this_code()
 And the data.
 
 ```{r beeswarm-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 
 set.seed(1234)
 
@@ -78,10 +78,10 @@ nu <- activeplayers |>
   filter(team == "Nebraska Huskers")
 ```
 ```{r beeswarm-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 ```
 ```{r beeswarm-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2022.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
 ```
 ```{r beeswarm-load-data-exercise-check}
 grade_this_code()
@@ -106,10 +106,10 @@ We know this data has a lot of players who didn't play, so let's get rid of them
 Recall in an earlier lesson, we used `filter` to get rid of players who don't play much. Let's do that again, dumping everyone who hasn't played 75 sets -- `s` in the data -- and we're going to get rid of every player with 10 or fewer kills. Believe it or not, there are players who have appeared in 75 sets who didn't rack up a single kill. We'll name our dataframe activeplayers.
 
 ```{r beeswarm2, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
-????????????? <- ??????? |> 
+____ <- ____ |> 
   filter(
-    s > ?? & 
-      kills > ?? & 
+    s > ____ & 
+      kills > ____ & 
       is.na(pos) == FALSE)
 ```
 ```{r beeswarm2-solution, exercise.reveal_solution = FALSE}
@@ -129,7 +129,7 @@ It works very much like you would expect, if you think about it. The group value
 
 ```{r beeswarm5, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 ggplot() + 
-  geom_beeswarm(data=????????, aes(x=???, y=?????), color="grey")
+  geom_beeswarm(data=____, aes(x=____, y=____), color="grey")
 ```
 ```{r beeswarm5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -149,7 +149,7 @@ We'll filter players on Nebraska who meet our criteria. Weirdly, this is the onl
 
 ```{r beeswarm6, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 nu <- activeplayers |> 
-  filter(team == "???????? ???????")
+  filter(team == "____ ____")
 ```
 ```{r beeswarm6-solution, exercise.reveal_solution = FALSE}
 nu <- activeplayers |> 
@@ -170,11 +170,11 @@ When you add another beeswarm, we need to pass another element in -- we need to 
 ```{r beeswarm7, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 ggplot() + 
   geom_beeswarm(
-    data=????????????, 
-    aes(x=???, y=?????), color="grey") + 
+    data=____, 
+    aes(x=____, y=____), color="grey") + 
   geom_beeswarm(
-    data=??, 
-    aes(x=???, y=?????), color="red")
+    data=____, 
+    aes(x=____, y=____), color="red")
 ```
 ```{r beeswarm7-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -198,14 +198,14 @@ This is where we can use ggrepel. Let's add a text layer and label the dots.
 ```{r beeswarm8, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 ggplot() + 
   geom_beeswarm(
-    data=???????????, 
-    aes(x=???, y=?????), color="grey") + 
+    data=____, 
+    aes(x=____, y=____), color="grey") + 
   geom_beeswarm(
-    data=??, 
-    aes(x=???, y=?????), color="red") + 
+    data=____, 
+    aes(x=____, y=____), color="red") + 
   geom_text_repel(
     data=nu, 
-    aes(x=???, y=?????, label=full_name))
+    aes(x=____, y=____, label=full_name))
 ```
 ```{r beeswarm8-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -223,7 +223,7 @@ ggplot() +
 grade_this_code()
 ```
 
-Kubik moving on hurts, but look at MB. Interesting, that. 
+What stories do you see? 
 
 ## A few other options
 
@@ -260,8 +260,6 @@ grade_this_code()
 ```
 
 Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- quasirandom spacing. 
-
-For `geom_jitter`, we need to remove the groupOnX value. Why? No clue. 
 
 ```{r beeswarm10, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 ggplot() + 
