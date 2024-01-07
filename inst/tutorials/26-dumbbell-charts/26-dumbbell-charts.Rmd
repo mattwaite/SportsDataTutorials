@@ -51,7 +51,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -65,7 +65,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r dumbbell-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 
 turnovers <- logs |>
   group_by(Team, Conference) |> 
@@ -75,10 +75,10 @@ turnovers <- logs |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r dumbbell-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r dumbbell-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r dumbbell-load-data-exercise-check}
 grade_this_code()
@@ -103,11 +103,11 @@ For this example, let's look at the difference between a team's giveaways -- tur
 To get this, we're going to add up all offensive turnovers and defensive turnovers for a team in a season and take a look at where they come out. Remember: TotalTurnovers is giving the ball away (bad turnovers) and DefTotalTurnovers is takeaways, good turnovers. To make this readable, I'm going to focus on the Big Ten.
 
 ```{r dumbbell1, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
-turnovers <- ???? |>
+turnovers <- ____ |>
   group_by(Team, Conference) |> 
   summarise(
-    Giveaways = sum(?????Turnovers), 
-    Takeaways = sum(????????Turnovers)) |>
+    Giveaways = sum(____Turnovers), 
+    Takeaways = sum(____Turnovers)) |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r dumbbell1-solution, exercise.reveal_solution = FALSE}
@@ -135,8 +135,8 @@ Because we grouped by and summarized earlier, we have three fields to work with:
 ```{r dumbbell2, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
   geom_dumbbell(
-    data=?????????, 
-    aes(y=????, x=?????????, xend=?????????)
+    data=____, 
+    aes(y=____, x=____, xend=____)
   )
 ```
 ```{r dumbbell2-solution, exercise.reveal_solution = FALSE}
@@ -154,17 +154,17 @@ Well, that's a chart alright, but what dot is the giveaways and what are the tak
 
 ### Exercise 3: Colors and size
 
-So our choice of colors here is important. We want giveaways to be seen as bad and takeaways to be seen as good. So lets try red for giveaways and green for takeaways. To make this work, we'll need to do three things: first, use the English spelling of color, so `colour`. The, uh, `colour` is the bar between the dots, the `x_colour` is the color of the x value dot and the `xend_colour` is the color of the xend dot. So in our setup, takeaways are x, they're good, so they're green. While we're at it, we'll add a size to make the dots stand out.
+So our choice of colors here is important. We want giveaways to be seen as bad and takeaways to be seen as good. So lets try red for giveaways and green for takeaways. To make this work, we'll need to do three things: first, use the English spelling of color, so `colour`. The, uh, `colour` is the bar between the dots, the `colour_x` is the color of the x value dot and the `colour_xend` is the color of the xend dot. So in our setup, takeaways are x, they're good, so they're green. While we're at it, we'll add a size to make the dots stand out.
 
 ```{r dumbbell3, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
   geom_dumbbell(
-    data=?????????, 
-    aes(y=????, x=Takeaways, xend=Giveaways),
+    data=____, 
+    aes(y=____, x=Takeaways, xend=Giveaways),
     size = 2,
-    colour = "????",
-    colour_x = "?????",
-    colour_xend = "???")
+    colour = "____",
+    colour_x = "____",
+    colour_xend = "____")
 ```
 ```{r dumbbell3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -189,12 +189,12 @@ But what if we sort it by good turnovers?
 ```{r dumbbell4, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
   geom_dumbbell(
-    data=?????????, 
-    aes(y=reorder(????, ????aways), x=Takeaways, xend=Giveaways),
+    data=____, 
+    aes(y=reorder(____, ____aways), x=Takeaways, xend=Giveaways),
     size = 2,
-    colour = "????",
-    colour_x = "?????",
-    colour_xend = "???")
+    colour = "____",
+    colour_x = "____",
+    colour_xend = "____")
 ```
 ```{r dumbbell4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -210,26 +210,26 @@ ggplot() +
 grade_this_code()
 ```
 
-Believe it or not, Iowa had the most takeaways in the Big Ten last season. And believe it: Nebraska ended up on the wrong side of the turnover margin again.
+Believe it or not, Michigan, Maryland and Penn State had the most takeaways in the Big Ten last season. And believe it: Nebraska ended up on the very, very, very wrong side of the turnover margin again.
 
 ### Exercise 5: Which dot is which? 
 
-One downside to the dumbell chart library is that it doesn't handle legends well. Adding a box to label which is the red dot and which is the green dot and which is the red dot is harder than it should be. An easier way is to use ggtext and make the colors red and green in some text explaining the graphic. 
+One downside to the dumbbell chart library is that it doesn't handle legends well. Adding a box to label which is the red dot and which is the green dot and which is the red dot is harder than it should be. An easier way is to use ggtext and make the colors red and green in some text explaining the graphic. 
 
 With ggtext, we need to add `labs` to our chart -- a headline and some chatter, called a `title` and a `subtitle` in ggplot. Then, in the subtitle, we can add some HTML to our text that will turn text red and green to match our `colour_x` and `colour_xend`. 
 
 ```{r dumbbell5, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
   geom_dumbbell(
-    data=?????????, 
-    aes(y=reorder(????, ????aways), x=Takeaways, xend=Giveaways),
+    data=____, 
+    aes(y=reorder(____, ____aways), x=Takeaways, xend=Giveaways),
     size = 2,
-    colour = "????",
-    colour_x = "?????",
-    colour_xend = "???") +
+    colour = "____",
+    colour_x = "____",
+    colour_xend = "____") +
   labs(
     title="Giveaways vs takeaways in the Big Ten", 
-    subtitle = "If <span style = 'color:?????;'>takeaways</span> are on the right, that's good. If <span style = 'color:???;'>giveaways</span> are on the right, that's bad."
+    subtitle = "If <span style = 'color:____;'>takeaways</span> are on the right, that's good. If <span style = 'color:____;'>giveaways</span> are on the right, that's bad."
   ) + 
   theme(
     plot.subtitle = element_textbox_simple()
