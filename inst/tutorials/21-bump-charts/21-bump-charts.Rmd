@@ -47,7 +47,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/cfbranking23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -61,19 +61,19 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 Now let's load it.
 
 ```{r bump-load-data, message=FALSE, warning=FALSE}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking23.csv")
 ```
 ```{r bump-load-data-exercise, exercise = TRUE}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking23.csv")
 ```
 ```{r bump-load-data-exercise-solution}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking22.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking23.csv")
 ```
 ```{r bump-load-data-exercise-check}
 grade_this_code()
 ```
 
-Given our requirements of a row of data for a team, in that week, with their rank, take a look at the data provided. We have 5 weeks of playoff rankings, so we should see a ranking, the week of the ranking and the team at that rank. You can see the basic look of the data by using head()
+Given our requirements of a row of data for a team, in that week, with their rank, take a look at the data provided. We have 6 weeks of playoff rankings, so we should see a ranking, the week of the ranking and the team at that rank. You can see the basic look of the data by using head()
 
 ```{r head-data, exercise=TRUE, exercise.setup = "bump-load-data"}
 head(rankings)
@@ -92,7 +92,7 @@ Our data is in the form we need it to be. Now we can make a bump chart.
 We'll start simple. `ggbump` adds it's own geom, `geom_bump`, and the parts of it are what you think. x is the time element -- Week in our case -- and the Y is the rank. Last, we'll add a color inside the aesthetic. Given that our data only has three columns, that narrows down what the color should be. 
 
 ```{r bump1, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
-ggplot() + geom_bump(data=rankings, aes(x=????, y=????, color=????))
+ggplot() + geom_bump(data=rankings, aes(x=____, y=____, color=____))
 ```
 ```{r bump1-solution, exercise.reveal_solution = FALSE}
 ggplot() + geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team))
@@ -111,7 +111,7 @@ I learned a neat trick from ggbump that's been in ggplot all along -- `scale_y_r
 
 ```{r bump2, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
 ggplot() + 
-  geom_bump(data=rankings, aes(x=????, y=????, color=????)) +
+  geom_bump(data=rankings, aes(x=____, y=____, color=____)) +
   scale_y_reverse()
 ```
 ```{r bump2-solution, exercise.reveal_solution = FALSE}
@@ -131,8 +131,8 @@ Let's add a point at each week. All along to this point, we've been laying in ge
 
 ```{r bump3, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
 ggplot() + 
-  geom_bump(data=rankings, aes(x=????, y=????, color=????)) +
-  geom_point(data=rankings, aes(x=????, y=????, color=????), size = 4) +
+  geom_bump(data=rankings, aes(x=____, y=____, color=____)) +
+  geom_point(data=rankings, aes(x=____, y=____, color=____), size = 4) +
   scale_y_reverse() 
 ```
 ```{r bump3-solution, exercise.reveal_solution = FALSE}
@@ -153,14 +153,14 @@ We've taken another step closer. That makes it more subway-map like. But the col
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
   scale_y_reverse() 
 ```
 ```{r bump4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
   scale_y_reverse() 
 ```
 ```{r bump4-check}
@@ -175,7 +175,7 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
   scale_y_reverse() 
 ```
 ```{r bump5-solution, exercise.reveal_solution = FALSE}
@@ -184,7 +184,7 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
   scale_y_reverse() 
 ```
 ```{r bump5-check}
@@ -199,9 +199,9 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
   scale_y_reverse() +
-  labs(title="Georgia is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -214,9 +214,9 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
   scale_y_reverse() +
-  labs(title="Georgia is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -235,10 +235,10 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
-  scale_x_continuous(breaks=c(13,14,15,16,17)) + 
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_x_continuous(breaks=c(9,10,11,12,13,14), limits = c(8, 15)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +
-  labs(title="Georgia is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -251,10 +251,10 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#F66733", "#CC0000", "#633194", "#fdd023", "#00274c", "#DE3121", "#044520", "#00265D", "#3C377D", "#EE9627", "#ffc72c", "#890012")) +
-  scale_x_continuous(breaks=c(13,14,15,16,17)) + 
+  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_x_continuous(breaks=c(9,10,11,12,13,14), limits = c(8, 15)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +
-  labs(title="Georgia is ruining college football", subtitle="The playoffs are boring. There's one reason why.", y= "Rank", x = "Week") +
+  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
