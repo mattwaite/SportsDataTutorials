@@ -126,7 +126,7 @@ Let's start by making a simple bar chart of `OverallSRS`. It's just a simple rat
 
 ```{r colors-bar, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, ??????????), weight=??????????)) + 
+  geom_bar(data=big, aes(x=reorder(School, ____), weight=____)) + 
   coord_flip()
 ```
 ```{r colors-bar-solution, exercise.reveal_solution = FALSE}
@@ -142,16 +142,16 @@ Now we've got a base.
 
 ### Exercise 2: Using color to reduce attention
 
-Let's make that base fade into the background by changing the color to light grey. With bar charts, we're changing the `fill`. Changing the `color` will only change the outline of the bar. 
+Let's make that base fade into the background by changing the color to light grey (which is one word in ggplot). With bar charts, we're changing the `fill`. Changing the `color` will only change the outline of the bar. 
 
 ```{r colors-bar2, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, ??????????), weight=??????????), fill="????? ????") + 
+  geom_bar(data=big, aes(x=reorder(School, ____), weight=____), fill="____") + 
   coord_flip()
 ```
 ```{r colors-bar2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="light grey") + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="lightgrey") + 
   coord_flip()
 ```
 ```{r colors-bar2-check}
@@ -162,19 +162,19 @@ Now we can add layers.
 
 ### Exercise 3: More layers, more colors
 
-Now we're going to add in `dance` and `mi` to our chart. We want them to stand out from the rest of the B1G, so we're going to made `dance` dark grey and we'll use Michigan State's hex code to shade them in. 
+Now we're going to add in `dance` and `mi` to our chart. We want them to stand out from the rest of the B1G, so we're going to made `dance` dark grey (again, one word) and we'll use Michigan State's hex code to shade them in. 
 
 ```{r colors-bar3, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="????? ????") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="???? ????") +  
-  geom_bar(data=??, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +    
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") +  
+  geom_bar(data=____, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +    
   coord_flip()
 ```
 ```{r colors-bar3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="light grey") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="dark grey") +  
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="lightgrey") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="darkgrey") +  
   geom_bar(data=mi, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +    
   coord_flip()
 ```
@@ -196,10 +196,10 @@ Let's use `theme_minimal` here.
 
 ```{r colors-bar4, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="????? ????") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="???? ????") +  
-  geom_bar(data=??, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +  
-  theme_???????() + 
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") +  
+  geom_bar(data=____, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +  
+  ____() + 
   coord_flip()
 ```
 ```{r colors-bar4-solution, exercise.reveal_solution = FALSE}
