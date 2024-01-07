@@ -50,7 +50,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -64,7 +64,7 @@ glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
 And load it.
 
 ```{r patchwork-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 
 totals <- games |> 
   filter(Conference == "Big Ten Conference") |> 
@@ -91,10 +91,10 @@ bar2 <- ggplot() +
   coord_flip()
 ```
 ```{r patchwork-load-data-exercise, exercise = TRUE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r patchwork-load-data-exercise-solution}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs22.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
 ```
 ```{r patchwork-load-data-exercise-check}
 grade_this_code()
@@ -142,12 +142,12 @@ grade_this_code()
 Okay, now to do this I need to **save my plots to an object**. We do this the same way we save things to a dataframe -- with the arrow aka the assignment operator. We'll make two identical bar charts, both using the `totals` dataframe. One with be the best passing team by average and one will be the best rushing by average. We'll call them bar1 and bar2.
 
 ```{r patchwork2, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
-???? <- ggplot() + 
-  geom_bar(data=???????, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) + 
+____ <- ggplot() + 
+  geom_bar(data=____, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) + 
   coord_flip()
 
-???? <- ggplot() + 
-  geom_bar(data=???????, aes(x=reorder(Team, RushingAvg), weight=RushingAvg)) + 
+____ <- ggplot() + 
+  geom_bar(data=____, aes(x=reorder(Team, RushingAvg), weight=RushingAvg)) + 
   coord_flip()
 ```
 ```{r patchwork2-solution, exercise.reveal_solution = FALSE}
@@ -168,7 +168,7 @@ grade_this_code()
 With patchwork, we can use some basic symbols to lay out plots. Because we have two plots, all we need to do is use a `+` to add our two plots together. Remember what you named them above?
 
 ```{r patchwork3, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
-???? + ????
+____ + ____
 ```
 ```{r patchwork3-solution, exercise.reveal_solution = FALSE}
 bar1 + bar2 
@@ -182,7 +182,7 @@ grade_this_code()
 We can also stack them on top of each other with /.
 
 ```{r patchwork4, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
-???? / ????
+____ / ____
 ```
 ```{r patchwork4-solution, exercise.reveal_solution = FALSE}
 bar1 / bar2
@@ -264,7 +264,7 @@ bar2 <- ggplot() +
   theme_minimal()
 
 bar1 + bar2 + 
-  ????_?????????(
+  _________(
     title = "This is a title and we need to tell a story with it",
     subtitle = "This is the subtitle and we need to add context to the chart here.",
     caption = "Source: Sports Reference | By Matt Waite"
