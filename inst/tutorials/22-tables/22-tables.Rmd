@@ -23,11 +23,11 @@ tutorial_options(exercise.completion=FALSE)
 
 ## The basics
 
-A table is the most simple form of data presentation. Tables have been around for millenial. We've improved in them since, so we're not making a table. We're making a table with features. 
+A table is the most simple form of data presentation. Tables have been around for millenia. We've improved in them since, so we're not making a table. We're making a table with features. 
 
 Sometimes, the best way to show your data is with a table -- simple rows and columns. It allows a reader to compare whatever they want to compare a little easier than a graph where you've chosen what to highlight. The folks that made R Studio and the tidyverse have a neat package called `gt`.
 
-For this assignment, we'll need `gt` and, like others, you have alreaddy installed it. But, if something isn't working right, go to the console and run `install.packages("gt")`
+For this assignment, we'll need `gt` and `wehoop`.
 
 What does this library do? We need the tidyverse and gt to find out.
 
@@ -50,7 +50,7 @@ For the data, I want to look at Nebraska women's basketball. I want to look at w
 ```{r table-load-data, message=FALSE, warning=FALSE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2023) |> 
+bigwbb <- load_wbb_team_box(seasons = 2024) |> 
   filter(team_short_display_name %in% big) |>
   select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
   mutate_at(vars(-team_short_display_name), as.numeric) |>
@@ -69,7 +69,7 @@ bigwbb <- load_wbb_team_box(seasons = 2023) |>
 ```{r table-load-data-exercise, exercise = TRUE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2023) |> 
+bigwbb <- load_wbb_team_box(seasons = 2024) |> 
   filter(team_short_display_name %in% big) |>
   select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
   mutate_at(vars(-team_short_display_name), as.numeric) |>
@@ -88,7 +88,7 @@ bigwbb <- load_wbb_team_box(seasons = 2023) |>
 ```{r table-load-data-exercise-solution}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2023) |> 
+bigwbb <- load_wbb_team_box(seasons = 2024) |> 
   filter(team_short_display_name %in% big) |>
   select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
   mutate_at(vars(-team_short_display_name), as.numeric) |>
@@ -132,8 +132,8 @@ We'll start with fixing headers. What we have isn't bad, but they aren't good ei
 bigwbb |> 
   gt() |> 
   cols_label(
-    ????? = "Shooting Percentage",
-    ???????? = "Three Point Percentage"
+    ____ = "Shooting Percentage",
+    ____ = "Three Point Percentage"
   )
 ```
 ```{r table1-solution, exercise.reveal_solution = FALSE}
@@ -160,12 +160,12 @@ The truth is most of your code in tables is going to be dedicated to styling spe
 bigwbb |> 
   gt() |> 
   cols_label(
-    ????? = "Shooting Percentage",
-    ???????? = "Three Point Percentage"
+    ____ = "Shooting Percentage",
+    ____ = "Three Point Percentage"
   ) |>
   tab_header(
-    ????? = "Does Nebraska have a chance to be special this season?",
-    ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    ____ = "Does Nebraska have a chance to be special this season?",
+    ____ = "Amy Williams' team is near the middle of a tough conference where it matters most."
   )
 ```
 ```{r table2-solution, exercise.reveal_solution = FALSE}
@@ -177,7 +177,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   )
 ```
 ```{r table2-check}
@@ -194,12 +194,12 @@ We can style individual elements using `tab_style`. First, let's make the main h
 bigwbb |> 
   gt() |> 
   cols_label(
-    ????? = "Shooting Percentage",
-    ???????? = "Three Point Percentage"
+    ____ = "Shooting Percentage",
+    ____ = "Three Point Percentage"
   ) |>
   tab_header(
-    ????? = "Does Nebraska have a chance to be special this season?",
-    ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    ____ = "Does Nebraska have a chance to be special this season?",
+    ____ = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -217,7 +217,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -238,12 +238,12 @@ The next item on the required elements list: Source and credit lines. In `gt`, t
 bigwbb |> 
   gt() |> 
   cols_label(
-    ????? = "Shooting Percentage",
-    ???????? = "Three Point Percentage"
+    ____ = "Shooting Percentage",
+    ____ = "Three Point Percentage"
   ) |>
   tab_header(
-    ????? = "Does Nebraska have a chance to be special this season?",
-    ???????? = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    ____ = "Does Nebraska have a chance to be special this season?",
+    ____ = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -251,7 +251,7 @@ bigwbb |>
     style = cell_text(color = "black", align = "left"),
     locations = cells_title("subtitle")
   ) |>
-  ???_??????_????(
+  ______________(
     source_note = md("**By:** Matt Waite  |  **Source:** wehoop: The SportsDataverse's R Package for Women's Basketball Data")
   )
 ```
@@ -264,7 +264,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -293,7 +293,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -321,7 +321,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -355,7 +355,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -385,7 +385,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -421,7 +421,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -455,7 +455,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -495,7 +495,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
@@ -537,7 +537,7 @@ bigwbb |>
   ) |>
   tab_header(
     title = "Does Nebraska have a chance to be special this season?",
-    subtitle = "Amy Williams' team is near the bottom of a tough conference where it matters most."
+    subtitle = "Amy Williams' team is near the middle of a tough conference where it matters most."
   ) |> tab_style(
     style = cell_text(color = "black", weight = "bold", align = "left"),
     locations = cells_title("title")
