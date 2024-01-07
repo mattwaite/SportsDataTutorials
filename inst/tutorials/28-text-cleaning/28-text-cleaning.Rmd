@@ -105,7 +105,7 @@ No really. That's it. So we're looking for `\\\\.*`. That'll find two backslashe
 To find something in text, we'll use a function called `gsub`. The pattern in `gsub` is `pattern, what we want to replace it with, what column this can all be found in`. So in our example, the pattern is `\\\\.*`, what we want to replace it with is ... nothing, and this is all in the Player column. 
 
 ```{r cleaning1, exercise=TRUE, exercise.setup = "cleaning-load-data", message=FALSE}
-nbaplayers |> mutate(Player=gsub("??????","",??????))
+nbaplayers |> mutate(Player=gsub("____","",____))
 ```
 ```{r cleaning1-solution, exercise.reveal_solution = FALSE}
 nbaplayers |> mutate(Player=gsub("\\\\.*","",Player))
@@ -176,7 +176,7 @@ For this, we're going to use a `tidyr` function called `separate` to split colum
 Let's use that comma to split the player and the rest. With separate, the pattern is separate WHAT, into WHAT, by WHAT. So we're going to separate Player into Player and School, and we're going to separate it by the comma.
 
 ```{r cleaning2, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
-kills |> separate(Player, into=c("??????", "??????"), sep=",") 
+kills |> separate(Player, into=c("____", "____"), sep=",") 
 ```
 ```{r cleaning2-solution, exercise.reveal_solution = FALSE}
 kills |> separate(Player, into=c("Player", "School"), sep=",") 
@@ -195,8 +195,8 @@ A problem is going to crop up here -- the paren is a special character, so we ha
 
 ```{r cleaning3, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
 kills |> 
-  separate(Player, into=c("??????", "??????"), sep=",") |>
-  separate(School, into=c("School", "Conference"), sep="??(") 
+  separate(Player, into=c("____", "____"), sep=",") |>
+  separate(School, into=c("School", "Conference"), sep="____(") 
 ```
 ```{r cleaning3-solution, exercise.reveal_solution = FALSE}
 kills |> 
@@ -215,11 +215,11 @@ Well, we can fix that with some gsub and we'll use a switch called `fixed`, whic
 
 ```{r cleaning4, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
 kills |> 
-  separate(Player, into=c("??????", "??????"), sep=",") |> 
+  separate(Player, into=c("____", "____"), sep=",") |> 
   mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
   mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
   mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
-  separate(School, into=c("School", "Conference"), sep="??(") 
+  separate(School, into=c("School", "Conference"), sep="____(") 
 ```
 ```{r cleaning4-solution, exercise.reveal_solution = FALSE}
 kills |> 
@@ -241,12 +241,12 @@ Believe it or not the trailing paren is NOT a special character. We can use muta
 
 ```{r cleaning5, exercise=TRUE, exercise.setup = "cleaning2-load-data", message=FALSE}
 kills |> 
-  separate(Player, into=c("??????", "??????"), sep=",") |> 
+  separate(Player, into=c("____", "____"), sep=",") |> 
   mutate(School = gsub("(FL)", "FL", School, fixed=TRUE)) |>
   mutate(School = gsub("(NY)", "NY", School, fixed=TRUE)) |>
   mutate(School = gsub("(PA)", "PA", School, fixed=TRUE)) |>
-  separate(School, into=c("School", "Conference"), sep="??(") |> 
-  mutate(Conference=gsub("?", "", Conference))
+  separate(School, into=c("School", "Conference"), sep="____(") |> 
+  mutate(Conference=gsub("____", "", Conference))
 ```
 ```{r cleaning5-solution, exercise.reveal_solution = FALSE}
 kills |> 
