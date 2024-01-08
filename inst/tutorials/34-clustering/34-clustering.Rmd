@@ -30,7 +30,7 @@ In this lesson, we're going to use a method that sounds advanced but it really q
 
 Imagine two dots on a scatterplot. If you took a ruler out and measured the distance between those dots, you'd know how far apart they are. In math, that's called the Euclidean distance. It's just the space between them in numbers. Where k-nearest neighbor comes in, you have lots of dots and you want measure the distance between all of them. What does k-means clustering do? It lumps them into groups based on the average distance between them. Players who are good on offense but bad on defense are over here, good offense good defense are over here. And using the Euclidean distance between them, we can decide who is in and who is out of those groups.
 
-For this exercise, I want to look at Bryce McGowens, Nebraska's 5-star and probably the most interesting player on Fred Hoiberg's team. So who does Bryce McGowens compare to? 
+For this exercise, I want to look at Keisei Tominaga, probably the most fun player ever on a Fred Hoiberg Nebraska team. So who does Keisei compare to? 
 
 To answer this, we'll use k-means clustering. 
 
@@ -59,7 +59,7 @@ library(downloadthis)
 library(glue)
 
 dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/players22.csv",
+  link = "https://mattwaite.github.io/sportsdatafiles/players24.csv",
   button_label = "Download csv file",
   button_type = "danger",
   has_icon = TRUE,
@@ -75,7 +75,7 @@ Now load that data.
 ```{r cluster-load-data, message=FALSE, warning=FALSE}
 set.seed(1234)
 
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players22.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players24.csv")
 
 playersselected <- players |> 
   filter(MP>0) |> filter(Pos == "G") |> 
@@ -91,13 +91,13 @@ clusters <- kmeans(playersscaled, centers = 5, nstart = 25)
 
 playercluster <- data.frame(playersselected, clusters$cluster) 
 
-bm <- playercluster |> filter(Player == "Bryce McGowens")
+kt <- playercluster |> filter(Player == "Keisei Tominaga")
 ```
 ```{r cluster-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players22.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players24.csv")
 ```
 ```{r cluster-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players22.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players24.csv")
 ```
 ```{r cluster-load-data-exercise-check}
 grade_this_code()
@@ -105,7 +105,7 @@ grade_this_code()
 
 To cluster this data properly, we have some work to do.
 
-First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Bryce McGowens is a guard, so let's just look at guards. Third, we want to limit the data to things that make sense to look at for Bryce McGowens -- things like shooting, three point shooting, assists, turnovers and points. 
+First, it won't do to have players who haven't played, so we can use filter to find anyone with greater than 0 minutes played. Next, Keisei Tominaga is a guard, so let's just look at guards. Third, we want to limit the data to things that make sense to look at for Keisei Tominaga -- things like shooting, three point shooting, assists, turnovers and points. 
 
 ```{r cluster1, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
 playersselected <- players |> 
@@ -209,9 +209,9 @@ clusters
 grade_this_code()
 ```
 
-Interpreting this output, the very first thing you need to know is that **the cluster numbers are meaningless**. They aren't ranks. They aren't anything. After you have taken that on board, look at the cluster sizes at the top. Clusters 2 and 5 are pretty large compared to others. That's notable. Then we can look at the cluster means. For reference, 0 is going to be average. So group 1 is above average on minutes played. Group 2 is below, group 5 is slightly above. 
+Interpreting this output, the very first thing you need to know is that **the cluster numbers are meaningless**. They aren't ranks. They aren't anything. After you have taken that on board, look at the cluster sizes at the top. What clusters are large compared to others. That's notable. Then we can look at the cluster means. For reference, 0 is going to be average. So which groups are above average on minutes played? Which groups are below? 
 
-So which group is Bryce McGowens in? Well, first we have to put our data back together again. In clusters, there is a list of cluster assignments in the same order we put them in, but recall we have no names. So we need to re-combine them with our original data. We can do that with the following:
+So which group is Keisei Tominaga in? Well, first we have to put our data back together again. In clusters, there is a list of cluster assignments in the same order we put them in, but recall we have no names. So we need to re-combine them with our original data. We can do that with the following:
 
 ```{r cluster6, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
 playercluster <- data.frame(playersselected, clusters$cluster) 
@@ -223,54 +223,54 @@ playercluster <- data.frame(playersselected, clusters$cluster)
 grade_this_code()
 ```
 
-Now we have a dataframe called playercluster that has our player names and what cluster they are in. The fastest way to find Bryce McGowens is to double click on the playercluster table in the environment and use the search in the top right of the table. Because this is based on some random selections of points to start the groupings, these may change from person to person, but McGowens is in Group 1 in my data. 
+Now we have a dataframe called playercluster that has our player names and what cluster they are in. The fastest way to find Keisei Tominaga is to double click on the playercluster table in the environment and use the search in the top right of the table. Because this is based on some random selections of points to start the groupings, these may change from person to person. 
 
-We now have a dataset and can plot it like anything else. Let's get Bryce McGowenss and then plot him against the rest of college basketball on assists versus minutes played. 
+We now have a dataset and can plot it like anything else. Let's get Keisei Tominaga and then plot him against the rest of college basketball on points versus minutes played. 
 
 ```{r cluster7, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
-bm <- playercluster |> filter(Player == "Bryce McGowens")
+kt <- playercluster |> filter(Player == "Keisei Tominaga")
 
-bm
+kt
 ```
 ```{r cluster7-solution, exercise.reveal_solution = FALSE}
-bm <- playercluster |> filter(Player == "Bryce McGowens")
+kt <- playercluster |> filter(Player == "Keisei Tominaga")
 
-bm
+kt
 ```
 ```{r cluster7-check}
 grade_this_code()
 ```
 
-So Bryce is in cluster 1, which if you look at our clusters, puts him in the cluster with all above average metrics. What does that look like? Let's look at scoring. 
+What does that look like? Let's look at scoring in a chart. 
 
 ```{r cluster8, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
 ggplot() + 
   geom_point(data=playercluster, aes(x=MP, y=PTS, color=clusters.cluster)) + 
-  geom_point(data=bm, aes(x=MP, y=PTS), color="red")
+  geom_point(data=kt, aes(x=MP, y=PTS), color="red")
 ```
 ```{r cluster8-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_point(data=playercluster, aes(x=MP, y=PTS, color=clusters.cluster)) + 
-  geom_point(data=bm, aes(x=MP, y=PTS), color="red")
+  geom_point(data=kt, aes(x=MP, y=PTS), color="red")
 ```
 ```{r cluster8-check}
 grade_this_code()
 ```
 
-Not bad, not bad. But who are Bryce McGowens' peers? If we look at the numbers in Group 1, there's 532 of them. So let's limit them to just Big Ten guards. Unfortunately, my scraper didn't quite work and in the place of Conference is the coach's name. So I'm going to have to do this the hard way and make a list of Big Ten teams and filter on that. Then I'll sort by minutes played. 
+Not bad, not bad. But who are Keisei Tominaga's peers? If we look at the numbers in his group, how many of them are there? What are their stats relative to average? So let's limit them to just Big Ten guards. Unfortunately, I don't have Conference names in my data, so I'm going to have to do this the hard way and make a list of Big Ten teams and filter on that. Then I'll sort by minutes played. 
 
 ```{r cluster9, exercise=TRUE, exercise.setup = "cluster-load-data", message=FALSE}
-big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
+big10 <- c("Nebraska Cornhuskers Men's", "Iowa Hawkeyes Men's", "Minnesota Golden Gophers Men's", "Illinois Fighting Illini Men's", "Northwestern Wildcats Men's", "Wisconsin Badgers Men's", "Indiana Hoosiers Men's", "Purdue Boilermakers Men's", "Ohio State Buckeyes Men's", "Michigan Wolverines Men's", "Michigan State Spartans Men's", "Penn State Nittany Lions Men's", "Rutgers Scarlet Knights Men's", "Maryland Terrapins Men's")
 
-playercluster |> filter(clusters.cluster == 1) |> filter(Team %in% big10) |> arrange(desc(MP))
+playercluster |> filter(clusters.cluster == kt$clusters.cluster) |> filter(Team %in% big10) |> arrange(desc(MP))
 ```
 ```{r cluster9-solution, exercise.reveal_solution = FALSE}
-big10 <- c("Nebraska Cornhuskers", "Iowa Hawkeyes", "Minnesota Golden Gophers", "Illinois Fighting Illini", "Northwestern Wildcats", "Wisconsin Badgers", "Indiana Hoosiers", "Purdue Boilermakers", "Ohio State Buckeyes", "Michigan Wolverines", "Michigan State Spartans", "Penn State Nittany Lions", "Rutgers Scarlet Knights", "Maryland Terrapins")
+big10 <- c("Nebraska Cornhuskers Men's", "Iowa Hawkeyes Men's", "Minnesota Golden Gophers Men's", "Illinois Fighting Illini Men's", "Northwestern Wildcats Men's", "Wisconsin Badgers Men's", "Indiana Hoosiers Men's", "Purdue Boilermakers Men's", "Ohio State Buckeyes Men's", "Michigan Wolverines Men's", "Michigan State Spartans Men's", "Penn State Nittany Lions Men's", "Rutgers Scarlet Knights Men's", "Maryland Terrapins Men's")
 
-playercluster |> filter(clusters.cluster == 1) |> filter(Team %in% big10) |> arrange(desc(MP))
+playercluster |> filter(clusters.cluster == kt$clusters.cluster) |> filter(Team %in% big10) |> arrange(desc(MP))
 ```
 ```{r cluster9-check}
 grade_this_code()
 ```
 
-So there are the 22 guards most like Bryce McGowens in the Big Ten. We should further limit our number by minutes played, but you can do that on your own another time.
+Who are the guards most like Keisei Tominaga in the Big Ten? We should further limit our number by minutes played, but you can do that on your own another time.
