@@ -186,7 +186,7 @@ Another thing regressions do is give us some other tools to evaluate if the rela
 
 I assure you that Run The Damn Ball Guy doesn't know what a linear regression is, but let's use one to fight him. 
 
-First things first, we're going to use newcorrelations like we did above. It has the point differential we used before. To do this, we're going to create a new object called fit -- named after the line of best fit, which is the regression line. It's going to use a new function -- `lm`. Then we need to say X is approximately modeled by Y. X will be our differential. Y will be the total penalty yards. The approximately modeled by is the ~ character. In fact, that's how you read ~ in R. When you see ~, you can say "is approximately modeled by."
+First things first, we're going to use newcorrelations like we did above. It has the point differential we used before. To do this, we're going to create a new object called fit -- named after the line of best fit, which is the regression line. It's going to use a new function -- `lm`. Then we need to say X is approximately modeled by Y. X will be our differential. Y will be the rushing yards. The approximately modeled by is the ~ character. In fact, that's how you read ~ in R. When you see ~, you can say "is approximately modeled by."
 
 ```{r regression1, exercise=TRUE, exercise.setup = "correlations-load-data"}
 fit <- lm(____ ~ ____, data = newcorrelations)
