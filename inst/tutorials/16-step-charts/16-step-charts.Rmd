@@ -209,11 +209,11 @@ ggplot() +
   annotate("text", x=(as.Date("2023-12-15")), y=185, label="Purdue") +
   annotate("text", x=(as.Date("2023-12-15")), y=20, label="Indiana") +
   labs(
-    x="Date", 
-    y="Cumulative Point Differential", 
-    title="Nebraska's season long slide", 
-    subtitle="The Huskers started solidly but ended up being outscored by more than any other Big Ten team.", 
-    caption="Source: Sports-Reference.com | By Matt Waite"
+    x="STOP USING SUBMIT ANSWER AND LABEL THIS YOURSELF", 
+    y="STOP USING SUBMIT ANSWER AND LABEL THIS YOURSELF", 
+    title="STOP USING SUMBIT ANSWER AND MAKE YOUR OWN HEADLINE", 
+    subtitle="STOP USING SUBMIT ANSWER AND MAKE YOUR OWN SUBTITLE", 
+    caption="Source: Sports-Reference.com | By YOUR NAME"
     ) + 
   theme_minimal()
 ```
