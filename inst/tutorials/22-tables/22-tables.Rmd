@@ -232,7 +232,7 @@ grade_this_code()
 
 ### Exercise 4: Adding source and credit lines
 
-The next item on the required elements list: Source and credit lines. In `gt`, those are called `tab_source_notes`:
+The next item on the required elements list: Source and credit lines. In `gt`, those are called a `tab_source_note`:
 
 ```{r table4, exercise=TRUE, exercise.setup = "table-load-data", message=FALSE}
 bigwbb |> 
