@@ -59,7 +59,7 @@ scoringoffense22 <- scoringoffenseurl22 |>
   html_nodes(xpath = '//*[@id="content"]/div[2]/table') |>
   html_table()
 
-scoringoffense2022 <- scoringoffense21[[2]]
+scoringoffense2022 <- scoringoffense22[[1]]
 
 fixedscoringoffense2022 <- scoringoffense2022 |> rename(Rank = 1)|> mutate(YEAR = 2022)
 fixedscoringoffense2023 <- scoring |> rename(Rank = 1) |> mutate(YEAR = 2023)
