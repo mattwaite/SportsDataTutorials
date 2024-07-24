@@ -1,12 +1,14 @@
 ---
-title: "Sports Data Lesson 3: Aggregates"
+title: "Sports Data Lesson 4: Aggregates, Part 2"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
-  Learn how to take lots of little things and total them up into bigger things.
+  Learn more about how to take lots of little things and total them up into bigger things.
 ---
 
 ```{r setup, include=FALSE}
