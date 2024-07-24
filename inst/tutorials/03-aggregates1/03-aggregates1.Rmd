@@ -168,7 +168,7 @@ grade_this_code()
 
 That block of code you just ran has two hints for the code block you'll have to complete later: What data are you using? What field in that data do you want to group by? Keep those in mind.
 
-### Exercise 3: Group by and count
+### Exercise 2: Group by and count
 
 After we group our data together by the thing we want to group it by, we need to count how many things are in each group. We do that first by saying we want to summarize our data (a count is a part of a summary). To get a summary, we have to tell it what we want to summarize. So in this case, we want a count. To get that, let's create a thing called total and set it equal to n(), which is `dplyr`s way of counting something.
 
@@ -200,7 +200,7 @@ grade_this_code()
 
 In this case, we wanted to group together positions, signified by the field name `pos`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](https://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are.
 
-### Exercise 4: Arranging data
+### Exercise 3: Arranging data
 
 And when we run that, we get a list of positions with a count next to them. But it's not in any order. So we'll add another And Then Do This %\>% and use `arrange`. Arrange does what you think it does -- it arranges data in order. By default, it's in ascending order -- smallest to largest. But if we want to know the position with the most players, we need to sort it in descending order. In arrange, we need to tell it what we are arranging by. **If you have group_by, then whatever you are arranging by will *always* come from inside summarize.** The pattern looks like this:
 
@@ -232,7 +232,7 @@ grade_this_code()
 
 What is the most common position in volleyball? If you look at the row with the largest total, you get your answer.
 
-### Exercise 5: Grouping by more than one thing
+### Exercise 4: Grouping by more than one thing
 
 We can, if we want, group by more than one thing. Which team has the most of a single position? To do that, we can group by the team and position in the data:
 
