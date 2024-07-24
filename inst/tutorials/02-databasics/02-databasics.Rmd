@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn some basic terminology about data that will help you all class long.
@@ -17,34 +19,250 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Data, structures and types
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to fundamental concepts and terminology related to data in the context of sports analytics. By the end of this tutorial, you'll understand the basic structure of datasets, including rows and columns, and how to view and inspect data in R. You'll learn about different data types you'll encounter, how to import data into R, and key functions like `head()` and `glimpse()` for exploring your data.
+
+## The Basics
 
 Data are everywhere (and data is plural of datum, thus the use of are in that statement). It surrounds you. Every time you use your phone, you are creating data. Lots of it. Your online life. Any time you buy something. It's everywhere. Sports, like life, is no different. Sports is drowning in data, and more comes along all the time.
 
 In sports, and in this class, we'll be dealing largely with two kinds of data: event level data and summary data. It's not hard to envision event level data in sports. A pitch in baseball. A hit. A play in football. A pass in soccer. They are the events that make up the game. Combine them together -- summarize them -- and you'll have some notion of how the game went. What we usually see is summary data -- who wants to scroll through 50 pitches to find out a player went 2-3 with a double and an RBI? Who wants to scroll through hundreds of pitches to figure out the Rays beat the Yankees? 
 
-To start with, we need to understand the shape of data. 
+To start with, we need to see our data. In order to do that, we need to get some. 
 
-## Rows and columns
+## Getting Data
 
-Data, oversimplifying it a bit, is information organized. Generally speaking, it's organized into rows and columns. Rows, generally, are individual elements. A team. A player. A game. Columns, generally, are components of the data, sometimes called variables. So if each row is a player, the first column might be their name. The second is their position. The third is their batting average. And so on. 
+R is a statistical programming language that is purpose built for data analysis.
+
+Base R does a lot, but there are a mountain of external libraries that do things to make R better/easier/more fully featured. We already installed the tidyverse -- or you should have if you followed the instructions for the last assignment -- which isn't exactly a library, but a collection of libraries. Together, they make up the tidyverse. Individually, they are extraordinarily useful for what they do. We can load them all at once using the tidyverse name, or we can load them individually. Let's start with individually.
+
+The two libraries we are going to need for this assignment are `readr` and `dplyr`. The library `readr` reads different types of data in as a dataframe. For this assignment, we're going to read in csv data or Comma Separated Values data. That's data that has a comma between each column of data.
+
+Then we're going to use `dplyr` to analyze it. To use a library, you need to import it. 
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">Put all your library imports at the top of your notebooks in a single block.</p>
+</div>
+
+**Don't do this yet. Read carefully. If you do this in a notebook, I'll know you're not reading.**
+
+Under normal circumstances, to load a single library, you do this:
+
+```         
+library(readr)
+```
+
+To load two of them, you need to run two lines of code like this:
+
+```         
+library(readr)
+library(dplyr)
+```
+
+**BUT...**
+
+You can keep doing that for as many libraries as you need. I've seen notebooks with 10 or more library imports.
+
+**But the tidyverse has a neat little trick. We can load most of the libraries we'll need for the whole semester with one line.**
+
+Run this.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">From now on, if that's not the first line of your notebook, you're probably doing it wrong.</p>
+</div>
+
+## Loading Data
+
+The first thing we need to do is get some data to work with. We do that by reading it in. In our case, we're going to read data from a csv file -- a comma-separated values file. Most of the data we'll use in this class will come from CSV files. 
+
+The CSV file we're going to read from last year's women's volleyball season. The data comes from the NCAA.
+
+You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
+
+```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
+library(downloadthis)
+library(glue)
+
+dllink <- download_link(
+  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv",
+  button_label = "Download csv file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
+
+```
+
+So step 2, after setting up our libraries, is most often going to be importing data. In order to analyze data, we need data, so it stands to reason that this would be something we'd do very early.
+
+The code looks *something* like this:
+
+```         
+volleyballplayers <- read_csv("ncaa_womens_volleyball_playerstats_2023.csv")
+```
+
+Let's unpack that.
+
+The first part -- volleyballplayers -- is the **name of your variable**. Remember: A variable is just a name of a thing that stores stuff. In this case, our variable is a data frame, which is R's way of storing data (technically it's a tibble, which is the tidyverse way of storing data, but the differences aren't important and people use them interchangeably). **We can call this whatever we want, with a few exceptions.** I always want to name data frames after what is in it. In this case, we're going to import a dataset of volleyball players. Variable names, by convention are one word all lower case. **You can end a variable with a number, but you can't start one with a number**.
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">Always give your data a name. Call it what is in the data. One word, all lowercase letters.</p>
+</div>
+
+The \<- bit is the variable assignment operator. It's how we know we're assigning something to a word. Think of the arrow as saying "Take everything on the right of this arrow and stuff it into the thing on the left." So we're creating an empty vessel called `volleyballplayers` and stuffing all this data into it.
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">The <code><-</code> is what creates the name. The name is to the left. What goes in the name is on the right.</p>
+</div>
+
+The `read_csv` bits are pretty obvious, except for one thing. What happens in the quote marks is the path to the data. In there, I have to tell R where it will find the data. The easiest thing to do when you are working on your own computer, if you are confused about how to find your data, is to put your data in the same folder as as your notebook (you'll have to save that notebook first). If you do that, then you just need to put the name of the file in there (filename.csv). For this exercise, we're pulling the data from a website, and the path that we'll enter is the url of the data.
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">The name of the file goes inside <code>read_csv</code> in quotes.</p>
+</div>
+
+Your first task is to import the data. For this exercise, you need to simply run this:
+
+```{r load-data, message=FALSE, warning=FALSE}
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+
+nrows <- nrow(volleyballplayers)
+ncolumns <- ncol(volleyballplayers)
+```
+
+```{r load-data-exercise, exercise = TRUE}
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+```
+
+```{r load-data-exercise-solution}
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+```
+
+```{r load-data-exercise-check}
+grade_this_code()
+```
+
+If it worked, you'll see a lot of output that describes your data. If it didn't, you'll get a short error message. In this case, it worked. We can move on.
+
+### Exercise 1: Using head to see your data
+
+Now we can inspect the data we imported. What does it look like? What's in it? What do we have to work with?
+
+That depends on where we are looking at the data. In the tutorials like this, we have limited tools to see the data. In a notebook, we have more. For now, we'll focus on what we do here in the tutorials.
+
+To see our data, we use the function `head()` and **put the name of the variable we created above between the parenthesis** to show the headers and **the first six rows of data**.
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0"><code>head()</code> only shows you the first six rows.</p>
+</div>
+
+```{r head-data, exercise=TRUE, exercise.setup = "load-data"}
+head(_____)
+```
+
+```{r head-data-solution, exercise.reveal_solution = FALSE}
+head(volleyballplayers)
+```
+
+```{r head-data-check}
+grade_this_code()
+```
+
+::: {#head-data-hint}
+**Hint:** The thing you need is to the left of a \<- in a block above.
+:::
+
+Let's look at this. As you can see by the data, we have six players, **which is what we expect** from `head()`. But notice the first row -- the headers. We have things like `team` and `pos` for team and position. And we have a lot of number columns, showing everything from matches started (ms) to kills.
+
+That header row is *incredibly* important for what's to come. When your data is wider that what you can see in the window, you'll see a black triangle on the upper right of the header row. That let's you scroll right to see more.
+
+### Exercise 2: Using glimpse to see your data
+
+There is another way to "see" your data that looks different than a table, but provides important information nonetheless.
+
+Why do this? Why use head? It gives us a glimpse of the data. Which ... conveniently ... is **also** a way to look at your data, and it works the same way as `head()`
+
+```{r glimpse-data, exercise=TRUE, exercise.setup = "load-data"}
+glimpse(____)
+```
+
+```{r glimpse-data-solution, exercise.reveal_solution = FALSE}
+glimpse(volleyballplayers)
+```
+
+```{r glimpse-data-check}
+grade_this_code()
+```
+
+::: {#glimpse-data-hint}
+**Hint:** This works the same as head() above.
+:::
+
+This time, the name of the columns are what you see first on each line. Seeing the data itself is less convenient, but more often than not, what we need is the name of the column, not the data. 
+
+Either of these will guide you with what you have to work with in the coming problems.
+
+## In The Notebook
+
+When you are working in a notebook, you have more tools available to you. The main one to get accustomed to is the Environment tab. When you run `read_csv`, you will see the name of your variable appear in the Environment. You'll also see some information about your data.
+
+![](images/environment1.png){width="100%"}
+```{r numberplayers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "load-data", results='asis'}
+glue("That more information? How many rows (or observations) are in your data, and how many columns. So, according to the environment, there are {nrows}, and there are {ncolumns} columns. But what does that mean?")
+```
+
+## Rows
+
+Data, oversimplifying it a bit, is information organized. Generally speaking, it's organized into rows and columns. Rows, generally, are individual elements. A team. A player. A game. Columns, generally, are components of the data, sometimes called variables. So if each row is a player, the first column might be their team name. The second is what season the data covers. The third is the jersey number. And so on. 
+
+Look at this screenshot of the volleyballplayer data. See how each row is a player? That's what rows are. One of a thing. 
 
 ![](images/data1.png){width="100%"}
-
 One of the critical components of data analysis, especially for beginners, is having a mental picture of your data. What does each row mean? What does each column in each row signify? How many rows do you have? How many columns? 
 
-## Column names
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">If you want to see your data in a spreadsheet format, double click on the name in the environment.</p>
+</div>
 
-An absolutely essential concept you need to understand for the whole course is that **every column has a name**. For your data to be valid, those names have to be the first row, and the first row only. 
+## Columns
+
+If your data is properly formed, the first row of your data will be the header row. The header row is the most important row in your data.
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">An absolutely essential concept you need to understand for the whole course is that **every column has a name**. That name is in the header row, the first row of your data when you are looking at it.</p>
+</div>
 
 ![](images/columnnames.png){width="100%"}
-So the names of every team in this dataset are in the Team column. Want to know who had the most kills per set in college volleyball? You'll need the KillsPerSet column name. Looking at that first row for those names is something you're going to do over and over again. 
+
+So the names of every team in this dataset are in the team column. Want to know who had the most kills in college volleyball? You'll need the kills column and the name column to know that. Looking at that first row for those names is something you're going to do over and over again. 
 
 ## Types
 
-There are scores of data types in the world, and R has them. In this class, we're primarily going to be dealing with data frames, and each element of our data frames will have a data type.
+There are scores of data types in the world, and R has them. In this class, we're primarily going to be dealing with dataframes, and each element of our dataframes will have a data type.
 
 Typically, they'll be one of four types of data:
 
@@ -55,44 +273,14 @@ Typically, they'll be one of four types of data:
 
 **Question:** Is a zip code a number? Is a jersey number a number? Trick question, because the answer is no. Numbers are things we do math on. If the thing you want is not something you're going to do math on -- can you add two phone numbers together? -- then make it a character type. If you don't, most every software system on the planet will drop leading zeros. For example, every zip code in Boston starts with 0. If you record that as a number, your zip code will become a four digit number, which isn't a zip code anymore. 
 
-## A simple way to get data
+## Recap
 
-One good thing about sports is that there's lots of interest in it. And that means there's outlets that put sports data on the internet. Now I'm going to show you a trick to getting it easily. 
+In this lesson, you've learned essential concepts for working with data in R. We covered how to import data using read_csv(), and explored ways to inspect your data using head() and glimpse(). You now understand that data is typically organized into rows (individual elements like players) and columns (variables or attributes). We discussed the importance of the header row in naming your columns, which is crucial for data manipulation. You've also been introduced to common data types you'll encounter: numeric, character, date, and logical. Remember, always start by loading the tidyverse library, give your imported data a descriptive name, and take time to understand the structure of your dataset. These foundational skills will be vital as you progress in your sports data analysis journey.
 
-The site sports-reference.com takes NCAA (and other league) stats and puts them online. For instance, [here's their page on Nebraska basketball's game logs](https://www.sports-reference.com/cbb/schools/nebraska/2023-gamelogs.html), which you should open now.
+## Terms To Know
 
-Now, in a new tab, log into Google Docs/Drive and open a new spreadsheet. In the first cell of the first row, copy and paste this formula in:
-
-```
-=IMPORTHTML("https://www.sports-reference.com/cbb/schools/nebraska/2023-gamelogs.html", "table", 1)
-```
-
-If it worked right, you've got the data from that page in a spreadsheet. 
-
-## Cleaning the data
-
-The first thing we need to do is recognize that we don't have data, really. We have the results of a formula. You can tell by putting your cursor on that field, where you'll see the formula again. This is where you'd look:
-
-![](images/clean1.png){width="100%"}
-
-The solution is easy:
-
-Edit > Select All or type command/control A
-Edit > Copy or type command/control c
-Edit > Paste Special > Values Only or type command/control shift v
-
-You can verify that it worked by looking in that same row 1 column A, where you'll see the formula is gone.
-
-![](images/clean2.png){width="100%"}
-
-Now you have data, but your headers are all wrong. You want your headers to be one line -- not two, like they have. And the header names repeat -- first for our team, then for theirs. So you have to change each header name to be UsORB or TeamORB and OpponentORB instead of just ORB.
-
-After you've done that, note we have repeating headers. There's two ways to deal with that -- you could just hightlight it and go up to Edit > Delete Rows XX-XX depending on what rows you highlighted. That's the easy way with our data. 
-
-But what if you had hundreds of repeating headers like that? Deleting them would take a long time. 
-
-You can use sorting to get rid of anything that's not data. So click on Data > Sort Range. You'll want to check the "Data has header row" field. Then hit Sort.
-
-![](images/clean3.png){width="100%"}
-
-Now all you need to do is search through the data for where your junk data -- extra headers, blanks, etc. -- got sorted and delete it. After you've done that, you can export it for use in R. Go to File > Download as > Comma Separated Values. Remember to put it in the same directory as your R Notebook file so you can import the data easily.
+- `read_csv()`: Function used to import CSV data into R
+- Dataframe: R's primary structure for storing tabular data
+- `head()`: Function to view the first six rows of a dataset
+- `glimpse()`: Function that provides a concise summary of a dataset's structure
+- Tidyverse: A collection of R packages designed for data science workflows

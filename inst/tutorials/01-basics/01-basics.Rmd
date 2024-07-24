@@ -85,7 +85,14 @@ Congrats, you've run some code. It's not very complex, and you knew the answer b
 
 ## Variables
 
-So we've learned that we can compute things. We can also store things. **In programming languages, these are called variables**. We can assign things to variables using `<-`. And then we can do things with them.
+So we've learned that we can compute things. We can also store things. **In programming languages, these are called variables**. 
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">A variable is a name that stores stuff. It can be as simple as a name, or a big as a dataset of every baseball game ever played. It's just a way to name a thing.</p>
+</div>
+
+We can assign things to variables using `<-`. And then we can do things with them.
 
 <div class="alert alert-info">
   <h4 class="alert-heading">Key Concept</h4>
