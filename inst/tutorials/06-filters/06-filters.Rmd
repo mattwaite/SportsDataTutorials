@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to narrow in on what's important and remove what isn't.
@@ -18,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Filtering
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to filtering and selecting data, two essential skills in data analysis. You'll learn how to use the `filter()` function to create subsets of your data based on specific criteria, allowing you to focus on the most relevant information for your analysis. We'll also cover the `select()` function, which enables you to choose specific columns from your dataset, streamlining your work by removing unnecessary information. By the end of this lesson, you'll be able to narrow down large datasets to exactly the information you need, whether it's looking at a specific team's performance, analyzing games with high rushing yards, or focusing on particular conferences. These skills are crucial for efficient data manipulation and analysis in sports analytics and beyond.
+
+## The Basics
 
 More often than not, we have more data than we want. Sometimes we need to be rid of that data. In `dplyr`, there's two ways to go about this: filtering and selecting.
 
@@ -28,7 +32,10 @@ More often than not, we have more data than we want. Sometimes we need to be rid
 
 **Selecting simply returns only the fields named**. So if you only want to see Team and TeamFGA, you select those fields. When you look at your data again, you'll have two columns. If you try to use one of your columns that you had before you used select, you'll get an error.  
 
-In short: **filter limits the number of rows, select limits the number of columns**.
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0"><code>filter()</code> limits rows. If you have 1000 rows and limit it to a single team, you'll have fewer than 1000 rows. <code>select()</code> limits columns. If you have 1000 rows and 25 columns, but you only need three columns, you'll still have 1000 rows when you are done using select.</p>
+</div>
 
 Let's work on some examples using college football game data from last season. You can download the data here if you want to use it in your own notebook -- and this is the same data we used in the mutating tutorial, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
 
@@ -88,7 +95,21 @@ grade_this_code()
 
 So, first things first, let's say we don't care about all this Air Force, Akron, Alabama crap and just want to see Dear Old Nebraska U. We do that with `filter` and then we pass it a condition. 
 
-Before we do anything, a note about conditions. Most of the conditional operators you'll understand -- greater than and less than are > and <. The tough one to remember is equal to. In conditional statements, equal to is == not =. If you haven't noticed, = is a variable assignment operator, not a conditional statement. So equal is == and NOT equal is !=. 
+Before we do anything, a note about conditions. Most of the conditional operators you'll understand -- greater than and less than are > and <. The tough one to remember is equal to. In conditional statements, equal to is == not =. If you haven't noticed, = is a variable assignment operator, not a conditional statement. **So equal is == and NOT equal is !=.**
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">Conditional operators to remember:
+  <ul>
+    <li>== is equal to.</li>
+    <li>!= is does not equal.</li>
+    <li>> is greater than.</li>
+    <li>>= is greater than or equal to.</li>
+    <li>< is less than.</li>
+    <li><= is less than or equal to.</li>
+  </ul>
+  </p>
+</div>
 
 So if you want to see Nebraska, what would you do?
 
@@ -166,7 +187,7 @@ glue("In the Big Ten last year, there were {nrow(bigrush)} games last season whe
 
 ### Exercise 4: Filtering with a list
 
-But what if we want to see all of the Power Five conferences? We *could* use conditional logic in our filter. The conditional logic operators are `|` for OR and `&` for AND. **NOTE: AND means all conditions have to be met. OR means any of the conditions work.** So be careful about boolean logic. 
+But what if we want to see all of the Power Four conferences (RIP Pac-12)? We *could* use conditional logic in our filter. The conditional logic operators are `|` for OR and `&` for AND. **NOTE: AND means all conditions have to be met. OR means any of the conditions work.** So be careful about boolean logic. 
 
 Here's what that looks like. It's a lot of extra code that you've got to be careful with.
 
@@ -175,7 +196,6 @@ games |>
   filter(
     Conference == "Big Ten Conference" | 
       Conference == "Southeastern Conference" | 
-      Conference == "Pac-12 Conference" | 
       Conference == "Atlantic Coast Conference" | 
       Conference == "Big 12 Conference")
 ```
@@ -184,7 +204,6 @@ games |>
   filter(
     Conference == "Big Ten Conference" | 
       Conference == "Southeastern Conference" | 
-      Conference == "Pac-12 Conference" | 
       Conference == "Atlantic Coast Conference" | 
       Conference == "Big 12 Conference")
 ```
@@ -201,7 +220,7 @@ Note here: text is in quotes. If they were numbers, we wouldn't need the quotes.
 With a list, we can use the %in% operator. It does what you think it does -- it gives you data that matches things IN the list you give it. 
 
 ```{r filtering-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfive <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 ____ |> filter(____ %in% ____)
 ```
@@ -221,14 +240,14 @@ So now we have our Power Five list. What if we just wanted to see team names, co
 ### Exercise 5: Select to simplify 
 
 ```{r selecting-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfive <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 ____ |> 
   filter(____ %in% ____) |> 
   select(____, ____, ____)
 ```
 ```{r selecting-power-solution}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfive <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 games |> 
   filter(Conference %in% powerfive) |> 
@@ -273,3 +292,17 @@ grade_this_code()
 ```{r teamrushers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "filtering-load-data", results='asis'}
 glue("Last season, it was {toprush$Team} that went off for {toprush$RushingYds} yards in a single game. Impressive, until you realize it was against {toprush$Opponent}.")
 ```
+
+## The Recap
+
+In this lesson, we've explored two powerful tools for data manipulation: filtering and selecting. We learned how to use filter() to narrow down our dataset based on specific conditions, such as team names or performance metrics. We also discovered how to chain multiple filters together for more complex queries, and how to use lists with the %in% operator for efficient filtering of multiple categories. The select() function allowed us to focus on specific columns, simplifying our dataset for analysis. We combined these tools with previously learned functions like arrange() and introduced top_n() for creating ranked lists. These skills are fundamental in sports analytics, allowing you to drill down into the data that matters most for your analysis. Whether you're isolating performances of a specific team, comparing conferences, or identifying top performers, the ability to filter and select data efficiently will be crucial in your sports data analysis toolkit. Remember, effective data analysis often starts with getting the right subset of data, and the skills you've learned here will help you do just that.
+
+## Terms to Know
+
+- `filter()`: A function used to subset data by rows based on specified conditions.
+- `select()`: A function used to choose specific columns from a dataset, reducing the number of variables.
+- Conditional operators: Symbols used in filtering to create conditions (e.g., ==, >, <, >=, <=, !=).
+- Boolean operators: Logical operators used to combine multiple conditions in filtering (e.g., & for AND, | for OR).
+- `%in%`: An operator used to check if values are present in a specified set or list.
+- `c()`: A function used to combine values into a vector or list.
+- `top_n()`: A function used to select the top n rows based on a specified column.
