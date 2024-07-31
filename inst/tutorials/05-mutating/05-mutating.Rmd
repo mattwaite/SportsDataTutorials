@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to make new columns of data.
@@ -18,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Mutating data
+## The Goal
 
-## The basics
+Sometimes your data comes in fully baked. Some sports, some leagues, they provide just about everything you need. But a great deal of the time, you won't have all of the columns you need. Say you want to compare quarterbacks. You know how many touchdowns passes they've thrown. You know how many interceptions they've thrown. But a common metric for quarterbacks is the touchdown/interception ratio, which simply divides the number of touchdowns by the number of interceptions. If that's a big number, your quarterback is very good. If it's a small number, your quarterback is terrible. To calculate that, we're going to introduce a new verb: `mutate()`
+
+## The Basics
 
 One of the most common data analysis techniques is to create a new stat out of existing stats provided by a league or sport. More often than not, this is meant to level the playing field, so to speak. It's hard to compare players or teams who have played a different number of games, or appeared for a different number of minutes. Often what we need is a per game or per attempt metric. 
 
@@ -106,7 +110,14 @@ grade_this_code()
 
 ### Exercise 1: Calculating goals per game 
 
-The code to calculate anything with mutate is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, **we're trying to do goals divided by games** -- goals per game -- but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's a Games column, and a Goals column. Then, to help us, we'll use arrange again to sort it, so we get the most ruthless squad over one year. Similar to summarize, we'll want to give what we create a name using =. 
+The code to calculate anything with mutate is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, **we're trying to do goals divided by games** -- goals per game -- but we're doing it with columns. 
+
+If we look at what we got when we ran `head`, you'll see there's a Games column, and a Goals column. Then, to help us, we'll use arrange again to sort it, so we get the most ruthless squad over one year. Similar to summarize, we'll want to give what we create a name using =. 
+
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">Similar to summarize, the pattern here is <code>nameofyournewcolumn = existingcolumn/existingcolumn</code> if you want to divide two columns. You can add them, subtract them, multiply them -- you can make any form of math you need this way.</p>
+</div>
 
 Replace the words in the blanks with the correct parts and **name the new column we're creating as gpg**. 
 
@@ -154,7 +165,12 @@ Another common analysis task is converting two numbers into a percentage. How of
 
 Sticking with our soccer data, which team was the most accurate when it comes to shots on goal? Who was pressuring the keeper the most? Sure, we could just arrange the shots on goal column and see who was at the top, but how then do you compare a team that shoots a lot with a team who doesn't but is ruthlessly efficient when they do? 
 
-**To calculate a percentage, we need to remember a formula: The smaller thing / the total number.** The smaller thing is the outcome you're measuring. The total number is all the chances a team or a player had at that thing. For example: Completion percentage. How do you calculate that? You divide completions by the total number of passes thrown. But if you do that, you'll get a number less than 1. That's because it's not yet a percentage like you are accustomed to seeing. To get that, you have to multiply the result of your division by 100. 
+<div class="alert alert-info">
+  <h4 class="alert-heading">Key Concept</h4>
+  <p class="mb-0">To calculate a percentage, we need to remember a formula: The smaller thing / the total number.</p>
+</div>
+
+The smaller thing is the outcome you're measuring. The total number is all the chances a team or a player had at that thing. For example: Completion percentage. How do you calculate that? You divide completions by the total number of passes thrown. But if you do that, you'll get a number less than 1. That's because it's not yet a percentage like you are accustomed to seeing. To get that, you have to multiply the result of your division by 100. 
 
 To get shots on goal percentage, we're going to do something very similar to the first exercise, but adding in the multiplication. **The little thing in this case is `SoG` (short for Shots on Goal). The big thing is `ShAtt` (short for Shot Attempts).** 
 
