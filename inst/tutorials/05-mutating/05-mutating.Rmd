@@ -237,3 +237,13 @@ grade_this_code()
 ```{r conf, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
 glue("What conference do you not want to be a keeper?  The {confsnipers$Conference} Conference, who are on goal {format(confsnipers$SoGPct, digits=1)}% of the time.")
 ``` 
+
+## The Recap
+
+In this lesson, we've explored the power of the mutate() function, a key tool in data analysis that allows us to create new variables based on existing ones. We learned how to calculate per-game statistics, such as goals per game, which helps level the playing field when comparing teams or players with different numbers of games played. We also delved into creating percentages, a crucial skill for comparing efficiencies across different sample sizes. By combining mutate() with other functions we've previously learned, like group_by(), summarize(), and arrange(), we've seen how we can perform more complex analyses, such as finding the most accurate shooting conference in women's soccer. These skills are fundamental in sports analytics, allowing us to derive meaningful insights that go beyond the basic statistics provided in raw data. Remember, the ability to create new, insightful metrics is often what separates good analysis from great analysis in the world of sports data.
+
+## Terms to Know
+
+- **mutate()**: A function used to create new columns in a dataset based on existing columns.
+- **Percentage Calculation**: A formula used to express a part as a fraction of the whole, typically multiplied by 100 to get a percentage. Formula: (smaller number / total number) * 100.
+- **Per-Game Statistics**: Metrics calculated by dividing a cumulative statistic by the number of games played, allowing for fairer comparisons between players or teams with different numbers of games.
