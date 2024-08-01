@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Significance tests
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to significance testing, a crucial statistical tool for determining whether observed differences in data are meaningful or merely due to chance. You'll learn about the concept of hypothesis testing, including null hypotheses and p-values, and how to interpret these results. We'll focus on using R's t.test() function to compare means between two groups, applying this to real-world sports data from the NBA's "bubble" season during the COVID-19 pandemic. By the end of this lesson, you'll be able to formulate hypotheses about sports data, conduct significance tests, and draw evidence-based conclusions about whether factors like the presence of fans significantly impact game outcomes. This skill is essential for moving beyond simple descriptive statistics and making more robust, inferential claims in sports analytics.
+
+## The Basics
 
 Now that we've worked with data a little, it's time to start asking more probing questions of our data. One of the most probing questions we can ask -- one that so few sports journalists ask -- is if the difference between this thing and the normal thing is real. 
 
@@ -103,7 +105,6 @@ head(logs)
 grade_this_code()
 ```
 
-
 ### Exercise 1: Let's test.
 
 First, let's just look at shooting Here's a theory: fans make players nervous. The screaming makes players tense up, and tension makes for bad shooting. An alternative to this: screaming fans make you defend harder. So my hypothesis is that not only is the shooting different, it's lower.
@@ -167,3 +168,16 @@ Look at the p-value. It's 2.247e-15. Is that less than .05? Depends on if you ca
 That means we **reject the null hypothesis** that there is no difference between fans and no fans when it comes to the refs calling fouls in NBA games. They absolutely did call more fouls in the bubble without fans. Our hypothesis that the bubble affected refereeing is correct, but our supposition about it is not. I thought they'd back off. Instead, they called more. 
 
 We're going to be analyzing these bubble games for *years* trying to find the true impact of fans.
+
+## The Recap
+
+In this lesson, we've delved into the world of significance testing, a powerful tool in sports analytics for determining whether observed differences are statistically meaningful. We learned about formulating hypotheses, understanding null hypotheses, and interpreting p-values. Using the t.test() function in R, we analyzed real NBA data to investigate whether the absence of fans during the "bubble" season affected game outcomes. We discovered that while shooting percentages weren't significantly different, the number of fouls called by referees was significantly higher without fans present. This exercise demonstrated how statistical tests can challenge our assumptions and reveal unexpected insights. Remember, a p-value below 0.05 generally indicates a statistically significant difference, allowing us to reject the null hypothesis. However, it's crucial to interpret these results in context and consider practical significance alongside statistical significance.
+
+## Terms to Know
+
+- Significance test: A statistical method used to determine if there is a meaningful difference between groups or if an observed effect is likely due to chance.
+- Hypothesis: A proposed explanation or prediction about a phenomenon, often used as the starting point for statistical testing.
+- Null hypothesis: The assumption that there is no significant difference or effect, which is tested against the alternative hypothesis.
+- p-value: The probability of obtaining results at least as extreme as the observed results, assuming that the null hypothesis is true. Generally, a p-value less than 0.05 is considered statistically significant.
+- t-test: A statistical test used to compare the means of two groups and determine if they are significantly different from each other.
+- Statistical significance: The likelihood that a relationship between two or more variables is caused by something other than random chance. Typically indicated by a p-value less than 0.05.
