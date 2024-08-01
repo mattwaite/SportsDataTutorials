@@ -4,6 +4,8 @@ output:
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to turn data on it's side and back again.
@@ -18,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Transforming data
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to the concept of data reshaping, specifically focusing on transforming data between "long" and "wide" formats using the pivot_longer() and pivot_wider() functions from the tidyr package. You'll learn why data sometimes needs to be reshaped, how to recognize long and wide data formats, and when to use each transformation. By the end of this lesson, you'll be able to restructure datasets to facilitate different types of analyses and visualizations, a crucial skill in sports analytics where data often comes in various formats. You'll apply these techniques to NBA per-game statistics, demonstrating how data reshaping can help answer questions about team performance across seasons.
+
+## The Basics
 
 Sometimes long data needs to be wide, and sometimes wide data needs to be long. I'll explain.
 
@@ -165,3 +169,14 @@ grade_this_code()
 ```
 
 We're back to 270 rows. 
+
+## The Recap
+
+In this lesson, we've explored the essential skill of data reshaping using the `pivot_wider()` and `pivot_longer()` functions from the tidyr package. We learned how to transform data from a long format, where each row represents a single observation, to a wide format, where each row contains multiple observations for a single entity. This transformation allowed us to perform calculations across seasons, such as comparing team performance year-over-year. We also practiced the reverse process, converting wide data back to long format, which is often necessary for certain types of analyses or visualizations. Through hands-on exercises with NBA data, you've seen how these transformations can help answer real-world sports analytics questions, like identifying the team with the most improved offense. Remember, the ability to reshape data is a powerful tool in your data analysis toolkit, allowing you to adapt your dataset to the specific requirements of your analysis or visualization tasks.
+
+## Terms to Know
+
+- pivot_wider(): A function from the tidyr package used to transform data from long to wide format, spreading unique values from one column into multiple new columns.
+- pivot_longer(): A function from the tidyr package used to transform data from wide to long format, gathering multiple columns into key-value pairs.
+- Long format: A data structure where each row represents a single observation, and each column represents a variable. In long format, you often have repeated entries in identifier columns.
+- Wide format: A data structure where each row represents a single entity with multiple observations in separate columns. This format often has fewer rows but more columns than long format.
