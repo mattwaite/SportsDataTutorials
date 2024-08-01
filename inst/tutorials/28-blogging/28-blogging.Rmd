@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 27: Make your own blog"
+title: "Sports Data Lesson 28: Make your own blog"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to show what you can do on the internet for an audience.

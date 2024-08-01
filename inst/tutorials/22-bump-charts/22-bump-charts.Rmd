@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 21: Bump charts"
+title: "Sports Data Lesson 22: Bump charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to make a combination of step charts and subway maps for ranks.

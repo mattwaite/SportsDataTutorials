@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 29: The importance of text"
+title: "Sports Data Lesson 30: The importance of text"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to add important labels and annotations to your charts.

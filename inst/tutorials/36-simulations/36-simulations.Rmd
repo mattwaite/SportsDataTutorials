@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 35: Simulation"
+title: "Sports Data Lesson 36: Simulation"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to determine if it was bad luck or some kind of cosmic weirdness.

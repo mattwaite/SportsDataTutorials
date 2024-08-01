@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 19: Bubble charts"
+title: "Sports Data Lesson 20: Bubble charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to show relationships, but now with magnitude.

@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 20: Beeswarm plots"
+title: "Sports Data Lesson 21: Beeswarm plots"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to make scatterplots grouped by categories on a number line.

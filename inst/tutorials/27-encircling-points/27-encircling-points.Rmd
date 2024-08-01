@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 25: Encirlcing points"
+title: "Sports Data Lesson 27: Encirlcing points"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to draw attention to some points.

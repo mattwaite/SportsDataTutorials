@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 28: Text cleaning"
+title: "Sports Data Lesson 29: Text cleaning"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to clear out some junk that data providers give you.

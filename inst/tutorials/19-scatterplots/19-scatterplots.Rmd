@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 18: Scatterplots"
+title: "Sports Data Lesson 19: Scatterplots"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to show how much two numbers are related.

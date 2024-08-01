@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 7: Significance tests"
+title: "Sports Data Lesson 8: Significance tests"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to see if differences are meaningful.

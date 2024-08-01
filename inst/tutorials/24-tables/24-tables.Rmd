@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 22: Tables"
+title: "Sports Data Lesson 24: Tables"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to make a table with visual interestingness.

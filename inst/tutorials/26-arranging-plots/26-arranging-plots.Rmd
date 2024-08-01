@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 24: Arranging plots"
+title: "Sports Data Lesson 26: Arranging plots"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to make multiple charts into one graphic.

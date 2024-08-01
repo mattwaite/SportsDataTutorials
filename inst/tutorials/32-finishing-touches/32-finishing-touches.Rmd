@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 31: Finishing touches"
+title: "Sports Data Lesson 32: Finishing touches"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to add the final visual flourishes to make your charts professional and presentable.

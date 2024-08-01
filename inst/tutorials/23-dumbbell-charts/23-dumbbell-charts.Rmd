@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 26: Dumbbell charts"
+title: "Sports Data Lesson 23: Dumbbell charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to show the difference between two points on a number line.

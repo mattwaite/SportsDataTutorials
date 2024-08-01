@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 30: Using color the right way"
+title: "Sports Data Lesson 31: Using color the right way"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how the limited use of color can draw attention and focus your story.

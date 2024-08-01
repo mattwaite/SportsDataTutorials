@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 10: Z-Scores"
+title: "Sports Data Lesson 11: Z-Scores"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to compare teams and players across leagues and time.

@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 34: Clustering"
+title: "Sports Data Lesson 35: Clustering"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to group like things together with math.

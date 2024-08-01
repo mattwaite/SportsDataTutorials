@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 17: Slope charts"
+title: "Sports Data Lesson 18: Slope charts"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn another way to show changes between two time periods.

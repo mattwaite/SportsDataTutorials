@@ -1,9 +1,11 @@
 ---
-title: "Sports Data Lesson 11: Using packages to get data"
+title: "Sports Data Lesson 12: Using packages to get data"
 output: 
   learnr::tutorial:
     progressive: true
     allow_skip: true
+    theme: united
+    ace_theme: github
 runtime: shiny_prerendered
 description: >
   Learn how to use a library to import data instead of a csv.
