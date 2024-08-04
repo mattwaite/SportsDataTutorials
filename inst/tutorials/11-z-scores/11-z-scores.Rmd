@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Z-scores
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to z-scores, a powerful statistical tool for standardizing and comparing data across different groups or time periods. You'll learn what z-scores are, how they're calculated, and why they're particularly useful in sports analytics. We'll focus on using R to calculate z-scores for volleyball team performance, allowing us to compare teams across different seasons and conferences. By the end of this lesson, you'll be able to use z-scores to create composite measures of performance, rank teams relative to their peers, and make meaningful comparisons that account for differences in competition levels or eras. You'll also learn how to interpret z-scores and communicate their meaning effectively to a non-technical audience. This skill will enable you to conduct more sophisticated analyses of team and player performance, helping you identify truly standout performances in their proper context.
+
+## The Basics
 
 Z-scores are a handy way to standardize numbers so you can compare things across groupings or time. In this class, we may want to compare teams by year, or era. We can use z-scores to answer questions like who was the greatest X of all time, because a z-score can put them in context to their era. 
 
@@ -243,3 +245,14 @@ If the word z-score appears in your story or in a chart, you need to explain wha
 
 **Never use z-score in a headline.** Write around it. Away from it. Z-score in a headline is attention repellent. You won't get anyone to look at it. So "Tottenham tops in z-score" bad, "Tottenham tops in the Premiere League" good.
 
+## The Recap
+
+In this lesson, we've explored the concept of z-scores and their application in sports analytics. We learned that z-scores provide a standardized measure of how far a data point is from the mean, expressed in terms of standard deviations. This allows us to compare performances across different seasons, leagues, or eras. We practiced calculating z-scores in R using the scale() function and applied this to volleyball team statistics. We created composite z-scores to rank teams based on multiple performance metrics, demonstrating how this technique can provide insights that raw statistics alone might miss. However, we also encountered some unexpected results, highlighting the importance of critically evaluating our measures and considering additional context. We discussed the challenges of communicating z-scores to a general audience and strategies for presenting these insights effectively. Remember, while z-scores are a powerful tool for standardizing comparisons, they should be used in conjunction with other analytical methods and domain knowledge for comprehensive sports analysis. 
+
+## Terms to Know
+
+- Z-score: A statistical measure that indicates how many standard deviations an element is from the mean.
+- Standard Deviation: A measure of the amount of variation or dispersion of a set of values.
+- Normal Distribution: A probability distribution that is symmetric about the mean, showing that data near the mean are more frequent in occurrence than data far from the mean.
+- scale() function: An R function used to compute z-scores by centering and scaling numeric variables.
+- Composite Z-score: A combined measure created by adding multiple individual z-scores together.
