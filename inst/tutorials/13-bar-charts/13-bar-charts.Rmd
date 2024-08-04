@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Intro to ggplot
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to creating bar charts using ggplot2, one of the most powerful and flexible data visualization tools in R. By the end of this tutorial, you'll understand the basic structure of a ggplot command, how to create simple bar charts, and how to customize them to better represent your data. You'll learn how to filter data to focus on specific subsets, reorder bars for clearer presentation, use layering to highlight particular data points, and adjust the orientation of your charts. These skills will form the foundation for creating more complex and insightful visualizations as you progress in your sports data analysis journey. Remember, effective data visualization is key to communicating your findings clearly and compellingly in sports analytics.
+
+## The Basics
 
 With `ggplot2`, we dive into the world of programmatic data visualization. The `ggplot2` library implements something called the grammar of graphics. The main concepts are: 
 
@@ -33,11 +35,6 @@ With `ggplot2`, we dive into the world of programmatic data visualization. The `
 * layers - which means how we might lay multiple geometries over top of each other to reveal new information.
 
 Hadley Wickham, who is behind all of the libraries we have used in this course to date, wrote about his layered grammar of graphics in [this 2009 paper that is worth your time to read](https://byrneslab.net/classes/biol607/readings/wickham_layered-grammar.pdf). 
-
-Here are some `ggplot2` resources you'll want to keep handy: 
-
-* [The ggplot documentation](https://ggplot2.tidyverse.org/reference/index.html)
-* [The ggplot cookbook](https://www.cookbook-r.com/Graphs/)
 
 Let's dive in using data on college softball in 2023. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will write the code that adds necessary and required parts to finish it. 
 
@@ -253,3 +250,19 @@ grade_this_code()
 ```
 
 Now we've got something working. There's a lot of work left to do to make this publishable, but we'll get to that in due time.
+
+## The Recap
+
+In this lesson, we've taken our first steps into the world of data visualization with ggplot2, focusing on bar charts. We've learned how to create basic bar charts using geom_bar(), and how to customize them to better represent our data. We explored key concepts such as filtering data to focus on specific subsets (like the Big Ten conference), using the weight aesthetic to represent values other than count, and reordering bars to improve readability. We also discovered how to use layering to highlight specific data points (like Nebraska's performance) and how to flip coordinates for horizontal bar charts. These foundational skills in creating and customizing bar charts will serve as building blocks for more complex visualizations in future lessons. Remember, effective data visualization is an iterative process - don't be afraid to experiment with different approaches to find the most clear and compelling way to present your sports data insights.
+
+## Terms to Know
+
+- ggplot2: A data visualization package for R that implements the grammar of graphics, allowing for the creation of complex plots from data in a layered fashion.
+- `geom_bar()`: A ggplot2 function used to create bar charts, which represent data with rectangular bars proportional to the values they represent.
+- Aesthetics (aes): In ggplot2, aesthetics define how variables in the data are mapped to visual properties of the plot, such as x and y positions, colors, sizes, etc.
+weight: An aesthetic in geom_bar() that allows you to represent values other than simple counts in your bar chart.
+- `reorder()`: A function used to change the order of categorical variables in a plot, often used to sort bars by their values for better readability.
+- `coord_flip()`: A ggplot2 function that switches the x and y axes, useful for creating horizontal bar charts.
+- Layering: The process of adding multiple geometric objects (geoms) to a plot, allowing for more complex and informative visualizations.
+- `fill`: An aesthetic that controls the interior color of geometric shapes in a plot, such as the color inside bars in a bar chart.
+- `data`: The argument in ggplot2 functions that specifies which dataset to use for creating the visualization.
