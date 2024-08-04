@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Waffle charts
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to waffle charts, an effective alternative to pie charts for visualizing proportions and compositions. By the end of this tutorial, you'll understand why waffle charts are often preferred over pie charts for certain types of data visualization. You'll learn how to create basic waffle charts using the waffle package in R, including how to prepare your data using vectors, customize chart appearance, and create side-by-side comparisons using the iron() function. We'll apply these concepts to real sports data, visualizing offensive statistics from a college football game. This lesson will enhance your data visualization toolkit, allowing you to present proportional data in a clear, engaging, and easily interpretable format that's particularly useful for sports analytics.
+
+## The Basics
 
 Pie charts are the devil. They should be an instant F in any data visualization class. The problem? How carefully can you evaluate angles and area? Unless they are blindingly obvious and only a few categories, not well. If you've got 25 categories, how can you tell the difference between 7 and 9 percent? You can't.
 
@@ -275,3 +277,16 @@ grade_this_code()
 ```
 
 News flash: Wisconsin beat Nebraska by one point. One. 
+
+## The Recap
+
+In this lesson, we've explored the power of waffle charts as an effective alternative to pie charts for visualizing proportional data in sports analytics. We started by learning how to create simple waffle charts using vectors and the waffle() function, applying this to visualize offensive statistics from a college football game. We then advanced to creating side-by-side comparisons using the iron() function, which allowed us to effectively contrast data from two teams. We also learned important techniques for improving our visualizations, such as adding padding to ensure consistent square sizes and adjusting the scale to represent multiple units per square. Throughout the lesson, we've seen how waffle charts can clearly display both the magnitude and composition of data, making them an excellent tool for presenting sports statistics. Remember, effective data visualization is about choosing the right tool for your data and audience, and waffle charts offer a clear, engaging way to present proportional data that's easy for viewers to interpret and compare.
+
+## Terms to Know
+
+- Waffle Chart: A chart type that represents data as squares in a grid, where each square represents a specific value or proportion of the whole.
+- Vector: In R, a basic data structure that contains elements of the same type, used to create the data for waffle charts.
+- `c()` Function: The concatenate function in R used to create vectors by combining values.
+- `waffle()` Function: The main function from the waffle package used to create individual waffle charts.
+- `iron()` Function: A function from the waffle package used to combine multiple waffle charts into a single visualization.
+- Padding: Extra values added to a vector to make the total consistent across different data sets, allowing for easier comparison in waffle charts.
