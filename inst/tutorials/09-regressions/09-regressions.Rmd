@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Correlations and regression
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to correlations and linear regressions, powerful statistical tools for examining relationships between variables in sports data. You'll learn how to calculate and interpret correlation coefficients, which measure the strength and direction of linear relationships between two variables. We'll also explore linear regression, a technique for modeling the relationship between a dependent variable and one or more independent variables. By the end of this lesson, you'll be able to use R to perform correlation analyses and simple linear regressions, interpret their results, and understand key concepts like statistical significance, R-squared values, and regression coefficients. We'll apply these techniques to real college football data, examining popular beliefs about offensive strategies and their impact on game outcomes. This knowledge will enable you to move beyond simple descriptive statistics and start making data-driven insights about the factors that influence sports performance.
+
+## The Basics
 
 Throughout sports, you will find no shortage of opinions. From people yelling at their TV screens to an entire industry of people paid to have opinions, there are no shortage of reasons why this team sucks and that player is great. They may have their reasons, but a better question is, does that reason really matter? 
 
@@ -290,3 +292,19 @@ Chances of that being right? About {format(summary(pass)$r.squared*100, digits=1
 ```
 
 What does this all mean? It means a sport with 22 players on the field at any one time is much more complicated than simple arguments on message boards would lead you to believe.
+
+## The Recap
+
+In this lesson, we've explored the powerful statistical tools of correlation and linear regression, applying them to analyze college football data and test common assumptions about offensive strategies. We learned how to calculate Pearson correlation coefficients to measure the strength of relationships between variables like rushing yards, passing yards, and point differentials. We then delved into linear regression, using it to model these relationships and assess their predictive power. We discovered that while relationships between offensive statistics and game outcomes are statistically significant, they explain less of the variance in point differentials than one might expect. This exercise demonstrated the complexity of football and the danger of oversimplifying strategic analysis. We also learned to interpret key regression outputs like p-values, R-squared values, and coefficients, and how to use these to make predictions. Remember, while these tools are powerful, they have limitations, especially in complex sports like football. 
+
+## Terms to Know
+
+- Correlation: A statistical measure that expresses the extent to which two variables are linearly related.
+- Pearson Correlation Coefficient: A value between -1 and 1 that indicates the strength and direction of a linear relationship between two variables.
+- Linear Regression: A statistical method for modeling the relationship between a dependent variable and one or more independent variables.
+- p-value: In regression analysis, a measure of the probability that an observed relationship between variables in a sample occurred by pure chance.
+- R-squared: A statistical measure that represents the proportion of the variance in the dependent variable that is predictable from the independent variable(s).
+- Coefficient: In a regression equation, the number that represents the rate of change of one variable (y) as a function of changes in the other (x).
+- Statistical Significance: The likelihood that a relationship between two or more variables is caused by something other than random chance.
+- Independent Variable: The variable in a regression analysis that is used to explain or predict the dependent variable.
+- Dependent Variable: The variable in a regression analysis that is being predicted or explained.
