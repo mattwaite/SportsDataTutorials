@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Residuals
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to residuals, a crucial concept in linear regression analysis. You'll learn what residuals are, how to calculate them, and why they're important in evaluating the effectiveness of your regression models. We'll explore how to interpret residuals to identify teams or players who are overperforming or underperforming relative to what the model predicts. You'll also learn how to visualize residuals to check the appropriateness of your linear model and to spot potential patterns or outliers in your data. By the end of this lesson, you'll be able to use residual analysis to enhance your understanding of statistical models in sports analytics, helping you to make more nuanced interpretations of team and player performance beyond what basic statistics might suggest.
+
+## The Basics
 
 When looking at a linear model of your data, there's a measure you need to be aware of called residuals. The residual is the distance between what the model predicted and what the real outcome is.  
 
@@ -258,3 +260,18 @@ penalties <- penalties |> mutate(predicted = predict(fit), residuals = residuals
 
 ggplot(data=penalties, aes(x=TotalPenaltyYards, y=differential)) + geom_point() + geom_segment(aes(xend = TotalPenaltyYards, yend = predicted)) + geom_smooth(method=lm, se=FALSE)
 ```
+
+## The Recap
+
+In this lesson, we've delved into the world of residuals, a key component of linear regression analysis. We learned that residuals represent the difference between observed values and those predicted by our model, providing valuable insights into model performance and data patterns. We practiced calculating residuals using R, interpreting them to identify over- and underperforming teams, and visualizing them to assess model appropriateness. Through our examples with college football data, we saw how residual analysis can reveal nuances in team performance that simple statistics might miss. We also encountered a case where residuals indicated a linear model was appropriate, but other metrics showed the model wasn't meaningful, highlighting the importance of considering multiple factors when evaluating models. Remember, while residuals are powerful tools, they should be used in conjunction with other statistical measures and domain knowledge for comprehensive analysis. 
+
+## Terms to Know
+
+- Residuals: The differences between observed values and values predicted by a statistical model.
+- Linear Model: A statistical model that assumes a linear relationship between variables, often used in regression analysis.
+- Overperforming: When an observed value is higher than what the model predicts, resulting in a positive residual.
+- Underperforming: When an observed value is lower than what the model predicts, resulting in a negative residual.
+- predict(): An R function used to generate predicted values from a fitted model.
+- residuals(): An R function used to extract the residuals from a fitted model.
+- Model Fit: How well a statistical model describes the relationship in the data, often assessed using residuals and other metrics.
+- Outliers: Data points that differ significantly from other observations, often identified through residual analysis.
