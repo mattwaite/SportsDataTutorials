@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Stacked bar charts
+## The Goal
 
-## The basics
+The goal of this lesson is to build upon your basic bar chart skills and introduce you to creating stacked bar charts using ggplot2. Stacked bar charts are powerful tools for visualizing the composition of a whole and comparing parts within it. By the end of this tutorial, you'll understand how to prepare your data for stacked bar charts, use the fill aesthetic to create layers within bars, and interpret the resulting visualizations. You'll learn how to create charts that show both total values and their components. This lesson will enhance your ability to create more nuanced and informative visualizations, allowing you to present complex relationships in sports data in a clear and compelling manner.
+
+## The Basics
 
 One of the elements of data visualization excellence is **inviting comparison**. Often that comes in showing **what proportion a thing is in relation to the whole thing**. With bar charts, we're showing magnitude of the whole thing. If we have information about the parts of the whole, **we can stack them on top of each other to compare them, showing both the whole and the components**. And it's a simple change to what we've already done. 
 
@@ -215,3 +217,15 @@ grade_this_code()
 ```
 
 And just like that ... Ohio State and Penn State are out on top. Where is Nebraska?
+
+## The Recap
+
+In this lesson, we've expanded our data visualization skills by learning how to create stacked bar charts using ggplot2. We started by preparing our data, using group_by() and summarise() to aggregate game-level data into season totals, and then transforming it from wide to long format using pivot_longer(). This data preparation step is crucial for creating effective stacked bar charts. We then built on our basic bar chart knowledge, adding the fill aesthetic to create layers within our bars that represent different components of the whole (in this case, rushing and passing yards). We also reinforced the importance of reordering our data for more meaningful visualizations. Through this process, we've learned how to create charts that not only show total offensive production for Big Ten football teams, but also reveal the balance between rushing and passing yards for each team. This type of visualization allows for rich comparisons and insights, demonstrating the power of stacked bar charts in sports data analysis. Remember, effective data visualization often requires careful data preparation and thoughtful design choices to clearly communicate your insights.
+
+## Terms to Know
+
+- Stacked Bar Chart: A type of bar chart where bars are divided into segments, each representing a subcategory of the main category. The total height of the bar represents the sum of all subcategories.
+- `pivot_longer()`: A function from the tidyr package used to transform data from wide to long format, which is often necessary for creating stacked bar charts in ggplot2.
+- `fill`: An aesthetic in ggplot2 used to assign different colors to subcategories within a stacked bar chart, allowing for visual distinction between components.
+- `reorder()`: A function used to change the order of categorical variables in a plot, often used in bar charts to sort bars by their total values for better readability.
+- Long format: A data structure where each row represents a single observation and each column represents a variable. This format is typically required for creating stacked bar charts in ggplot2.
