@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Using packages to get data
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to using specialized R packages to directly import sports data into your analysis workflow. You'll learn how to leverage libraries like those in the SportsDataverse to access rich datasets without needing to manually download CSV files or scrape websites. By the end of this lesson, you'll be able to use the wehoop package to import women's basketball data, including both box scores and play-by-play information. You'll practice filtering, grouping, and analyzing this data to gain insights into team performance and game dynamics. This skill will significantly expand your ability to access and work with diverse sports datasets, allowing you to conduct more sophisticated and up-to-date analyses.
+
+## The Basics
 
 There is a growing number of packages and repositories of sports data, largely because there's a growing number of people who want to analyze that data. We've done it ourselves with simple Google Sheets tricks. Then there's RVest, which is a method of scraping the data yourself from websites that you'll do later. But with these packages, someone has done the work of gathering the data for you. All you have to learn are the commands to get it.
 
@@ -172,3 +174,15 @@ grade_this_code()
 ```
 
 The most common plays -- missed shots and made free throws. But if you look at basketball stats, that makes sense. There's a lot more defensive rebounds than offensive. There's a lot more missed threes than made ones, typically. But as Nebraska goes further on this run, you now have the ability to get very granular data to analyze how Amy Williams and the team are doing it. 
+
+## The Recap
+
+In this lesson, we've explored the power of specialized R packages for accessing sports data, focusing on the wehoop package for women's basketball. We learned how to load player box scores and play-by-play data directly into our R environment without the need for manual data downloads. We practiced filtering this data to focus on specific teams, grouping by various factors, and using functions like tally() to quickly summarize information. Through exercises analyzing Nebraska's starting lineups and most common shooting plays, we've seen how these packages can provide rich, detailed data for in-depth sports analysis. Remember, while these packages greatly simplify data access, it's crucial to read their documentation carefully as they may have specific requirements or limitations. This approach to data import opens up new possibilities for timely, comprehensive sports analytics across various leagues and sports.
+
+## Terms to Know
+
+- SportsDataverse: A collection of R packages designed for accessing and analyzing sports data across various leagues and sports.
+- wehoop: An R package specifically for accessing women's basketball data, including player box scores and play-by-play information.
+- tally(): A dplyr function that provides a shortcut for counting observations within groups, often used with group_by() for quick summaries.
+- API (Application Programming Interface): A set of protocols and tools that allow different software applications to communicate with each other, often used by sports data packages to retrieve data.
+- Documentation: Written materials that explain how to use a software package, including function descriptions, parameters, and usage examples, crucial for effectively utilizing sports data packages.
