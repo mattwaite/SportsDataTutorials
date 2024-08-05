@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Bubble charts
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to bubble charts, an advanced form of scatterplot that incorporates a third dimension of data through the size of the plotted points. By the end of this tutorial, you'll understand when to use bubble charts, how to create them using ggplot2, and how to interpret the complex relationships they reveal. You'll learn to prepare data for bubble charts, plot points with varying sizes to represent an additional variable, add reference lines for context, and use ggrepel to label points without overlap. We'll apply these concepts to real college football data, analyzing the relationship between offensive and defensive performance while also considering team wins. This lesson will enhance your ability to visualize multidimensional data relationships in sports, a crucial skill for understanding complex performance factors and making nuanced comparisons between teams.
+
+## The Basics
 
 Here is the real talk: Bubble charts are hard. The reason they are hard is not because of the code, or the complexity or anything like that. They're a scatterplot with magnitude added -- the size of the dot in the scatterplot has meaning. The hard part is seeing when a bubble chart works and when it doesn't. 
 
@@ -371,3 +373,17 @@ grade_this_code()
 ```
 
 Where is Nebraska? And what story does that tell? 
+
+## The Recap
+
+In this lesson, we've explored the power and complexity of bubble charts for visualizing multidimensional relationships in sports data. We started by learning how to prepare data for bubble charts, including grouping and summarizing game-level statistics into team-level metrics. We then progressed from creating basic scatterplots to more complex bubble charts by incorporating a size aesthetic to represent wins. We covered important techniques such as using transparency (alpha) to manage overlapping points, scaling bubble sizes for better readability, and layering data to highlight specific groups like Big Ten teams. We also learned how to add context to our charts with reference lines representing average performance metrics. Finally, we introduced the ggrepel package to add non-overlapping labels to our chart, enhancing its interpretability. Throughout the lesson, we've seen how bubble charts can reveal complex relationships between offensive performance, defensive performance, and overall success in college football. Remember, while bubble charts are powerful tools for visualizing three-dimensional data, they require careful design and interpretation to effectively communicate insights. Always consider whether the added complexity of a bubble chart enhances or potentially obscures your data story.
+
+## Terms to Know
+
+- Bubble Chart: A variation of a scatterplot where a third variable is represented by the size of the plotted points or "bubbles".
+- `geom_point()`: A ggplot2 function used to create scatterplots and bubble charts by plotting individual data points.
+- `alpha`: A parameter in ggplot2 that controls the transparency of graphical elements, useful for managing overlapping points in bubble charts.
+- `scale_size()`: A ggplot2 function used to adjust the range of sizes for bubbles in a bubble chart.
+- `geom_vline()` and `geom_hline()`: ggplot2 functions used to add vertical and horizontal reference lines to a chart, respectively.
+- `ggrepel`: An R package that provides geoms for ggplot2 to repel overlapping text labels.
+- `geom_text_repel()`: A function from the ggrepel package used to add non-overlapping text labels to points in a chart.
