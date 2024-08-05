@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Step charts
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to step charts, a powerful visualization tool for displaying cumulative change over time. By the end of this tutorial, you'll understand when to use step charts, how to create them using ggplot2, and how to customize them for clearer data representation. You'll learn to prepare cumulative data, plot multiple step lines, use color effectively to highlight specific data series, and add annotations to enhance your chart's narrative. We'll apply these concepts to real college basketball data, analyzing team performance across a season using cumulative point differentials. This lesson will enhance your ability to visualize and interpret cumulative data trends, a crucial skill in sports analytics for understanding team performance trajectories and making meaningful comparisons between teams over time.
+
+## The Basics
 
 Step charts are **a method of showing progress** toward a total number They combine showing change over time -- **cumulative change over time** -- with magnitude. They're good at inviting comparison. 
 
@@ -224,3 +226,19 @@ grade_this_code()
 ```
 
 This is a decent looking chart.
+
+## The Recap
+
+In this lesson, we've explored the power of step charts for visualizing cumulative change over time in sports data. We started by learning how to prepare cumulative data using group_by() and cumsum() functions, a crucial step in creating meaningful step charts. We then progressed to creating basic step charts using geom_step(), and advanced to more complex visualizations comparing multiple teams' performances. We covered important techniques such as effective use of color to highlight specific teams, layering to provide context, and adding annotations to clarify data points. We also introduced labeling and theming to enhance the professional appearance of our charts. Throughout the lesson, we've seen how step charts can effectively show the progression of team performance over a season, allowing for easy comparisons between teams and revealing patterns that might be missed in other chart types. Remember, while step charts are excellent for showing cumulative trends, they're most effective when used thoughtfully - consider your color choices, annotations, and overall design to ensure your chart tells a clear and compelling story. 
+
+## Terms to Know
+
+- Step Chart: A type of line chart where the line moves in discrete steps, typically used to show cumulative change over time.
+- `geom_step()`: A ggplot2 function used to create step charts, connecting data points with horizontal and vertical lines.
+- Cumulative Data: Data that represents a running total, where each new data point is added to the sum of all previous data points.
+- `cumsum()`: A function in R that calculates the cumulative sum of a vector, essential for creating step charts.
+- Annotation: Additional text or graphical elements added to a chart to provide context, explanation, or highlight specific data points.
+- `annotate()`: A ggplot2 function used to add annotations to a chart, such as text labels or shapes.
+- `labs()`: A ggplot2 function used to add labels to a chart, including titles, subtitles, axis labels, and captions.
+- `theme_minimal()`: A ggplot2 theme that provides a clean, minimalist appearance to charts.
+- `Point Differential`: In sports, the difference between points scored by a team and points scored by their opponents, often used as a measure of team performance.
