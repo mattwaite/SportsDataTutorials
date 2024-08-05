@@ -21,9 +21,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Beeswarm plots
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to beeswarm plots, an innovative visualization technique that combines elements of scatterplots, histograms, and bar charts. By the end of this tutorial, you'll understand when to use beeswarm plots, how to create them using the ggbeeswarm package in R, and how to interpret the distributions they reveal. You'll learn to prepare data for beeswarm plots, create basic plots, layer data to highlight specific groups, and add labels using ggrepel. We'll apply these concepts to real college volleyball data, analyzing player performance across different positions. You'll also explore variations like quasirandom and jitter plots. This lesson will enhance your ability to visualize the distribution of individual data points within categories, a crucial skill for understanding player performance patterns and making nuanced comparisons in sports analytics.
+
+## The Basics
 
 A beeswarm plot is sometimes called a column scatterplot. It's an effective way to show how individual things -- teams, players, etc. -- are distributed along a numberline. The column is a grouping -- say positions in basketball -- and the dots are players, and the dots cluster where the numbers are more common. So think of it like a histogram mixed with a scatterplot crossed with a bar chart. 
 
@@ -294,3 +296,17 @@ grade_this_code()
 `geom_jitter` spreads out the dots evenly across the width of the column, randomly deciding where in the line of the kills they appear. 
 
 Which one is right for you? You're going to have to experiment and decide. This is the art in the art and a science. 
+
+## The Recap
+
+In this lesson, we've explored the power of beeswarm plots for visualizing the distribution of individual data points within categories in sports data. We started by learning how to prepare data, filtering for active players to ensure meaningful visualizations. We then progressed from creating basic beeswarm plots to more complex layered plots, highlighting specific teams within the context of all players. We covered important techniques such as setting a random seed for reproducibility, using color to differentiate groups, and adding non-overlapping labels with ggrepel. We also explored variations of the beeswarm plot, including quasirandom and jitter plots, discussing how each can offer different insights into data distribution. Throughout the lesson, we've seen how beeswarm plots can reveal patterns in player performance across different positions in volleyball, allowing for nuanced comparisons between teams and the broader player population. Remember, while beeswarm plots are powerful tools for visualizing categorical-numerical relationships, the choice between beeswarm, quasirandom, or jitter plots often depends on your specific data and the story you're trying to tell. Always experiment with different approaches to find the most effective visualization for your sports analytics insights.
+
+## Terms to Know
+
+- Beeswarm Plot: A type of plot that displays the distribution of individual data points within categories, combining elements of scatterplots, histograms, and bar charts.
+- `ggbeeswarm`: An R package that extends ggplot2 to create beeswarm and related plots.
+- `geom_beeswarm()`: A function from the ggbeeswarm package used to create beeswarm plots in ggplot2.
+- `set.seed()`: An R function used to set a seed for the random number generator, ensuring reproducibility in plots with random elements.
+- `Jittering`: A technique of adding small random offsets to data points to reduce overplotting in visualizations.
+- `geom_quasirandom()`: A function from ggbeeswarm that creates a variation of the beeswarm plot with quasirandom point placement.
+- `geom_jitter()`: A function that creates a plot similar to a beeswarm plot but with points spread evenly across the width of each category.
