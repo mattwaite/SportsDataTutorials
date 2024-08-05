@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Scatterplots
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to scatterplots, a powerful visualization tool for exploring relationships between two numerical variables in sports data. By the end of this tutorial, you'll understand when to use scatterplots, how to create them using ggplot2, and how to interpret the patterns they reveal. You'll learn to prepare data for scatterplots, plot points to visualize relationships, add regression lines for trend analysis, and interpret statistical measures like R-squared values. We'll apply these concepts to real college volleyball data, analyzing the relationship between player height and kills. This lesson will enhance your ability to identify and quantify correlations in sports data, a crucial skill for understanding performance factors and making data-driven decisions in sports analytics.
+
+## The Basics
 
 Scatterplots are very good at showing **relationships between two numbers**. They can help us ask questions of data and find people or teams who are doing better or worse than we would expect, provided there's a strong relationship in the data. 
 
@@ -249,3 +251,20 @@ If we built a model to predict kills based purely on height, we missed {nu$last_
 ```
 
 **This is an important lesson: Not all scatterplots work. Not all scatterplots tell a clear story. If you try a scatterplot and get this level of inconclusiveness, you need to try something else.**
+
+## The Recap
+
+In this lesson, we've explored the power of scatterplots for visualizing relationships between two variables in sports data. We started by learning how to prepare data for scatterplots, including combining separate measurements into a single variable and filtering out irrelevant data points. We then progressed to creating basic scatterplots using geom_point(), and advanced to adding regression lines with geom_smooth(). We covered important techniques such as interpreting the spread and direction of data points, understanding the significance of regression lines, and using linear models to quantify relationships. We also learned a crucial lesson: not all scatterplots reveal clear or useful relationships, and it's important to be prepared to try different approaches when results are inconclusive. Throughout the lesson, we've seen how scatterplots can help us test assumptions and uncover nuanced relationships in sports data, such as the complex connection between a volleyball player's height and their number of kills. Remember, while scatterplots are excellent for exploring relationships between variables, they're most effective when combined with statistical analysis and domain knowledge to draw meaningful conclusions.
+
+## Terms to Know
+
+- Scatterplot: A type of chart that displays the relationship between two numerical variables, with each data point represented by a dot on the graph.
+- `geom_point()`: A ggplot2 function used to create scatterplots by plotting individual data points.
+- `geom_smooth()`: A ggplot2 function used to add a trend line or regression line to a scatterplot.
+- Correlation: The statistical relationship between two variables, which can be visualized using a scatterplot.
+- Linear Regression: A statistical method for modeling the relationship between a dependent variable and one or more independent variables, often visualized as a line on a scatterplot.
+- R-squared: A statistical measure that represents the proportion of the variance in the dependent variable that is predictable from the independent variable(s).
+- P-value: In regression analysis, a measure of the probability that an observed relationship between variables occurred by chance.
+- Coefficient: In a regression equation, the number that represents the rate of change of one variable as a function of changes in the other.
+- Intercept: The point where the regression line crosses the y-axis, representing the predicted value of the dependent variable when the independent variable is zero.
+- `lm()`: An R function used to fit linear models, often used in conjunction with scatterplots to quantify relationships between variables.
