@@ -19,7 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Slope charts
+## The Goal
+
+The goal of this lesson is to introduce you to slope charts, a powerful visualization tool for comparing data between two time periods. By the end of this tutorial, you'll understand when to use slope charts, how to create them using ggplot2, and how to customize them for clearer data representation. You'll learn to prepare data for slope charts, plot lines and points to create the slope effect, use color effectively to highlight specific teams, and add labels to enhance your chart's readability. We'll apply these concepts to real college football data, analyzing team performance across two seasons using yards per play statistics.
+
+## The Basics
 
 A line chart, as we learned, shows change over time, with the date on the x-axis and each line representing a team or player. But sometimes, you have just two seasons -- a line chart of two seasons is ... not a line chart. 
 
@@ -272,4 +276,17 @@ ggplot() +
 grade_this_code()
 ```
 
-And there you have it. A clean and clear slope chart showing how last season compared to the previous one. 
+And there you have it. A clean and clear slope chart showing how last season compared to the previous one.
+
+## The Recap
+
+In this lesson, we've explored the power of slope charts for visualizing changes between two time periods in sports data. We started by learning how to prepare and filter data for slope charts, focusing on specific teams and conferences. We then progressed to creating basic slope charts using a combination of geom_line() and geom_point(), and advanced to more complex visualizations by layering multiple teams with distinct colors. We covered important techniques such as manipulating axis scales to create space for labels, adding text annotations to identify teams, and using theme_minimal() for a cleaner look. Throughout the lesson, we've seen how slope charts can effectively show changes in team performance between seasons, allowing for easy comparisons and revealing patterns that might be missed in tabular data or other chart types. Remember, while slope charts are excellent for comparing two time points, they're most effective when used thoughtfully - consider your color choices, labeling, and overall design to ensure your chart tells a clear and compelling story. 
+
+## Terms to Know
+
+- Slope Chart: A type of chart that compares changes in data between two time points, using lines to connect the values for each entity.
+- `geom_line()`: A ggplot2 function used to create the connecting lines in a slope chart.
+- `geom_point()`: A ggplot2 function used to create the end points in a slope chart.
+- Layering: The technique of adding multiple geom functions to create a more complex chart, often used to highlight specific data series in slope charts.
+- `scale_x_continuous()`: A ggplot2 function used to customize the x-axis, including setting breaks and limits.
+- `geom_text()`: A ggplot2 function used to add text labels to a chart, often used in slope charts to identify entities.
