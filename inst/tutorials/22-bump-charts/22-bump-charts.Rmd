@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Bump charts
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to bump charts, a powerful visualization technique for displaying changes in rankings over time. By the end of this tutorial, you'll understand when to use bump charts, how to create them using the ggbump package in R, and how to customize them for clearer data representation. You'll learn to prepare data for bump charts, create basic plots, add points and labels to enhance readability, and fine-tune the appearance with custom colors and themes. We'll apply these concepts to real college football playoff ranking data, visualizing how team rankings change across multiple weeks. This lesson will enhance your ability to effectively communicate ranking changes and trends in sports data, a crucial skill for analyzing and presenting competitive standings over a season or multiple time periods.
+
+## The Basics
 
 The point of a bump chart is to show how the ranking of something changed over time -- you could do this with the top 25 in football or basketball. I've seen it done with European soccer league standings over a season. 
 
@@ -267,3 +269,19 @@ ggplot() +
 grade_this_code()
 ```
 There's still some work to do here -- note the names on the edges are getting cut off. But compare to where we started. This is looking pretty good. 
+
+## The Recap
+
+In this lesson, we've explored the power of bump charts for visualizing changes in rankings over time in sports data. We started by learning how to create basic bump charts using the ggbump package, and then progressively enhanced our visualization through several iterations. We covered important techniques such as reversing axes to place higher ranks at the top, adding points to highlight specific time periods, and incorporating team-specific colors. We also learned how to add labels at the start and end points for better readability, remove unnecessary elements like legends, and fine-tune axis breaks for a cleaner look. Throughout the process, we saw how combining different ggplot2 elements like geom_bump, geom_point, and geom_text can create a more informative and visually appealing chart. We also touched on the importance of thoughtful design choices, such as using team colors and minimizing chart junk. Remember, while bump charts are excellent for showing ranking changes, the effectiveness of your visualization often comes down to these final details and refinements. Always consider your audience and the story you're trying to tell when making these design decisions.
+
+## Terms to Know
+
+- Bump Chart: A type of chart that visualizes changes in rankings over time, often resembling a subway map.
+- `ggbump`: An R package that extends ggplot2 to create bump charts and related visualizations.
+- `geom_bump()`: A function from the ggbump package used to create the main lines in a bump chart.
+- `scale_y_reverse()`: A ggplot2 function used to reverse the y-axis, often used in bump charts to place higher ranks at the top.
+- `geom_point()`: A ggplot2 function used to add points to a chart, in this case highlighting specific time periods in the bump chart.
+- `scale_color_manual()`: A ggplot2 function used to manually specify colors for different categories, such as team colors in this example.
+- `hjust`: Short for "horizontal justification", a parameter in text geoms that controls the horizontal alignment of text labels.
+- `legend.position`: A theme parameter in ggplot2 used to control the position of the legend, or remove it entirely.
+- `scale_x_continuous()`: A ggplot2 function used to customize the x-axis, including setting specific breaks and limits.
