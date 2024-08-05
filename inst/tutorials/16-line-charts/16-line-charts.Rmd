@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Line charts
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to line charts, a powerful visualization tool for displaying trends over time. By the end of this tutorial, you'll understand when to use line charts, how to create them using ggplot2, and how to customize them for clearer data representation. You'll learn to plot single and multiple lines, adjust axes for better context, and add layers to compare different datasets. We'll apply these concepts to real college basketball data, analyzing team performance across a season. This lesson will enhance your ability to visualize and interpret time-series data, a crucial skill in sports analytics for understanding performance trends, seasonal patterns, and comparative team dynamics.
+
+## The Basics
 
 So far, we've talked about bar charts -- stacked or otherwise -- are good for showing relative size of a thing compared to another thing. Stacked Bars and Waffle charts are good at showing proportions of a whole. 
 
@@ -252,3 +254,19 @@ ggplot() +
 ```{r line5-check}
 grade_this_code()
 ```
+
+
+## The Recap
+
+In this lesson, we've explored the power of line charts for visualizing trends over time in sports data. We started with creating basic line charts using ggplot2, learning how to plot a single team's performance throughout a season. We then advanced to more complex visualizations, comparing multiple teams on the same chart and adding context with conference-wide data. We covered important techniques such as zeroing axes for honest representation, using color to highlight specific data series, and incorporating average lines for broader context. Throughout the lesson, we've seen how line charts can effectively show performance fluctuations, allow for easy comparisons between teams, and reveal patterns that might be missed in tabular data. Remember, while line charts are excellent for showing trends over time, they're most effective when used thoughtfully - consider your audience and the story you're trying to tell when deciding how many lines to include and how to style them. This skill in creating and interpreting line charts will be invaluable as you continue to analyze and present sports performance data.
+
+## Terms to Know
+
+- Line Chart: A type of graph that displays data points connected by straight line segments, typically used to show trends over time.
+- `geom_line()`: A ggplot2 function used to create line charts by connecting data points with lines.
+- Time Series: A sequence of data points indexed in time order, often visualized using line charts.
+- x-axis: The horizontal axis in a chart, typically representing time in line charts.
+- y-axis: The vertical axis in a chart, typically representing the measured variable in line charts.
+- `scale_y_continuous()` or `scale_x_continuous()`: A ggplot2 function used to customize the y-axis or x-axis, including setting limits and breaks.
+- Layering: The technique of adding multiple geom_line() functions to create a chart with multiple lines.
+- Context Line: A line added to a chart to provide additional context, such as an average or benchmark, often distinguished by color or style.
