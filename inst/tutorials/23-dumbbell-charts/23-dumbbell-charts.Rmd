@@ -21,9 +21,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Dumbbell charts
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to dumbbell charts, a powerful visualization technique for comparing two related values across different categories. By the end of this tutorial, you'll understand when to use dumbbell charts, how to create them using the ggalt package in R, and how to customize them for clearer data representation. You'll learn to prepare data for dumbbell charts, create basic plots, add colors to differentiate between measures, and use reordering to enhance the story your data tells. We'll apply these concepts to real college football data, visualizing the difference between giveaways and takeaways for teams in the Big Ten conference. This lesson will enhance your ability to effectively communicate comparisons between paired data points, a crucial skill for analyzing and presenting sports statistics such as offensive versus defensive performance metrics.
+
+## The Basics
 
 Second to my love of waffle charts because or their name and I'm always hungry, dumbbell charts are an excellently named way of **showing the difference between two things on a number line** -- a start and a finish, for instance. Or the difference between two related things. Say, turnovers and assists. 
 
@@ -257,3 +259,17 @@ ggplot() +
 ```{r dumbbell5-check}
 grade_this_code()
 ```
+
+## The Recap
+
+In this lesson, we've explored the power of dumbbell charts for visualizing comparisons between paired data points in sports statistics. We started by learning how to prepare data for dumbbell charts, grouping and summarizing game-level statistics into team-level metrics. We then progressed from creating basic dumbbell charts to more informative visualizations by adding meaningful colors, adjusting sizes for better visibility, and reordering data to highlight patterns. We covered important techniques such as using color to differentiate between positive and negative metrics (takeaways vs. giveaways), and leveraging the reorder function to sort teams based on performance. We also addressed the challenge of adding legends to dumbbell charts by incorporating color-coded text explanations using ggtext. Throughout the process, we saw how dumbbell charts can effectively show the relationship between two related metrics across multiple categories, providing insights into team performance in a visually intuitive way. Remember, the effectiveness of a dumbbell chart often lies in the thoughtful use of color, ordering, and supplementary text to guide the viewer's interpretation of the data.
+
+## Terms to Know
+
+
+- Dumbbell Chart: A type of chart that visualizes the difference between two related values for multiple categories, resembling a dumbbell or barbell shape.
+- `ggalt`: An R package that extends ggplot2 to create alternative plot types, including dumbbell charts.
+- `geom_dumbbell()`: A function from the ggalt package used to create dumbbell charts in ggplot2.
+- `colour_x` and `colour_xend`: Parameters in geom_dumbbell() used to specify colors for the start and end points of each dumbbell.
+- `ggtext`: An R package that extends ggplot2's text rendering capabilities, allowing for formatted text in plot labels.
+- `element_textbox_simple()`: A function from ggtext that allows for the use of formatted text in plot subtitles and other text elements.
