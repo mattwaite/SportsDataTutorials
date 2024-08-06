@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Arranging multiple plots together
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to the patchwork package in R, a powerful tool for combining multiple ggplot2 charts into a single, cohesive visualization. By the end of this tutorial, you'll understand how to create individual plots, save them as objects, and arrange them together using patchwork's intuitive syntax. You'll learn how to stack plots vertically or place them side by side, add overall titles and annotations, and apply consistent theming across combined plots. We'll apply these concepts to real college football data, creating a comparative visualization of rushing and passing performance across Big Ten teams. This lesson will enhance your ability to create complex, multi-faceted visualizations that tell a more comprehensive story with your sports data, allowing you to present related information in a clear, unified format.
+
+## The Basics
 
 Sometimes you have two or three (or more) charts that by themselves aren't very exciting and are really just one chart that you need to merge together. It would be nice to be able to arrange them programmatically and not have to mess with it in Adobe Illustrator.
 
@@ -137,7 +139,6 @@ totals <- games |>
 ```{r patchwork1-check}
 grade_this_code()
 ```
-
 
 ### Exercise 1: Making bar charts into objects
 
@@ -447,4 +448,16 @@ bar1 + bar2  +
 grade_this_code()
 ```
 
-THREE GAMES. We won only THREE games last season. HOW? Might have something to do with not being able to run the ball. 
+No surprise, the data reflects what happened last season -- we could run it, we could not throw it. 
+
+## The Recap
+
+In this lesson, we've explored the power of the patchwork package to create complex, multi-chart visualizations in R. We started by creating individual bar charts representing passing and rushing averages for Big Ten football teams, then learned how to combine these charts using patchwork's simple '+' and '/' operators. We progressed to adding overall titles, subtitles, and captions to our combined plots using plot_annotation(), and discovered how to apply consistent theming across the entire visualization. We also learned the importance of saving individual plots as objects for easier manipulation and combination. Throughout the lesson, we emphasized the need for context and visual hierarchy in our charts, introducing techniques like using color to highlight specific data points (in this case, Nebraska's performance). By the end, we created a comprehensive visualization that not only displayed data but told a story about team performance. Remember, while patchwork makes it easy to combine plots, the real skill lies in choosing which plots to combine and how to present them to best communicate your insights.
+
+## Terms to Know
+
+- patchwork: An R package that allows for easy combination of multiple ggplot2 charts into a single visualization.
+- plot_annotation(): A patchwork function used to add overall titles, subtitles, and captions to combined plots.
+- `+` operator in patchwork: Used to place plots side by side in a patchwork arrangement.
+- `/` operator in patchwork: Used to stack plots vertically in a patchwork arrangement.
+- `&` operator in patchwork: Used to apply theme elements to all plots in a patchwork arrangement.
