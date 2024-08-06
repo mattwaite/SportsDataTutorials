@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Facet wraps
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to faceting, a powerful technique in ggplot2 for creating multiple related charts in a single visualization. By the end of this tutorial, you'll understand how to use facet_wrap() and facet_grid() to create small multiples, allowing you to compare trends across different categories or groups. You'll learn when to use faceting, how to implement it with various chart types, and how to customize faceted plots for better readability. We'll apply these concepts to real college football data, analyzing offensive performance across Big Ten teams. This lesson will enhance your ability to present complex, multi-dimensional data in a clear and intuitive format, enabling viewers to easily compare patterns and trends across different subsets of your data.
+
+## The Basics
 
 Sometimes the easiest way to spot a trend is to chart a bunch of small things side by side. Edward Tufte, one of the most well known data visualization thinkers on the planet, calls this "small multiples" where ggplot calls this a facet wrap or a facet grid, depending. 
 
@@ -206,3 +208,15 @@ Two notes:
 
 1. We'd have some work to do with the labeling on this -- we'll get to that -- but you can see where this is valuable comparing a group of things. One warning: Don't go too crazy with this or it loses it's visual power.
 2. There's nothing special about a line chart with faceting. You can facet any kind of ggplot chart. 
+
+## The Recap
+
+In this lesson, we've explored the power of faceting in ggplot2 to create small multiples, a technique that allows for easy comparison across multiple categories or groups. We started by creating a basic line chart of offensive performance for Big Ten football teams, then transformed it into a faceted plot using facet_wrap(). We learned how to add context to our faceted plots by including a reference line for the conference average. We then explored the difference between facet_wrap() and facet_grid(), understanding how each can be used to arrange our small multiples either in a grid or in rows/columns. We saw how faceting can reveal patterns and trends that might be obscured in a single, overlapping chart. Throughout the lesson, we applied these techniques to real college football data, demonstrating how faceting can provide insights into team performance over time. Remember, while faceting is a powerful tool, it's important to use it judiciously to maintain clarity in your visualizations. As we progressed, we also touched on the importance of proper labeling and the versatility of faceting across different chart types.
+
+## Terms to Know
+
+- Faceting: A technique in ggplot2 for creating multiple related charts in a single visualization, allowing for easy comparison across categories or groups.
+- Small Multiples: A series of similar graphs or charts using the same scale and axes, allowing for comparison across different categories or time periods.
+- `facet_wrap()`: A ggplot2 function that wraps a series of plots into a rectangular layout.
+- `facet_grid()`: A ggplot2 function that creates a grid of plots with fixed horizontal and vertical axes.
+- Tilde (~): In the context of faceting, used to specify the variable(s) by which to facet the plot.
