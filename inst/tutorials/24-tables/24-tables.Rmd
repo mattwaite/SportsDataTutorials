@@ -21,9 +21,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Tables
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to creating informative and visually appealing tables using the gt package in R. By the end of this tutorial, you'll understand when to use tables for data presentation, how to create basic tables, and how to enhance them with various styling and formatting options. You'll learn to prepare data for tables, add headers and labels, style different elements, and use color to highlight specific information. We'll apply these concepts to real women's basketball data, analyzing shooting percentages across Big Ten teams. This lesson will enhance your ability to present complex data in a clear, readable format, allowing viewers to make their own comparisons while still highlighting key points. You'll see how tables can be an effective alternative to graphs in certain situations, especially when you want to provide detailed information that allows for multiple comparisons.
+
+## The Basics
 
 A table is the most simple form of data presentation. Tables have been around for millenia. We've improved in them since, so we're not making a table. We're making a table with features. 
 
@@ -577,3 +579,15 @@ grade_this_code()
 ```
 
 We've arrived where we want to be: We've created a clear table that allows a reader to compare schools at will while also using color to draw attention to the thing we want to draw attention to. **We've kept it simple so the color has impact**.
+
+## The Recap
+
+In this lesson, we've explored the power of tables for presenting sports data using the gt package in R. We started by learning how to create basic tables from our dataset, then progressively enhanced them with various features. We covered important techniques such as adding meaningful headers and labels, styling text elements for better readability, and incorporating source information. We learned how to use tab_style() to customize specific parts of our table, including making headers bold and adding bottom borders. We also explored how to improve the table's overall appearance by using row striping and removing unnecessary lines. Importantly, we practiced formatting numerical data appropriately, converting raw numbers into percentages. Finally, we learned how to use color strategically to highlight specific data points, enhancing the table's ability to tell a story. Throughout the process, we saw how tables can effectively present detailed information while still guiding the viewer's attention to key points. Remember, while tables may seem simple, thoughtful design and formatting can make them powerful tools for communicating sports analytics insights.
+
+## Terms to Know
+
+- `gt`: An R package used for creating customizable tables in data analysis and presentation.
+- `tab_header()`: A function in gt used to add a title and subtitle to a table.
+- `cols_label()`: A function in gt used to rename column headers in a table.
+- `tab_style()`: A function in gt used to apply custom styles to specific parts of a table.
+- `tab_source_note()`: A function in gt used to add source information or notes at the bottom of a table.
