@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# The importance of text
+## The Goal
 
-## What makes a good graphic
+The goal of this lesson is to emphasize the critical role of text elements in creating effective and professional data visualizations for sports analytics. By the end of this tutorial, you'll understand the importance of well-crafted headlines, informative subtitles (chatter), and strategic annotations in enhancing your charts and graphs. You'll learn how to write compelling headlines that capture the essence of your data story, create subtitles that provide context, and use annotations to guide viewers' attention to key insights. We'll apply these concepts to real sports data visualizations, demonstrating how thoughtful text can transform a basic chart into a powerful communication tool. This lesson will sharpen your ability to convey complex sports analytics concepts clearly and engagingly, making your blog posts more impactful and accessible to a wider audience.
+
+## The Basics
 
 These are the pieces of a good graphic: 
 
@@ -447,3 +449,18 @@ ggplot() +
 ```{r bubble6-check}
 grade_this_code()
 ```
+
+## The Recap
+
+In this lesson, we've explored the crucial role of text elements in elevating the quality and effectiveness of sports data visualizations. We started by examining the key components of a good graphic, including headlines, chatter, annotations, and source lines. We then focused on crafting compelling headlines, learning to avoid generic titles and instead create specific, verb-driven headlines that provoke interest and convey the core message of our data. We practiced writing informative chatter that complements the headline and provides essential context. Through hands-on examples with college football data, we saw how well-chosen text can transform a basic chart into a story-driven visualization. We also delved into the strategic use of annotations, learning how to guide the viewer's eye to important data points or trends. By mastering these techniques, you'll be able to create more engaging, informative, and professional-looking visualizations for your sports analytics blog, effectively communicating complex insights to your audience.
+
+## Terms to Know
+
+- Headline: The main title of a data visualization that captures the key message or story of the graphic.
+- Chatter: The subtitle or explanatory text below the headline that provides additional context or details about the visualization.
+- Annotation: Text or graphical elements added to a chart to highlight or explain specific data points or trends.
+- `labs()`: A ggplot2 function used to add labels, titles, and captions to a visualization.
+- `geom_text()`: A ggplot2 function used to add text directly to a plot at specified coordinates.
+- `geom_text_repel()`: A function from the ggrepel package that adds non-overlapping text labels to a plot.
+- Caption: Text at the bottom of a graphic that typically includes the data source and credit information.
+- Axis Labels: Text that describes what the x and y axes represent in a chart.
