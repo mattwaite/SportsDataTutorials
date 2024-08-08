@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Text cleaning 
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to essential text cleaning techniques for sports data analysis. By the end of this tutorial, you'll understand how to handle common data inconsistencies and formatting issues that often arise when working with sports statistics. You'll learn how to use regular expressions, the gsub() function, and tidyr's separate() function to clean player names, split compound data fields, and convert text-based measurements into numeric values. These skills will enable you to transform messy, raw data into clean, analysis-ready datasets. By mastering these techniques, you'll be able to produce more accurate analyses and create more professional-looking visualizations, enhancing the quality and credibility of your sports analytics blog posts.
+
+## The Basics
 
 On occasion, you'll get some data from someone that ... isn't quite what you need it to be. There's something flawed in it. Some extra text, some choice that the data provider made that you just don't agree with. 
 
@@ -330,3 +332,16 @@ grade_this_code()
 And now, in 10 lines of code, using separate, mutate and gsub, we've turned the mess that is the NCAA's data into actually useful data we can analyze. 
 
 These patterns of thought come in handy when facing messed up data.
+
+## The Recap
+
+In this lesson, we've explored various techniques for cleaning and refining sports data to make it more suitable for analysis and visualization. We started by addressing common issues in data from sources like Sports Reference, learning how to use regular expressions with gsub() to remove unwanted text from player names. We then tackled more complex data cleaning challenges using NCAA volleyball statistics, where we applied the separate() function to split compound fields into distinct columns for player names, schools, and conferences. We also learned how to handle special characters and inconsistencies in data formatting, such as state abbreviations in parentheses. Finally, we converted text-based height measurements into numeric values, demonstrating how to transform data types for quantitative analysis. These skills are crucial for preparing clean, consistent datasets that will yield accurate insights and professional-looking visualizations in your sports analytics work. Remember, effective data cleaning is often the first and most important step in any data analysis project, setting the foundation for all subsequent analyses and visualizations.
+
+## Terms to Know
+
+- Regular Expression (Regex): A sequence of characters that defines a search pattern, used for pattern matching with strings.
+- `gsub()`: A function in R used for finding and replacing patterns in strings.
+- `separate()`: A function from the tidyr package used to split a single column into multiple columns.
+- Escape Character: A character (usually a backslash ) used to indicate that the following character should be interpreted literally.
+- `as.numeric()`: A function used to convert other data types to numeric values.
+- `fixed = TRUE`: An argument in gsub() that treats the pattern as a fixed string rather than a regular expression.

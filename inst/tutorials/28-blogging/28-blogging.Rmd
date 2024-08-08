@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Building your own blog with Quarto
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to creating and publishing your own data analysis blog using Quarto and GitHub Pages. By the end of this tutorial, you'll understand how to set up a Quarto blog project, create blog posts with R code and analysis, preview your site locally, and publish it online for free using GitHub. You'll learn the importance of blogging for aspiring sports analysts, how to structure your blog posts to showcase your work, and best practices for naming and organizing your content. This lesson will enhance your ability to share your sports data insights with a wider audience, building your portfolio and demonstrating your skills to potential employers or collaborators in the field of sports analytics.
+
+## The Basics
 
 If you listen to the [Measurables Podcast](https://www.measurablespod.com/podcast) for about two episodes, you'll detect a pattern. The host asks each guest how they got started in sports analytics. To a one, they'll say they found public data and started blogging about their analysis of it. For nearly every single guest, this is their path into the field. They started messing around with data in a toolset, found something interesting and wrote a post about what they found and how they found it. Other analysts noticed it, or a hiring manager liked what they read, and the rest is history, as they say.
 
@@ -222,3 +224,20 @@ knitr::include_graphics(rep("images/blog13.png"))
 ```
 
 In a few minutes, you should be able to go to username.github.io in a browser and you'll see your site. [Here's mine](https://mattwaite.github.io/).
+
+## The Recap
+
+In this lesson, we've explored the process of creating and publishing your own sports analytics blog using Quarto and GitHub Pages. We started by discussing the importance of blogging in the sports analytics community and how it can help launch careers. We then walked through the step-by-step process of setting up a Quarto blog project, including customizing your blog's appearance and creating your first post. We covered key concepts such as YAML headers, code folding, and the importance of SEO-friendly post titles. We also learned how to preview your blog locally and make adjustments before publishing. Finally, we delved into the process of setting up a GitHub account, creating a repository for your blog, and using GitHub Desktop to easily publish and update your site. Remember, consistency in posting and quality of analysis are key to building an audience and showcasing your skills. 
+
+## Terms to Know
+
+- Quarto: An open-source scientific and technical publishing system built on Pandoc that can create dynamic content with Python, R, Julia, and Observable.
+- YAML: A human-readable data serialization format used for configuration files and in data storage or transmission, often used in Quarto for metadata and settings.
+- Static Site Generator: A tool that generates a full static HTML website based on raw data and a set of templates, which Quarto functions as for blogs.
+- GitHub: A web-based platform and cloud-based service for version control and collaboration using Git.
+- Repository: A storage location for a project that contains all of its files and each file's revision history on GitHub.
+- GitHub Pages: A static site hosting service that takes HTML, CSS, and JavaScript files straight from a repository on GitHub and publishes a website.
+Markdown: A lightweight markup language with plain text formatting syntax, used in Quarto for writing content.
+- Git: A distributed version control system for tracking changes in source code during software development.
+- Clone: The process of creating a local copy of a GitHub repository on your computer.
+- Commit: A Git action that saves changes to your local repository, preparing them to be pushed to the remote repository on GitHub.

@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Encircling points on a scatterplot
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to the technique of encircling points on a scatterplot using the ggalt package in R. By the end of this tutorial, you'll understand how to use the geom_encircle() function to draw attention to specific data points or groups of points in your visualizations. You'll learn how to create basic scatterplots, layer additional data points, and then highlight key information using circles and text labels. We'll apply these concepts to real college basketball data, analyzing player performance in terms of shooting percentage and rebounds. This lesson will enhance your ability to create more informative and visually compelling scatterplots, allowing you to guide your audience's attention to the most important aspects of your data story in sports analytics.
+
+## The Basics
 
 One thing we've talked about all semester is drawing attention to the thing you want to draw attention to. We've used color and labels to do that so far. Let's add another layer to it -- a shape around the point or points you want to highlight. 
 
@@ -227,3 +229,14 @@ ggplot() +
 ```{r encircle5-check}
 grade_this_code()
 ```
+
+## The Recap
+
+In this lesson, we've explored the powerful technique of encircling points on a scatterplot using the ggalt package in R. We started by creating a basic scatterplot of college basketball player performance, focusing on shooting percentage and rebounds. We then learned how to layer additional data points to highlight specific teams or players. The key skill we developed was using geom_encircle() to draw attention to particular data points, in this case, showcasing Derrick Walker's exceptional performance for Nebraska. We practiced fine-tuning the encirclement using parameters like s_shape and expand, and learned how to combine this technique with text labels for even greater clarity. Throughout the lesson, we emphasized the importance of visual hierarchy and guiding the viewer's eye to the most crucial information. We also touched on how to make our visualizations more polished and publication-ready by adding appropriate titles, labels, and theming. Remember, the goal of these techniques is not just to present data, but to tell a compelling story with your visualizations.
+
+## Terms to Know
+
+- `ggalt`: An extension package for ggplot2 that provides additional geoms and statistical transformations.
+- `geom_encircle()`: A function from ggalt that allows you to draw a circle or shape around specified data points on a plot.
+- `s_shape`: A parameter in geom_encircle() that controls the shape of the encircling line, with values between 0 and 1.
+- `expand`: A parameter in geom_encircle() that determines how far the encircling line extends from the data points.
