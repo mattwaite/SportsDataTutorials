@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Multiple regression
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to multiple regression, a powerful statistical technique that builds upon simple linear regression. By the end of this tutorial, you'll understand how to use multiple predictors to create a more comprehensive model for analyzing sports data. We'll explore how to build and interpret multiple regression models using college football data, covering concepts such as multicollinearity and model evaluation. You'll learn how to select appropriate variables, interpret regression outputs, and use your model to make predictions. We'll also discuss the practical implications of these models in the context of sports analytics, such as predicting team performance based on various statistics. This lesson will enhance your ability to create more nuanced and accurate predictive models, a crucial skill for advanced sports data analysis.
+
+## The Basics
 
 In an earlier lesson, we looked at correlations and linear regression to predict how one element of a game would predict the score. But we know that a single variable, in all but the rarest instances, is not going to be that predictive. We need more than one. Enter multiple regression. Multiple regression lets us add -- wait for it -- multiple predictors to our equation to help us get a better fit to reality.
 
@@ -294,3 +296,20 @@ grade_this_code()
 ```
 
 By this model, it predicted we would average outscoring our opponents by a touchdown over the season. Reality? We outscored them by 5.25 on average. And we won three games. Thanks Northwestern!
+
+## The Recap
+
+In this lesson, we've delved into the world of multiple regression, a key technique for creating more comprehensive predictive models in sports analytics. We started by building upon our knowledge of simple linear regression, learning how to incorporate multiple predictors to improve our model's accuracy. We explored the process of creating a multiple regression model using college football data, focusing on predicting point differentials using various game statistics. Along the way, we covered important concepts such as multicollinearity and learned how to use correlation matrices to identify potential issues in our variable selection. We practiced interpreting regression outputs, paying close attention to adjusted R-squared values, p-values, and residual standard errors to assess our model's performance. Finally, we applied our model to real-world scenarios, predicting outcomes for conference champions and comparing them to actual team performances. This hands-on approach has equipped you with the skills to create more sophisticated predictive models, a valuable asset in the field of sports analytics. Remember, while multiple regression is a powerful tool, it's important to use it judiciously, always considering the practical implications and limitations of your models in the context of sports analysis.
+
+## Terms to Know
+
+- Multiple Regression: A statistical technique that uses two or more independent variables to predict the outcome of a dependent variable.
+- Predictor Variable: Also known as an independent variable, it's a factor used in regression to predict the dependent variable.
+- Multicollinearity: A phenomenon in which two or more predictor variables in a multiple regression model are highly correlated, potentially leading to unreliable and unstable estimates of regression coefficients.
+- Adjusted R-squared: A modified version of R-squared that adjusts for the number of predictors in a model, providing a more accurate measure of the model's explanatory power.
+- p-value: In regression analysis, a measure of the probability that an observed relationship between variables occurred by chance.
+- Residual Standard Error: A measure of the average amount that the response variable deviates from the true regression line.
+- Correlation Matrix: A table showing correlation coefficients between variables, used to identify potential multicollinearity issues.
+- Coefficient: In a regression equation, the number that represents the rate of change of one variable as a function of changes in the other.
+- Intercept: The expected mean value of Y when all X variables are zero.
+- Model Prediction: The process of using a regression model to estimate the value of the dependent variable based on given values of the independent variables.
