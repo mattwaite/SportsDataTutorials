@@ -22,9 +22,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Finishing touches
+## The Goal
 
-## A quick review
+The goal of this lesson is to teach you how to apply professional finishing touches to your sports data visualizations, elevating them from basic charts to publication-ready graphics. By the end of this tutorial, you'll understand how to refine your ggplot2 charts with custom themes, appropriate font sizes, and strategic use of white space. You'll learn to adjust title positions, modify grid lines, and fine-tune text elements to create a visual hierarchy that guides the reader's eye. We'll also cover special considerations for waffle charts and how to properly label multi-chart visualizations. Additionally, you'll understand the importance of consistent styling across your graphics and how to implement code folding in your blog posts. These skills will help you create polished, professional-looking visualizations that effectively communicate your sports analytics insights and enhance the overall quality of your blog.
+
+## The Basics
 
 The output from ggplot is good, but not great. We need to add some pieces to it. The elements of a good graphic are:
 
@@ -527,3 +529,18 @@ Note: These finishing touches aren't optional. They're required of every graphic
 ## One last finishing touch
 
 In your blog post, in your yaml header, you must have the `code-fold: true` bits from the blogging tutorial. If it's missing, you lose points. 
+
+## The Recap
+
+In this lesson, we've explored the crucial final steps in creating professional-quality sports data visualizations. We started by reviewing the essential elements of a good graphic, including headlines, chatter, annotations, and source lines. We then delved into practical techniques for refining ggplot2 charts, such as applying theme_minimal() to create a clean base, customizing text elements for better visual hierarchy, and adjusting margins for improved layout. We learned how to strategically modify grid lines and axis labels to enhance readability without cluttering the visualization. Special attention was given to waffle charts, demonstrating how to add appropriate labels and themes while working within the constraints of the waffle library. We also covered the nuances of styling multi-chart visualizations using waffle irons. Throughout the lesson, we emphasized the importance of consistent styling and the necessity of including these finishing touches in all graphics for this course. Finally, we highlighted the requirement of implementing code folding in blog posts, ensuring that your visualizations are not only visually appealing but also presented in a professional, interactive format. These skills will set your sports analytics blog apart, demonstrating a level of polish and attention to detail that marks the transition from amateur to professional-quality data visualization.
+
+## Terms to Know
+
+- `theme_minimal()`: A ggplot2 function that applies a clean, minimalist theme to charts, removing unnecessary visual elements.
+- `theme()`: A ggplot2 function used to customize various aspects of a plot's appearance, including text, lines, and backgrounds.
+- `element_text()`: A function used within theme() to specify text properties such as size, color, and font face.
+- `plot.title.position`: A theme element that controls the alignment of the plot title, often set to "plot" for left alignment.
+- `panel.grid.minor`: A theme element used to control the appearance of minor grid lines in a plot.
+- `labs()`: A ggplot2 function used to add or modify plot labels, including title, subtitle, and axis labels.
+- `code-fold`: A YAML header option in Quarto documents that allows readers to show or hide code chunks in the final output.
+- Visual Hierarchy: The arrangement of graphic elements to show their order of importance, guiding the viewer's attention through the visualization.

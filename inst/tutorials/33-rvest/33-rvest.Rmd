@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Intro to rvest
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to web scraping using the rvest package in R. By the end of this tutorial, you'll understand how to extract data from HTML tables on websites and import it into R for analysis. You'll learn how to identify the correct HTML elements to target, use XPath to select specific table data, and handle common challenges like unnamed columns and multi-row headers. We'll apply these techniques to real sports statistics websites, scraping college football and basketball data. You'll also practice cleaning and combining data from multiple years. This skill will allow you to automate data collection from web sources, saving time and enabling more up-to-date analysis of sports statistics that may not be available through official APIs or datasets.
+
+## The Basics
 
 All the way back in Lesson 2, we used Google Sheets and importHTML to get our own data out of a website. For me, that's a lot of pointing and clicking and copying and pasting. R has a library that can automate the harvesting of data from HTML on the internet. It's called `rvest`. 
 
@@ -467,3 +469,20 @@ grade_this_code()
 ```
 
 While this seems like a lot of work, if your job is to analyze college basketball as the year goes by, and you're going to be pulling this page every few days, the work you just did will save you hours of time down the road. Automating the import of data is an important function for data scientists to save time on drudgery and focus on analysis.
+
+## The Recap
+
+In this lesson, we've explored the powerful capabilities of the rvest package for web scraping in R. We started with a simple example, extracting a basic HTML table from a college football statistics website. We then progressed to more complex scenarios, including combining data from multiple years and handling tables with non-standard headers. Throughout the tutorial, you've learned key rvest functions like read_html(), html_nodes(), and html_table(), as well as how to use XPath to target specific elements. We also covered important data cleaning steps, such as renaming columns, filtering out unwanted rows, and converting data types. By working through real-world examples with sports data, you've gained practical experience in overcoming common web scraping challenges. Remember, while web scraping can be a powerful tool for data collection, it's important to use it responsibly and in compliance with websites' terms of service. With these skills, you're now equipped to automate data collection from web sources, enabling more efficient and up-to-date sports analytics.
+
+## Terms to Know
+
+- `rvest`: An R package designed for web scraping, providing functions to easily extract data from HTML web pages.
+- Web scraping: The process of automatically collecting data from websites using programming techniques.
+- XPath: A query language used to navigate through elements and attributes in an XML or HTML document.
+- `html_nodes()`: An rvest function used to select specific HTML elements from a web page based on CSS selectors or XPath.
+- `html_table()`: An rvest function that extracts data from HTML tables and converts them into R data frames.
+- `read_html()`: An rvest function that reads HTML content from a URL or file.
+- `bind_rows()`: A dplyr function used to combine multiple data frames vertically, stacking them on top of each other.
+- `mutate_at()`: A dplyr function that applies a transformation to multiple columns in a data frame.
+- `rename()`: A dplyr function used to change the names of columns in a data frame.
+- `header=FALSE`: An argument used in html_table() to indicate that the first row of the HTML table should not be treated as column names.
