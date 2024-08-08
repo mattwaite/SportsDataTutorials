@@ -21,9 +21,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Using color
+## The Goal
 
-## An introduction
+The goal of this lesson is to introduce you to the strategic use of color in sports data visualizations. By the end of this tutorial, you'll understand how to effectively use color to enhance your charts and graphs, drawing attention to key data points and reinforcing your story. You'll learn the basic rules of color usage in data visualization, including limiting color palette, using contrast for emphasis, and avoiding color abuse. We'll apply these concepts to real sports data, demonstrating how thoughtful color choices can transform a basic chart into a compelling visual narrative. This lesson will sharpen your ability to create more professional and impactful visualizations for your sports analytics blog, helping you guide your audience's attention and effectively communicate complex insights through color.
+
+## The Basics
 
 The main focus of this whole class -- indeed the whole sports media major -- is to tell a story. If the chart is not telling a story, then it doesn't serve a purpose and we've failed. And if our chart does tell a story, but the reader can't find it, then that means we've still failed the main purpose. 
 
@@ -217,3 +219,15 @@ grade_this_code()
 ```
 
 This chart has some work left -- headlines, some text to explain the dark grey bars, the axis labels are garbage -- but this chart tells a story and our reader can find it. 
+
+## The Recap
+
+In this lesson, we've explored the powerful role of color in enhancing sports data visualizations. We began by discussing the three fundamental rules of color usage: limiting the number of colors, using contrast to draw attention, and avoiding color abuse. We then applied these principles to a real-world example using college basketball data from the NCAA tournament. Through hands-on exercises, we transformed a basic bar chart into a visually compelling story about Big Ten teams' performance. We practiced using color strategically to fade less important data into the background, highlight key information, and guide the viewer's eye to the most crucial elements of our visualization. We also learned how to remove distracting elements like default backgrounds to further emphasize our color choices. By mastering these techniques, you'll be able to create more effective, professional-looking visualizations that not only present data but tell a clear, visually engaging story for your sports analytics blog.
+
+## Terms to Know
+
+- Color Contrast: The use of different colors to make certain elements stand out from others in a visualization.
+- Color Palette: A set of colors chosen to be used together in a visualization, often selected for their harmony and effectiveness in conveying information.
+- `fill`: A ggplot2 parameter used to set the interior color of graphical elements like bars in a bar chart.
+- `color`: A ggplot2 parameter that sets the outline color of graphical elements.
+- Hex Code: A six-digit code that represents a specific color in digital design, often used for precise color selection in visualizations.
