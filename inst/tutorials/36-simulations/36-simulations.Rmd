@@ -19,9 +19,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Simulations
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to the concept of statistical simulation and its applications in sports analytics. By the end of this tutorial, you'll understand how to use simulations to determine whether unusual performances or streaks are likely due to random chance or indicative of a significant change in performance. We'll focus on using R's random binomial distribution function to simulate shooting percentages over multiple trials. You'll learn how to interpret the results of these simulations, understand the concept of statistical distributions, and apply this knowledge to real-world sports scenarios. This skill will enhance your ability to differentiate between genuine performance issues and normal variability in sports data, providing valuable insights for player evaluation, strategy development, and performance analysis.
+
+## The Basics
 
 In the 2017-2018 season, James Palmer Jr. took 139 three point attempts and made 43 of them for a .309 shooting percentage. A few weeks into the next season, he was 7 for 39 -- a paltry .179. 
 
@@ -86,3 +88,18 @@ grade_this_code()
 ```
 
 Short answer: Really weird. If you simulate 15 threes 1000 times, sometimes you'll see them miss all of them, but only a few times -- five times, in this case. Most of the time, the team won't go 0-15 even once. So going ice cold is not totally out of the realm of random chance, but it's highly unlikely.
+
+## The Recap
+
+In this lesson, we've explored the powerful technique of statistical simulation and its application in sports analytics. We began by understanding the concept of normal distribution and how it relates to player performance. Using R's rbinom() function, we learned how to simulate shooting percentages over multiple trials, applying this to real examples like James Palmer Jr.'s three-point shooting slump. We discovered how to interpret the results of these simulations, determining whether observed performances are within the realm of normal variability or truly unusual. We also applied this technique to team performance, analyzing the likelihood of extreme cold streaks. This hands-on approach has equipped you with the skills to use simulations for evaluating player and team performances, helping to distinguish between random fluctuations and genuine issues. Remember, while simulations provide valuable insights, they should be used in conjunction with other analytical tools and contextual knowledge of the sport for comprehensive analysis. 
+
+## Terms to Know
+
+- Simulation: A statistical technique that uses random sampling to model real-world scenarios and estimate probabilities of different outcomes.
+- Normal Distribution: A symmetrical, bell-shaped probability distribution where data tends to cluster around the mean, with decreasing frequency as values move away from the center.
+- Binomial Distribution: A probability distribution that represents the number of successes in a fixed number of independent trials, each with the same probability of success.
+- `rbinom()`: An R function used to generate random numbers from a binomial distribution, often used in simulations.
+- Set Seed: A function used to initialize the random number generator, ensuring reproducibility in simulations.
+- Probability: The likelihood of an event occurring, expressed as a number between 0 and 1.
+- Standard Deviation: A measure of the amount of variation or dispersion of a set of values from their mean.
+- Random Variability: Natural fluctuations in performance or outcomes that occur by chance rather than due to a specific cause.
