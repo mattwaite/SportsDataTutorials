@@ -20,9 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-# Clustering
+## The Goal
 
-## The basics
+The goal of this lesson is to introduce you to k-means clustering, a powerful technique for grouping similar data points in sports analytics. By the end of this tutorial, you'll understand how to use clustering to identify player types and find comparable athletes based on their statistical profiles. We'll walk through the process of preparing data, determining the optimal number of clusters, and interpreting the results using college basketball player statistics. You'll learn how to apply k-means clustering to group players with similar performance metrics, visualize the clusters, and use this information to find peers for specific athletes like Keisei Tominaga. This skill will enhance your ability to conduct more sophisticated player comparisons and team composition analyses, providing valuable insights for talent evaluation and strategic decision-making in sports.
+
+## The Basics
 
 One common effort in sports is to classify teams and players -- who are this player's peers? What teams are like this one? Who should we compare a player to? Truth is, most sports commentators use nothing more sophisticated that looking at a couple of stats or use the "eye test" to say a player is like this or that. 
 
@@ -276,3 +278,16 @@ grade_this_code()
 ```
 
 Who are the guards most like Keisei Tominaga in the Big Ten? We should further limit our number by minutes played, but you can do that on your own another time.
+
+## The Recap
+
+In this lesson, we've explored the powerful technique of k-means clustering and its application in sports analytics. We started by preparing our data, selecting relevant statistics for guards in college basketball, and scaling these metrics to ensure fair comparisons. We then learned how to determine the optimal number of clusters using the Elbow method, providing a data-driven approach to grouping players. By applying k-means clustering to our dataset, we were able to group players with similar statistical profiles, focusing on Keisei Tominaga as our example. We visualized these clusters using ggplot2, allowing us to see how players are distributed based on their performance metrics. Finally, we narrowed our focus to Big Ten guards, identifying players most similar to Tominaga within his cluster. This hands-on approach has equipped you with the skills to use clustering for player comparisons, talent evaluation, and strategic analysis in sports. Remember, while clustering is a powerful tool, it's important to combine these insights with domain knowledge and consider the context of the sport when interpreting results.
+
+## Terms to Know
+
+- K-means Clustering: A machine learning algorithm that groups similar data points into a specified number of clusters based on their features.
+- Euclidean Distance: The straight-line distance between two points in a multi-dimensional space, used in k-means clustering to measure similarity between data points.
+- Cluster: A group of data points in a k-means analysis that are more similar to each other than to data points in other clusters.
+- Centroid: The mean point of all data points within a cluster, representing the cluster's center.
+- Elbow Method: A technique used to determine the optimal number of clusters (k) by plotting the sum of squared distances against different k values and looking for an "elbow" in the curve.
+- Scaling: The process of standardizing variables to a common scale to ensure each feature contributes equally to the clustering analysis.
