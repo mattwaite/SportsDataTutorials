@@ -70,7 +70,7 @@ big <- football |>
     SeasonPassingYards = sum(PassingYds),
   ) |> filter(Conference == "Big Ten Conference")
 
-bigwide <- big |> 
+biglong <- big |> 
   pivot_longer(
     cols=starts_with("Season"), 
     names_to="Type", 
@@ -146,7 +146,7 @@ Now, the problem we have is that ggplot wants long data and this data is wide.
 
 Remember transforming data? Lesson 6? This is where that work is going to pay off. We need to pivot this data longer. In order to do that, we need to say which columns are being pivoted. Note in the head block above, we have four columns. Two columns are the Team and the Conference. The other columns start with the word Season. That, my friends, is a gigantic hint.
 
-We're going to save this work to a new dataframe called bigwide. 
+We're going to save this work to a new dataframe called biglong. 
 
 ```{r stacked-pivot, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
 ____ <- ____ |> 
@@ -156,7 +156,7 @@ ____ <- ____ |>
     values_to="Yards")
 ```
 ```{r stacked-pivot-solution, exercise.reveal_solution = FALSE}
-bigwide <- big |> 
+biglong <- big |> 
   pivot_longer(
     cols=starts_with("Season"), 
     names_to="Type", 
@@ -169,10 +169,10 @@ grade_this_code()
 If this worked, you'll have two rows for each team: One for rushing yards, one for passing yards. This is what ggplot needs. 
 
 ```{r head2-data, exercise=TRUE, exercise.setup = "stacked-load-data"}
-head(bigwide)
+head(biglong)
 ```
 ```{r head2-data-solution}
-head(bigwide)
+head(biglong)
 ```
 ```{r head2-data-check}
 grade_this_code()
@@ -189,7 +189,7 @@ ggplot() +
 ```
 ```{r stacked-plot1-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=bigwide, aes(x=Team, weight=Yards, fill=Type)) + 
+  geom_bar(data=biglong, aes(x=Team, weight=Yards, fill=Type)) + 
   coord_flip()
 ```
 ```{r stacked-plot1-check}
@@ -209,7 +209,7 @@ ggplot() +
 ```
 ```{r stacked-plot2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=bigwide, aes(x=reorder(Team, Yards), weight=Yards, fill=Type)) + 
+  geom_bar(data=biglong, aes(x=reorder(Team, Yards), weight=Yards, fill=Type)) + 
   coord_flip()
 ```
 ```{r stacked-plot2-check}
