@@ -40,26 +40,7 @@ So let's use 2023's Nebraska volleyball team, which if you weren't paying attent
 
 ## Calculating a Z score in R
 
-For this we'll need the season totals for the last four seasons. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-
-```
-
-Load the tidyverse.
+For this we'll need the season totals for the last four seasons. First, load the tidyverse.
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)

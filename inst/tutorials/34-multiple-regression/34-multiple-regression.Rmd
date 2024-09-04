@@ -28,23 +28,7 @@ The goal of this lesson is to introduce you to multiple regression, a powerful s
 
 In an earlier lesson, we looked at correlations and linear regression to predict how one element of a game would predict the score. But we know that a single variable, in all but the rarest instances, is not going to be that predictive. We need more than one. Enter multiple regression. Multiple regression lets us add -- wait for it -- multiple predictors to our equation to help us get a better fit to reality.
 
-That presents it's own problems. So let's get set up. The dataset we'll use is all college football games since the 2011 season. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs1121.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-```
+That presents it's own problems. So let's get set up. The dataset we'll use is all college football games since the 2011 season. 
 
 We need the tidyverse and a library called `Hmisc` that we'll use later.
 

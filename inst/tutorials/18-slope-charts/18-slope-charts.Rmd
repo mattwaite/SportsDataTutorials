@@ -35,25 +35,6 @@ Nebraska, in 2022, fired its head coach and had an up and down year with a quart
 
 You're going to need a dataset I created that has two seasons of Yards Per Play data on offense. This is the total yards gained divided by the total number of plays. For each team, there's two rows -- one in 2022 and one in 2023. 
 
-**For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballslope.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-
-```
-
 We'll need the tidyverse.
 
 ```{r load-tidyverse, exercise=TRUE}

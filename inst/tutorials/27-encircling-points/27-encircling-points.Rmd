@@ -49,23 +49,7 @@ library(ggalt)
 grade_this_code()
 ```
 
-Let's say we want to highlight the quiet contributions of Derrick Walker to the Husker basketball team. There are bigger personalities, and bigger hype attached to others. But without Walker, this team would be in more trouble than it's already in. Let's take a look at this season's player data. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/players23.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-```
+Let's say we want to highlight the quiet contributions of Derrick Walker to the Husker basketball team. There are bigger personalities, and bigger hype attached to others. But without Walker, this team would be in more trouble than it's already in. Let's take a look at this season's player data. 
 
 And while we're loading it, let's filter out anyone who hasn't played 100 minutes and hasn't pulled down a rebound. 
 

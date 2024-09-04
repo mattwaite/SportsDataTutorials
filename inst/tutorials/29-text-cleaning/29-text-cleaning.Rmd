@@ -47,25 +47,9 @@ Now, two examples.
 
 ## Stripping out text
 
-Throughout this class, we've used data from Sports Reference. If you've used their Share > CSV method to copy data from a table, you may have noticed some extra cruft in the player name field. If you haven't seen it, I'll give you an example -- a dataset of NBA players and their advanced metrics. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.** 
+Throughout this class, we've used data from Sports Reference. If you've used their Share > CSV method to copy data from a table, you may have noticed some extra cruft in the player name field. If you haven't seen it, I'll give you an example -- a dataset of NBA players and their advanced metrics. 
 
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-```
-
-Now load it.
+Load it.
 
 ```{r cleaning-load-data, message=FALSE, warning=FALSE}
 nbaplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
@@ -124,23 +108,7 @@ Just like that, the trash is gone.
 
 Text cleaning is really just a set of logic puzzles. What do I need to do? How can I get there step by step?
 
-The NCAA does some very interesting things with data, making it pretty useless. Here's some volleyball data from a few seasons ago.
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/killsperset.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-```
+The NCAA does some very interesting things with data, making it pretty useless.
 
 Let's import it and take a look.
 

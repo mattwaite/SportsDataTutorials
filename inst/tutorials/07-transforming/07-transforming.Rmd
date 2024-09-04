@@ -32,23 +32,7 @@ You are soon going to discover that long before you can visualize data, **you ne
 
 But what if your visualization library needs one row for each measure? So team, season and the wins. Nebraska, 2022, 4. That's one row. Then the next row is Nebraska, 2021, 3. That's the next row. That's where recasting your data comes in. 
 
-We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of NBA per-game statistics. We're going to try and answer some questions about offensive improvement. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/nbalong.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-```
+We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of NBA per-game statistics. We're going to try and answer some questions about offensive improvement. 
 
 First we need some libraries. 
 

@@ -38,26 +38,7 @@ Hadley Wickham, who is behind all of the libraries we have used in this course t
 
 Let's dive in using data on college softball in 2023. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will write the code that adds necessary and required parts to finish it. 
 
-**For purposes of this exercise, you don't need to download this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_softball_2023.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-
-```
-
-Now load the tidyverse.
+First, load the tidyverse.
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)

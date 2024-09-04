@@ -37,26 +37,7 @@ More often than not, we have more data than we want. Sometimes we need to be rid
   <p class="mb-0"><code>filter()</code> limits rows. If you have 1000 rows and limit it to a single team, you'll have fewer than 1000 rows. <code>select()</code> limits columns. If you have 1000 rows and 25 columns, but you only need three columns, you'll still have 1000 rows when you are done using select.</p>
 </div>
 
-Let's work on some examples using college football game data from last season. You can download the data here if you want to use it in your own notebook -- and this is the same data we used in the mutating tutorial, so if you already downloaded it, you don't need to do it again. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-
-```
-
-First we'll need the tidyverse. Your first step is always loading libraries and you'll need to run this step in nearly every single thing you do.
+Let's work on some examples using college football game data from last season. First we'll need the tidyverse. Your first step is always loading libraries and you'll need to run this step in nearly every single thing you do.
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)

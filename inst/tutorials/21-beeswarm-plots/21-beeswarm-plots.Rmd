@@ -33,24 +33,6 @@ An example will help.
 
 Let's use the NU Women's Volleyball team as our example. Let's look at a new metric: points. Who is doing the work for NU? 
 
-Here is that data. Per usual: **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-```
-
 To make beeswarm plots, you need a library that adds some geoms to ggplot. In this cases it's called ggbeeswarm, and you installed it way back at the beginning. But any time you need a library, and it's on CRAN, you can go to your console and install it with `install.packages("ggbeeswarm")`
 
 We'll need to load ggbeeswarm, the tidyverse and, for later, ggrepel.

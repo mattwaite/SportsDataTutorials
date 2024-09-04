@@ -40,26 +40,7 @@ library(tidyverse)
 grade_this_code()
 ```
 
-We're going to look at last season's women's soccer season and ask a couple of questions. You can download the data here if you want to use it in your own notebook. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-
-```
-
-Your first task is to import the data. For this exercise, you need to simply run this:
+We're going to look at last season's women's soccer season and ask a couple of questions. Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
 soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")

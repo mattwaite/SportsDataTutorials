@@ -31,24 +31,7 @@ So far, we've talked about bar charts -- stacked or otherwise -- are good for sh
 
 Let's look at how we can answer this question: How is this season's Nebraska's basketball season progressing?
 
-We'll need the logs of every game in college basketball. **For purposes of this exercise, you don't need to do this. The data is included here if you want to try this in your own notebook.**
-
-```{r echo=FALSE, class.output="bg-info", results="asis",  message=FALSE,  warning=FALSE}
-library(downloadthis)
-library(glue)
-
-dllink <- download_link(
-  link = "https://mattwaite.github.io/sportsdatafiles/logs24.csv",
-  button_label = "Download csv file",
-  button_type = "danger",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-glue("<pre><p><strong>For this walkthrough:</strong></p><p>{dllink}</p></pre>")
-
-```
+We'll use the logs of every game in college basketball. 
 
 Let's start getting all that we need. We can use the tidyverse shortcut. 
 
