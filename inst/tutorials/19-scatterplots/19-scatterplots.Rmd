@@ -14,6 +14,7 @@ description: >
 ```{r setup, include=FALSE}
 library(learnr)
 library(gradethis)
+library(glue)
 library(tidyverse)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
