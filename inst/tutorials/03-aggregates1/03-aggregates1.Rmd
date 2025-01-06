@@ -53,12 +53,12 @@ Now, let's use the same volleyball player data we used in the last tutorial.
 To load the data, we can run this block of code:
 
 ```{r load-data, message=FALSE, warning=FALSE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 
 nplayers <- nrow(volleyballplayers)
 
 avgsets <- volleyballplayers |>
-  group_by(pos) |>
+  group_by(position) |>
   summarise(
     count = n(),
     mean_sets = mean(s),
@@ -70,11 +70,11 @@ killsleader <- volleyballplayers |> arrange(desc(kills)) |> slice(1)
 ```
 
 ```{r load-data-exercise, exercise = TRUE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 ```
 
 ```{r load-data-exercise-solution}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 ```
 
 ```{r load-data-exercise-check}
@@ -166,7 +166,7 @@ ____ |>
 
 ```{r group-by-solution, exercise.reveal_solution = FALSE}
 volleyballplayers |>
-  group_by(pos) |>
+  group_by(position) |>
   summarise(
     total = n()
   ) 
@@ -180,7 +180,7 @@ grade_this_code()
 **Hint:** The name of your data -- the first thing you need -- is the same as what you used in `head()` and `glimpse()`. Then, look carefully at the first row of the output of head. What you need is in bold at the top. It's a column name.
 :::
 
-In this case, we wanted to group together positions, signified by the field name `pos`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](https://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are.
+In this case, we wanted to group together positions, signified by the field name `position`. After we group the data, we need to count them up. In dplyr, we use `summarize` [which can do more than just count things](https://dplyr.tidyverse.org/reference/summarise.html). Inside the parentheses in summarize, we set up the summaries we want. In this case, we just want a count of the positions: `total = n(),` says create a new field, called `total` and set it equal to `n()`, which might look weird, but it's common in stats. The number of things in a dataset? Statisticians call in n. There are n number of players in this dataset. So `n()` is a function that counts the number of things there are.
 
 ### Exercise 3: Arranging data
 
@@ -197,7 +197,7 @@ volleyballplayers |>
 
 ```{r group-by-2-solution, exercise.reveal_solution = FALSE}
 volleyballplayers |>
-  group_by(pos) |>
+  group_by(position) |>
   summarise(
     total = n()
   ) |> 
@@ -229,7 +229,7 @@ volleyballplayers |>
 
 ```{r group-by-3-solution, exercise.reveal_solution = FALSE}
 volleyballplayers |>
-  group_by(team, pos) |>
+  group_by(team, position) |>
   summarise(
     total = n()
   ) |> 
