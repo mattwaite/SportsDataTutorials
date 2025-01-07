@@ -65,10 +65,10 @@ fit <- lm(differential ~ RushingYds, data = newcorrelations)
 pass <- lm(differential ~ PassingYds, data = newcorrelations)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
