@@ -51,24 +51,24 @@ grade_this_code()
 Now import the data.
 
 ```{r filtering-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 
 rushinggames <- nrow(games |> filter(RushingYds > 250))
 
 bigrush <- games |> filter(RushingYds > 250) |> filter(Conference == "Big Ten Conference")
 
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 toprush <- games |> 
-  filter(Conference %in% powerfive) |> 
+  filter(Conference %in% powerfour) |> 
   select(Team, Conference, RushingYds, Opponent) |>
   top_n(1, wt=RushingYds)
 ```
 ```{r filtering-load-data-exercise, exercise = TRUE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r filtering-load-data-exercise-solution}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r filtering-load-data-exercise-check}
 grade_this_code()
@@ -80,16 +80,15 @@ Before we do anything, a note about conditions. Most of the conditional operator
 
 <div class="alert alert-info">
   <h4 class="alert-heading">Key Concept</h4>
-  <p class="mb-0">Conditional operators to remember:
+  <p class="mb-0">Conditional operators to remember:</p>
   <ul>
-    <li>== is equal to.</li>
-    <li>!= is does not equal.</li>
-    <li>> is greater than.</li>
-    <li>>= is greater than or equal to.</li>
-    <li>< is less than.</li>
-    <li><= is less than or equal to.</li>
+    <li>`==` is equal to.</li>
+    <li>`!=` is does not equal.</li>
+    <li>`<` is greater than.</li>
+    <li>`<=` is greater than or equal to.</li>
+    <li>`>` is less than.</li>
+    <li>`>=` is less than or equal to.</li>
   </ul>
-  </p>
 </div>
 
 So if you want to see Nebraska, what would you do?
@@ -99,7 +98,7 @@ First, let's use head to give us a peek at the data. This data's layout is ... n
 ```{r head-data, exercise=TRUE, exercise.setup = "filtering-load-data"}
 head(____)
 ```
-```{r head-data-solution}
+```{r head-data-solution, exercise.reveal_solution = FALSE}
 head(games)
 ```
 ```{r head-data-check}
@@ -113,7 +112,7 @@ Now that we can see the column names, we now know Team is where the names of the
 ```{r filtering-nebraska, exercise=TRUE, exercise.setup = "filtering-load-data"}
 ____ |> filter(____ == "____")
 ```
-```{r filtering-nebraska-solution}
+```{r filtering-nebraska-solution, exercise.reveal_solution = FALSE}
 games |> filter(Team == "Nebraska")
 ```
 ```{r filtering-nebraska-check}
@@ -131,7 +130,7 @@ There's a certain strain of football fan around these parts that is absolutely o
 ```{r filtering-rushers, exercise=TRUE, exercise.setup = "filtering-load-data"}
 ____ |> filter(____ > ___)
 ```
-```{r filtering-rushers-solution}
+```{r filtering-rushers-solution, exercise.reveal_solution = FALSE}
 games |> filter(RushingYds > 250)
 ```
 ```{r filtering-rushers-check}
@@ -153,7 +152,7 @@ ____ |>
   filter(____ > ____) |> 
   filter(____ == "____")
 ```
-```{r filtering-big-solution}
+```{r filtering-big-solution, exercise.reveal_solution = FALSE}
 games |> 
   filter(RushingYds > 250) |> 
   filter(Conference == "Big Ten Conference")
@@ -201,14 +200,14 @@ Note here: text is in quotes. If they were numbers, we wouldn't need the quotes.
 With a list, we can use the %in% operator. It does what you think it does -- it gives you data that matches things IN the list you give it. 
 
 ```{r filtering-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 ____ |> filter(____ %in% ____)
 ```
 ```{r filtering-power-solution}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
-games |> filter(Conference %in% powerfive)
+games |> filter(Conference %in% powerfour)
 ```
 ```{r filtering-power-check}
 grade_this_code()
@@ -216,22 +215,22 @@ grade_this_code()
 
 ## Selecting data to make it easier to read
 
-So now we have our Power Five list. What if we just wanted to see team names, conferences and passing yards from the most recent season and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Team, Conference and PassingYds. 
+So now we have our Power Four list. What if we just wanted to see team names, conferences and passing yards from the most recent season and ignore all the rest? Select to the rescue. With select, we just spell out exactly which columns we want to see. In our case, we've got three we're interested in seeing: Team, Conference and PassingYds. 
 
 ### Exercise 5: Select to simplify 
 
 ```{r selecting-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 ____ |> 
   filter(____ %in% ____) |> 
   select(____, ____, ____)
 ```
 ```{r selecting-power-solution}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 games |> 
-  filter(Conference %in% powerfive) |> 
+  filter(Conference %in% powerfour) |> 
   select(Team, Conference, PassingYds)
 ```
 ```{r selecting-power-check}
@@ -249,7 +248,7 @@ One last little dplyr trick that's nice to have in the toolbox is a shortcut for
 So what are the top rushing games by Power Five schools? All we're doing here is chaining commands together with what we've already got. We're *filtering* by our list of Power Five conferences, we're *selecting* the three fields we need -- Team, Conference and the rushing yards column. Now we'll introduce the new function: `top_n`. The `top_n` function just takes a number and a weight, abbreviated wt. So we want a top 10 list? The number is pretty obvious. The weight is the column we're ranking on -- the rushing yards.
 
 ```{r selecting-top-power, exercise=TRUE, exercise.setup = "filtering-load-data"}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 ____ |> 
   filter(____ %in% ____) |> 
@@ -258,10 +257,10 @@ ____ |>
   top_n(____, wt=____)
 ```
 ```{r selecting-top-power-solution, exercise.reveal_solution = FALSE}
-powerfive <- c("Southeastern Conference", "Big Ten Conference", "Pac-12 Conference", "Big 12 Conference", "Atlantic Coast Conference")
+powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 games |> 
-  filter(Conference %in% powerfive) |> 
+  filter(Conference %in% powerfour) |> 
   select(Team, Conference, RushingYds) |>
   arrange(desc(RushingYds)) |> 
   top_n(10, wt=RushingYds)
