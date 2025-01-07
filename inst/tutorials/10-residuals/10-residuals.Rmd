@@ -47,7 +47,7 @@ grade_this_code()
 Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE, results=FALSE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 
 residualmodel <- correlations |> 
   mutate(
@@ -73,10 +73,10 @@ penresid <- penalties |> mutate(predicted = predict(pfit), residuals = residuals
 pensort <- penresid |> arrange(desc(residuals)) |> select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals) |> slice(1)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
@@ -202,7 +202,7 @@ glue("So from top to bottom:
 * Our p-value is ... {summary(pfit)$coefficients[, \"Pr(>|t|)\"][2]}, which is more than than .05.")
 ```
 
-So what we can say about this model is that it's statistically significant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. 
+So what we can say about this model is that it's statistically insignificant and utterly meaningless. Normally, we'd stop right here -- why bother going forward with a predictive model that isn't predictive? But let's do it anyway. 
 
 ### Exercise 3: Adding residuals and arranging them.
 
