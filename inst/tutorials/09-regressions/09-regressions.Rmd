@@ -47,7 +47,7 @@ grade_this_code()
 Now read in all FBS college football teams and their season stats. 
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 
 newcorrelations <- correlations |>
   mutate(
@@ -156,7 +156,7 @@ grade_this_code()
 ```
 
 ```{r cor2, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("Uh oh. Run The Damn Ball Guy's argument has gotten worse. The pearson correlation coefficient is even closer to 50-50 -- {format(newcoefficient$estimate, digits=1)} -- where there's a positive correlation here, but it's not perfect.")
+glue("Uh oh. Run The Damn Ball Guy's argument has gotten worse. The pearson correlation coefficient is even closer to 50-50 -- {format(newcoefficient$estimate, digits=2)} -- where there's a positive correlation here, but it's not perfect.")
 ```
 
 Normally, at this point, you'd quit while you were ahead. Arguments with Run The Damn Ball Guy are, on a good day, an exercise in pounding your head against a rock. They have a world view and are going to stick with it, so bringing inconclusive evidence to a stupid fight is a waste of time. 
@@ -234,7 +234,7 @@ grade_this_code()
 ```
 
 ```{r cor3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("Answer: {format(newcoefficient$estimate*100, digits=1)} percent.
+glue("Answer: {format(passcoefficient$estimate*100, digits=1)} percent.
      
 Oh no. That's way less correlated than rushing yards.")
 ```
