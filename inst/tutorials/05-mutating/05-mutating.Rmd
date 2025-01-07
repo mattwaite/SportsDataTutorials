@@ -43,29 +43,29 @@ grade_this_code()
 We're going to look at last season's women's soccer season and ask a couple of questions. Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
-soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2024.csv")
 
 ruthless <- soccer |> mutate(
-  gpg = Goals/Games
+  gpg = goals/games
 ) |> 
   arrange(desc(gpg)) |> slice(1)
 
 snipers <- soccer |>
-  mutate(SoGPct = (SoG/ShAtt)*100
+  mutate(sogpct = (so_g/sh_att)*100
 ) |>
-  arrange(desc(SoGPct)) |> slice(1)
+  arrange(desc(sogpct)) |> slice(1)
 
-maxgames <- soccer |> summarize(max_games = max(Games))
+maxgames <- soccer |> summarize(max_games = max(games))
 
 confsnipers <- soccer |>
-  group_by(Conference) |>
+  group_by(conference) |>
   summarize(
-    total_sog = sum(SoG),
-    total_shatt = sum(ShAtt)
+    total_sog = sum(so_g),
+    total_shatt = sum(sh_att)
   ) |>
-  mutate(SoGPct = (total_sog/total_shatt)*100
+  mutate(sogpct = (total_sog/total_shatt)*100
 ) |>
-  arrange(desc(SoGPct)) |> slice(1)
+  arrange(desc(sogpct)) |> slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
 soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
@@ -109,7 +109,7 @@ ____ |>
 ```
 ```{r mutate-change-solution, exercise.reveal_solution = FALSE}
 soccer |> mutate(
-  gpg = Goals/Games
+  gpg = goals/games
 ) 
 ```
 ```{r mutate-change-check}
@@ -128,7 +128,7 @@ ____ |>
 ```
 ```{r mutate-change2-solution, exercise.reveal_solution = FALSE}
 soccer |> mutate(
-  gpg = Goals/Games
+  gpg = goals/games
 ) |> 
   arrange(desc(gpg))
 ```
@@ -137,7 +137,7 @@ grade_this_code()
 ```
 
 ```{r ruthless, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
-glue("So in that season, {ruthless$Institution} were the most ruthless team scoring about {format(ruthless$gpg, digits=2)} goals per game.")
+glue("So in that season, {ruthless$team} were the most ruthless team scoring about {format(ruthless$gpg, digits=2)} goals per game.")
 ```
 
 ### Exercise 2: Calculating a percentage.
@@ -153,9 +153,9 @@ Sticking with our soccer data, which team was the most accurate when it comes to
 
 The smaller thing is the outcome you're measuring. The total number is all the chances a team or a player had at that thing. For example: Completion percentage. How do you calculate that? You divide completions by the total number of passes thrown. But if you do that, you'll get a number less than 1. That's because it's not yet a percentage like you are accustomed to seeing. To get that, you have to multiply the result of your division by 100. 
 
-To get shots on goal percentage, we're going to do something very similar to the first exercise, but adding in the multiplication. **The little thing in this case is `SoG` (short for Shots on Goal). The big thing is `ShAtt` (short for Shot Attempts).** 
+To get shots on goal percentage, we're going to do something very similar to the first exercise, but adding in the multiplication. **The little thing in this case is `so_g` (short for Shots on Goal). The big thing is `sh_att` (short for Shot Attempts).** 
 
-**Let's call our new column SoGPct, short for Shot on Goal Percentage.**
+**Let's call our new column sogpct, short for Shot on Goal Percentage.**
 
 ```{r mutate-change-percent, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
 soccer |>
@@ -165,18 +165,18 @@ soccer |>
 ```
 ```{r mutate-change-percent-solution, exercise.reveal_solution = FALSE}
 soccer |>
-  mutate(SoGPct = (SoG/ShAtt)*100
+  mutate(sogpct = (so_g/sh_att)*100
 ) |>
-  arrange(desc(SoGPct))
+  arrange(desc(sogpct))
 ```
 ```{r mutate-change-percent-check}
 grade_this_code()
 ```
 
 ```{r accurate, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
-glue("Who is putting the most pressure on the keeper shot after shot?  {snipers$Institution}, who are on goal {format(snipers$SoGPct, digits=1)}% of the time.
+glue("Who is putting the most pressure on the keeper shot after shot?  {snipers$team}, who are on goal {format(snipers$sogpct, digits=1)}% of the time.
      
-     A note about this. Note that {snipers$Institution} played in {snipers$Games} matches. The team that played the most played in {maxgames$max_games}. We'll learn how to deal with that in the next tutorial.")
+     A note about this. Note that {snipers$team} played in {snipers$games} matches. The team that played the most played in {maxgames$max_games}. We'll learn how to deal with that in the next tutorial.")
 ``` 
 
 ### Exercise 3: Combining what we know
@@ -187,7 +187,7 @@ To take a dataset of every team and get each conference, we need to use group by
 
 Then, to calculate a percentage for the conference, we need to add up the two pieces we need in summarize *before* we mutate a new column. We're going to sum the shots on goal and the shot attempts. You've used those two columns before -- look at your previous work.
 
-Then we're going to create a shots on goal percentage -- call it SoGPct. To make that percentage, you only have what you made in summarize to work with. What you made is what you named. What you named is always left of the =.
+Then we're going to create a shots on goal percentage -- call it sogpct. To make that percentage, you only have what you made in summarize to work with. What you made is what you named. What you named is always left of the =.
 
 ```{r mutate-change-percent-arrange, exercise=TRUE, exercise.setup = "mutating-load-data", message=FALSE, warning=FALSE}
 soccer |>
@@ -202,21 +202,21 @@ soccer |>
 ```
 ```{r mutate-change-percent-arrange-solution, exercise.reveal_solution = FALSE, warning=FALSE}
 soccer |>
-  group_by(Conference) |>
+  group_by(conference) |>
   summarize(
-    total_sog = sum(SoG),
-    total_shatt = sum(ShAtt)
+    total_sog = sum(so_g),
+    total_shatt = sum(sh_att)
   ) |>
-  mutate(SoGPct = (total_sog/total_shatt)*100
+  mutate(sogpct = (total_sog/total_shatt)*100
 ) |>
-  arrange(desc(SoGPct))
+  arrange(desc(sogpct))
 ```
 ```{r mutate-change-percent-arrange-check}
 grade_this_code()
 ```
 
 ```{r conf, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "mutating-load-data", results='asis'}
-glue("What conference do you not want to be a keeper?  The {confsnipers$Conference} Conference, who are on goal {format(confsnipers$SoGPct, digits=1)}% of the time.")
+glue("What conference do you not want to be a keeper?  The {confsnipers$conference} Conference, who are on goal {format(confsnipers$sogpct, digits=1)}% of the time.")
 ``` 
 
 ## The Recap
