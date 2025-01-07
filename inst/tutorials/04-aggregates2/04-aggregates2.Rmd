@@ -45,12 +45,12 @@ grade_this_code()
 Now, we load the data. 
 
 ```{r load-data, message=FALSE, warning=FALSE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 
 nplayers <- nrow(volleyballplayers)
 
 avgsets <- volleyballplayers |>
-  group_by(pos) |>
+  group_by(position) |>
   summarise(
     count = n(),
     mean_sets = mean(s),
@@ -62,11 +62,11 @@ killsleader <- volleyballplayers |> arrange(desc(kills)) |> slice(1)
 ```
 
 ```{r load-data-exercise, exercise = TRUE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 ```
 
 ```{r load-data-exercise-solution}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 ```
 
 ```{r load-data-exercise-check}
@@ -117,7 +117,7 @@ _____ |>
 
 ```{r group-by-4-solution, exercise.reveal_solution = FALSE}
 volleyballplayers |>
-  group_by(pos) |>
+  group_by(position) |>
   summarise(
     mean_sets = mean(s)
   ) |>
@@ -133,7 +133,7 @@ grade_this_code()
 :::
 
 ```{r avgsets, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "load-data", results='asis'}
-glue("So there's {nplayers} players in the data. Of them, {avgsets$count} are of the position {avgsets$pos}, which if you know volleyball you can figure out what that is pretty quickly. The average {avgsets$pos} plays in {format(avgsets$mean_sets, digits=1)} sets on average.")
+glue("So there's {nplayers} players in the data. Of them, {avgsets$count} are of the position {avgsets$position}, which if you know volleyball you can figure out what that is pretty quickly. The average {avgsets$position} plays in {format(avgsets$mean_sets, digits=1)} sets on average.")
 ```
 
 ### Exercise 2: More than one number
@@ -154,7 +154,7 @@ _____ |>
 
 ```{r group-by-5-solution, exercise.reveal_solution = FALSE}
 volleyballplayers |>
-  group_by(pos) |>
+  group_by(position) |>
   summarise(
     mean_sets = mean(s),
     median_sets = median(s)
@@ -172,7 +172,7 @@ grade_this_code()
 
 ### Exercise 3: Arranging two ways
 
-One thing to keep in mind is this: You can use any of these verbs -- group_by, summarize, arrange -- on their own without the others. For example, what player had the most kills in 2021? To find this out, we don't need a group_by or summarize, so what goes in arrange is just the field name. Let's put this in order of kills.
+One thing to keep in mind is this: You can use any of these verbs -- group_by, summarize, arrange -- on their own without the others. For example, what player had the most kills in 2024? To find this out, we don't need a group_by or summarize, so what goes in arrange is just the field name. Let's put this in order of kills.
 
 First let's get the most kills.
 
@@ -208,7 +208,7 @@ grade_this_code()
 ```
 
 ```{r killer, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "load-data", results='asis'}
-glue("The kill leader in the NCAA? {killsleader$full_name} of the {killsleader$team} with {killsleader$kills} kills. The lowest? A whole lot of people with 0.")
+glue("The kill leader in the NCAA? {killsleader$name} of {killsleader$team} with {killsleader$kills} kills. The lowest? A whole lot of people with 0.")
 ```
 
 That's a huge difference.
@@ -237,7 +237,7 @@ volleyballplayers |>
 
 ```{r group-by-8-solution, exercise.reveal_solution = FALSE}
 volleyballplayers |> 
-  group_by(pos) |> 
+  group_by(position) |> 
   summarise(
     total = sum(pts), 
     avg_points = mean(pts), 
@@ -260,7 +260,7 @@ grade_this_code()
   <p class="mb-0">So many students of this class have struggled with the simple difference between a count (<code>n()</code>) and a sum (<code>sum()</code>). Let's pretend I have 5 players who have each scored 2 points. If I count them, I get 5. If I sum them, I get 10 -- 2+2+2+2+2 = 10.</p>
 </div>
 
-No surprise with our data analysis, outside hitters with the most points. Most of the stats here we can intuitively understand -- a minimum of zero means they probably didn't play at all. A large max means that player was good a volleyball. The one that you should give an extra check is the standard deviation. When your standard deviation is large, that's a sign you've got some huge points players and a bunch of bench players and you should consider which measure of the middle you're going to use.
+No surprise with our data analysis, outside hitters with the most points. Most of the stats here we can intuitively understand -- a minimum of zero means they probably didn't play at all. A large max means that player was good at volleyball. The one that you should give an extra check is the standard deviation. When your standard deviation is large, that's a sign you've got some huge points players and a bunch of bench players and you should consider which measure of the middle you're going to use.
 
 ## The Recap
 
