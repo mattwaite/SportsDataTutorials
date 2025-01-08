@@ -48,7 +48,7 @@ grade_this_code()
 And the data.
 
 ```{r line-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs25.csv")
 
 nu <- logs |> filter(Team == "Nebraska")
 pu <- logs |> filter(Team == "Purdue")
