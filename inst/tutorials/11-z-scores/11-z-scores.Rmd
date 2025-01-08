@@ -36,9 +36,9 @@ knitr::include_graphics(rep("images/simulations2.png"))
 
 If you think of the normal distribution, it means that 84.3 percent of all case are below that 1. If it were -1, it would mean the number is one standard deviation below the mean, and 84.3 percent of cases would be above that -1. So if you have numbers with z-scores of 3 or even 4, that means that number is waaaaaay above the mean.  
 
-So let's use 2023's Nebraska volleyball team, which if you weren't paying attention, was very good at volleyball. A two matches away from legendary. But were they the best Husker team since 2018, when they were also the national semifinalist? 
+So let's use the remarkable career of Nebraska volleyball legend and CoJMC alumna Lexi Rodriguez, which if you weren't paying attention, she was very good at volleyball. She finished her career breaking Nebraska's all-time digs record, overtaking another Nebraska legend Justine Wong-Orontes. In her senior season, Rodriquez was up for player of the year awards. But was it her best season as a Husker?
 
-## Calculating a Z score in R
+### Calculating a Z score in R
 
 For this we'll need the season totals for the last four seasons. First, load the tidyverse.
 
@@ -55,30 +55,28 @@ grade_this_code()
 And load the data.
 
 ```{r zscore-load-data, message=FALSE, warning=FALSE, results=FALSE}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2124.csv")
 
 perset <- seasons |> 
   mutate(
-    killsperset = Kills/S,
-    digsperset = Digs/S,
-    acesperset = Aces/S
+    digsperset = digs/s,
+    acesperset = aces/s
   ) |>
-  select(Season, Team, Conference, killsperset, digsperset, acesperset)
+  select(season, team, conference, name, digsperset, acesperset)
 
-teamzscore <- perset |>
-  group_by(Season) |> 
+playerzscore <- perset |>
+  group_by(season) |> 
   mutate(
-    killszscore = as.numeric(scale(killsperset, center = TRUE, scale = TRUE)),
     aceszscore = as.numeric(scale(acesperset, center = TRUE, scale = TRUE)),
     digszscore = as.numeric(scale(digsperset, center = TRUE, scale = TRUE)),
-    TotalZscore = killszscore + aceszscore + digszscore
+    totalzscore = aceszscore + digszscore
   ) |> ungroup() 
 ```
 ```{r zscore-load-data-exercise, exercise = TRUE}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2124.csv")
 ```
 ```{r zscore-load-data-exercise-solution}
-seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/volleyball1823.csv")
+seasons <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2124.csv")
 ```
 ```{r zscore-load-data-exercise-check}
 grade_this_code()
@@ -98,123 +96,119 @@ grade_this_code()
 
 ### Exercise 1: Preparing data
 
-The first thing we need to do is create some metrics to deal with comparing seasons that include the covid season. Then we'll select some fields we think represent team quality and a few things to help us keep things straight. 
+The first thing we need to do is create some metrics to deal with comparing seasons that deal with players playing different amounts. Then we'll select some fields we think represent a good libero and a few things to help us keep things straight. 
 
-Every team plays a different number of sets in a season, and really great teams and really bad teams will play fewer sets than middle of the road teams. And, with the covid season, some teams got just a few matches in, others got more. To be able to work with this, we need to standardize around *per set* metrics. Sets in our data are marked as S. 
+Every player plays a different number of sets in a season, and that has to do with how good you are and how good your team is. In volleyball, being on a really good team can mean playing *fewer* sets in a season, because you're just sweeping everyone. But then you get the NCAA tournament, and get more matches. So it's just a mess. To be able to work with this, we need to standardize around *per set* metrics. Sets in our data are marked as s. 
 
-To get that, we're going to use mutate to create `killsperset`, `digsperset` and `acesperset`. Then, we're going to use select to get Season, Institution, Conference and our four metrics. 
+To get that, we're going to use mutate to create `digsperset` and `acesperset`. Then, we're going to use select to get season, team, conference and our metrics. 
 
 ```{r zscore2, exercise=TRUE, exercise.setup = "zscore-load-data"}
 perset <- seasons |> 
   mutate(
-    killsperset = ____/____,
     digsperset = ____/____,
     acesperset = ____/____
   ) |>
-  select(Season, Team, Conference, ____, ____, ____)
+  select(season, team, conference, ____, ____)
 ```
 ```{r zscore2-solution, exercise.reveal_solution = FALSE}
 perset <- seasons |> 
   mutate(
-    killsperset = Kills/S,
-    digsperset = Digs/S,
-    acesperset = Aces/S
+    digsperset = digs/s,
+    acesperset = aces/s
   ) |>
-  select(Season, Team, Conference, killsperset, digsperset, acesperset)
+  select(season, team, conference, name, digsperset, acesperset)
 ```
 ```{r zscore2-check}
 grade_this_code()
 ```
 
-## Exercise 2: Create a z-score
+### Exercise 2: Create a z-score
 
-The first thing we're going to do is deal with having multiple seasons. We want the z-score to be centered on the average for *that season*, so each Husker team gets ranked against their competition, not all teams in all seasons. That way, we compare how good the 2018 Huskers were compared to 2018 teams, vs 2021 teams, which is impossible. A team from 2018 can't play a team from 2021 or 2022 or 2023. How do we make z-scores for each season? Simple: group by. 
+The first thing we're going to do is deal with having multiple seasons. We want the z-score to be centered on the average for *that season*, so each Husker gets ranked against their competition, not all players in all seasons. That way, we compare how good 2021 Lexi was compared to 2024 Lexi. Lexi from 2021 can't play a season of matches from 2024 or 2023 or 2022, so we can only compare her to her competition. How do we make z-scores for each season? Simple: group by. 
 
 Then, we're *NOT* going to use summarize. We'll use mutate. That has the effect of putting all the 2020 teams together in a pile, calculating each teams z-score and then just leaving it there instead of folding it all together into a single number (like summarize would). 
 
 To calculate a z-score in R, the easiest way is to use the `scale` function in base R. To use it, you use `scale(FieldName, center=TRUE, scale=TRUE)`. The center and scale indicate if you want to subtract from the mean and if you want to divide by the standard deviation, respectively. We do.
 
-When we have multiple z-scores, it's pretty standard practice to add them together into a composite score. That's what we're doing at the end here with `TotalZscore`. 
+When we have multiple z-scores, it's pretty standard practice to add them together into a composite score. That's what we're doing at the end here with `totalzscore`. 
 
 ```{r zscore3, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore <- perset |>
+playerzscore <- perset |>
   group_by(____) |> 
   mutate(
-    killszscore = as.numeric(scale(____perset, center = TRUE, scale = TRUE)),
     aceszscore = as.numeric(scale(____perset, center = TRUE, scale = TRUE)),
     digszscore = as.numeric(scale(____perset, center = TRUE, scale = TRUE)),
-    TotalZscore = ____zscore + ____zscore + ____zscore
+    totalzscore = ____zscore + ____zscore
   ) |> ungroup() 
 ```
 ```{r zscore3-solution, exercise.reveal_solution = FALSE}
-teamzscore <- perset |>
-  group_by(Season) |> 
+playerzscore <- perset |>
+  group_by(season) |> 
   mutate(
-    killszscore = as.numeric(scale(killsperset, center = TRUE, scale = TRUE)),
     aceszscore = as.numeric(scale(acesperset, center = TRUE, scale = TRUE)),
     digszscore = as.numeric(scale(digsperset, center = TRUE, scale = TRUE)),
-    TotalZscore = killszscore + aceszscore + digszscore
+    totalzscore = aceszscore + digszscore
   ) |> ungroup() 
 ```
 ```{r zscore3-check}
 grade_this_code()
 ```
 
-So now we have a dataframe called `teamzscore` that has all teams from the 2018-2023 seasons with Z scores. What does it look like? 
+So now we have a dataframe called `playerzscore` that has all players from the 2021-2024 seasons with Z scores. What does it look like? 
 
 ```{r head-data, exercise=TRUE, exercise.setup = "zscore-load-data"}
-head(teamzscore)
+head(playerzscore)
 ```
 ```{r head-data-solution}
-head(teamzscore)
+head(playerzscore)
 ```
 ```{r head-data-check}
 grade_this_code()
 ```
 
-A way to interpret this data -- a team at zero is precisely average. The larger the positive number, the more exceptional they are. The larger the negative number, the more truly terrible they are. 
+A way to interpret this data -- a player at zero is precisely average. The larger the positive number, the more exceptional they are. The larger the negative number, the more truly terrible they are (relative to all DI talent, which is orders of magnitude better than any of us). 
 
 ### Exercise 3: Arrange to the rescue
 
-So who were the best teams in the country last season? Arrange can tell us. We just made a composite z-score -- a total if you will. Let's use that in arrange to see who is the best by our measure.
+So who were the best players in the country over this time? Arrange can tell us. We just made a composite z-score -- a total if you will. Let's use that in arrange to see who is the best by our measure.
 
 ```{r zscore4, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore |> arrange(desc(____))
+playerzscore |> arrange(desc(____))
 ```
 ```{r zscore4-solution, exercise.reveal_solution = FALSE}
-teamzscore |> arrange(desc(TotalZscore))
+playerzscore |> arrange(desc(totalzscore))
 ```
 ```{r zscore4-check}
 grade_this_code()
 ```
 
-And the greatest volleyball team in the last four years is ... wait what? 
+And the greatest libero in the last four years is ... wait what? 
 
 So we have some work to do here if this is the answer we're getting, but what if we look a little closer. 
 
-### Exercise 4: Filtering to see Nebraska
+### Exercise 4: Filtering to see Lexi
 
-Closer to home, how is Nebraska doing vs the Big Ten? Because we included Conference in our select, we can add a filter for the Big Ten before our arrange and get an answer. 
+Obviously, competition matters, and we could do some filtering to get only Power Four teams in here and do it again. But we set out to ask which was Lexi's best season. So let's filter for it. 
 
 ```{r zscore5, exercise=TRUE, exercise.setup = "zscore-load-data"}
-teamzscore |> 
-  filter(Conference == "____") |> 
+playerzscore |> 
+  filter(name == "____") |> 
   arrange(desc(____)) |>
-  select(Season, Team, TotalZscore)
+  select(season, name, totalzscore)
 ```
 ```{r zscore5-solution, exercise.reveal_solution = FALSE}
-teamzscore |> 
-  filter(Conference == "Big Ten") |> 
-  arrange(desc(TotalZscore)) |>
-  select(Season, Team, TotalZscore)
+playerzscore |> 
+  filter(name == "Lexi Rodriguez") |> 
+  arrange(desc(totalzscore)) |>
+  select(season, name, totalzscore)
 ```
 ```{r zscore5-check}
 grade_this_code()
 ```
 
-So, as we can see, with our composite Z Score, the best Big Ten volleyball since 2018 isn't Nebraska, a three-time national semi-finalist. It isn't Wisconsin who won the natty over us and was a finalist in 2019. It's ... Minnesota? Interesting.
+So, as we can see, with our composite Z Score, the best Lexi isn't this year. It isn't even last year. It was 2021.
 
-The 2023 Huskers are the ... 48th best Big Ten team since 2018? Hmmm. Maybe our composite score needs some work. 
+In 2024, breaking records and on the doorstep of Player of the Year, Lexi turned in her third best season, relative to competition. Huh.
 
 ## Writing about z-scores
 
@@ -228,7 +222,7 @@ If the word z-score appears in your story or in a chart, you need to explain wha
 
 ## The Recap
 
-In this lesson, we've explored the concept of z-scores and their application in sports analytics. We learned that z-scores provide a standardized measure of how far a data point is from the mean, expressed in terms of standard deviations. This allows us to compare performances across different seasons, leagues, or eras. We practiced calculating z-scores in R using the scale() function and applied this to volleyball team statistics. We created composite z-scores to rank teams based on multiple performance metrics, demonstrating how this technique can provide insights that raw statistics alone might miss. However, we also encountered some unexpected results, highlighting the importance of critically evaluating our measures and considering additional context. We discussed the challenges of communicating z-scores to a general audience and strategies for presenting these insights effectively. Remember, while z-scores are a powerful tool for standardizing comparisons, they should be used in conjunction with other analytical methods and domain knowledge for comprehensive sports analysis. 
+In this lesson, we've explored the concept of z-scores and their application in sports analytics. We learned that z-scores provide a standardized measure of how far a data point is from the mean, expressed in terms of standard deviations. This allows us to compare performances across different seasons, leagues, or eras. We practiced calculating z-scores in R using the scale() function and applied this to volleyball player statistics. We created composite z-scores to rank players based on multiple performance metrics, demonstrating how this technique can provide insights that raw statistics alone might miss. However, we also encountered some unexpected results, highlighting the importance of critically evaluating our measures and considering additional context. We discussed the challenges of communicating z-scores to a general audience and strategies for presenting these insights effectively. Remember, while z-scores are a powerful tool for standardizing comparisons, they should be used in conjunction with other analytical methods and domain knowledge for comprehensive sports analysis. 
 
 ## Terms to Know
 
