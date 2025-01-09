@@ -50,7 +50,7 @@ grade_this_code()
 We'll use the college football game data we've used before. Load it.
 
 ```{r patchwork-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 
 totals <- games |> 
   filter(Conference == "Big Ten Conference") |> 
@@ -77,16 +77,16 @@ bar2 <- ggplot() +
   coord_flip()
 ```
 ```{r patchwork-load-data-exercise, exercise = TRUE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r patchwork-load-data-exercise-solution}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r patchwork-load-data-exercise-check}
 grade_this_code()
 ```
 
-For this, we're going to total up the rushing yards and attempts for each game, as well as the passing yards and attempts, to get a top 5 list of the best rushing and passing offeneses in the Big Ten last season.
+For this, we're going to total up the rushing yards and attempts for each game, as well as the passing yards and attempts, to get a top 5 list of the best rushing and passing offenses in the Big Ten last season.
 
 ```{r patchwork1, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
 totals <- games |> 
