@@ -31,9 +31,9 @@ But with some fiddling with lines and points, you can create a new chart type th
 
 Think of a slope chart like the meme you see online: How is started vs how it's going. 
 
-Nebraska, in 2022, fired its head coach and had an up and down year with a quarterback who could sling it and a receiver who could run under it. Then they hired a new coach in 2023, ran off that quarterback and brough in a new one. So what does that look like on offense?
+Nebraska, in 2023, fielded one of the worst offenses in school history. What happened next? Oh, we did some recruiting. I don't remember details. Something about a quarterback. Familiar name, can't remember it. Anywho. What does that look like on offense?
 
-You're going to need a dataset I created that has two seasons of Yards Per Play data on offense. This is the total yards gained divided by the total number of plays. For each team, there's two rows -- one in 2022 and one in 2023. 
+You're going to need a dataset I created that has two seasons of Yards Per Play data on offense. This is the total yards gained divided by the total number of plays. For each team, there's two rows -- one in 2023 and one in 2024. 
 
 We'll need the tidyverse.
 
@@ -50,7 +50,7 @@ grade_this_code()
 And the data.
 
 ```{r slope-load-data, message=FALSE, warning=FALSE}
-yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope.csv")
+yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope2324.csv")
 
 nu <- yardsperplay |> filter(Team == "Nebraska")
 oh <- yardsperplay |> filter(Team == "Ohio State")
@@ -60,10 +60,10 @@ big <- yardsperplay |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r slope-load-data-exercise, exercise = TRUE}
-yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope.csv")
+yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope2324.csv")
 ```
 ```{r slope-load-data-exercise-solution}
-yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope.csv")
+yardsperplay <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope2324.csv")
 ```
 ```{r slope-load-data-exercise-check}
 grade_this_code()
@@ -97,7 +97,7 @@ glimpse(big)
 grade_this_code()
 ```
 
-Better. Now we have a dataset of 28 rows -- 14 teams x 2 seasons of data. 
+Better, but weird. Now we have a dataset of 32 rows -- 18 teams x 2 seasons of data should be 36 rows. But, because four new teams entered the league in 2024, we only have that year for them in the Big Ten. We could fix this with some filter-fu, but we're not going to this time. 
 
 ### Exercise 2: Making our first slope chart. 
 
@@ -121,7 +121,7 @@ Well, we got something. But where is Nebraska? And who is that so far ahead of e
 
 ### Exercise 3: More filtering
 
-Well, I said Nebraska had the second most explosive offense, so we should use filtering to find Nebraska first. Then, I have to believe Ohio State is always near the top in this, so let's find them too. But Michigan won the conference last season, so we should throw them in too. 
+Because of where we are right now, we should use filtering to find Nebraska first. Then, I have to believe Ohio State is always near the top in this, so let's find them too. Let's also do Michigan, who won a natty in 2023 and ... didn't ... in 2024. 
 
 ```{r slope3, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
 nu <- yardsperplay |> filter(Team == "____")
@@ -169,13 +169,13 @@ ggplot() +
 grade_this_code()
 ```
 
-Well, we know Michigan and Ohio State were top teams in the conference. But where is Nebraska? And what story does this tell? 
+What story does this tell? Follow the Ohio State line. It goes up. Meaning Ohio State's offense got better. Surprising? No. Follow the Michigan line. Surprising? Also no. How about Nebraska?
 
 ### Exercise 5: Getting creative with spacing and breaks
 
 Now that we have something to work with, it's time to start improving it. It would be nice if the years at the bottom didn't have a lot of meaningless decimals on them -- as in we only have two years -- and also, it would be good to label each team. Maybe we label them on each end of the graph. Given how much space the default ggplot behavior has left us to do that, we're going to need to make some space.
 
-We can do that with some clever manipulations of the x axis. In ggplot, there are all kinds of ways to work with the x and y axis scales. In this case, we have a continuous number on the x axis, so we'll use `scale_x_continuous` and we're going to first set the line breaks manually so there's just 2022 and 2023. Then, we're going to set the limits of our x axis so that it doesn't just default to 2022-2023, but is a little wider so we have extra space. We're going to add a half a year on each side to pad it out. 
+We can do that with some clever manipulations of the x axis. In ggplot, there are all kinds of ways to work with the x and y axis scales. In this case, we have a continuous number on the x axis, so we'll use `scale_x_continuous` and we're going to first set the line breaks manually so there's just 2023 and 2024. Then, we're going to set the limits of our x axis so that it doesn't just default to 2023-2024, but is a little wider so we have extra space. We're going to add a half a year on each side to pad it out. 
 
 ```{r slope5, exercise=TRUE, exercise.setup = "slope-load-data", message=FALSE}
 ggplot() + 
@@ -187,7 +187,7 @@ ggplot() +
   geom_point(data=oh, aes(x=Season, y=YardsPerPlay, group=Team), color="black") +
   geom_line(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
   geom_point(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") + 
-  scale_x_continuous(breaks=c(____, ____), limits=c(2021.5,2023.5)) 
+  scale_x_continuous(breaks=c(____, ____), limits=c(2022.5,2024.5)) 
 ```
 ```{r slope5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
@@ -199,7 +199,7 @@ ggplot() +
   geom_point(data=oh, aes(x=Season, y=YardsPerPlay, group=Team), color="black") +
   geom_line(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") +
   geom_point(data=mi, aes(x=Season, y=YardsPerPlay, group=Team), color="blue") + 
-  scale_x_continuous(breaks=c(2022, 2023), limits=c(2021.5,2023.5)) 
+  scale_x_continuous(breaks=c(2023, 2024), limits=c(2022.5,2024.5)) 
 ```
 ```{r slope5-check}
 grade_this_code()
@@ -209,9 +209,9 @@ A ha! Better. We now just have the two years and we have some space to put our t
 
 ### Exercise 6: adding labels
 
-To add the labels, we again need to be a bit clever. We want to label each dot *twice* -- once for 2021 and once for 2022. But our data has both years in it, so we're going to have to do something we don't do a lot of: put a `dplyr` filter into our data= bits. 
+To add the labels, we again need to be a bit clever. We want to label each dot *twice* -- once for 2023 and once for 2024. But our data has both years in it, so we're going to have to do something we don't do a lot of: put a `dplyr` filter into our data= bits. 
 
-We're going to use a `geom_text`, which will just put text anywhere on your graph. The aes will be the same as the geom_point, except it will have a label in it that we'll set to the Team. Then, for data, we're going to filter our dataframes for the `min(Season)` and the `max(Season)`, which will give us 2022 and 2023 respectively. Then, one last little trick -- we're going to nudge our labels over a little. For our min, we're going to subtract .2 years off our season, which will have the effect of moving the text to the left just a bit. Then, on the max side, we'll nudge it .2 to the right by adding it to the season. 
+We're going to use a `geom_text`, which will just put text anywhere on your graph. The aes will be the same as the geom_point, except it will have a label in it that we'll set to the Team. Then, for data, we're going to filter our dataframes for the `min(Season)` and the `max(Season)`, which will give us 2023 and 2024 respectively. Then, one last little trick -- we're going to nudge our labels over a little. For our min, we're going to subtract .2 years off our season, which will have the effect of moving the text to the left just a bit. Then, on the max side, we'll nudge it .2 to the right by adding it to the season. 
 
 To cap it off, we'll add `theme_minimal()` at the end because we want to remove the grey background. 
 
@@ -231,7 +231,7 @@ ggplot() +
   geom_text(data=mi |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh |> filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  scale_x_continuous(breaks=c(2022, 2023), limits=c(2021.5,2023.5))  +
+  scale_x_continuous(breaks=c(2023, 2024), limits=c(2022.5,2024.5))  +
   theme_minimal()
 ```
 ```{r slope6-solution, exercise.reveal_solution = FALSE}
@@ -250,7 +250,7 @@ ggplot() +
   geom_text(data=mi |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh |> filter(Season == max(Season)), aes(x=Season + .2, y=YardsPerPlay, group=Team, label=Team)) + 
   geom_text(data=oh |> filter(Season == min(Season)), aes(x=Season - .2, y=YardsPerPlay, group=Team, label=Team)) + 
-  scale_x_continuous(breaks=c(2022, 2023), limits=c(2021.5,2023.5)) +
+  scale_x_continuous(breaks=c(2023, 2024), limits=c(2022.5,2024.5)) +
   theme_minimal()
 ```
 ```{r slope6-check}
