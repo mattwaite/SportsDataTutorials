@@ -54,20 +54,20 @@ grade_this_code()
 And the data.
 
 ```{r beeswarm-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 
 set.seed(1234)
 
-activeplayers <- players |> filter(s > 75 & kills > 10 & is.na(pos) == FALSE)
+activeplayers <- players |> filter(s > 75 & kills > 10 & is.na(position) == FALSE)
 
 nu <- activeplayers |> 
-  filter(team == "Nebraska Huskers")
+  filter(team == "Nebraska")
 ```
 ```{r beeswarm-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 ```
 ```{r beeswarm-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
 ```
 ```{r beeswarm-load-data-exercise-check}
 grade_this_code()
@@ -96,14 +96,14 @@ ____ <- ____ |>
   filter(
     s > ____ & 
       kills > ____ & 
-      is.na(pos) == FALSE)
+      is.na(position) == FALSE)
 ```
 ```{r beeswarm2-solution, exercise.reveal_solution = FALSE}
 activeplayers <- players |> 
   filter(
     s > 75 & 
       kills > 10 & 
-      is.na(pos) == FALSE)
+      is.na(position) == FALSE)
 ```
 ```{r beeswarm2-check}
 grade_this_code()
@@ -111,7 +111,7 @@ grade_this_code()
 
 ### Exercise 2: Your first beeswarm
 
-It works very much like you would expect, if you think about it. The group value -- the columns that you put your dots in -- is the x, the number is the y. We're going to beeswarm by position -- `pos` -- and the dots will be `kills`. 
+It works very much like you would expect, if you think about it. The group value -- the columns that you put your dots in -- is the x, the number is the y. We're going to beeswarm by position -- `position` -- and the dots will be `kills`. 
 
 ```{r beeswarm5, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 ggplot() + 
@@ -119,7 +119,7 @@ ggplot() +
 ```
 ```{r beeswarm5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_beeswarm(data=activeplayers, aes(x=pos, y=kills), color="grey")
+  geom_beeswarm(data=activeplayers, aes(x=position, y=kills), color="grey")
 ```
 ```{r beeswarm5-check}
 grade_this_code()
@@ -131,15 +131,15 @@ So where are the Nebraska players in that mix?
 
 ### Exercise 3: Filtering for Nebraska
 
-We'll filter players on Nebraska who meet our criteria. Weirdly, this is the only dataset we have that calls Nebraska the Huskers, so be mindful of that when you filter. 
+We'll filter players on Nebraska who meet our criteria.
 
 ```{r beeswarm6, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 nu <- activeplayers |> 
-  filter(team == "____ ____")
+  filter(team == "____")
 ```
 ```{r beeswarm6-solution, exercise.reveal_solution = FALSE}
 nu <- activeplayers |> 
-  filter(team == "Nebraska Huskers")
+  filter(team == "Nebraska")
 ```
 ```{r beeswarm6-check}
 grade_this_code()
@@ -166,10 +166,10 @@ ggplot() +
 ggplot() + 
   geom_beeswarm(
     data=activeplayers, 
-    aes(x=pos, y=kills), color="grey") + 
+    aes(x=position, y=kills), color="grey") + 
   geom_beeswarm(
     data=nu, 
-    aes(x=pos, y=kills), color="red")
+    aes(x=position, y=kills), color="red")
 ```
 ```{r beeswarm7-check}
 grade_this_code()
@@ -179,7 +179,7 @@ What does this say about Nebraska? The number of players, where they rank, by po
 
 ### Exercise 5: Labeling 
 
-This is where we can use ggrepel. Let's add a text layer and label the dots. 
+This is where we can use ggrepel. Let's add a text layer and label the dots with the players name. 
 
 ```{r beeswarm8, exercise=TRUE, exercise.setup = "beeswarm-load-data", message=FALSE}
 ggplot() + 
@@ -191,19 +191,19 @@ ggplot() +
     aes(x=____, y=____), color="red") + 
   geom_text_repel(
     data=nu, 
-    aes(x=____, y=____, label=full_name))
+    aes(x=____, y=____, label=name))
 ```
 ```{r beeswarm8-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_beeswarm(
     data=activeplayers, 
-    aes(x=pos, y=kills), color="grey") + 
+    aes(x=position, y=kills), color="grey") + 
   geom_beeswarm(
     data=nu, 
-    aes(x=pos, y=kills), color="red") + 
+    aes(x=position, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
-    aes(x=pos, y=kills, label=full_name))
+    aes(x=position, y=kills, label=name))
 ```
 ```{r beeswarm8-check}
 grade_this_code()
@@ -221,25 +221,25 @@ There's not a lot to change from our example to see what they do.
 ggplot() + 
   geom_quasirandom(
     data=activeplayers, 
-    aes(x=pos, y=kills), color="grey") + 
+    aes(x=position, y=kills), color="grey") + 
   geom_quasirandom(
     data=nu, 
-    aes(x=pos, y=kills), color="red") + 
+    aes(x=position, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
-    aes(x=pos, y=kills, label=full_name))
+    aes(x=position, y=kills, label=name))
 ```
 ```{r beeswarm9-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_quasirandom(
     data=activeplayers, 
-    aes(x=pos, y=kills), color="grey") + 
+    aes(x=position, y=kills), color="grey") + 
   geom_quasirandom(
     data=nu, 
-    aes(x=pos, y=kills), color="red") + 
+    aes(x=position, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
-    aes(x=pos, y=kills, label=full_name))
+    aes(x=position, y=kills, label=name))
 ```
 ```{r beeswarm9-check}
 grade_this_code()
@@ -251,25 +251,25 @@ Quasirandom spreads out the dots you see in beeswarm using -- you guessed it -- 
 ggplot() + 
   geom_jitter(
     data=activeplayers, 
-    aes(x=pos, y=kills), color="grey") + 
+    aes(x=position, y=kills), color="grey") + 
   geom_jitter(
     data=nu, 
-    aes(x=pos, y=kills), color="red") + 
+    aes(x=position, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
-    aes(x=pos, y=kills, label=full_name))
+    aes(x=position, y=kills, label=name))
 ```
 ```{r beeswarm10-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_jitter(
     data=activeplayers, 
-    aes(x=pos, y=kills), color="grey") + 
+    aes(x=position, y=kills), color="grey") + 
   geom_jitter(
     data=nu, 
-    aes(x=pos, y=kills), color="red") + 
+    aes(x=position, y=kills), color="red") + 
   geom_text_repel(
     data=nu, 
-    aes(x=pos, y=kills, label=full_name))
+    aes(x=position, y=kills, label=name))
 ```
 ```{r beeswarm10-check}
 grade_this_code()
