@@ -32,7 +32,7 @@ If this sounds like the correlations and regressions tutorial, you're right. Sca
 
 So let's ask a silly question. Nebraska is a volleyball school. We're good at it. We recruit well for it. But is volleyball recruiting as simple as recruiting the tallest athlete and let them pound the ball at shorter athletes? Put more simply: Does height dictate attacking success? Taller athlete, more kills?
 
-First, we need libraries and every college volleyball player from the last season. **What we're interested in is less about a specific player and more about a general point: Are these numbers related and by how much? What can they tell you about your players in general?**
+First, we need libraries and every college volleyball player for a season. **What we're interested in is less about a specific player and more about a general point: Are these numbers related and by how much? What can they tell you about your players in general?**
 
 We'll need the tidyverse.
 
