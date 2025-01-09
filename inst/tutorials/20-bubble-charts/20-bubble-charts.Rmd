@@ -55,7 +55,7 @@ grade_this_code()
 And the data.
 
 ```{r bubble-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 
 winlosslogs <- logs |> 
   mutate(
@@ -79,10 +79,10 @@ ypp <- winlosslogs |>
 bigten <- ypp |> filter(Conference == "Big Ten Conference")
 ```
 ```{r bubble-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r bubble-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r bubble-load-data-exercise-check}
 grade_this_code()
