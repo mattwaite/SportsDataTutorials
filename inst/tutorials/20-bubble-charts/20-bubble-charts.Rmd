@@ -301,8 +301,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.737114) + 
-  geom_hline(yintercept = 5.596514)
+  geom_vline(xintercept = 5.763149) + 
+  geom_hline(yintercept = 5.601157)
 ```
 ```{r bubble8-check}
 grade_this_code()
@@ -343,8 +343,8 @@ ggplot() +
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
     color="red") + 
-  geom_vline(xintercept = 5.737114) + 
-  geom_hline(yintercept = 5.596514) +
+  geom_vline(xintercept = 5.763149) + 
+  geom_hline(yintercept = 5.601157) +
   geom_text_repel(
     data=bigten, 
     aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
