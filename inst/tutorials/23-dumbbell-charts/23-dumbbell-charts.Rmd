@@ -51,7 +51,7 @@ grade_this_code()
 For this, let's use college football game logs from this season. Load it.
 
 ```{r dumbbell-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 
 turnovers <- logs |>
   group_by(Team, Conference) |> 
@@ -61,10 +61,10 @@ turnovers <- logs |>
   filter(Conference == "Big Ten Conference")
 ```
 ```{r dumbbell-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r dumbbell-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r dumbbell-load-data-exercise-check}
 grade_this_code()
@@ -196,7 +196,7 @@ ggplot() +
 grade_this_code()
 ```
 
-Believe it or not, Michigan, Maryland and Penn State had the most takeaways in the Big Ten last season. And believe it: Nebraska ended up on the very, very, very wrong side of the turnover margin again.
+What story does this tell?
 
 ### Exercise 5: Which dot is which? 
 
