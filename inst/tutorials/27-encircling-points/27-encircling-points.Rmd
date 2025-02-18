@@ -1,5 +1,5 @@
 ---
-title: "Sports Data Lesson 27: Encirlcing points"
+title: "Sports Data Lesson 27: Shapes as storytelling"
 output: 
   learnr::tutorial:
     progressive: true
@@ -16,13 +16,14 @@ library(learnr)
 library(gradethis)
 library(tidyverse)
 library(ggalt)
+library(ggrepel)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
 ## The Goal
 
-The goal of this lesson is to introduce you to the technique of encircling points on a scatterplot using the ggalt package in R. By the end of this tutorial, you'll understand how to use the geom_encircle() function to draw attention to specific data points or groups of points in your visualizations. You'll learn how to create basic scatterplots, layer additional data points, and then highlight key information using circles and text labels. We'll apply these concepts to real college basketball data, analyzing player performance in terms of shooting percentage and rebounds. This lesson will enhance your ability to create more informative and visually compelling scatterplots, allowing you to guide your audience's attention to the most important aspects of your data story in sports analytics.
+The goal of this lesson is to introduce you to the technique of encircling points on a scatterplot using the ggalt package in R and annotation with rectangles and `geom_rect`. By the end of this tutorial, you'll understand how to use the `geom_encircle()` and `annotate` functions to draw attention to specific data points or groups of points in your visualizations. You'll learn how to create basic scatterplots, layer additional data points, and then highlight key information using circles and text labels. We'll apply these concepts to real college basketball data, analyzing player performance in terms of shooting percentage and rebounds. This lesson will enhance your ability to create more informative and visually compelling scatterplots, allowing you to guide your audience's attention to the most important aspects of your data story in sports analytics.
 
 ## The Basics
 
@@ -39,140 +40,149 @@ There's a bunch of things that `ggalt` does, but one of the most useful for us i
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
 library(ggalt)
-
+library(ggrepel)
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
 library(ggalt)
+library(ggrepel)
 ```
 ```{r load-tidyverse-check}
 grade_this_code()
 ```
 
-Let's say we want to highlight the quiet contributions of Derrick Walker to the Husker basketball team. There are bigger personalities, and bigger hype attached to others. But without Walker, this team would be in more trouble than it's already in. Let's take a look at this season's player data. 
+Let's say we want to highlight Brice Williams and his place in college basketball. Let's take a look at this season's player data. 
 
-And while we're loading it, let's filter out anyone who hasn't played 100 minutes and hasn't pulled down a rebound. 
+And while we're loading it, let's filter out anyone who hasn't played 100 minutes. 
 
 ```{r encircle-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players23.csv") |> filter(MP > 100 & TRB > 0)
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players25.csv") |> filter(MP > 100)
 
 nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
-dw <- nu |> filter(Player == "Derrick Walker")
+bw <- nu |> filter(Player == "Brice Williams")
 ```
 ```{r encircle-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players23.csv") |>
-  filter(MP > 100 & TRB > 0)
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players25.csv") |>
+  filter(MP > 100)
 ```
 ```{r encircle-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players23.csv") |>
-  filter(MP > 100 & TRB > 0)
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players25.csv") |>
+  filter(MP > 100)
 ```
 ```{r encircle-load-data-exercise-check}
 grade_this_code()
 ```
 
-We've done this before, but let's make a standard scatterplot of shooting percentage and rebounds. 
+We've done this before, but let's make a standard scatterplot of points and player efficiency rating. 
 
 ### Exercise 1: Making the first scatterplot
 
-Who is hitting shots, and who is pulling down boards -- two things the mens basketball team doesn't do particularly well. Our data is players, and our two fields are `FG%` -- note the backticks because of the percent sign -- and TRB.
+Who is hitting shots, and who is using his chances to score efficiently is the question we're after here. Our data is players, and our two fields are PTS and PER.
 
 ```{r encircle1, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
-ggplot() + geom_point(data=???????, aes(x=`??%`, y=???))
+ggplot() + geom_point(data=____, aes(x=____, y=____))
 ```
 ```{r encircle1-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_point(data=players, aes(x=`FG%`, y=TRB))
+ggplot() + geom_point(data=players, aes(x=PTS, y=PER))
 ```
 ```{r encircle1-check}
 grade_this_code()
 ```
 
-We can see right away that there are some dots at the edges -- lots of rebounds but average shooting or high shooting and not a ton of rebounds. Where are the Huskers in this normal curve? We can get that with filtering and layering.
+We can see right away that there are some dots at the edges -- lots of points but maybe they aren't contributing elsewhere. Where are the Huskers in this? We can get that with filtering and layering.
 
 ### Exercise 2: Adding the Huskers as a layer
 
-Like we have done in the past, let's make a dataframe of Nebraska players and add a layer to our graph that puts Nebraska's dots in red. While we're at it, we'll make everyone else grey. 
+Like we have done in the past, let's make a dataframe of Nebraska players and add a layer to our graph that puts Nebraska's dots in red. While we're at it, we'll make everyone else grey. And let's label the Nebraska players.
 
 ```{r encircle2, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
 nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
 ggplot() + 
-  geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
-  geom_point(data=??, aes(x=`??%`, y=???), color="red")
+  geom_point(data=____, aes(x=____, y=____), color="grey") +
+  geom_point(data=____, aes(x=____, y=____), color="red") +
+  geom_text_repel(data=____, aes(x=PTS, y=PER, label=Player))
 ```
 ```{r encircle2-solution, exercise.reveal_solution = FALSE}
 nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
 ggplot() + 
-  geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
-  geom_point(data=nu, aes(x=`FG%`, y=TRB), color="red")
+  geom_point(data=players, aes(x=PTS, y=PER), color="grey") + 
+  geom_point(data=nu, aes(x=PTS, y=PER), color="red") +
+  geom_text_repel(data=nu, aes(x=PTS, y=PER, label=Player))
 ```
 ```{r encircle2-check}
 grade_this_code()
 ```
 
-Given that this chart is about Derrick Walker, I'll give you three guesses who that dot is shooting at a high percentage and leading the team in rebounds. Your first two guesses don't count and his last name rhymes with talker.
+Given that this chart is about Brice Williams, I'll give you three guesses who that dot is scoring a lot of points really efficiently. Your first two guesses don't count and his last name rhymes with rice illiams.
 
 But just this quickly, we're on the path to something publishable. We'll need to label a dot and we'll need to drop the default grey and add some headlines and all that. And, for the most part, we've got a solid chart. 
 
 But what if we could really draw the eye to a dot or group of them? In `ggalt`, there is a geom called `geom_encircle`, which ... does what you think it does. It encircles all the dots in a dataset. 
 
-### Exercise 3: Our first encircle
+### Exercise 3: geom_encircle
 
-Let's draw a circle around, uh, that one guy. I'm being coy here for a reason. Sometimes the group you want to highlight isn't known to you. Sometimes you want to highlight players by some criteria. In our case, if we look at the graph above, we know we have a player who is shooting better than 65 percent (or .65). To show you how, let's use that x axis interpolation as our filter.
+Now we'll add geom_encircle and we'll just copy the data and the aes from our nu geom_point. Then, we need to give the encirclement a shape using s_shape -- which is a number between 0 and 1 -- and then how far away from the dots to draw the circle using expand, which is another number between 0 and 1.
 
-Then we'll add geom_encircle and we'll just copy the data and the aes from our nu geom_point. Then, we need to give the encirclement a shape using s_shape -- which is a number between 0 and 1 -- and then how far away from the dots to draw the circle using expand, which is another number between 0 and 1.
-
-Let's start with `s_shape` 1 and `expand` 1.
+Let's start with `s_shape` .03 and `expand` .03. Getting to the right number involves a lot of trial and error messing with that number. Sometimes you'll want a bigger circle -- closer to one -- and sometimes you want small. 
 
 ```{r encircle3, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
-dw <- nu |> filter(Player == "Derrick Walker")
+bw <- nu |> filter(Player == "Brice Williams")
 
 ggplot() + 
-  geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
-  geom_point(data=??, aes(x=`??%`, y=???), color="red") + 
-  geom_encircle(data=dw, aes(x=`??%`, y=???), s_shape=1, expand=1, colour="red")
+  geom_point(data=____, aes(x=____, y=____), color="grey") +
+  geom_point(data=____, aes(x=____, y=____), color="red") +
+  geom_text_repel(data=nu, aes(x=PTS, y=PER, label=Player)) + 
+  geom_encircle(data=bw, aes(x=____, y=____), s_shape=.03, expand=.03, colour="red")
 ```
 ```{r encircle3-solution, exercise.reveal_solution = FALSE}
-dw <- nu |> filter(Player == "Derrick Walker")
+bw <- nu |> filter(Player == "Brice Williams")
 
 ggplot() + 
-  geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
-  geom_point(data=nu, aes(x=`FG%`, y=TRB), color="red") + 
-  geom_encircle(data=dw, aes(x=`FG%`, y=TRB), s_shape=1, expand=1, colour="red")
+  geom_point(data=players, aes(x=PTS, y=PER), color="grey") + 
+  geom_point(data=nu, aes(x=PTS, y=PER), color="red") +
+  geom_text_repel(data=nu, aes(x=PTS, y=PER, label=Player)) +
+  geom_encircle(data=bw, aes(x=PTS, y=PER), s_shape=.03, expand=.03, colour="red")
 ```
 ```{r encircle3-check}
 grade_this_code()
 ```
 
-Whoa. That's ... not good.
+That's not bad. If you disagree, now you begin the process of fiddling with `s_shape` and `expand` until you get it just right. 
 
-Now begins the process of fiddling with `s_shape` and `expand` until you get it just right. But let's add a layer of difficulty here that isn't that difficult to solve: Adding in a text label and using interpolation to move the circle and the text label around. 
+## Using annotate to draw rectangles
 
-### Exercise 4: Fudging it until it looks good
+What if, instead of a circle, you wanted to add a rectangle to highlight the zone of good players (or something like that). Rectangles work great to highlight zones or, if you have time as your x axis, events and time periods. Think of it this way -- if you had a line chart of Nebraska's wins over time, you could add rectangles over the years for certain coaches you wanted to highlight. 
 
-This takes a little bit of finessing, but a shape of .5 means the line will have some bend to it -- it'll look more like someone circled it with a pen. Then, the expand is better if you use hundredths instead of tenths. So .01 instead of .1. 
+### Exercise 4: Using a rectangle instead
 
-In terms of interpolation, this is just trial and error. In your `geom_text` and `geom_encirle` aes, you don't *have* to use column names. It's just easier, especially when you have multiple data points. In our case, our dw dataframe has one point in it, so we can use a little math and push it around a little bit.
+So how do you make rectangles? With annotate and some interpolation. What's interpolation? It's looking at the x and y axis and interpreting where to draw the lines.
 
-If we just put in Walker's FG% and TRB into `geom_text`, his name would appear right on top of the dot, with the dot right in the middle of his name. We can use simple addition to move it up and left. Then, we can use that same math to shift the circle to the left, circling his name AND dot instead of just the dot. And, because we're using math instead of just putting hard numbers in, we make this chart future proof -- we can update the data and the dot, the text and the circle all move automatically.
+Looking at our previous work, what if we use 200 points and a 20 PER rating as the floor for our good zone. The end ceiling is the top of the chart -- which ggplot can conveniently just use infinity for that. 
 
-Normally you'll have to fuss with this for a bit. I'm going to give you the fussing here. We're going to move the name and circle up 7 rebounds to get it above Walker's dot, and then we'll drop 5 percent off his shooting numbers to move his name to the left, which prevents it from getting cut off by the graph. 
+One more thing? We should label our zone. It looks like there's a spot at 300 points and 35 PER to fit some text. 
 
 ```{r encircle4, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
 ggplot() + 
-  geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
-  geom_point(data=??, aes(x=`??%`, y=???), color="red") + 
-  geom_text(data=??, aes(x=`??%`-.05, y=???+7, label=Player)) + 
-  geom_encircle(data=dw, aes(x=`??%`-.05, y=???+7), s_shape=.1, expand=.01, colour="red")
+  geom_point(data=players, aes(x=PTS, y=PER), color="grey") +
+  geom_point(data=nu, aes(x=PTS, y=PER), color="red") +
+  geom_text_repel(data=nu, aes(x=PTS, y=PER, label=Player)) +
+  annotate("rect", fill = "blue", alpha = 0.1, 
+        xmin = ____, xmax = Inf,
+        ymin = ____, ymax = Inf) +
+  geom_text(aes(x=____, y=____, label="Good player zone"), size=3)
 ```
 ```{r encircle4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") +
-  geom_point(data=nu, aes(x=`FG%`, y=TRB), color="red") + 
-  geom_text(data=dw, aes(x=`FG%`-.05, y=TRB+7, label=Player)) + 
-  geom_encircle(data=dw, aes(x=`FG%`-.05, y=TRB+7), s_shape=.1, expand=.01, colour="red")
+  geom_point(data=players, aes(x=PTS, y=PER), color="grey") +
+  geom_point(data=nu, aes(x=PTS, y=PER), color="red") + 
+  geom_text_repel(data=nu, aes(x=PTS, y=PER, label=Player)) +
+  annotate("rect", fill = "blue", alpha = 0.1, 
+        xmin = 200, xmax = Inf,
+        ymin = 20, ymax = Inf) +
+  geom_text(aes(x=300, y=35, label="Good player zone"), size=3)
 ```
 ```{r encircle4-check}
 grade_this_code()
@@ -182,11 +192,14 @@ Now let's clean this up and make it presentable with labels, a theme and some al
 
 ```{r encircle5, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
 ggplot() + 
-  geom_point(data=???????, aes(x=`??%`, y=???), color="grey") +
-  geom_point(data=??, aes(x=`??%`, y=???), color="red") + 
-  geom_text(data=??, aes(x=`??%`-.05, y=???+7, label=Player)) + 
-  geom_encircle(data=dw, aes(x=`??%`-.05, y=???+7), s_shape=.1, expand=.01, colour="red") + 
-  labs(title="Derrick Walker is Nebraska's MVP", subtitle="When he shoots, he nearly always scores and he's by far the team's best rebounder.", x="Shooting percentage", y="Rebounds") + 
+  geom_point(data=players, aes(x=PTS, y=PER), color="grey") +
+  geom_point(data=nu, aes(x=PTS, y=PER), color="red") +
+  geom_text_repel(data=nu, aes(x=PTS, y=PER, label=Player)) +
+  annotate("rect", fill = "blue", alpha = 0.1, 
+        xmin = ____, xmax = Inf,
+        ymin = ____, ymax = Inf) +
+  geom_text(aes(x=300, y=35, label="Good player zone"), size=3) +
+  labs(title="Brice Williams is Nebraska's MVP", subtitle="Not just Nebraska's best, but one of the best in the Big Ten.", x="Points scored", y="Player Efficiency Rating") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -197,11 +210,14 @@ ggplot() +
 ```
 ```{r encircle5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_point(data=players, aes(x=`FG%`, y=TRB), color="grey") + 
-  geom_point(data=nu, aes(x=`FG%`, y=TRB), color="red") + 
-  geom_text(data=dw, aes(x=`FG%`-.05, y=TRB+7, label=Player)) + 
-  geom_encircle(data=dw, aes(x=`FG%`-.05, y=TRB+7), s_shape=.1, expand=.01, colour="red") + 
-  labs(title="Derrick Walker is Nebraska's MVP", subtitle="When he shoots, he nearly always scores and he's by far the team's best rebounder.", x="Shooting percentage", y="Rebounds") + 
+  geom_point(data=players, aes(x=PTS, y=PER), color="grey") +
+  geom_point(data=nu, aes(x=PTS, y=PER), color="red") + 
+  geom_text_repel(data=nu, aes(x=PTS, y=PER, label=Player)) +
+  annotate("rect", fill = "blue", alpha = 0.1, 
+        xmin = 200, xmax = Inf,
+        ymin = 20, ymax = Inf) +
+  geom_text(aes(x=300, y=35, label="Good player zone"), size=3) + 
+  labs(title="Brice Williams is Nebraska's MVP", subtitle="Not just Nebraska's best, but one of the best in the Big Ten.", x="Points scored", y="Player Efficiency Rating") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -216,7 +232,7 @@ grade_this_code()
 
 ## The Recap
 
-In this lesson, we've explored the powerful technique of encircling points on a scatterplot using the ggalt package in R. We started by creating a basic scatterplot of college basketball player performance, focusing on shooting percentage and rebounds. We then learned how to layer additional data points to highlight specific teams or players. The key skill we developed was using geom_encircle() to draw attention to particular data points, in this case, showcasing Derrick Walker's exceptional performance for Nebraska. We practiced fine-tuning the encirclement using parameters like s_shape and expand, and learned how to combine this technique with text labels for even greater clarity. Throughout the lesson, we emphasized the importance of visual hierarchy and guiding the viewer's eye to the most crucial information. We also touched on how to make our visualizations more polished and publication-ready by adding appropriate titles, labels, and theming. Remember, the goal of these techniques is not just to present data, but to tell a compelling story with your visualizations.
+In this lesson, we've explored the powerful technique of encircling points on a scatterplot using the ggalt package in R and making rectangles with annotate. We started by creating a basic scatterplot of college basketball player performance, focusing on points and efficiency. We then learned how to layer additional data points to highlight specific teams or players. The key skill we developed was using geom_encircle() and annotate to draw attention to particular data points, in this case, showcasing Brice Williams exceptional performance for Nebraska. Throughout the lesson, we emphasized the importance of visual hierarchy and guiding the viewer's eye to the most crucial information. We also touched on how to make our visualizations more polished and publication-ready by adding appropriate titles, labels, and theming. Remember, the goal of these techniques is not just to present data, but to tell a compelling story with your visualizations.
 
 ## Terms to Know
 

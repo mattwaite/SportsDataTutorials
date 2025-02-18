@@ -206,7 +206,7 @@ playerzscore |>
 grade_this_code()
 ```
 
-So, as we can see, with our composite Z Score, the best Lexi isn't this year. It isn't even last year. It was 2021.
+So, as we can see, with our composite Z Score, the best Lexi isn't this year. It isn't even last year. It was 2022.
 
 In 2024, breaking records and on the doorstep of Player of the Year, Lexi turned in her third best season, relative to competition. Huh.
 
