@@ -156,7 +156,7 @@ That's not bad. If you disagree, now you begin the process of fiddling with `s_s
 
 What if, instead of a circle, you wanted to add a rectangle to highlight the zone of good players (or something like that). Rectangles work great to highlight zones or, if you have time as your x axis, events and time periods. Think of it this way -- if you had a line chart of Nebraska's wins over time, you could add rectangles over the years for certain coaches you wanted to highlight. 
 
-### Exercise 4: Using a rectangle instead
+### Exercise 4: Using a rectangle instead of a circle
 
 So how do you make rectangles? With annotate and some interpolation. What's interpolation? It's looking at the x and y axis and interpreting where to draw the lines.
 
