@@ -137,11 +137,11 @@ You get an error. `non-numeric argument to binary operator` is a rather computer
 
 Let's do something more real and calculate the number of home runs per game the Nebraska baseball team hit this season. To do this, we need to know the number of home runs the team hit and the number of games they played. Then it's just simple division.
 
-[You can find season stats here](https://storage.googleapis.com/huskers-com-prod/2024/06/04/TE2BF2HsILQBpGGrpJgNm3IKFlj3V9fWUX3r1Jd1.pdf) at the bottom of the table in a row labeled Totals. The number of games is in the column named GP-GS, which stands for Games Played - Games Started. See why naming things what they are is a rule in this class?
+[You can find season stats here](https://huskers.com/sports/baseball/stats/season/2025) at the bottom of the table in a row labeled Totals. The number of games is in the column named GP, which stands for Games Played. See why naming things what they are is a rule in this class?
 
 We're going to name the first variable HomeRuns and the second variable Games. **Pay Attention: HomeRuns, not Home Runs. The space will break it.** Set them equal to the numbers you got from the table, then divide HomeRuns by Games.
 
-*Write the code necessary to create the variables and set it to the number of home runs Nebraska hit in the 2024 season and the number of games played.*
+*Write the code necessary to create the variables and set it to the number of home runs Nebraska hit in the 2025 season and the number of games played.*
 
 ```{r variables-one, exercise=TRUE}
 
@@ -154,7 +154,7 @@ SOMETHING / SOMETHING
 ```
 
 ```{r variables-one-solution, exercise.reveal_solution = FALSE}
-HomeRuns <- 72
+HomeRuns <- 62
 Games <- 62
 HomeRuns / Games
 ```

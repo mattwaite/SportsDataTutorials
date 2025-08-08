@@ -68,10 +68,10 @@ confsnipers <- soccer |>
   arrange(desc(sogpct)) |> slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
-soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2024.csv")
 ```
 ```{r mutating-load-data-exercise-solution}
-soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_totals_2023.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2024.csv")
 ```
 ```{r mutating-load-data-exercise-check}
 grade_this_code()
