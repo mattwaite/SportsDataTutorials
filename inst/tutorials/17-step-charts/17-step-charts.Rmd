@@ -27,7 +27,7 @@ The goal of this lesson is to introduce you to step charts, a powerful visualiza
 
 Step charts are **a method of showing progress** toward a total number They combine showing change over time -- **cumulative change over time** -- with magnitude. They're good at inviting comparison. 
 
-There's great examples out there. First is the Washignton Post looking at [Lebron passing Jordan's career point total](https://www.washingtonpost.com/graphics/sports/lebron-james-michael-jordan-nba-scoring-list/?utm_term=.481074150849). Another is John Burn-Murdoch's work at the Financial Times (which is paywalled) about soccer stars. [Here's an example of his work outside the paywall](https://johnburnmurdoch.github.io/projects/goal-lines/CL/).
+There's great examples out there. First is the Washington Post looking at [Lebron passing Jordan's career point total](https://www.washingtonpost.com/graphics/sports/lebron-james-michael-jordan-nba-scoring-list/?utm_term=.481074150849). Another is John Burn-Murdoch's work at the Financial Times (which is paywalled) about soccer stars. [Here's an example of his work outside the paywall](https://johnburnmurdoch.github.io/projects/goal-lines/CL/).
 
 To replicate this, we need cumulative data -- data that is the running total of data at a given point. So think of it this way -- Nebraska scores 50 points in a basketball game and then 50 more the next, their cumulative total at two games is 100 points. 
 
