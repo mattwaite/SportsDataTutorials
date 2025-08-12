@@ -44,7 +44,7 @@ grade_this_code()
 And the data.
 
 ```{r stacked-load-data, message=FALSE, warning=FALSE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 
 big <- football |> 
   group_by(Conference, Team) |> 
@@ -60,10 +60,10 @@ biglong <- big |>
     values_to="Yards")
 ```
 ```{r stacked-load-data-exercise, exercise = TRUE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r stacked-load-data-exercise-solution}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs23.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r stacked-load-data-exercise-check}
 grade_this_code()
@@ -199,7 +199,7 @@ ggplot() +
 grade_this_code()
 ```
 
-And just like that ... Ohio State and Penn State are out on top. Where is Nebraska?
+And just like that ... Penn State and Oregon are out on top. Where is Nebraska?
 
 ## The Recap
 
