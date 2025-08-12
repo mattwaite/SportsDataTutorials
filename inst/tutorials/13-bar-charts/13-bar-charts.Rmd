@@ -36,7 +36,7 @@ With `ggplot2`, we dive into the world of programmatic data visualization. The `
 
 Hadley Wickham, who is behind all of the libraries we have used in this course to date, wrote about his layered grammar of graphics in [this 2009 paper that is worth your time to read](https://byrneslab.net/classes/biol607/readings/wickham_layered-grammar.pdf). 
 
-Let's dive in using data on college softball in 2023. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will write the code that adds necessary and required parts to finish it. 
+Let's dive in using data on college softball in 2024. This workflow will represent a clear picture of what your work in this class will be like for much of the rest of the semester. One way to think of this workflow is that your R Notebook is now your digital sketchbook, where you will try different types of visualizations to find ones that work. Then, you will write the code that adds necessary and required parts to finish it. 
 
 First, load the tidyverse.
 
@@ -53,11 +53,11 @@ grade_this_code()
 And the data.
 
 ```{r ggplot-load-data, message=FALSE, warning=FALSE}
-softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2024.csv")
+softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
 
 huskers <- softball |>
   filter(
-    team == "Nebraska"
+    short_name == "Nebraska"
   )
 
 big10 <- softball |> 
@@ -66,10 +66,10 @@ big10 <- softball |>
   )
 ```
 ```{r ggplot-load-data-exercise, exercise = TRUE}
-softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2024.csv")
+softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
 ```
 ```{r ggplot-load-data-exercise-solution}
-softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2024.csv")
+softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
 ```
 ```{r ggplot-load-data-exercise-check}
 grade_this_code()
@@ -77,7 +77,7 @@ grade_this_code()
 
 And let's get a glimpse of the data to remind us what is all there. 
 
-Let's `glimpse` the data because it's wide and has a lot of columns. 
+Why `glimpse` here? The data because it's wide and has a lot of columns. 
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "ggplot-load-data"}
 glimpse(softball)
@@ -111,7 +111,7 @@ big10 <- softball |>
 grade_this_code()
 ```
 
-Now, we should have 14 teams that we can look at. That's far more manageable than 306 -- the number of softball teams in Division I. 
+Now, we should have 17 teams that we can look at. That's far more manageable than 309 -- the number of softball teams in Division I. 
 
 ## The bar chart
 
@@ -119,15 +119,15 @@ The easiest thing we can do is create a simple bar chart of our data. **Bar char
 
 We could, for instance, create a bar chart of home runs each team hit. We might be asking the question: Which Big Ten team relies on the long ball to score runs? To do that, we simply tell `ggplot2` what our dataset is, what element of the data we want to make the bar chart out of (which is the aesthetic), and the geometry type (which is the geom). It looks like this:
 
-`ggplot() + geom_bar(data=big10, aes(x=team))` 
+`ggplot() + geom_bar(data=big10, aes(x=short_name))` 
 
-We start with `ggplot()` which is creating a blank canvas for us to work in. The `geom_bar()` is the geometry -- the form the data will take. We will learn many geometries over the next several lessons. `huskers` is our data, `aes` means aesthetics, `x=Season` explicitly tells `ggplot2` that our x value -- our horizontal value -- is the Season field from the data. Why season? We want one bar per season, no? Put the season on the x axis is what that is saying. And what do we get when we run that? 
+We start with `ggplot()` which is creating a blank canvas for us to work in. The `geom_bar()` is the geometry -- the form the data will take. We will learn many geometries over the next several lessons. `big10` is our data, `aes` means aesthetics, `x=short_name` explicitly tells `ggplot2` that our x value -- our horizontal value -- is the short name of the team field from the data. Why short_name (or team if we wanted the long version)? We want one bar per team, no? Put the team on the x axis is what that is saying. And what do we get when we run that? 
 
 ```{r ggplot-bar1, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
-ggplot() + geom_bar(data=big10, aes(x=team))
+ggplot() + geom_bar(data=big10, aes(x=short_name))
 ```
 ```{r ggplot-bar1-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_bar(data=big10, aes(x=team))
+ggplot() + geom_bar(data=big10, aes(x=short_name))
 ```
 ```{r ggplot-bar1-check}
 grade_this_code()
@@ -141,11 +141,11 @@ You saw how it was done before. This just adds weight to the aes. The weight is 
 
 ```{r ggplot-bar2, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=team, weight=____))
+  geom_bar(data=big10, aes(x=short_name, weight=____))
 ```
 ```{r ggplot-bar2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=team, weight=hr))
+  geom_bar(data=big10, aes(x=short_name, weight=hr))
 ```
 ```{r ggplot-bar2-check}
 grade_this_code()
@@ -163,11 +163,11 @@ To change the order of the bars, we have to `reorder` it. With `reorder`, we fir
 
 ```{r ggplot-bar3, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(team, ____), weight=____))
+  geom_bar(data=big10, aes(x=reorder(short_name, ____), weight=____))
 ```
 ```{r ggplot-bar3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(team, hr), weight=hr))
+  geom_bar(data=big10, aes(x=reorder(short_name, hr), weight=hr))
 ```
 ```{r ggplot-bar3-check}
 grade_this_code()
@@ -178,14 +178,14 @@ There, now our bars are in some kind of order.
 ### Exercise 4: Layering
 
 Our data has 14 teams in it but what if we wanted to focus on one team? We can use layering for that. 
-First, we need to make a dataframe of one. Let's focus on Nebraska for ... reasons. The, we just add another geom_bar to our chart.
+First, we need to make a dataframe of one. Let's focus on Nebraska for ... reasons. Then, we just add another geom_bar to our chart.
 
 To our new geom, we're going to add one new thing -- a fill. Let's make the color red. Again. For reasons. 
 
 ```{r ggplot-bar4, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
 huskers <- softball |>
   filter(
-    team == "Nebraska"
+    short_name == "Nebraska"
   )
 
 ggplot() + 
@@ -195,12 +195,12 @@ ggplot() +
 ```{r ggplot-bar4-solution, exercise.reveal_solution = FALSE}
 huskers <- softball |>
   filter(
-    team == "Nebraska"
+    short_name == "Nebraska"
   )
 
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(team, hr), weight=hr)) +
-  geom_bar(data=huskers, aes(x=reorder(team, hr), weight=hr), fill="red")
+  geom_bar(data=big10, aes(x=reorder(short_name, hr), weight=hr)) +
+  geom_bar(data=huskers, aes(x=reorder(short_name, hr), weight=hr), fill="red")
 ```
 ```{r ggplot-bar4-check}
 grade_this_code()
@@ -216,14 +216,14 @@ Sometimes, we don't want vertical bars. Maybe we think this would look better ho
 
 ```{r ggplot-bar5, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(team, hr), weight=hr)) +
-  geom_bar(data=huskers, aes(x=reorder(team, hr), weight=hr), fill="red") +
+  geom_bar(data=big10, aes(x=reorder(short_name, hr), weight=hr)) +
+  geom_bar(data=huskers, aes(x=reorder(short_name, hr), weight=hr), fill="red") +
   ____()
 ```
 ```{r ggplot-bar5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big10, aes(x=reorder(team, hr), weight=hr)) +
-  geom_bar(data=huskers, aes(x=reorder(team, hr), weight=hr), fill="red") + 
+  geom_bar(data=big10, aes(x=reorder(short_name, hr), weight=hr)) +
+  geom_bar(data=huskers, aes(x=reorder(short_name, hr), weight=hr), fill="red") + 
   coord_flip()
 ```
 ```{r ggplot-bar5-check}
