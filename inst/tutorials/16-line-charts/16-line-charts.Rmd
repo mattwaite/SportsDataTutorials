@@ -57,10 +57,10 @@ average <- logs |> group_by(Date) |> summarise(mean_shooting=mean(TeamFGPCT))
 
 ```
 ```{r line-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs25.csv")
 ```
 ```{r line-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs25.csv")
 ```
 ```{r line-load-data-exercise-check}
 grade_this_code()
