@@ -49,7 +49,7 @@ grade_this_code()
 And the data.
 
 ```{r scatter-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2024.csv")
 
 tall <- players |> 
   mutate(height = (12 * feet) + inches)
@@ -76,10 +76,10 @@ result <- (m*x) + b
 missed <- nu$kills - result 
 ```
 ```{r scatter-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2024.csv")
 ```
 ```{r scatter-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2023.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_playerstats_2024.csv")
 ```
 ```{r scatter-load-data-exercise-check}
 grade_this_code()
