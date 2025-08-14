@@ -51,7 +51,7 @@ library(ggrepel)
 grade_this_code()
 ```
 
-Let's say we want to highlight Brice Williams and his place in college basketball. Let's take a look at this season's player data. 
+Let's say we want to highlight Brice Williams and his place in college basketball last season. Let's take a look at last season's player data. 
 
 And while we're loading it, let's filter out anyone who hasn't played 100 minutes. 
 
@@ -74,7 +74,7 @@ players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players25.csv")
 grade_this_code()
 ```
 
-We've done this before, but let's make a standard scatterplot of points and player efficiency rating. 
+Let's make a standard scatterplot of points and player efficiency rating. 
 
 ### Exercise 1: Making the first scatterplot
 
@@ -116,7 +116,7 @@ ggplot() +
 grade_this_code()
 ```
 
-Given that this chart is about Brice Williams, I'll give you three guesses who that dot is scoring a lot of points really efficiently. Your first two guesses don't count and his last name rhymes with rice illiams.
+Given that this chart is about Brice Williams, I'll give you three guesses who that dot is scoring a lot of points really efficiently. Your first two guesses don't count and his name rhymes with rice illiams.
 
 But just this quickly, we're on the path to something publishable. We'll need to label a dot and we'll need to drop the default grey and add some headlines and all that. And, for the most part, we've got a solid chart. 
 
