@@ -41,7 +41,7 @@ The basic rules of color we're going to use are:
 
 Where do these rules come from? Experience of people who have made graphics before. Looking at what has succeeded and what has failed. 
 
-**Rule 1:** Alberto Cairo, a professor in the University of Miami School of Communication and expert in data visualization, wrote in his book The Functional Art that limiting color was "not just a minimalist aesthetic choice, but a practical one. Limiting the amount of colors and different fonts in your graphics will help you create a sense of unity in the composition."
+**Rule 1:** Alberto Cairo, a professor in the University of Miami school of Communication and expert in data visualization, wrote in his book The Functional Art that limiting color was "not just a minimalist aesthetic choice, but a practical one. Limiting the amount of colors and different fonts in your graphics will help you create a sense of unity in the composition."
 
 He went on: 
 
@@ -76,11 +76,11 @@ teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illino
 
 tournament <- c("Illinois", "Maryland", "Michigan", "Michigan State", "Oregon", "Purdue", "UCLA", "Wisconsin")
 
-big <- stats |> filter(School %in% teams)
+big <- stats |> filter(school %in% teams)
 
-dance <- stats |> filter(School %in% tournament)
+dance <- stats |> filter(school %in% tournament)
 
-mi <- stats |> filter(School == "Michigan State")
+mi <- stats |> filter(school == "Michigan State")
 ```
 ```{r colors-load-data-exercise, exercise = TRUE}
 stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats25.csv")
@@ -89,11 +89,11 @@ teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illino
 
 tournament <- c("Illinois", "Maryland", "Michigan", "Michigan State", "Oregon", "Purdue", "UCLA", "Wisconsin")
 
-big <- stats |> filter(School %in% teams)
+big <- stats |> filter(school %in% teams)
 
-dance <- stats |> filter(School %in% tournament)
+dance <- stats |> filter(school %in% tournament)
 
-mi <- stats |> filter(School == "Michigan State")
+mi <- stats |> filter(school == "Michigan State")
 ```
 ```{r colors-load-data-exercise-solution}
 stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats25.csv")
@@ -102,11 +102,11 @@ teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illino
 
 tournament <- c("Illinois", "Maryland", "Michigan", "Michigan State", "Oregon", "Purdue", "UCLA", "Wisconsin")
 
-big <- stats |> filter(School %in% teams)
+big <- stats |> filter(school %in% teams)
 
-dance <- stats |> filter(School %in% tournament)
+dance <- stats |> filter(school %in% tournament)
 
-mi <- stats |> filter(School == "Michigan State")
+mi <- stats |> filter(school == "Michigan State")
 ```
 ```{r colors-load-data-exercise-check}
 grade_this_code()
@@ -126,16 +126,16 @@ grade_this_code()
 
 ### Exercise 1: Making the first bar
 
-Let's start by making a simple bar chart of `OverallSRS`. It's just a simple rating of each team. We're going to re-order it and coord_flip it like we've done before. 
+Let's start by making a simple bar chart of `srs`. It's just a simple rating of each team. We're going to re-order it and coord_flip it like we've done before. 
 
 ```{r colors-bar, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, ____), weight=____)) + 
+  geom_bar(data=big, aes(x=reorder(school, ____), weight=____)) + 
   coord_flip()
 ```
 ```{r colors-bar-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS)) + 
+  geom_bar(data=big, aes(x=reorder(school, srs), weight=srs)) + 
   coord_flip()
 ```
 ```{r colors-bar-check}
@@ -150,12 +150,12 @@ Let's make that base fade into the background by changing the color to light gre
 
 ```{r colors-bar2, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, ____), weight=____), fill="____") + 
+  geom_bar(data=big, aes(x=reorder(school, ____), weight=____), fill="____") + 
   coord_flip()
 ```
 ```{r colors-bar2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="lightgrey") + 
+  geom_bar(data=big, aes(x=reorder(school, srs), weight=srs), fill="lightgrey") + 
   coord_flip()
 ```
 ```{r colors-bar2-check}
@@ -170,16 +170,16 @@ Now we're going to add in `dance` and `mi` to our chart. We want them to stand o
 
 ```{r colors-bar3, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") +  
-  geom_bar(data=____, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +    
+  geom_bar(data=big, aes(x=reorder(school, srs), weight=srs), fill="____") + 
+  geom_bar(data=dance, aes(x=reorder(school, srs), weight=srs), fill="____") +  
+  geom_bar(data=____, aes(x=reorder(school, srs), weight=srs), fill="#18453B") +    
   coord_flip()
 ```
 ```{r colors-bar3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="lightgrey") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="darkgrey") +  
-  geom_bar(data=mi, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +    
+  geom_bar(data=big, aes(x=reorder(school, srs), weight=srs), fill="lightgrey") + 
+  geom_bar(data=dance, aes(x=reorder(school, srs), weight=srs), fill="darkgrey") +  
+  geom_bar(data=mi, aes(x=reorder(school, srs), weight=srs), fill="#18453B") +    
   coord_flip()
 ```
 ```{r colors-bar3-check}
@@ -200,17 +200,17 @@ Let's use `theme_minimal` here.
 
 ```{r colors-bar4, exercise=TRUE, exercise.setup = "colors-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="____") +  
-  geom_bar(data=____, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") +  
+  geom_bar(data=big, aes(x=reorder(school, srs), weight=srs), fill="____") + 
+  geom_bar(data=dance, aes(x=reorder(school, srs), weight=srs), fill="____") +  
+  geom_bar(data=____, aes(x=reorder(school, srs), weight=srs), fill="#18453B") +  
   ____() + 
   coord_flip()
 ```
 ```{r colors-bar4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="lightgrey") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="darkgrey") +  
-  geom_bar(data=mi, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") + 
+  geom_bar(data=big, aes(x=reorder(school, srs), weight=srs), fill="lightgrey") + 
+  geom_bar(data=dance, aes(x=reorder(school, srs), weight=srs), fill="darkgrey") +  
+  geom_bar(data=mi, aes(x=reorder(school, srs), weight=srs), fill="#18453B") + 
   theme_minimal() + 
   coord_flip()
 ```
