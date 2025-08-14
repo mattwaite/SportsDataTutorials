@@ -44,16 +44,16 @@ library(ggbump)
 grade_this_code()
 ```
 
-Let's use college football playoff rankings, specifically the top 10 in each week of the rankings. 
+Let's use college football playoff rankings, specifically the top 12 in each week of the rankings. 
 
 ```{r bump-load-data, message=FALSE, warning=FALSE}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking23.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking24.csv")
 ```
 ```{r bump-load-data-exercise, exercise = TRUE}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking23.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking24.csv")
 ```
 ```{r bump-load-data-exercise-solution}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking23.csv")
+rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking24.csv")
 ```
 ```{r bump-load-data-exercise-check}
 grade_this_code()
@@ -78,10 +78,12 @@ Our data is in the form we need it to be. Now we can make a bump chart.
 We'll start simple. `ggbump` adds it's own geom, `geom_bump`, and the parts of it are what you think. x is the time element -- Week in our case -- and the Y is the rank. Last, we'll add a color inside the aesthetic. Given that our data only has three columns, that narrows down what the color should be. 
 
 ```{r bump1, exercise=TRUE, exercise.setup = "bump-load-data", message=FALSE}
-ggplot() + geom_bump(data=rankings, aes(x=____, y=____, color=____))
+ggplot() + 
+  geom_bump(data=rankings, aes(x=____, y=____, color=____))
 ```
 ```{r bump1-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team))
+ggplot() + 
+  geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team))
 ```
 ```{r bump1-check}
 grade_this_code()
@@ -139,14 +141,48 @@ We've taken another step closer. That makes it more subway-map like. But the col
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_y_reverse() 
 ```
 ```{r bump4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_bump(data=rankings, aes(x=Week, y=Rank, color=Team)) + 
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_y_reverse() 
 ```
 ```{r bump4-check}
@@ -161,7 +197,24 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_y_reverse() 
 ```
 ```{r bump5-solution, exercise.reveal_solution = FALSE}
@@ -170,7 +223,24 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_y_reverse() 
 ```
 ```{r bump5-check}
@@ -185,9 +255,26 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_y_reverse() +
-  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
+  labs(title="The top stays top", subtitle="The CFB playoff picture hasn't changed with Oregon first, but below them there's movement.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -200,9 +287,26 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_y_reverse() +
-  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
+  labs(title="The top stays top", subtitle="The CFB playoff picture hasn't changed with Oregon first, but below them there's movement.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -221,10 +325,27 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_x_continuous(breaks=c(9,10,11,12,13,14), limits = c(8, 15)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +
-  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
+  labs(title="The top stays top", subtitle="The CFB playoff picture hasn't changed with Oregon first, but below them there's movement.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
@@ -237,10 +358,27 @@ ggplot() +
   geom_point(data=rankings, aes(x=Week, y=Rank, color=Team), size = 4) + 
   geom_text(data = rankings |> filter(Week == min(Week)), aes(x = Week - .2, y=Rank, label = Team), size = 3, hjust = 1) +
   geom_text(data = rankings |> filter(Week == max(Week)), aes(x = Week + .2, y=Rank, label = Team), size = 3, hjust = 0) +
-  scale_color_manual(values = c("#690014", "#782F40", "#BA0C2F", "#AD0000", "#00274C", "#14213D", "#000000", "#BB0000", "#841617", "#154733", "#041E42", "#BF5700", "#4B2E83")) +
+  scale_color_manual(values = c(
+  "#9E1B32",  # Alabama
+  "#8C1D40",  # Arizona State
+  "#002E5D",  # BYU
+  "#D64309",  # Boise State
+  "#F56600",  # Clemson
+  "#BA0C2F",  # Georgia
+  "#990000",  # Indiana
+  "#F47321",  # Miami
+  "#CE1126",  # Ole Miss (Mississippi)
+  "#0C2340",  # Notre Dame
+  "#BB0000",  # Ohio State
+  "#154733",  # Oregon
+  "#041E42",  # Penn State
+  "#0033A0",  # SMU
+  "#FF8200",  # Tennessee
+  "#BF5700"   # Texas
+)) +
   scale_x_continuous(breaks=c(9,10,11,12,13,14), limits = c(8, 15)) + 
   scale_y_reverse(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)) +
-  labs(title="A playoff rankings twist", subtitle="The CFB playoff picture changed more in the last week than it did in the previous four weeks.", y= "Rank", x = "Week") +
+  labs(title="The top stays top", subtitle="The CFB playoff picture hasn't changed with Oregon first, but below them there's movement.", y= "Rank", x = "Week") +
   theme_minimal() +
   theme(
     legend.position = "none",
