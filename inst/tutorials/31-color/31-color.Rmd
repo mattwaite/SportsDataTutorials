@@ -53,7 +53,7 @@ He went on:
 
 ## An example of using color
 
-We're going to build a simple bar chart and layer in come color as an example. A story coming out of of the NCAA tournament in 2023 might be how Big Ten teams again made up a large number of tournament teams but most didn't make it past the second round and Michigan State was the last B1G team dancing. So let's explore that. 
+We're going to build a simple bar chart and layer in come color as an example. Let's look at Big Ten teams in the 2025 NCAA Tournament. So let's explore that. 
 
 First load the tidyverse.
 
@@ -67,14 +67,14 @@ library(tidyverse)
 grade_this_code()
 ```
 
-And the data. We're going to do four things here: first, we'll load in the season stats for each team in college basketball in 2023. Then we'll filter out Big Ten teams to get us a dataframe of 14 teams called `big`. We'll then filter B1G teams that made the tournament. Lastly, we'll make a dataframe of just Michigan State.  
+And the data. We're going to do four things here: first, we'll load in the season stats for each team in college basketball in 2024-2025. Then we'll filter out Big Ten teams to get us a dataframe of 18 teams called `big`. We'll then filter B1G teams that made the tournament. Lastly, we'll make a dataframe of just Michigan State, who seem to always be the last Big Ten team in the tournament.  
 
 ```{r colors-load-data, message=FALSE, warning=FALSE}
-stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats23.csv")
+stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats25.csv")
 
-teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
+teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland", "Oregon", "Washington", "USC", "UCLA")
 
-tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
+tournament <- c("Illinois", "Maryland", "Michigan", "Michigan State", "Oregon", "Purdue", "UCLA", "Wisconsin")
 
 big <- stats |> filter(School %in% teams)
 
@@ -83,11 +83,11 @@ dance <- stats |> filter(School %in% tournament)
 mi <- stats |> filter(School == "Michigan State")
 ```
 ```{r colors-load-data-exercise, exercise = TRUE}
-stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats23.csv")
+stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats25.csv")
 
-teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
+teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland", "Oregon", "Washington", "USC", "UCLA")
 
-tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
+tournament <- c("Illinois", "Maryland", "Michigan", "Michigan State", "Oregon", "Purdue", "UCLA", "Wisconsin")
 
 big <- stats |> filter(School %in% teams)
 
@@ -96,11 +96,11 @@ dance <- stats |> filter(School %in% tournament)
 mi <- stats |> filter(School == "Michigan State")
 ```
 ```{r colors-load-data-exercise-solution}
-stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats23.csv")
+stats <- read_csv("https://mattwaite.github.io/sportsdatafiles/stats25.csv")
 
-teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland")
+teams <- c("Nebraska", "Iowa", "Northwestern", "Minnesota", "Wisconsin", "Illinois", "Indiana", "Purdue", "Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland", "Oregon", "Washington", "USC", "UCLA")
 
-tournament <- c("Iowa", "Northwestern", "Maryland", "Indiana", "Penn State", "Illinois", "Michigan State", "Purdue")
+tournament <- c("Illinois", "Maryland", "Michigan", "Michigan State", "Oregon", "Purdue", "UCLA", "Wisconsin")
 
 big <- stats |> filter(School %in% teams)
 
@@ -208,8 +208,8 @@ ggplot() +
 ```
 ```{r colors-bar4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="light grey") + 
-  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="dark grey") +  
+  geom_bar(data=big, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="lightgrey") + 
+  geom_bar(data=dance, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="darkgrey") +  
   geom_bar(data=mi, aes(x=reorder(School, OverallSRS), weight=OverallSRS), fill="#18453B") + 
   theme_minimal() + 
   coord_flip()
