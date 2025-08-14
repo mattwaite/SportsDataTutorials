@@ -31,7 +31,7 @@ A beeswarm plot is sometimes called a column scatterplot. It's an effective way 
 
 An example will help.
 
-Let's use the NU Women's Volleyball team as our example. Let's look at a new metric: points. Who is doing the work for NU? 
+Let's use the NU Women's Volleyball team as our example. Let's look at a new metric: points. Who did the work for NU? 
 
 To make beeswarm plots, you need a library that adds some geoms to ggplot. In this cases it's called ggbeeswarm, and you installed it way back at the beginning. But any time you need a library, and it's on CRAN, you can go to your console and install it with `install.packages("ggbeeswarm")`
 
