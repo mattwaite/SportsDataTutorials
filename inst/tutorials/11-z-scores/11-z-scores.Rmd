@@ -108,7 +108,7 @@ perset <- seasons |>
     digsperset = ____/____,
     acesperset = ____/____
   ) |>
-  select(season, team, conference, ____, ____)
+  select(season, team, conference, name, ____, ____)
 ```
 ```{r zscore2-solution, exercise.reveal_solution = FALSE}
 perset <- seasons |> 
@@ -116,7 +116,7 @@ perset <- seasons |>
     digsperset = digs/s,
     acesperset = aces/s
   ) |>
-  select(season, team, conference, digsperset, acesperset)
+  select(season, team, conference, name, digsperset, acesperset)
 ```
 ```{r zscore2-check}
 grade_this_code()
