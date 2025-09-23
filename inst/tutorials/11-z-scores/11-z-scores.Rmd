@@ -116,7 +116,7 @@ perset <- seasons |>
     digsperset = digs/s,
     acesperset = aces/s
   ) |>
-  select(season, team, conference, name, digsperset, acesperset)
+  select(season, team, conference, digsperset, acesperset)
 ```
 ```{r zscore2-check}
 grade_this_code()
