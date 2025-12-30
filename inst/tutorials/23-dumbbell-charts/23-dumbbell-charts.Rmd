@@ -15,7 +15,6 @@ description: >
 library(learnr)
 library(gradethis)
 library(tidyverse)
-library(ggalt)
 library(ggtext)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
@@ -23,26 +22,22 @@ tutorial_options(exercise.completion=FALSE)
 
 ## The Goal
 
-The goal of this lesson is to introduce you to dumbbell charts, a powerful visualization technique for comparing two related values across different categories. By the end of this tutorial, you'll understand when to use dumbbell charts, how to create them using the ggalt package in R, and how to customize them for clearer data representation. You'll learn to prepare data for dumbbell charts, create basic plots, add colors to differentiate between measures, and use reordering to enhance the story your data tells. We'll apply these concepts to real college football data, visualizing the difference between giveaways and takeaways for teams in the Big Ten conference. This lesson will enhance your ability to effectively communicate comparisons between paired data points, a crucial skill for analyzing and presenting sports statistics such as offensive versus defensive performance metrics.
+The goal of this lesson is to introduce you to dumbbell charts, a powerful visualization technique for comparing two related values across different categories. By the end of this tutorial, you'll understand when to use dumbbell charts, how to create them using ggplot, and how to customize them for clearer data representation. You'll learn to prepare data for dumbbell charts, create basic plots, add colors to differentiate between measures, and use reordering to enhance the story your data tells. We'll apply these concepts to real college football data, visualizing the difference between giveaways and takeaways for teams in the Big Ten conference. This lesson will enhance your ability to effectively communicate comparisons between paired data points, a crucial skill for analyzing and presenting sports statistics such as offensive versus defensive performance metrics.
 
 ## The Basics
 
 Second to my love of waffle charts because or their name and I'm always hungry, dumbbell charts are an excellently named way of **showing the difference between two things on a number line** -- a start and a finish, for instance. Or the difference between two related things. Say, turnovers and assists. 
 
-Dumbbell charts come batteries included in `ggalt` which we used in Lesson 25. Like usual, you already installed this if you followed the install instructions at the beginning of the course. But if you're having trouble getting this to work, go to your console in R Studio and install it with `install.packages("ggalt")`
+Past iterations of this class used an external library to make dumbbell charts because it was very easy to do. The problem? The library is no longer supported, which is a risk in using non-mainstream libraries. But the truth is, dumbbell charts were never that hard to make to begin with. Instead of one geom, you need three.
 
 Let's give it a whirl.
 
 ```{r load-tidyverse, exercise=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)
-library(ggalt)
-library(ggtext)
 
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
-library(ggalt)
-library(ggtext)
 ```
 ```{r load-tidyverse-check}
 grade_this_code()
@@ -51,20 +46,20 @@ grade_this_code()
 For this, let's use college football game logs from this season. Load it.
 
 ```{r dumbbell-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
 turnovers <- logs |>
-  group_by(Team, Conference) |> 
+  group_by(team, conference) |> 
   summarise(
-    Giveaways = sum(TotalTurnovers), 
-    Takeaways = sum(DefTotalTurnovers)) |>
-  filter(Conference == "Big Ten Conference")
+    giveaways = sum(turnovers), 
+    takeaways = sum(opponent_turnovers)) |>
+  filter(conference == "Big Ten Conference")
 ```
 ```{r dumbbell-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r dumbbell-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r dumbbell-load-data-exercise-check}
 grade_this_code()
@@ -82,176 +77,347 @@ head(logs)
 grade_this_code()
 ```
 
-For this example, let's look at the difference between a team's giveaways -- turnovers lost -- versus takeaways, or turnovers gained. 
+For this example, let's look at the difference between a team's giveaways -- turnovers lost -- versus takeaways, or opponent turnovers. 
 
 ### Exercise 1: Preparing the data
 
-To get this, we're going to add up all offensive turnovers and defensive turnovers for a team in a season and take a look at where they come out. Remember: TotalTurnovers is giving the ball away (bad turnovers) and DefTotalTurnovers is takeaways, good turnovers. To make this readable, I'm going to focus on the Big Ten.
+To get this, we're going to add up all offensive turnovers and defensive turnovers for a team in a season and take a look at where they come out. Remember: turnovers is giving the ball away (bad turnovers) and opponent_turnovers is takeaways, good turnovers. To make this readable, I'm going to focus on the Big Ten.
 
 ```{r dumbbell1, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 turnovers <- ____ |>
-  group_by(Team, Conference) |> 
+  group_by(team, conference) |> 
   summarise(
-    Giveaways = sum(____Turnovers), 
-    Takeaways = sum(____Turnovers)) |>
-  filter(Conference == "Big Ten Conference")
+    giveaways = sum(____), 
+    takeaways = sum(____)) |>
+  filter(conference == "Big Ten Conference")
 ```
 ```{r dumbbell1-solution, exercise.reveal_solution = FALSE}
 turnovers <- logs |>
-  group_by(Team, Conference) |> 
+  group_by(team, conference) |> 
   summarise(
-    Giveaways = sum(TotalTurnovers), 
-    Takeaways = sum(DefTotalTurnovers)) |>
-  filter(Conference == "Big Ten Conference")
+    giveaways = sum(turnovers), 
+    takeaways = sum(opponent_turnovers)) |>
+  filter(conference == "Big Ten Conference")
 ```
 ```{r dumbbell1-check}
 grade_this_code()
 ```
 
-Now, the way that the `geom_dumbbell` works is pretty simple when viewed through what we've done before. There's just some tweaks. 
+Now we have the three columns we need to make a dumbbell chart -- a label and two numbers that are on the same scale and how far apart they are is meaningful. 
 
-### Exercise 2: The first dumbbell
+### Exercise 2: Starting the dumbbell
 
-First: We start with the y axis. The reason is we want our dumbbells going left and right, so the label is going to be on the y axis. 
+First, we're going to make the bar in the dumbbell. It's just a line that starts and stops at a certain point. That is called a `geom_segment` because, well, it's a line segment. 
 
-Second: Our x is actually two things: x and xend. What you put in there will decide where on the line the dot appears.
+We start with the y axis. The reason we start with the y is we want our dumbbells going left and right, so the label -- what you see telling you what line this is -- is going to be on the y axis aka the left side of the graph. In `geom_segment`, the y is made up of two parts -- the `y` and the `yend`. In our case, at least at first, they're going to be the same thing -- the team name.  
 
-Because we grouped by and summarized earlier, we have three fields to work with: Team, Takeaways and Giveaways.
+Next, our x is also two things: x and xend. What you put in there will decide where on the line the dot appears.
+
+Because we grouped by and summarized earlier, we have three fields to work with: team, takeaways and giveaways.
 
 ```{r dumbbell2, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=____, 
-    aes(y=____, x=____, xend=____)
+    aes(
+      y=____, yend=____,
+      x=____, xend=____)
   )
 ```
 ```{r dumbbell2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=turnovers, 
-    aes(y=Team, x=Takeaways, xend=Giveaways)
+    aes(
+      y=team, yend=team,
+      x=takeaways, xend=giveaways)
   )
 ```
 ```{r dumbbell2-check}
 grade_this_code()
 ```
 
-Well, that's a chart alright, but what dot is the giveaways and what are the takeaways? To fix this, we'll add colors.
+Well, that's a chart alright, but ... it's kind of plain and where is the bells from the dumbbell? 
 
-### Exercise 3: Colors and size
+### Exercise 3: Adding the bells
 
-So our choice of colors here is important. We want giveaways to be seen as bad and takeaways to be seen as good. So lets try red for giveaways and green for takeaways. To make this work, we'll need to do three things: first, use the English spelling of color, so `colour`. The, uh, `colour` is the bar between the dots, the `colour_x` is the color of the x value dot and the `colour_xend` is the color of the xend dot. So in our setup, takeaways are x, they're good, so they're green. While we're at it, we'll add a size to make the dots stand out.
+To make the bells, we need two geom points -- one for the giveaways and one for the takeaways. And those dots need to line up with your team names, so that should narrow down what you're using for `y`. 
 
 ```{r dumbbell3, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=____, 
-    aes(y=____, x=Takeaways, xend=Giveaways),
-    size = 2,
-    colour = "____",
-    colour_x = "____",
-    colour_xend = "____")
+    aes(
+      y=____, yend=____,
+      x=____, xend=____)
+  ) + 
+  geom_point(
+    data=____,
+    aes(
+      y=____,
+      x=____
+    )
+  ) + 
+  geom_point(
+    data=____,
+    aes(
+      y=____,
+      x=____
+    )
+  )
 ```
 ```{r dumbbell3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=turnovers, 
-    aes(y=Team, x=Takeaways, xend=Giveaways),
-    size = 2,
-    colour = "grey",
-    colour_x = "green",
-    colour_xend = "red")
+    aes(
+      y=team, yend=team,
+      x=takeaways, xend=giveaways)
+  )  + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=takeaways
+    )
+  ) + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=giveaways
+    )
+  )
 ```
 ```{r dumbbell3-check}
 grade_this_code()
 ```
 
-And now we have a chart that is trying to tells a story. We know, logically, that green on the right is good. A long distance between green and red? Better. 
+Better. But what dot is the giveaways and what are the takeaways? And it's a little flat. Can we make it a little more dramatic? To fix this, we'll add colors and size.
 
-### Exercise 4: Arrange helps tell the story
+### Exercise 4: What is what?
 
-But what if we sort it by good turnovers? 
+We want to use color to show what is what, and our choice of colors here is important. We want giveaways to be seen as bad and takeaways to be seen as good. So lets try red for giveaways and green for takeaways. 
+
+Next, our segment and dots are a little small. Let's make them bigger.
+
+To make this work, we'll need to do two things to each geom: First, we're going to give everything a color, but we're going to do it in a strange way. The segment will get the color *outside* of the aes, and the points will be *inside* the `aes`, but instead of a color, we're going to just say what it is instead of giving it a column name. In other words, normally we use a column name in the aes, but this time it's just going to be "Takeaways" for example. 
+
+Then, after we give them colors, we'll boost the size. This comes in two different flavors: a `linewidth` for the segment and a size for the dot. Let's make the linewidth 1.5 and the dot a 2.
 
 ```{r dumbbell4, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=____, 
-    aes(y=reorder(____, ____aways), x=Takeaways, xend=Giveaways),
-    size = 2,
-    colour = "____",
-    colour_x = "____",
-    colour_xend = "____")
+    aes(
+      y=____, yend=____,
+      x=____, xend=____),
+    color="grey",
+    linewidth = ____,
+  ) + 
+  geom_point(
+    data=____,
+    aes(
+      y=____,
+      x=____,
+      color="Giveaways"
+    ),
+    size=____
+  ) + 
+  geom_point(
+    data=____,
+    aes(
+      y=____,
+      x=____,
+    color="Takeaways"
+    ),
+    size=____
+  )
 ```
 ```{r dumbbell4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=turnovers, 
-    aes(y=reorder(Team, Takeaways), x=Takeaways, xend=Giveaways),
-    size = 2,
-    colour = "grey",
-    colour_x = "green",
-    colour_xend = "red")
+    aes(
+      y=team, yend=team,
+      x=takeaways, xend=giveaways),
+    color="grey",
+    linewidth = 1.5
+  )  + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=takeaways,
+      color="Takeaways"
+    ),
+    size=2
+  ) + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=giveaways,
+      color="Giveaways"
+    ),
+    size=2
+  )
 ```
 ```{r dumbbell4-check}
 grade_this_code()
 ```
 
-What story does this tell?
+And now we have a chart that is trying to tells a story. We know, logically, that good turnovers are on the right, and that's good if that happens. Bad on the left? That's good too. A long distance between good and bad? Means you're probably a pretty good football team.
 
-### Exercise 5: Which dot is which? 
+But wasn't our goal to make good turnovers green and bad turnovers red? 
 
-One downside to the dumbbell chart library is that it doesn't handle legends well. Adding a box to label which is the red dot and which is the green dot and which is the red dot is harder than it should be. An easier way is to use ggtext and make the colors red and green in some text explaining the graphic. 
+### Exercise 5: What color is that again? 
 
-With ggtext, we need to add `labs` to our chart -- a headline and some chatter, called a `title` and a `subtitle` in ggplot. Then, in the subtitle, we can add some HTML to our text that will turn text red and green to match our `colour_x` and `colour_xend`. 
+To do that, we need to tell ggplot that we want to make Takeaways green and Giveaways red. How do we do this? Same way we did stacked bar charts -- scale manual. Except in this case, it's scale_color_manual. But one thing to know about manual scales -- the colors appear backwards to what you might think. So when you color them, it's the color for giveaways first, the color for takeaways second.
 
 ```{r dumbbell5, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=____, 
-    aes(y=reorder(____, ____aways), x=Takeaways, xend=Giveaways),
-    size = 2,
-    colour = "____",
-    colour_x = "____",
-    colour_xend = "____") +
-  labs(
-    title="Giveaways vs takeaways in the Big Ten", 
-    subtitle = "If <span style = 'color:____;'>takeaways</span> are on the right, that's good. If <span style = 'color:____;'>giveaways</span> are on the right, that's bad."
+    aes(
+      y=____, yend=____,
+      x=____, xend=____),
+    color="grey",
+    linewidth = ____
   ) + 
-  theme(
-    plot.subtitle = element_textbox_simple()
-  )
+  geom_point(
+    data=____,
+    aes(
+      y=____,
+      x=____,
+      color="Takeaways"
+    ),
+    size=____
+  ) + 
+  geom_point(
+    data=____,
+    aes(
+      y=____,
+      x=____,
+    color="Giveaways"
+    ),
+    size=____
+  ) + 
+  scale_color_manual(name="Turnovers", values=c("____", "____"))
 ```
 ```{r dumbbell5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_dumbbell(
+  geom_segment(
     data=turnovers, 
-    aes(y=reorder(Team, Takeaways), x=Takeaways, xend=Giveaways),
-    size = 2,
-    colour = "grey",
-    colour_x = "green",
-    colour_xend = "red") +
-  labs(
-    title="Giveaways vs takeaways in the Big Ten", 
-    subtitle = "If <span style = 'color:green;'>takeaways</span> are on the right, that's good. If <span style = 'color:red;'>giveaways</span> are on the right, that's bad."
+    aes(
+      y=team, yend=team,
+      x=takeaways, xend=giveaways),
+    color="grey",
+    linewidth = 1.5
+  )  + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=takeaways,
+      color="Takeaways"
+    ),
+    size=2
   ) + 
-  theme(
-    plot.subtitle = element_textbox_simple()
-  )
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=giveaways,
+      color="Giveaways"
+    ),
+    size=2
+  ) + 
+  scale_color_manual(name="Turnovers", values=c("red", "green"))
 ```
 ```{r dumbbell5-check}
 grade_this_code()
 ```
 
+
+### Exercise 6: Arrange helps tell the story
+
+But what if we sort it by good turnovers? 
+
+```{r dumbbell6, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
+ggplot() + 
+  geom_segment(
+    data=turnovers, 
+    aes(
+      y=reorder(____, ____), yend=team,
+      x=takeaways, xend=giveaways),
+    color="grey",
+    linewidth = 1.5
+  ) + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=takeaways,
+      color="Takeaways"
+    ),
+    size=2
+  ) + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=giveaways,
+      color="Giveaways"
+    ),
+    size=2
+  ) + 
+  scale_color_manual(name="Turnovers", values=c("red", "green"))
+```
+```{r dumbbell6-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_segment(
+    data=turnovers, 
+    aes(
+      y=reorder(team, takeaways), yend=team,
+      x=takeaways, xend=giveaways),
+    color="grey",
+    linewidth = 1.5
+  )  + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=takeaways,
+      color="Takeaways"
+    ),
+    size=2
+  ) + 
+  geom_point(
+    data=turnovers,
+    aes(
+      y=team,
+      x=giveaways,
+      color="Giveaways"
+    ),
+    size=2
+  ) + 
+  scale_color_manual(name="Turnovers", values=c("red", "green"))
+```
+```{r dumbbell6-check}
+grade_this_code()
+```
+
+What story does this tell?
+
 ## The Recap
 
-In this lesson, we've explored the power of dumbbell charts for visualizing comparisons between paired data points in sports statistics. We started by learning how to prepare data for dumbbell charts, grouping and summarizing game-level statistics into team-level metrics. We then progressed from creating basic dumbbell charts to more informative visualizations by adding meaningful colors, adjusting sizes for better visibility, and reordering data to highlight patterns. We covered important techniques such as using color to differentiate between positive and negative metrics (takeaways vs. giveaways), and leveraging the reorder function to sort teams based on performance. We also addressed the challenge of adding legends to dumbbell charts by incorporating color-coded text explanations using ggtext. Throughout the process, we saw how dumbbell charts can effectively show the relationship between two related metrics across multiple categories, providing insights into team performance in a visually intuitive way. Remember, the effectiveness of a dumbbell chart often lies in the thoughtful use of color, ordering, and supplementary text to guide the viewer's interpretation of the data.
+In this lesson, we've explored the power of dumbbell charts for visualizing comparisons between paired data points in sports statistics. We started by learning how to prepare data for dumbbell charts, grouping and summarizing game-level statistics into team-level metrics. We then progressed from creating basic dumbbell charts to more informative visualizations by adding meaningful colors, adjusting sizes for better visibility, and reordering data to highlight patterns. We covered important techniques such as using color to differentiate between positive and negative metrics (takeaways vs. giveaways), and leveraging the reorder function to sort teams based on performance. We also addressed the challenge of adding legends to dumbbell charts by adjusting legends and colors. Throughout the process, we saw how dumbbell charts can effectively show the relationship between two related metrics across multiple categories, providing insights into team performance in a visually intuitive way. Remember, the effectiveness of a dumbbell chart often lies in the thoughtful use of color, ordering, and supplementary text to guide the viewer's interpretation of the data.
 
 ## Terms to Know
 
-
 - Dumbbell Chart: A type of chart that visualizes the difference between two related values for multiple categories, resembling a dumbbell or barbell shape.
-- `ggalt`: An R package that extends ggplot2 to create alternative plot types, including dumbbell charts.
-- `geom_dumbbell()`: A function from the ggalt package used to create dumbbell charts in ggplot2.
-- `colour_x` and `colour_xend`: Parameters in geom_dumbbell() used to specify colors for the start and end points of each dumbbell.
-- `ggtext`: An R package that extends ggplot2's text rendering capabilities, allowing for formatted text in plot labels.
-- `element_textbox_simple()`: A function from ggtext that allows for the use of formatted text in plot subtitles and other text elements.
+- geom_segment: A ggplot2 geometry that draws a line between two points, used to create the bar connecting the two ends of a dumbbell chart.
+- geom_point: A ggplot2 geometry that draws points or dots at specified coordinates, used to create the "bells" at each end of a dumbbell chart.
+- scale_color_manual: A ggplot2 function that allows you to manually specify the colors assigned to different categories in your visualization.
+- reorder(): A function that reorders the levels of a factor based on the values of another variable, useful for sorting chart elements to tell a clearer story.
