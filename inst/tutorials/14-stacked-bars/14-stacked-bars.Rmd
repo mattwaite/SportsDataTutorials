@@ -44,32 +44,32 @@ grade_this_code()
 And the data.
 
 ```{r stacked-load-data, message=FALSE, warning=FALSE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
 big <- football |> 
-  group_by(Conference, Team) |> 
+  group_by(conference, team) |> 
   summarise(
-    SeasonRushingYards = sum(RushingYds),
-    SeasonPassingYards = sum(PassingYds),
-  ) |> filter(Conference == "Big Ten Conference")
+    season_rushing_yards = sum(rushing_yds),
+    season_passing_yards = sum(passing_yds),
+  ) |> filter(conference == "Big Ten Conference")
 
 biglong <- big |> 
   pivot_longer(
-    cols=starts_with("Season"), 
-    names_to="Type", 
-    values_to="Yards")
+    cols=starts_with("season_"), 
+    names_to="type", 
+    values_to="yards")
 ```
 ```{r stacked-load-data-exercise, exercise = TRUE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r stacked-load-data-exercise-solution}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r stacked-load-data-exercise-check}
 grade_this_code()
 ```
 
-What we have here is every game in college football in 2022. Let's quick take a glimpse.
+What we have here is every game in college football in 2025. Let's quick take a glimpse.
 
 ```{r glimpse-data, exercise=TRUE, exercise.setup = "stacked-load-data"}
 glimpse(____)
@@ -91,27 +91,27 @@ We have game data, and we need season data. To get that, we need to do some grou
 
 ```{r stacked-big, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
 ____ <- football |> 
-  group_by(Conference, Team) |> 
+  group_by(conference, team) |> 
   summarise(
-    SeasonRushingYards = sum(____),
-    SeasonPassingYards = sum(____)
+    season_rushing_yards = sum(____),
+    season_passing_yards = sum(____)
   ) |> 
-  filter(Conference == "Big Ten Conference")
+  filter(conference == "Big Ten Conference")
 ```
 ```{r stacked-big-solution, exercise.reveal_solution = FALSE}
 big <- football |> 
-  group_by(Conference, Team) |> 
+  group_by(conference, team) |> 
   summarise(
-    SeasonRushingYards = sum(RushingYds),
-    SeasonPassingYards = sum(PassingYds)
+    season_rushing_yards = sum(rushing_yds),
+    season_passing_yards = sum(passing_yds)
   ) |> 
-  filter(Conference == "Big Ten Conference")
+  filter(conference == "Big Ten Conference")
 ```
 ```{r stacked-big-check}
 grade_this_code()
 ```
 
-By looking at this, we can see we got what we needed. We have 14 teams (though remember that head only shows you six) and numbers that look like season totals for yards. 
+By looking at this, we can see we got what we needed. We have 18 teams (though remember that head only shows you six) and numbers that look like season totals for yards. 
 
 ```{r head-data, exercise=TRUE, exercise.setup = "stacked-load-data"}
 head(big)
@@ -127,7 +127,7 @@ Now, the problem we have is that ggplot wants long data and this data is wide.
 
 ### Exercise 2: Making wide data long
 
-Remember transforming data? Lesson 6? This is where that work is going to pay off. We need to pivot this data longer. In order to do that, we need to say which columns are being pivoted. Note in the head block above, we have four columns. Two columns are the Team and the Conference. The other columns start with the word Season. That, my friends, is a gigantic hint.
+Remember transforming data? Lesson 6? This is where that work is going to pay off. We need to pivot this data longer. In order to do that, we need to say which columns are being pivoted. Note in the head block above, we have four columns. Two columns are the team and the conference. The other columns start with the word "season". That, my friends, is a gigantic hint.
 
 We're going to save this work to a new dataframe called biglong. 
 
@@ -135,15 +135,15 @@ We're going to save this work to a new dataframe called biglong.
 ____ <- ____ |> 
   pivot_longer(
     cols=starts_with("____"), 
-    names_to="Type", 
-    values_to="Yards")
+    names_to="type", 
+    values_to="yards")
 ```
 ```{r stacked-pivot-solution, exercise.reveal_solution = FALSE}
 biglong <- big |> 
   pivot_longer(
-    cols=starts_with("Season"), 
-    names_to="Type", 
-    values_to="Yards")
+    cols=starts_with("season"), 
+    names_to="type", 
+    values_to="yards")
 ```
 ```{r stacked-pivot-check}
 grade_this_code()
@@ -167,12 +167,12 @@ Building on what we learned in the last chapter, we know we can turn this into a
 
 ```{r stacked-plot1, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=____, aes(x=____, weight=Yards, fill=____)) + 
+  geom_bar(data=____, aes(x=____, weight=yards, fill=____)) + 
   coord_flip()
 ```
 ```{r stacked-plot1-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=biglong, aes(x=Team, weight=Yards, fill=Type)) + 
+  geom_bar(data=biglong, aes(x=team, weight=yards, fill=type)) + 
   coord_flip()
 ```
 ```{r stacked-plot1-check}
@@ -187,19 +187,53 @@ There's a couple of things, one of which we'll deal with now: The ordering is al
 
 ```{r stacked-plot2, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
 ggplot() + 
-  geom_bar(data=____, aes(x=reorder(____, ____), weight=Yards, fill=____)) + 
+  geom_bar(data=____, aes(x=reorder(____, ____), weight=yards, fill=____)) + 
   coord_flip()
 ```
 ```{r stacked-plot2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_bar(data=biglong, aes(x=reorder(Team, Yards), weight=Yards, fill=Type)) + 
+  geom_bar(data=biglong, aes(x=reorder(team, yards), weight=yards, fill=type)) + 
   coord_flip()
 ```
 ```{r stacked-plot2-check}
 grade_this_code()
 ```
 
-And just like that ... Penn State and Oregon are out on top. Where is Nebraska?
+And just like that ... Indiana and Oregon are out on top. Where is Nebraska?
+
+But there's more work to do. First, the colors are terrible. And look at that legend on the chart. If you were just a regular reader, someone in off the street, you'd wonder what happened there. It's a train wreck. 
+
+### Exercise 5: Changing those gawdawful colors
+
+The default colors for a stacked bar chart are triggering to me. They're the colors my mom chose for a bathroom in the 1980s. Fortunately for us, there's a way to change those easily -- `scale_fill_manual`. 
+
+With `scale_fill_manual`, we can specify what colors we want instead of taking the colors ggplot gives us. How do we do that? We specify the `values` -- the color for each segment of bar. Got two segments? The values needs two colors. Got 10 values? Need 10 colors, but don't do that. Too many colors ruins the graphic. 
+
+While we're at it, we can change the name of the legend *and* the labels, making them something a human would want to read. 
+
+```{r stacked-plot3, exercise=TRUE, exercise.setup = "stacked-load-data", message=FALSE}
+ggplot() + 
+  geom_bar(data=____, aes(x=reorder(____, ____), weight=yards, fill=____)) + 
+  coord_flip() +
+  scale_fill_manual(
+    name = "Yards", 
+    ____ = c("red", "blue"), 
+    labels = c("Passing", "Rushing")
+    )
+```
+```{r stacked-plot3-solution, exercise.reveal_solution = FALSE}
+ggplot() + 
+  geom_bar(data=biglong, aes(x=reorder(team, yards), weight=yards, fill=type)) + 
+  coord_flip() + 
+  scale_fill_manual(
+    name = "Yards", 
+    values = c("red", "blue"), 
+    labels = c("Passing", "Rushing")
+    )
+```
+```{r stacked-plot3-check}
+grade_this_code()
+```
 
 ## The Recap
 
