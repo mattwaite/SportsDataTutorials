@@ -14,14 +14,14 @@ description: >
 ```{r setup, include=FALSE}
 library(learnr)
 library(gradethis)
-library(waffle)
+library(tidyverse)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
 ## The Goal
 
-The goal of this lesson is to introduce you to waffle charts, an effective alternative to pie charts for visualizing proportions and compositions. By the end of this tutorial, you'll understand why waffle charts are often preferred over pie charts for certain types of data visualization. You'll learn how to create basic waffle charts using the waffle package in R, including how to prepare your data using vectors, customize chart appearance, and create side-by-side comparisons using the iron() function. We'll apply these concepts to real sports data, visualizing offensive statistics from a college football game. This lesson will enhance your data visualization toolkit, allowing you to present proportional data in a clear, engaging, and easily interpretable format that's particularly useful for sports analytics.
+The goal of this lesson is to introduce you to waffle charts, an effective alternative to pie charts for visualizing proportions and compositions. By the end of this tutorial, you'll understand why waffle charts are often preferred over pie charts for certain types of data visualization. You'll learn how to create basic waffle charts, including how to prepare your data using some new tricks and customize chart appearance. We'll apply these concepts to real sports data. This lesson will enhance your data visualization toolkit, allowing you to present proportional data in a clear, engaging, and easily interpretable format that's particularly useful for sports analytics.
 
 ## The Basics
 
@@ -31,262 +31,249 @@ So let's introduce a better way: The Waffle Chart. Some call it a square pie cha
 
 **A waffle chart is designed to show you parts of the whole -- proportionality**. How many yards on offense come from rushing or passing. How many singles, doubles, triples and home runs make up a teams hits. How many shots a basketball team takes are two pointers versus three pointers. 
 
-Now load it. For this exercise, we don't need the tidyverse. 
+If you Google making waffle charts in R, you're going to find a library called `waffle` that does this pretty easily. Worse, if you ask AI to do it for you -- don't, that's an academic integrity violation -- it will use the waffle library do this. Problem? The library is abandoned. It won't install (easily) and worse, will slowly break in not-easily-understood ways. 
+
+This library breaking is a new thing, so you're among the first to do it with just ggplot. And it's not that tough to pull off. We just need the `tidyverse`. 
 
 ```{r load-waffle, exercise=TRUE}
-library(waffle)
+library(tidyverse)
 ```
 ```{r load-waffle-solution}
-library(waffle)
+library(tidyverse)
 ```
 ```{r load-waffle-check}
 grade_this_code()
 ```
 
-## Making waffles with vectors
+## Making waffles with grids
 
-Let's look at the heartbreak that was Nebraska vs. Wisconsin in fall 2022 in college football. A standout heartbreak in a decade of heartbreaks. [Here's the box score](https://www.espn.com/college-football/matchup/_/gameId/401405142), which we'll use for this part of the walkthrough. 
+Let's look at Nebraska's 2025 softball team -- among the five most successful softball teams in Husker history. How good? They set school records for batting average, home runs, extra base hits, RBIs, slugging percentage and total bases on the way to the second most post-season wins in school history. 
 
-Just remember -- we lost this game by 1 point.
-
-The easiest way to do waffle charts is to make vectors of your data and plug them in. To make a vector, we use the `c` or concatenate function. We did this all the way back in Lesson 1. 
-
-So let's look at offense. Rushing vs passing. 
+What does that look like in a waffle chart? First, we have to make the data. We're going to look at the breakdown of hits -- how many singles, doubles, triples, and home runs they had. First here, we're going do that manually. The way you do it is you create a `category` and make a list of the categories. Then you create a `count` and make a list of the numbers that correspond to each category. When you see it here, it'll make more sense. 
 
 ```{r waffle-load-data, message=FALSE, warning=FALSE}
-nu <- c("Rushing"=106, "Passing"=65)
-wi <- c("Rushing"=235, "Passing"=83)
+rows <- 10
 
-total <- c("Nebraska"=171, "Wisconsin"=318)
+softball <- data.frame(
+  category = c("1B", "2B", "3B", "HR"),
+  count = c(325, 101, 10, 107)
+)
 
-nu2 <- c("Rushing"=106, "Passing"=65, 147)
-wi2 <- c("Rushing"=235, "Passing"=83)
+waffle_softball <- softball |>
+  uncount(count) |>
+  mutate(
+    x = (row_number() - 1) %/% rows + 1,
+    y = (row_number() - 1) %% rows + 1
+  )
+
+softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+
+team_rows <- 5
+
+team_waffle <- softball_teams |> 
+  filter(conference == "Big Ten") |> 
+  select(team, w, l, t) |> 
+  pivot_longer(cols=-team, names_to = "category", values_to ="count") |> 
+  uncount(count) |>
+  group_by(team) |> 
+  mutate(
+    x = (row_number() - 1) %/% team_rows + 1,
+    y = (row_number() - 1) %% team_rows + 1
+  ) |> 
+  ungroup()
 ```
 ```{r waffle-load-data-exercise, exercise = TRUE}
-nu <- c("Rushing"=106, "Passing"=65)
-wi <- c("Rushing"=235, "Passing"=83)
+softball <- data.frame(
+  category = c("1B", "2B", "3B", "HR"),
+  count = c(325, 101, 10, 107)
+)
 ```
 ```{r waffle-load-data-exercise-solution}
-nu <- c("Rushing"=106, "Passing"=65)
-wi <- c("Rushing"=235, "Passing"=83)
+softball <- data.frame(
+  category = c("1B", "2B", "3B", "HR"),
+  count = c(325, 101, 10, 107)
+)
 ```
 ```{r waffle-load-data-exercise-check}
 grade_this_code()
 ```
 
-So what does the breakdown of the night look like?
+Now we have to get a little tricky. Instead of a dataframe with four rows in it, we need to create a grid. That grid will have 325 singles, 101 doubles, 10 triples and 107 home runs. How do we do that? It's a little funky the first time you see it. 
 
-### Exercise 1: Make a waffle chart
+### Exercise 1: Make a grid for our waffle chart 
 
-The waffle library can break this down in a way that's easier on the eyes than a pie chart. We call the `waffle` function, add the data for Nebraska, specify the number of rows (10 is a good start), give it a title and an x value label, and to clean up a quirk of the library, we've got to specify colors. 
+Now we're going to create a dataframe called `waffle_softball`. What is going into it and how it gets made is like this, in this order: 
+
+* First, we set the number of rows. Because we have a lot of squares, we're going to set the number of rows at 10. 
+* Then, start our data analysis. `waffle_softball` is going to pull our data from `softball`.
+* Next we are going to use the uncount function, which is the opposite of the count function. If `softball` had a team with 10 singles, then uncount turns that into 10 rows of 1B. 
+* Next we have to create rows for our waffle chart. We're creating squares that will go left and right on the x-axis and up and down on the y-axis in a grid. 
+* `row_number()` is just what you think it is -- what row number is it? Remember uncount made every hit into a row. 
+* For the x axis in mutate, `%/%` means divide and drop the remainder. In practice, what that says is if there's 30 doubles, the first 10 will be in row 1, the next 10 will be in row 2 and so forth as specified by the number of rows set above.
+* For the y axis, `%%` means do the division and keep the remainder. In practice, that's going to increment the column up one each time. Row 1 column 1. Row 1 column 2. Row 1 column 3 and so on. 
+* The + 1 parts just increments everything so the counts start at 1 not 0. 
 
 ```{r waffle, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-waffle(
-        ____, 
-        rows = ____, 
-        title="Nebraska's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-)
+rows <- ____ 
+
+waffle_softball <- ____ |>
+  uncount(count) |>
+  mutate(
+    x = (row_number() - 1) %/% rows + 1,
+    y = (row_number() - 1) %% rows + 1
+  )
 ```
 ```{r waffle-solution, exercise.reveal_solution = FALSE}
-waffle(
-        nu, 
-        rows = 10, 
-        title="Nebraska's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-)
+rows <- 10
+
+waffle_softball <- softball |>
+  uncount(count) |>
+  mutate(
+    x = (row_number() - 1) %/% rows + 1,
+    y = (row_number() - 1) %% rows + 1
+  )
 ```
 ```{r waffle-check}
 grade_this_code()
 ```
 
-Or, we could make this two teams in the same chart by just changing the vector up. Nebraska had 171 yards that night. Wisconsin had 318.
+Now we've got a grid. Let's make a waffle. 
 
-### Exercise 2: Two teams, one waffle
+### Exercise 2: The waffle chart
+
+The geom here is called `geom_tile` and it is like it sounds -- it creates tiles, like a floor. It works similar to what we've done before with stacked bar charts, except instead of a `weight` it takes a `y`. What goes in x and y is very, very simple -- we just created and x and y in mutate above. What goes in x and y is literally x and y. The fill? That's our category (aka 1B, 2B, 3B, HR). 
+
+What comes after is what makes this into a waffle chart. The `color` in this case creates a white line around the tiles and the `linewidth` does what you think it does. `coord_equal` makes all the squares an equal size. Then `theme_void` removes all of the x and y tick marks and labeling so all you see are squares.  
 
 ```{r waffle2, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-total <- c("Nebraska"=____, "____"=318)
-
-waffle(
-        ____, 
-        rows = 10, 
-        title="Nebraska vs Wisconsin: total yards", 
-        xlab="1 square = 1 yard", 
-        colors = c("red", "black")
-)
+ggplot() +
+  geom_tile(
+    data=____, 
+    aes(
+      x = x, y = y, fill = ____
+      ), 
+    color = "white", 
+    linewidth = .5) +
+  coord_equal() + 
+  theme_void()
 ```
 ```{r waffle2-solution, exercise.reveal_solution = FALSE}
-total <- c("Nebraska"=171, "Wisconsin"=318)
-
-waffle(
-        total, 
-        rows = 10, 
-        title="Nebraska vs Wisconsin: total yards", 
-        xlab="1 square = 1 yard", 
-        colors = c("red", "black")
-)
+ggplot() +
+  geom_tile(
+    data=waffle_softball, 
+    aes(
+      x = x, y = y, fill = category
+      ), 
+    color = "white", 
+    linewidth = .5) +
+  coord_equal() + 
+  theme_void()
 ```
 ```{r waffle2-check}
 grade_this_code()
 ```
 
-No matter how you look at this game, it just comes back to heartache.
+There's a reason they call the triple the most exciting play in baseball (or softball in this case). They're very, very rare. And these Huskers loved the long ball. 
 
-## Two waffles = waffle iron
+## Make more waffles 
 
-What does it look like if we compare the two teams using the two vectors in the same chart? To do that -- and I am not making this up -- you have to create a waffle iron. Get it? Waffle charts? Iron?
+What does it look like if we compare multiple teams? One truth you're going to hear repeated -- one bar isn't a bar chart. One line isn't a line chart. One waffle *can* be a waffle chart if it's detailed and very clear, but our example so far isn't great. It needs more. So how about we compare teams in the Big Ten? 
 
-### Exercise 3: The waffle iron
+### Exercise 3: Making a grid from a dataframe
 
-To make an waffle iron, you wrap your `waffle` functions in an `iron` function. The `iron` is just a wrapper -- it just combines them together. Each waffle functions seperately in the iron. 
+To make lots of waffles, you're going to need lots of things -- teams, players, etc. We *could* do it the way we did it before one team at a time, but who wants to hand enter 17 Big Ten softball team stats? Not me. 
 
-In this block, we're going to use the first vectors we made with nu and ms. You'll see, the iron is just two waffles with a comma between them.
+For this, we can use a data from the NCAA. For this, we're going to read in a file of softball team stats. Then, we're going to set a different number of rows. Since we already have something called `rows`, we'll call this one `team_rows` and change our math in mutate to reflect that change. Then, we'll make a dataframe called `team_waffle` that will do a couple of things: First, filter for the Big Ten, then select only the rows we need. Because this has to be long data, we're going to use pivot_longer from the Transforming Data chapter to make it long. After that, it'll look just like above with one small exception -- we need to group this by the team so each team ends up in their own rows and columns. 
 
 ```{r waffle3, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-iron(
- waffle(____, 
-        rows = 10, 
-        title="Nebraska's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-        ),
- waffle(____, 
-        rows = 10, 
-        title="Wisconsin's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-        )
-)
+softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+
+____ <- 5
+
+team_waffle <- softball_teams |> 
+  filter(conference == "Big Ten") |> 
+  select(team, w, l, t) |> 
+  pivot_longer(cols=-team, names_to = "category", values_to ="count") |> 
+  uncount(count) |>
+  group_by(____) |> 
+  mutate(
+    x = (row_number() - 1) %/% ____ + 1,
+    y = (row_number() - 1) %% ____ + 1
+  ) |> 
+  ungroup()
 ```
 ```{r waffle3-solution, exercise.reveal_solution = FALSE}
-iron(
- waffle(nu, 
-        rows = 10, 
-        title="Nebraska's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-        ),
- waffle(wi, 
-        rows = 10, 
-        title="Wisconsin's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-        )
-)
+softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+
+team_rows <- 5
+
+team_waffle <- softball_teams |> 
+  filter(conference == "Big Ten") |> 
+  select(team, w, l, t) |> 
+  pivot_longer(cols=-team, names_to = "category", values_to ="count") |> 
+  uncount(count) |>
+  group_by(team) |> 
+  mutate(
+    x = (row_number() - 1) %/% team_rows + 1,
+    y = (row_number() - 1) %% team_rows + 1
+  ) |> 
+  ungroup()
 ```
 ```{r waffle3-check}
 grade_this_code()
 ```
 
-What do you notice about this chart? Notice how the squares aren't the same size? Well, Wisconsin out-gained Nebraska by a chunk ... AND ONLY WON BY A POINT. So the squares aren't the same size because the numbers aren't the same. 
+Now that we have data to work with, let's make a bunch of waffles all at once. How? 
 
-### Exercise 4: Adding padding
+### Exercise 4: Lots of waffles, one line of code
 
-We can fix the uneven box sizes by adding an unnamed padding number so the number of yards add up to the same thing. Wisconsin's total yards ended up at 318. To make the squares the same, we need to make the total for everyone be 318. To do that, we need to add 147 to Nebraska. REMEMBER: Don't name it or it'll show up in the legend.
+To make a lot of waffles -- one for each team -- we just need to add something called a facet. We've got a whole chapter ahead on facets, so all you need for now is to know that a facet is one chart for each thing you specify. We're going to specify the `team` as the thing we want a chart out of. Next, we just want to make six columns of facets -- there's 17 softball teams in the Big Ten, so six columns will make 3 rows of charts. 
 
-Now, in our waffle iron, if we don't give that padding a color, we'll get an error. So we need to make it white. Which, given our white background, means it will disappear.
+Everything else in this waffle chart is the same as before, except for the name of the data and the `facet_wrap`, which we'll go into much more depth about in Exercise 25. 
 
 ```{r waffle4, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-nu2 <- c("Rushing"=106, "Passing"=65, 147)
-wi2 <- c("Rushing"=235, "Passing"=83)
-
-iron(
- waffle(____, 
-        rows = 10, 
-        title="Nebraska's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red", "____")
-        ),
- waffle(____, 
-        rows = 10, 
-        title="Wisconsin's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-        )
-)
+ggplot() +
+  geom_tile(
+    data=team_waffle, 
+    aes(
+      x = x, y = y, fill = category
+      ), 
+    color = "white", 
+    linewidth = .5) +
+  facet_wrap(~____, ncol = ____) +
+  coord_equal() + 
+  theme_void()
 ```
 ```{r waffle4-solution, exercise.reveal_solution = FALSE}
-nu2 <- c("Rushing"=106, "Passing"=65, 147)
-wi2 <- c("Rushing"=235, "Passing"=83)
-
-iron(
- waffle(nu2, 
-        rows = 10, 
-        title="Nebraska's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red", "white")
-        ),
- waffle(wi2, 
-        rows = 10, 
-        title="Wisconsin's offense", 
-        xlab="1 square = 1 yard", 
-        colors = c("black", "red")
-        )
-)
+ggplot() +
+  geom_tile(
+    data=team_waffle, 
+    aes(
+      x = x, y = y, fill = category
+      ), 
+    color = "white", 
+    linewidth = .5) +
+  facet_wrap(~team, ncol = 6) +
+  coord_equal() + 
+  theme_void()
 ```
 ```{r waffle4-check}
 grade_this_code()
 ```
 
-### Exercise 5: Many units, one box
-
-One last thing we can do is change the 1 square = 1 yard bit -- which makes the squares really small in this case -- by dividing our vector. Because of how R makes vectors, you can just divide it by a number and R will know to divide the numbers inside the vector by that number. Take what you just did and divide it by 2 and see what happens. Reminder: in R, divide is just the slash.
-
-```{r waffle5, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-nu2 <- c("Rushing"=106, "Passing"=65, 147)
-wi2 <- c("Rushing"=235, "Passing"=83)
-
-iron(
- waffle(____/____, 
-        rows = 10, 
-        title="Nebraska's offense", 
-        xlab="1 square = 2 yards", 
-        colors = c("black", "red", "____")
-        ),
- waffle(____/____, 
-        rows = 10, 
-        title="Wisconsin's offense", 
-        xlab="1 square = 2 yards", 
-        colors = c("black", "red")
-        )
-)
-```
-```{r waffle5-solution, exercise.reveal_solution = FALSE}
-nu2 <- c("Rushing"=106, "Passing"=65, 147)
-wi2 <- c("Rushing"=235, "Passing"=83)
-
-iron(
- waffle(nu2/2, 
-        rows = 10, 
-        title="Nebraska's offense", 
-        xlab="1 square = 2 yards", 
-        colors = c("black", "red", "white")
-        ),
- waffle(wi2/2, 
-        rows = 10, 
-        title="Wisconsin's offense", 
-        xlab="1 square = 2 yards", 
-        colors = c("black", "red")
-        )
-)
-```
-```{r waffle5-check}
-grade_this_code()
-```
-
-News flash: Wisconsin beat Nebraska by one point. One. 
+There's more to be done here -- we need some labels to explain things and those colors are awful, as described in the previous chapter, so we could change those the same way. But for now, we've arrived where we need to be -- with lots of waffles all at once. 
 
 ## The Recap
 
-In this lesson, we've explored the power of waffle charts as an effective alternative to pie charts for visualizing proportional data in sports analytics. We started by learning how to create simple waffle charts using vectors and the waffle() function, applying this to visualize offensive statistics from a college football game. We then advanced to creating side-by-side comparisons using the iron() function, which allowed us to effectively contrast data from two teams. We also learned important techniques for improving our visualizations, such as adding padding to ensure consistent square sizes and adjusting the scale to represent multiple units per square. Throughout the lesson, we've seen how waffle charts can clearly display both the magnitude and composition of data, making them an excellent tool for presenting sports statistics. Remember, effective data visualization is about choosing the right tool for your data and audience, and waffle charts offer a clear, engaging way to present proportional data that's easy for viewers to interpret and compare.
+In this lesson, we've explored waffle charts as an effective alternative to pie charts for visualizing proportional data in sports analytics. Unlike pie charts, which require viewers to judge angles and areas, waffle charts use a grid of squares that makes comparisons intuitive and accurate. We learned that the waffle library is now abandoned, so we built our charts using just the `tidyverse` and `ggplot2.` The key to creating waffle charts is transforming your data into a grid using `uncount()` to expand categories into individual rows, then calculating x and y positions using integer division (%/%) and modulo (%%) operators. We applied `geom_tile()` to render the grid as colored squares, used `coord_equal()` to ensure uniform square sizes, and `theme_void()` to strip away unnecessary axis elements. Finally, we scaled up to compare multiple teams at once by grouping our data and using `facet_wrap()` to generate a waffle chart for each team in a single visualization. Waffle charts excel at showing parts of a whole, making them ideal for displaying compositions like hit types, win-loss records, or any categorical breakdown in sports data.
 
 ## Terms to Know
 
-- Waffle Chart: A chart type that represents data as squares in a grid, where each square represents a specific value or proportion of the whole.
-- Vector: In R, a basic data structure that contains elements of the same type, used to create the data for waffle charts.
-- `c()` Function: The concatenate function in R used to create vectors by combining values.
-- `waffle()` Function: The main function from the waffle package used to create individual waffle charts.
-- `iron()` Function: A function from the waffle package used to combine multiple waffle charts into a single visualization.
-- Padding: Extra values added to a vector to make the total consistent across different data sets, allowing for easier comparison in waffle charts.
+- Waffle Chart: A visualization that represents proportional data as colored squares in a grid, where each square represents a unit or portion of the whole, making it easier to compare parts than a pie chart.
+- `uncount()` Function: A tidyverse function that does the opposite of count()—it expands a summarized dataframe by repeating rows based on a count column, turning aggregated data into individual observations.
+- `geom_tile()`: A ggplot2 geom that draws rectangular tiles, used here to create the individual squares of a waffle chart by mapping x and y grid positions.
+- Integer Division (%/%): An operator that divides two numbers and returns only the whole number portion, dropping any remainder. Used to determine which row a square belongs to in the waffle grid.
+- Modulo (%%): An operator that returns the remainder after division. Used to determine which column a square belongs to within its row.
+- `coord_equal()`: A ggplot2 function that forces the x and y axes to have the same scale, ensuring that tiles appear as perfect squares rather than rectangles.
+- `theme_void()`: A ggplot2 theme that removes all axis labels, tick marks, and gridlines, leaving only the plotted elements—ideal for waffle charts where axes are meaningless.
+- `facet_wrap()`: A ggplot2 function that creates multiple small charts (small multiples), one for each level of a specified variable, allowing easy comparison across groups like teams.
