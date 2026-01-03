@@ -415,112 +415,97 @@ ggplot() +
 grade_this_code()
 ```
 
-## Waffle charts require special attention
+## Waffle charts require some special attention
 
 Frequently in my classes, students use the waffle charts library quite extensively to make graphics. This is a quick walkthough on how to get a waffle chart into a publication ready state. 
 
-Let's look go back to the Nebraska vs Michigan State waffle chart we did in the waffle tutorial. 
+Let's look back to the softball waffle chart we did in the waffle tutorial that had lots of waffles in them. That one requires the most work, but note two things:
+
+1. This is still just a ggplot chart, so everything in the first part of this tutorial applies. 
+2. This is a facet chart, so everything done here in theme applies to them too, regardless of the chart type. 
 
 ```{r waffle-load-data, message=FALSE, warning=FALSE}
-nu <- c("Rushing"=187, "Passing"=255)
-ms <- c("Rushing"=71, "Passing"=183, 188)
+softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+
+team_rows <- 5
+
+team_waffle <- softball_teams |> 
+  filter(conference == "Big Ten") |> 
+  select(team, w, l, t) |> 
+  pivot_longer(cols=-team, names_to = "category", values_to ="count") |> 
+  uncount(count) |>
+  group_by(team) |> 
+  mutate(
+    x = (row_number() - 1) %/% team_rows + 1,
+    y = (row_number() - 1) %% team_rows + 1
+  ) |> 
+  ungroup()
 ```
 
-We can add labels and themes, but you have to be careful. The waffle library is applying it's own theme -- like theme_minimal -- but if we override something they are using in their theme, some things that are hidden come back and make it worse. So here is an example of how to use ggplot's `labs` and the `theme` to make a fully publication ready graphic. They just get added with a + after the waffle.
+We can add labels and themes, but you have to be careful: for a waffle chart to look like a waffle chart, we used `theme_void()` which works similarly to `theme_minimal()` in that it applies a bunch of choices to your chart. But in this case, we want to undo one thing theme void does and that is remove the x-axis label. Strangely, if you mess with one axis label, *both* return. So how do we get the x-axis back but not the y? We tell it to make the y blank, and it doing so, it brings the x axis label back from the dead. 
+
+Note below that labels look the same as the other charts, but what we put in x is an explanation of what each square represents. This might be yards, or games, or homeruns or whatever. But we need to tell our audience what a square is. 
+
+Next: we can rename our legend in labs by specifying what the `fill` or `color` label is. In this case, we'll make it "Record" since we're talking about wins and losses. 
+
+Then, in our theme, note two things: 
+
+- `axis.title.y = element_blank()` just drops the y-axis label from appearing. It would only say "y" in this case anyway, so it's not necessary. 
+- `strip.text.x = element_text(size = 6, hjust=0)` changes the top labels on each chart (aka the column that was faceted). In this case, it's the name of the school. In ggplot that label is called a strip, so strip.text.x is the x axis strip. The size makes it smaller and hjust is the horizontal justification. For hjust, 0 is left, 1 is right. Left looks better to me. 
 
 ```{r waffle1, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-waffle(
-        nu, 
-        rows = 10, 
-        colors = c("black", "red")
-) +
+ggplot() +
+  geom_tile(
+    data=team_waffle, 
+    aes(
+      x = x, y = y, fill = category
+      ), 
+    color = "white", 
+    linewidth = .5) +
+  facet_wrap(~team, ncol = 6) +
+  coord_equal() + 
+  theme_void() + 
   labs(
-    x = "1 square = 1 yard",
-    title="Nebraska rolled up yards on offense", 
-    subtitle="The Huskers had a good night throwing and running.",
-    caption="Source: NCAA | Graphic by Matt Waite") + 
+    x = "1 square = 1 game",
+    title="Big 10 Softball: The Haves and Have Nots", 
+    subtitle="UCLA and Oregon made the College World Series, but Nebraska came close.",
+    caption="Source: NCAA | Graphic by Matt Waite",
+    fill = "Record") + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
-    axis.title = element_text(size = 10),
-    axis.title.y = element_blank()
+    plot.subtitle = element_text(size = 10),
+    axis.title = element_text(size = 8),
+    axis.title.y = element_blank(),
+    strip.text.x = element_text(size = 6, hjust=0)
   )
 ```
 ```{r waffle1-solution, exercise.reveal_solution = FALSE}
-waffle(
-        nu, 
-        rows = 10, 
-        colors = c("black", "red")
-) +
+ggplot() +
+  geom_tile(
+    data=team_waffle, 
+    aes(
+      x = x, y = y, fill = category
+      ), 
+    color = "white", 
+    linewidth = .5) +
+  facet_wrap(~team, ncol = 6) +
+  coord_equal() + 
+  theme_void() + 
   labs(
-    x = "1 square = 1 yard",
-    title="Nebraska rolled up yards on offense", 
-    subtitle="The Huskers had a good night throwing and running.",
-    caption="Source: NCAA | Graphic by Matt Waite") + 
+    x = "1 square = 1 game",
+    title="Big 10 Softball: The Haves and Have Nots", 
+    subtitle="UCLA and Oregon made the College World Series, but Nebraska came close.",
+    caption="Source: NCAA | Graphic by Matt Waite",
+    fill = "Record") + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
-    axis.title = element_text(size = 10),
-    axis.title.y = element_blank()
+    plot.subtitle = element_text(size = 10),
+    axis.title = element_text(size = 8),
+    axis.title.y = element_blank(),
+    strip.text.x = element_text(size = 6, hjust=0)
   )
 ```
 ```{r waffle1-check}
-grade_this_code()
-```
-
-But what if we're using a waffle iron? It gets tougher. 
-
-Here is a full example. I start with my waffle iron code, but note that each waffle is pretty much a self contained thing. That's because a waffle iron isn't really a thing. It's just a way to group waffles together, so you have to make each waffle individually. My first waffle has the title and subtitle and the x-axis label is the team -- Nebraska. The bottom one has no title or subtitle but it does have the caption and the axis label has a little trick to add a return into the label, so I get both the team and the unit in there. 
-
-```{r waffle2, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-iron(
- waffle(
-   nu, 
-   rows = 10, 
-   colors = c("black", "red", "white")) + 
-   labs(
-     x="Nebraska",
-     title="Nebraska vs Michigan State: By the numbers", 
-     subtitle="The Huskers won everywhere except the scoreboard.") + 
-   theme(
-    plot.title = element_text(size = 16, face = "bold"),
-    axis.title = element_text(size = 10),
-    axis.title.y = element_blank()
-  ),
- waffle(
-   ms, 
-   rows = 10, 
-   colors = c("black", "dark green", "white")) + 
-   labs(
-     x = "Michigan State\n1 square = 10 yards",
-     caption="Source: NCAA | Graphic by Matt Waite"
-     )
-) 
-```
-```{r waffle2-solution, exercise.reveal_solution = FALSE}
-iron(
- waffle(
-   nu, 
-   rows = 10, 
-   colors = c("black", "red", "white")) + 
-   labs(
-     x="Nebraska",
-     title="Nebraska vs Michigan State: By the numbers", 
-     subtitle="The Huskers won everywhere except the scoreboard.") + 
-   theme(
-    plot.title = element_text(size = 16, face = "bold"),
-    axis.title = element_text(size = 10),
-    axis.title.y = element_blank()
-  ),
- waffle(
-   ms, 
-   rows = 10, 
-   colors = c("black", "dark green", "white")) + 
-   labs(
-     x = "Michigan State\n1 square = 10 yards",
-     caption="Source: NCAA | Graphic by Matt Waite"
-     )
-) 
-```
-```{r waffle2-check}
 grade_this_code()
 ```
 
@@ -532,7 +517,7 @@ In your blog post, in your yaml header, you must have the `code-fold: true` bits
 
 ## The Recap
 
-In this lesson, we've explored the crucial final steps in creating professional-quality sports data visualizations. We started by reviewing the essential elements of a good graphic, including headlines, chatter, annotations, and source lines. We then delved into practical techniques for refining ggplot2 charts, such as applying theme_minimal() to create a clean base, customizing text elements for better visual hierarchy, and adjusting margins for improved layout. We learned how to strategically modify grid lines and axis labels to enhance readability without cluttering the visualization. Special attention was given to waffle charts, demonstrating how to add appropriate labels and themes while working within the constraints of the waffle library. We also covered the nuances of styling multi-chart visualizations using waffle irons. Throughout the lesson, we emphasized the importance of consistent styling and the necessity of including these finishing touches in all graphics for this course. Finally, we highlighted the requirement of implementing code folding in blog posts, ensuring that your visualizations are not only visually appealing but also presented in a professional, interactive format. These skills will set your sports analytics blog apart, demonstrating a level of polish and attention to detail that marks the transition from amateur to professional-quality data visualization.
+In this lesson, we've explored the crucial final steps in creating professional-quality sports data visualizations. We started by reviewing the essential elements of a good graphic, including headlines, chatter, annotations, and source lines. We then delved into practical techniques for refining ggplot2 charts, such as applying theme_minimal() to create a clean base, customizing text elements for better visual hierarchy, and adjusting margins for improved layout. We learned how to strategically modify grid lines and axis labels to enhance readability without cluttering the visualization. Special attention was given to waffle charts, demonstrating how to add appropriate labels and themes while working within the constraints of theme_void. Throughout the lesson, we emphasized the importance of consistent styling and the necessity of including these finishing touches in all graphics for this course. Finally, we highlighted the requirement of implementing code folding in blog posts, ensuring that your visualizations are not only visually appealing but also presented in a professional, interactive format. These skills will set your sports analytics blog apart, demonstrating a level of polish and attention to detail that marks the transition from amateur to professional-quality data visualization.
 
 ## Terms to Know
 
