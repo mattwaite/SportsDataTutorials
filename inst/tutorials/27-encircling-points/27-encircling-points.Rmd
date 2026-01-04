@@ -199,7 +199,7 @@ ggplot() +
         xmin = ____, xmax = Inf,
         ymin = ____, ymax = Inf) +
   geom_text(aes(x=300, y=35, label="Good player zone"), size=3) +
-  labs(title="Brice Williams is Nebraska's MVP", subtitle="Not just Nebraska's best, but one of the best in the Big Ten.", x="Points scored", y="Player Efficiency Rating") + 
+  labs(title="Brice Williams was Nebraska's MVP last season", subtitle="Not just Nebraska's best, but one of the best in the Big Ten.", x="Points scored", y="Player Efficiency Rating") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
@@ -217,7 +217,7 @@ ggplot() +
         xmin = 200, xmax = Inf,
         ymin = 20, ymax = Inf) +
   geom_text(aes(x=300, y=35, label="Good player zone"), size=3) + 
-  labs(title="Brice Williams is Nebraska's MVP", subtitle="Not just Nebraska's best, but one of the best in the Big Ten.", x="Points scored", y="Player Efficiency Rating") + 
+  labs(title="Brice Williams was Nebraska's MVP last season", subtitle="Not just Nebraska's best, but one of the best in the Big Ten.", x="Points scored", y="Player Efficiency Rating") + 
   theme_minimal() + 
   theme(
     plot.title = element_text(size = 16, face = "bold"),
