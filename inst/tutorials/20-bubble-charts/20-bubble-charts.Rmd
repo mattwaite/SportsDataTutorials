@@ -55,55 +55,55 @@ grade_this_code()
 And the data.
 
 ```{r bubble-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
 winlosslogs <- logs |> 
   mutate(
     wins = case_when(
-      grepl("W", Outcome) ~ 1, 
-      grepl("L", Outcome) ~ 0)
+      grepl("W", rslt) ~ 1, 
+      grepl("L", rslt) ~ 0)
   )
     
 ypp <- winlosslogs |> 
-  group_by(Team, Conference) |> 
+  group_by(team, conference) |> 
   summarise(
-    TotalPlays = sum(OffensivePlays), 
-    TotalYards = sum(OffensiveYards), 
-    DefensivePlays = sum(DefPlays), 
-    DefensiveYards = sum(DefYards), 
-    TotalWins = sum(wins)) |> 
+    total_plays = sum(plays), 
+    total_yards = sum(tot), 
+    defensive_plays = sum(opponent_plays), 
+    defensive_yards = sum(opponent_tot), 
+    total_wins = sum(wins)) |> 
   mutate(
-    OffensiveYPP = TotalYards/TotalPlays, 
-    DefensiveYPP = DefensiveYards/DefensivePlays)
+    offensiveYPP = total_yards/total_plays, 
+    defensiveYPP = defensive_yards/defensive_plays)
 
-bigten <- ypp |> filter(Conference == "Big Ten Conference")
+bigten <- ypp |> filter(conference == "Big Ten Conference")
 ```
 ```{r bubble-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r bubble-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r bubble-load-data-exercise-check}
 grade_this_code()
 ```
 
-To do this, I've got some work to do. First, I need to mutate the outcomes of the games into 1s and 0s so I can add up the wins. 
+To do this, I've got some work to do. First, I need to mutate the results of the games into 1s and 0s so I can add up the wins. 
 
 ```{r bubble1, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
 winlosslogs <- logs |> 
   mutate(
     wins = case_when(
-      grepl("W", Outcome) ~ 1, 
-      grepl("L", Outcome) ~ 0)
+      grepl("W", rslt) ~ 1, 
+      grepl("L", rslt) ~ 0)
 )
 ```
 ```{r bubble1-solution, exercise.reveal_solution = FALSE}
 winlosslogs <- logs |> 
   mutate(
     wins = case_when(
-      grepl("W", Outcome) ~ 1, 
-      grepl("L", Outcome) ~ 0)
+      grepl("W", rslt) ~ 1, 
+      grepl("L", rslt) ~ 0)
 )
 ```
 ```{r bubble1-check}
@@ -118,29 +118,29 @@ I'm going to give you the data. It's pretty straightforward. We're making a new 
 
 ```{r bubble2, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
 ypp <- winlosslogs |> 
-  group_by(Team, Conference) |> 
+  group_by(team, conference) |> 
   summarise(
-    TotalPlays = sum(OffensivePlays), 
-    TotalYards = sum(OffensiveYards), 
-    DefensivePlays = sum(DefPlays), 
-    DefensiveYards = sum(DefYards), 
-    TotalWins = sum(wins)) |> 
+    total_plays = sum(plays), 
+    total_yards = sum(tot), 
+    defensive_plays = sum(opponent_plays), 
+    defensive_yards = sum(opponent_tot), 
+    total_wins = sum(wins)) |> 
   mutate(
-    OffensiveYPP = TotalYards/TotalPlays, 
-    DefensiveYPP = DefensiveYards/DefensivePlays)
+    offensiveYPP = total_yards/total_plays, 
+    defensiveYPP = defensive_yards/defensive_plays)
 ```
 ```{r bubble2-solution, exercise.reveal_solution = FALSE}
 ypp <- winlosslogs |> 
-  group_by(Team, Conference) |> 
+  group_by(team, conference) |> 
   summarise(
-    TotalPlays = sum(OffensivePlays), 
-    TotalYards = sum(OffensiveYards), 
-    DefensivePlays = sum(DefPlays), 
-    DefensiveYards = sum(DefYards), 
-    TotalWins = sum(wins)) |> 
+    total_plays = sum(plays), 
+    total_yards = sum(tot), 
+    defensive_plays = sum(opponent_plays), 
+    defensive_yards = sum(opponent_tot), 
+    total_wins = sum(wins)) |> 
   mutate(
-    OffensiveYPP = TotalYards/TotalPlays, 
-    DefensiveYPP = DefensiveYards/DefensivePlays)
+    offensiveYPP = total_yards/total_plays, 
+    defensiveYPP = defensive_yards/defensive_plays)
 ```
 ```{r bubble2-check}
 grade_this_code()
@@ -149,10 +149,10 @@ grade_this_code()
 A bubble chart is just a scatterplot with one additional element in the aesthetic -- a size. Here's the scatterplot version. 
 
 ```{r bubble3, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-ggplot() + geom_point(data=ypp, aes(x=OffensiveYPP, y=DefensiveYPP))
+ggplot() + geom_point(data=ypp, aes(x=offensiveYPP, y=defensiveYPP))
 ```
 ```{r bubble3-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_point(data=ypp, aes(x=OffensiveYPP, y=DefensiveYPP))
+ggplot() + geom_point(data=ypp, aes(x=offensiveYPP, y=defensiveYPP))
 ```
 ```{r bubble3-check}
 grade_this_code()
@@ -170,14 +170,14 @@ Let's add the size element. From our data work above, we want to add the column 
 ggplot() + 
   geom_point(
     data=____, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____)
+    aes(x=offensiveYPP, y=defensiveYPP, size=____)
     )
 ```
 ```{r bubble4-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins)
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins)
     )
 ```
 ```{r bubble4-check}
@@ -194,7 +194,7 @@ But we can make this more readable by adding an `alpha` element outside the aest
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____),
+    aes(x=offensiveYPP, y=defensiveYPP, size=____),
     alpha = ____) + 
   scale_size(range = c(3, 8), name="Wins")
 ```
@@ -202,7 +202,7 @@ ggplot() +
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins),
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins),
     alpha = .3) + 
   scale_size(range = c(3, 8), name="Wins")
 ```
@@ -217,31 +217,31 @@ Better?
 And by now, you now know to add in the Big Ten as a layer, I would hope.
 
 ```{r bubble6, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-bigten <- ypp |> filter(Conference == "____ ____ ____")
+bigten <- ypp |> filter(conference == "____ ____ ____")
 
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=____), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=____), 
     color="red")
 ```
 ```{r bubble6-solution, exercise.reveal_solution = FALSE}
-bigten <- ypp |> filter(Conference == "Big Ten Conference")
+bigten <- ypp |> filter(conference == "Big Ten Conference")
 
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="red")
 ```
 ```{r bubble6-check}
@@ -258,16 +258,16 @@ Let's add some things to this chart to help us out. First, let's add lines that 
 ypp |> 
   ungroup() |> 
   summarise(
-    offense = mean(OffensiveYPP), 
-    defense = mean(DefensiveYPP)
+    offense = mean(offensiveYPP), 
+    defense = mean(defensiveYPP)
     )
 ```
 ```{r bubble7-solution, exercise.reveal_solution = FALSE}
 ypp |> 
   ungroup() |> 
   summarise(
-    offense = mean(OffensiveYPP), 
-    defense = mean(DefensiveYPP)
+    offense = mean(offensiveYPP), 
+    defense = mean(defensiveYPP)
     )
 ```
 ```{r bubble7-check}
@@ -280,12 +280,12 @@ Now we can use those averages to add two more geoms -- geom_vline and geom_hline
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=____), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=____), 
     color="red") + 
   geom_vline(xintercept = ____) + 
   geom_hline(yintercept = ____)
@@ -294,15 +294,15 @@ ggplot() +
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="red") + 
-  geom_vline(xintercept = 5.763149) + 
-  geom_hline(yintercept = 5.601157)
+  geom_vline(xintercept = 5.714648) + 
+  geom_hline(yintercept = 5.514364)
 ```
 ```{r bubble8-check}
 grade_this_code()
@@ -318,36 +318,36 @@ Now it's time for ggrepel. What ggrepel does is help us label the dots without o
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=____), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="red") + 
   geom_vline(xintercept = ____) + 
   geom_hline(yintercept = ____) +
   geom_text_repel(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, label=____)
+    aes(x=offensiveYPP, y=defensiveYPP, label=____)
   )
 ```
 ```{r bubble9-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
   geom_point(
     data=ypp, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="grey", 
     alpha=.3) + 
   geom_point(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    aes(x=offensiveYPP, y=defensiveYPP, size=total_wins), 
     color="red") + 
-  geom_vline(xintercept = 5.763149) + 
-  geom_hline(yintercept = 5.601157) +
+  geom_vline(xintercept = 5.714648) + 
+  geom_hline(yintercept = 5.514364) +
   geom_text_repel(
     data=bigten, 
-    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+    aes(x=offensiveYPP, y=defensiveYPP, label=team)
   )
 ```
 ```{r bubble9-check}

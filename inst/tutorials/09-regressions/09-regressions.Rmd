@@ -47,28 +47,28 @@ grade_this_code()
 Now read in all FBS college football teams and their season stats. 
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
 newcorrelations <- correlations |>
   mutate(
-    differential = TeamScore - OpponentScore
+    differential = team_pts - opponent_pts
   )
 
-coefficient <- cor.test(correlations$TeamScore, correlations$RushingYds)
+coefficient <- cor.test(correlations$team_pts, correlations$rushing_yds)
 
-newcoefficient <- cor.test(newcorrelations$differential, newcorrelations$RushingYds)
+newcoefficient <- cor.test(newcorrelations$differential, newcorrelations$rushing_yds)
 
-passcoefficient <- cor.test(newcorrelations$differential, newcorrelations$PassingYds)
+passcoefficient <- cor.test(newcorrelations$differential, newcorrelations$passing_yds)
 
-fit <- lm(differential ~ RushingYds, data = newcorrelations)
+fit <- lm(differential ~ rushing_yds, data = newcorrelations)
 
-pass <- lm(differential ~ PassingYds, data = newcorrelations)
+pass <- lm(differential ~ passing_yds, data = newcorrelations)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
@@ -98,18 +98,18 @@ grade_this_code()
 
 ### Exercise 1: Correlating rushing yards and points.
 
-In R, there is a `cor` function, and it works much the same as `mean` or `median`. So we want to see if `TeamScore` is correlated with `RushingYds`, which should be pretty self explanatory. We do that by referencing those two fields and specifying we want a `pearson` correlation. The number we get back is the correlation coefficient.
+In R, there is a `cor` function, and it works much the same as `mean` or `median`. So we want to see if `team_pts` is correlated with `rushing_yds`, which should be pretty self explanatory. We do that by referencing those two fields and specifying we want a `pearson` correlation. The number we get back is the correlation coefficient.
 
 ```{r correlation1, exercise=TRUE, exercise.setup = "correlations-load-data"}
 ____ |> 
   summarise(
-    pearson = cor(TeamScore, ____, method="pearson")
+    pearson = cor(team_pts, ____, method="pearson")
     )
 ```
 ```{r correlation1-solution, exercise.reveal_solution = FALSE}
 correlations |> 
   summarise(
-    pearson = cor(TeamScore, RushingYds, method="pearson")
+    pearson = cor(team_pts, rushing_yds, method="pearson")
     )
 ```
 ```{r correlation1-check}
@@ -143,12 +143,12 @@ ____ |>
 ```{r correlation2-solution, exercise.reveal_solution = FALSE}
 newcorrelations <- correlations |>
   mutate(
-    differential = TeamScore - OpponentScore
+    differential = team_pts - opponent_pts
   )
 
 newcorrelations |> 
   summarise(
-    correlation = cor(differential, RushingYds, method="pearson")
+    correlation = cor(differential, rushing_yds, method="pearson")
     )
 ```
 ```{r correlation2-check}
@@ -178,7 +178,7 @@ fit <- lm(____ ~ ____, data = newcorrelations)
 summary(____)
 ```
 ```{r regression1-solution, exercise.reveal_solution = FALSE}
-fit <- lm(differential ~ RushingYds, data = newcorrelations)
+fit <- lm(differential ~ rushing_yds, data = newcorrelations)
 summary(fit)
 ```
 ```{r regression1-check}
@@ -204,7 +204,7 @@ glue("What does that mean? Let's use a simple example. Let's say you rush for 10
 You can see the problem in a graph. On the X axis is rushing yards, on the y is aggregate score. If these elements had a strong relationship, we'd see a clear pattern moving from right to left, sloping up. On the left would be the teams with few rushing yards and a negative point differential. On right would be teams with high rushing yards and positive point differentials. Do you see that below?
 
 ```{r correlationchart, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
-ggplot(newcorrelations, aes(x=RushingYds, y=differential)) + geom_point()
+ggplot(newcorrelations, aes(x=rushing_yds, y=differential)) + geom_point()
 ```
 
 A charitable reading of this would be ... shrug? Maybe? Seems kind of random? And that's the point. It's squishy. 
@@ -227,7 +227,7 @@ newcorrelations |>
 ```
 ```{r regression2-solution, exercise.reveal_solution = FALSE}
 newcorrelations |> 
-  summarise(correlation = cor(differential, PassingYds, method="pearson"))
+  summarise(correlation = cor(differential, passing_yds, method="pearson"))
 ```
 ```{r regression2-check}
 grade_this_code()
@@ -248,7 +248,7 @@ pass <- lm(differential ~ ____, data = newcorrelations)
 summary(pass)
 ```
 ```{r regression3-solution, exercise.reveal_solution = FALSE}
-pass <- lm(differential ~ PassingYds, data = newcorrelations)
+pass <- lm(differential ~ passing_yds, data = newcorrelations)
 summary(pass)
 ```
 ```{r regression3-check}

@@ -43,7 +43,7 @@ grade_this_code()
 We're going to look at last season's women's soccer season and ask a couple of questions. Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r mutating-load-data, message=FALSE, warning=FALSE}
-soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2024.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2025.csv")
 
 ruthless <- soccer |> mutate(
   gpg = goals/games
@@ -68,10 +68,10 @@ confsnipers <- soccer |>
   arrange(desc(sogpct)) |> slice(1)
 ```
 ```{r mutating-load-data-exercise, exercise = TRUE}
-soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2024.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2025.csv")
 ```
 ```{r mutating-load-data-exercise-solution}
-soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2024.csv")
+soccer <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_soccer_teams_2025.csv")
 ```
 ```{r mutating-load-data-exercise-check}
 grade_this_code()
@@ -80,7 +80,7 @@ grade_this_code()
 Remember, if you want to see the first six rows -- handy to take a peek at your data -- you can use the function `head`.
 
 ```{r head-data, exercise=TRUE, exercise.setup = "mutating-load-data"}
-head(??????)
+head(____)
 ```
 ```{r head-data-solution}
 head(soccer)

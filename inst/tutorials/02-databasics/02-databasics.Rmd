@@ -125,18 +125,18 @@ The `read_csv` bits are pretty obvious, except for one thing. What happens in th
 Your first task is to import the data. For this exercise, you need to simply run this:
 
 ```{r load-data, message=FALSE, warning=FALSE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 
 nrows <- nrow(volleyballplayers)
 ncolumns <- ncol(volleyballplayers)
 ```
 
 ```{r load-data-exercise, exercise = TRUE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
 
 ```{r load-data-exercise-solution}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
 
 ```{r load-data-exercise-check}

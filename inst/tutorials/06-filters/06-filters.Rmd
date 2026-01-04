@@ -51,24 +51,24 @@ grade_this_code()
 Now import the data.
 
 ```{r filtering-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
-rushinggames <- nrow(games |> filter(RushingYds > 250))
+rushinggames <- nrow(games |> filter(rushing_yds > 250))
 
-bigrush <- games |> filter(RushingYds > 250) |> filter(Conference == "Big Ten Conference")
+bigrush <- games |> filter(rushing_yds > 250) |> filter(conference == "Big Ten Conference")
 
 powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 toprush <- games |> 
-  filter(Conference %in% powerfour) |> 
-  select(Team, Conference, RushingYds, Opponent) |>
-  top_n(1, wt=RushingYds)
+  filter(conference %in% powerfour) |> 
+  select(team, conference, rushing_yds, opponent) |>
+  top_n(1, wt=rushing_yds)
 ```
 ```{r filtering-load-data-exercise, exercise = TRUE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r filtering-load-data-exercise-solution}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r filtering-load-data-exercise-check}
 grade_this_code()
@@ -113,7 +113,7 @@ Now that we can see the column names, we now know Team is where the names of the
 ____ |> filter(____ == "____")
 ```
 ```{r filtering-nebraska-solution, exercise.reveal_solution = FALSE}
-games |> filter(Team == "Nebraska")
+games |> filter(team == "Nebraska")
 ```
 ```{r filtering-nebraska-check}
 grade_this_code()
@@ -131,14 +131,14 @@ There's a certain strain of football fan around these parts that is absolutely o
 ____ |> filter(____ > ___)
 ```
 ```{r filtering-rushers-solution, exercise.reveal_solution = FALSE}
-games |> filter(RushingYds > 250)
+games |> filter(rushing_yds > 250)
 ```
 ```{r filtering-rushers-check}
 grade_this_code()
 ```
 
 ```{r rushers, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "filtering-load-data", results='asis'}
-glue("Look at that. There were {rushinggames} games last season where a team ran for more than 250 yards.")
+glue("Look there at the bottom of that window, below the data. See how many rows there are? Since each row is a game, that means there were were {rushinggames} games last season where a team ran for more than 250 yards.")
 ```
 
 But how many of those were in the Big Ten? To do this we're going to *chain* filters together, which is a fancy way of just saying we're going to add another.
@@ -154,8 +154,8 @@ ____ |>
 ```
 ```{r filtering-big-solution, exercise.reveal_solution = FALSE}
 games |> 
-  filter(RushingYds > 250) |> 
-  filter(Conference == "Big Ten Conference")
+  filter(rushing_yds > 250) |> 
+  filter(conference == "Big Ten Conference")
 ```
 ```{r filtering-big-check}
 grade_this_code()
@@ -174,18 +174,18 @@ Here's what that looks like. It's a lot of extra code that you've got to be care
 ```{r filtering-power5, exercise=TRUE, exercise.setup = "filtering-load-data"}
 games |> 
   filter(
-    Conference == "Big Ten Conference" | 
-      Conference == "Southeastern Conference" | 
-      Conference == "Atlantic Coast Conference" | 
-      Conference == "Big 12 Conference")
+    conference == "Big Ten Conference" | 
+      conference == "Southeastern Conference" | 
+      conference == "Atlantic Coast Conference" | 
+      conference == "Big 12 Conference")
 ```
 ```{r filtering-power5-solution}
 games |> 
   filter(
-    Conference == "Big Ten Conference" | 
-      Conference == "Southeastern Conference" | 
-      Conference == "Atlantic Coast Conference" | 
-      Conference == "Big 12 Conference")
+    conference == "Big Ten Conference" | 
+      conference == "Southeastern Conference" | 
+      conference == "Atlantic Coast Conference" | 
+      conference == "Big 12 Conference")
 ```
 ```{r filtering-power5-check}
 grade_this_code()
@@ -207,7 +207,7 @@ ____ |> filter(____ %in% ____)
 ```{r filtering-power-solution}
 powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
-games |> filter(Conference %in% powerfour)
+games |> filter(conference %in% powerfour)
 ```
 ```{r filtering-power-check}
 grade_this_code()
@@ -230,8 +230,8 @@ ____ |>
 powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 games |> 
-  filter(Conference %in% powerfour) |> 
-  select(Team, Conference, PassingYds)
+  filter(conference %in% powerfour) |> 
+  select(team, conference, passing_yds)
 ```
 ```{r selecting-power-check}
 grade_this_code()
@@ -260,10 +260,10 @@ ____ |>
 powerfour <- c("Southeastern Conference", "Big Ten Conference", "Big 12 Conference", "Atlantic Coast Conference")
 
 games |> 
-  filter(Conference %in% powerfour) |> 
-  select(Team, Conference, RushingYds) |>
-  arrange(desc(RushingYds)) |> 
-  top_n(10, wt=RushingYds)
+  filter(conference %in% powerfour) |> 
+  select(team, conference, rushing_yds) |>
+  arrange(desc(rushing_yds)) |> 
+  top_n(10, wt=rushing_yds)
 ```
 ```{r selecting-top-power-check}
 grade_this_code()

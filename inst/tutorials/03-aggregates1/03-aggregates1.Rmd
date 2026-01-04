@@ -53,7 +53,7 @@ Now, let's use the same volleyball player data we used in the last tutorial.
 To load the data, we can run this block of code:
 
 ```{r load-data, message=FALSE, warning=FALSE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 
 nplayers <- nrow(volleyballplayers)
 
@@ -70,11 +70,11 @@ killsleader <- volleyballplayers |> arrange(desc(kills)) |> slice(1)
 ```
 
 ```{r load-data-exercise, exercise = TRUE}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
 
 ```{r load-data-exercise-solution}
-volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+volleyballplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
 
 ```{r load-data-exercise-check}
