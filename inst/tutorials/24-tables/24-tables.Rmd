@@ -54,7 +54,7 @@ For the data, I want to look at Nebraska women's basketball. I want to look at w
 ```{r table-load-data, message=FALSE, warning=FALSE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2025) |> 
+bigwbb <- load_wbb_team_box(seasons = 2026) |> 
   filter(team_short_display_name %in% big) |>
   select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
   mutate_at(vars(-team_short_display_name), as.numeric) |>
@@ -73,7 +73,7 @@ bigwbb <- load_wbb_team_box(seasons = 2025) |>
 ```{r table-load-data-exercise, exercise = TRUE}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2025) |> 
+bigwbb <- load_wbb_team_box(seasons = 2026) |> 
   filter(team_short_display_name %in% big) |>
   select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
   mutate_at(vars(-team_short_display_name), as.numeric) |>
@@ -92,7 +92,7 @@ bigwbb <- load_wbb_team_box(seasons = 2025) |>
 ```{r table-load-data-exercise-solution}
 big <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Wisconsin", "Michigan", "Michigan St", "Ohio State", "Purdue", "Indiana", "Maryland", "Rutgers", "Penn State", "Northwestern")
 
-bigwbb <- load_wbb_team_box(seasons = 2025) |> 
+bigwbb <- load_wbb_team_box(seasons = 2026) |> 
   filter(team_short_display_name %in% big) |>
   select(team_short_display_name, field_goals_made, field_goals_attempted, three_point_field_goals_made, three_point_field_goals_attempted) |>
   mutate_at(vars(-team_short_display_name), as.numeric) |>
