@@ -37,7 +37,6 @@ It's called `patchwork`, and it's pretty easy to use. You installed patchwork wa
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
 library(patchwork)
-
 ```
 ```{r load-tidyverse-solution}
 library(tidyverse)
@@ -50,37 +49,37 @@ grade_this_code()
 We'll use the college football game data we've used before. Load it.
 
 ```{r patchwork-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
 totals <- games |> 
-  filter(Conference == "Big Ten Conference") |> 
-  group_by(Team) |> 
+  filter(conference == "Big Ten Conference") |> 
+  group_by(team) |> 
   summarize(
-    TotalRushes = sum(RushingAtt),
-    TotalRushYds = sum(RushingYds),
-    TotalPasses = sum(PassingAtt),
-    TotalPassYds = sum(PassingYds)
+    total_rushes = sum(rushing_att),
+    total_rush_yds = sum(rushing_yds),
+    total_passes = sum(passing_att),
+    total_pass_yds = sum(passing_yds)
   ) |>
   mutate(
-    RushingAvg = TotalRushYds/TotalRushes,
-    PassingAvg = TotalPassYds/TotalPasses
+    rushing_avg = total_rush_yds/total_rushes,
+    passing_avg = total_pass_yds/total_passes
   ) 
 
-nu <- totals |> filter(Team == "Nebraska")
+nu <- totals |> filter(team == "Nebraska")
 
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip()
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), color="grey") +
   coord_flip()
 ```
 ```{r patchwork-load-data-exercise, exercise = TRUE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r patchwork-load-data-exercise-solution}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r patchwork-load-data-exercise-check}
 grade_this_code()
@@ -90,32 +89,32 @@ For this, we're going to total up the rushing yards and attempts for each game, 
 
 ```{r patchwork1, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
 totals <- games |> 
-  filter(Conference == "Big Ten Conference") |> 
-  group_by(Team) |> 
+  filter(conference == "Big Ten Conference") |> 
+  group_by(team) |> 
   summarize(
-    TotalRushes = sum(RushingAtt),
-    TotalRushYds = sum(RushingYds),
-    TotalPasses = sum(PassingAtt),
-    TotalPassYds = sum(PassingYds)
+    total_rushes = sum(rushing_att),
+    total_rush_yds = sum(rushing_yds),
+    total_passes = sum(passing_att),
+    total_pass_yds = sum(passing_yds)
   ) |>
   mutate(
-    RushingAvg = TotalRushYds/TotalRushes,
-    PassingAvg = TotalPassYds/TotalPasses
+    rushing_avg = total_rush_yds/total_rushes,
+    passing_avg = total_pass_yds/total_passes
   ) 
 ```
 ```{r patchwork1-solution, exercise.reveal_solution = FALSE}
 totals <- games |> 
-  filter(Conference == "Big Ten Conference") |> 
-  group_by(Team) |> 
+  filter(conference == "Big Ten Conference") |> 
+  group_by(team) |> 
   summarize(
-    TotalRushes = sum(RushingAtt),
-    TotalRushYds = sum(RushingYds),
-    TotalPasses = sum(PassingAtt),
-    TotalPassYds = sum(PassingYds)
+    total_rushes = sum(rushing_att),
+    total_rush_yds = sum(rushing_yds),
+    total_passes = sum(passing_att),
+    total_pass_yds = sum(passing_yds)
   ) |>
   mutate(
-    RushingAvg = TotalRushYds/TotalRushes,
-    PassingAvg = TotalPassYds/TotalPasses
+    rushing_avg = total_rush_yds/total_rushes,
+    passing_avg = total_pass_yds/total_passes
   ) 
 ```
 ```{r patchwork1-check}
@@ -128,20 +127,20 @@ Okay, now to do this I need to **save my plots to an object**. We do this the sa
 
 ```{r patchwork2, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
 ____ <- ggplot() + 
-  geom_bar(data=____, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) + 
+  geom_bar(data=____, aes(x=reorder(team, passing_avg), weight=passing_avg)) + 
   coord_flip()
 
 ____ <- ggplot() + 
-  geom_bar(data=____, aes(x=reorder(Team, RushingAvg), weight=RushingAvg)) + 
+  geom_bar(data=____, aes(x=reorder(team, rushing_avg), weight=rushing_avg)) + 
   coord_flip()
 ```
 ```{r patchwork2-solution, exercise.reveal_solution = FALSE}
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip()
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg)) +
   coord_flip()
 ```
 ```{r patchwork2-check}
@@ -184,7 +183,7 @@ Let's just start with labels and a pre-set theme on each plot.
 
 ```{r patchwork5, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip() + 
   labs(
     x="", 
@@ -193,7 +192,7 @@ bar1 <- ggplot() +
   theme_minimal() 
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), color="grey") +
   coord_flip() +  
   labs(
     x="", 
@@ -204,7 +203,7 @@ bar1 + bar2
 ```
 ```{r patchwork5-solution, exercise.reveal_solution = FALSE}
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip() + 
   labs(
     x="", 
@@ -213,7 +212,7 @@ bar1 <- ggplot() +
   theme_minimal() 
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), color="grey") +
   coord_flip() +  
   labs(
     x="", 
@@ -232,7 +231,7 @@ What's missing here? To publish this, we need a headline, chatter, source line a
 
 ```{r patchwork6, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip() + 
   labs(
     x="", 
@@ -241,7 +240,7 @@ bar1 <- ggplot() +
   theme_minimal()
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), color="grey") +
   coord_flip() +  
   labs(
     x="", 
@@ -257,7 +256,7 @@ bar1 + bar2 +
 ```
 ```{r patchwork6-solution, exercise.reveal_solution = FALSE}
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip() + 
   labs(
     x="", 
@@ -266,7 +265,7 @@ bar1 <- ggplot() +
   theme_minimal() 
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), color="grey") +
   coord_flip() +  
   labs(
     x="", 
@@ -288,7 +287,7 @@ Now, we need to add some theming to those plot text elements. To do that, we use
 
 ```{r patchwork7, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip() + 
   labs(
     x="", 
@@ -297,7 +296,7 @@ bar1 <- ggplot() +
   theme_minimal() 
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), color="grey") +
   coord_flip() +  
   labs(
     x="", 
@@ -319,7 +318,7 @@ bar1 + bar2 +
 ```
 ```{r patchwork7-solution, exercise.reveal_solution = FALSE}
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg)) +
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg)) +
   coord_flip() + 
   labs(
     x="", 
@@ -328,7 +327,7 @@ bar1 <- ggplot() +
   theme_minimal() 
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), color="grey") +
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), color="grey") +
   coord_flip() +  
   labs(
     x="", 
@@ -357,11 +356,11 @@ grade_this_code()
 The last thing we're missing is color. Our eyes aren't drawn to anything (except maybe the top and bottom). So we need to help that. **A bar chart without context or color to draw attention to something isn't much of a bar chart**. Same with a line chart -- if your line chart has one line, no context, no color, it's going to fare poorly. To get some color and context in this, we're going to focus on ... a local team ... and add another geom_bar to our two bar charts using that data. We can then assign that one bar a color.
 
 ```{r patchwork8, exercise=TRUE, exercise.setup = "patchwork-load-data", message=FALSE}
-nu <- totals |> filter(Team == "Nebraska")
+nu <- totals |> filter(team == "Nebraska")
 
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +
-  geom_bar(data=nu, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="red") + 
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(team, passing_avg), weight=passing_avg), fill="red") + 
   coord_flip() + 
   labs(
     x="", 
@@ -370,8 +369,8 @@ bar1 <- ggplot() +
   theme_minimal() 
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="grey") +
-  geom_bar(data=nu, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="red") + 
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(team, rushing_avg), weight=rushing_avg), fill="red") + 
   coord_flip() +  
   labs(
     x="", 
@@ -392,11 +391,11 @@ bar1 + bar2  +
   )
 ```
 ```{r patchwork8-solution, exercise.reveal_solution = FALSE}
-nu <- totals |> filter(Team == "Nebraska")
+nu <- totals |> filter(team == "Nebraska")
 
 bar1 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="grey") +
-  geom_bar(data=nu, aes(x=reorder(Team, PassingAvg), weight=PassingAvg), fill="red") + 
+  geom_bar(data=totals, aes(x=reorder(team, passing_avg), weight=passing_avg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(team, passing_avg), weight=passing_avg), fill="red") + 
   coord_flip() + 
   labs(
     x="", 
@@ -405,8 +404,8 @@ bar1 <- ggplot() +
   theme_minimal() 
 
 bar2 <- ggplot() + 
-  geom_bar(data=totals, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="grey") +
-  geom_bar(data=nu, aes(x=reorder(Team, RushingAvg), weight=RushingAvg), fill="red") + 
+  geom_bar(data=totals, aes(x=reorder(team, rushing_avg), weight=rushing_avg), fill="grey") +
+  geom_bar(data=nu, aes(x=reorder(team, rushing_avg), weight=rushing_avg), fill="red") + 
   coord_flip() +  
   labs(
     x="", 
