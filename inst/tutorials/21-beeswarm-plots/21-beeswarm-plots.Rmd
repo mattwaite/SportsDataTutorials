@@ -54,7 +54,7 @@ grade_this_code()
 And the data.
 
 ```{r beeswarm-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 
 set.seed(1234)
 
@@ -64,10 +64,10 @@ nu <- activeplayers |>
   filter(team == "Nebraska")
 ```
 ```{r beeswarm-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
 ```{r beeswarm-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2024.csv")
+players <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
 ```{r beeswarm-load-data-exercise-check}
 grade_this_code()
@@ -145,7 +145,7 @@ nu <- activeplayers |>
 grade_this_code()
 ```
 
-There's six Huskers who have played in more than 75 sets and who have more than 10 kills. 
+There's seven Huskers who have played in more than 75 sets and who have more than 10 kills. 
 
 But how good are they as killers compared to the rest of college volleyball?  
 
