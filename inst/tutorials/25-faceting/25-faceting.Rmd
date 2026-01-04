@@ -44,15 +44,15 @@ grade_this_code()
 We're going to use the logs of college football games last season. 
 
 ```{r facet-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
-big10 <- logs |> filter(Conference == "Big Ten Conference")
+big10 <- logs |> filter(conference == "Big Ten Conference")
 ```
 ```{r facet-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r facet-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r facet-load-data-exercise-check}
 grade_this_code()
@@ -61,10 +61,10 @@ grade_this_code()
 Let's narrow our pile and look just at the Big Ten.
 
 ```{r facet1, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
-big10 <- logs |> filter(Conference == "Big Ten Conference")
+big10 <- logs |> filter(conference == "Big Ten Conference")
 ```
 ```{r facet1-solution, exercise.reveal_solution = FALSE}
-big10 <- logs |> filter(Conference == "Big Ten Conference")
+big10 <- logs |> filter(conference == "Big Ten Conference")
 ```
 ```{r facet1-check}
 grade_this_code()
@@ -74,15 +74,15 @@ The first thing we can do is look at a line chart, like we have done in previous
 
 ### Exercise 1: Make a line chart
 
-We'll do something simple like a line chart of OffenseAvg -- the yards per play on offense -- and we're going to group on Team.
+We'll do something simple like a line chart of `avg` -- the yards per play on offense -- and we're going to group on `team`.
 
 ```{r facet2, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
 ggplot() + 
-  geom_____(data=____, aes(x=Date, y=____, group=____))
+  geom_____(data=____, aes(x=date, y=____, group=____))
 ```
 ```{r facet2-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team))
+  geom_line(data=big10, aes(x=date, y=avg, group=team))
 ```
 ```{r facet2-check}
 grade_this_code()
@@ -98,13 +98,13 @@ The only thing we MUST pass into a `facet_wrap` is what thing we're going to sep
 
 ```{r facet3, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
 ggplot() + 
-  geom_____(data=____, aes(x=Date, y=____, group=____)) + 
+  geom_____(data=____, aes(x=date, y=____, group=____)) + 
   facet_wrap(~____)
 ```
 ```{r facet3-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
-  facet_wrap(~Team)
+  geom_line(data=big10, aes(x=date, y=avg, group=team)) + 
+  facet_wrap(~team)
 ```
 ```{r facet3-check}
 grade_this_code()
@@ -117,10 +117,10 @@ Answer: Not immediately clear, but we can look at this and analyze it. We could 
 Let's add a line to every chart that's the conference average shooting percentage. 
 
 ```{r facet4, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
-big10 |> summarise(mean(OffenseAvg))
+big10 |> summarise(mean(avg))
 ```
 ```{r facet4-solution, exercise.reveal_solution = FALSE}
-big10 |> summarise(mean(OffenseAvg))
+big10 |> summarise(mean(avg))
 ```
 ```{r facet4-check}
 grade_this_code()
@@ -131,14 +131,14 @@ Copy that number, and we're going to add it into the facet chart with a `geom_hl
 ```{r facet5, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
 ggplot() + 
   geom_hline(yintercept=____, color="blue") + 
-  geom_____(data=____, aes(x=Date, y=____, group=____)) + 
+  geom_____(data=____, aes(x=date, y=____, group=____)) + 
   facet_wrap(~____)
 ```
 ```{r facet5-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=5.708621, color="blue") + 
-  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
-  facet_wrap(~Team)
+  geom_hline(yintercept=5.871749, color="blue") + 
+  geom_line(data=big10, aes(x=date, y=avg, group=team)) + 
+  facet_wrap(~team)
 ```
 ```{r facet5-check}
 grade_this_code()
@@ -155,14 +155,14 @@ Facet grids allow us to put teams on the same plane, versus just repeating them.
 ```{r facet6, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
 ggplot() + 
   geom_hline(yintercept=____, color="blue") + 
-  geom_____(data=____, aes(x=Date, y=____, group=____)) + 
-  facet_grid(Team ~ .)
+  geom_____(data=____, aes(x=date, y=____, group=____)) + 
+  facet_grid(team ~ .)
 ```
 ```{r facet6-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=5.708621, color="blue") + 
-  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
-  facet_grid(Team ~ .)
+  geom_hline(yintercept=5.871749, color="blue") + 
+  geom_line(data=big10, aes(x=date, y=avg, group=team)) + 
+  facet_grid(team ~ .)
 ```
 ```{r facet6-check}
 grade_this_code()
@@ -173,14 +173,14 @@ And here they are next to each other:
 ```{r facet7, exercise=TRUE, exercise.setup = "facet-load-data", message=FALSE}
 ggplot() + 
   geom_hline(yintercept=____, color="blue") + 
-  geom_____(data=____, aes(x=Date, y=____, group=____)) + 
-  facet_grid(. ~ Team)
+  geom_____(data=____, aes(x=date, y=____, group=____)) + 
+  facet_grid(. ~ team)
 ```
 ```{r facet7-solution, exercise.reveal_solution = FALSE}
 ggplot() + 
-  geom_hline(yintercept=5.708621, color="blue") + 
-  geom_line(data=big10, aes(x=Date, y=OffenseAvg, group=Team)) + 
-  facet_grid(. ~ Team)
+  geom_hline(yintercept=5.871749, color="blue") + 
+  geom_line(data=big10, aes(x=date, y=avg, group=team)) + 
+  facet_grid(. ~ team)
 ```
 ```{r facet7-check}
 grade_this_code()
