@@ -47,30 +47,30 @@ grade_this_code()
 Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE, results=FALSE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
 
 residualmodel <- correlations |> 
   mutate(
-    differential = TeamScore - OpponentScore,
-    NetYards = OffensiveYards - DefYards
+    differential = team_pts - opponent_pts,
+    net_yards = tot - opponent_tot
     )
 
-fit <- lm(differential ~ NetYards, data = residualmodel)
+fit <- lm(differential ~ net_yards, data = residualmodel)
 summary(fit)
 
 penalties <- correlations |> 
   mutate(
-    differential = TeamScore - OpponentScore, 
-    TotalPenalties = Penalties+DefPenalties,
-    TotalPenaltyYards = PenaltyYds+DefPenaltyYds
+    differential = team_pts - opponent_pts, 
+    total_penalties = penalties+opponent_penalties,
+    total_penalty_yards = penalty_yds+opponent_penalty_yds
   )
 
-pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
+pfit <- lm(differential ~ total_penalty_yards, data = penalties)
 summary(pfit)
 
 penresid <- penalties |> mutate(predicted = predict(pfit), residuals = residuals(pfit))
 
-pensort <- penresid |> arrange(desc(residuals)) |> select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals) |> slice(1)
+pensort <- penresid |> arrange(desc(residuals)) |> select(team, opponent, rslt, differential, total_penalty_yards, predicted, residuals) |> slice(1)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
 correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
@@ -96,14 +96,14 @@ grade_this_code()
 
 ### Exercise 1: Create the model.
 
-Just like the headline says, it's time to create a linear model like we did in the last lesson. We'll create a linear model object called fit, and we'll use our residualmodel dataframe. In the model, we'll say that differential is approximately modeled by NetYards.
+Just like the headline says, it's time to create a linear model like we did in the last lesson. We'll create a linear model object called fit, and we'll use our residualmodel dataframe. In the model, we'll say that differential is approximately modeled by net_yards.
 
 ```{r regression1, exercise=TRUE, exercise.setup = "correlations-load-data"}
 ____ <- lm(differential ~ ____, data = ____)
 summary(____)
 ```
 ```{r regression1-solution, exercise.reveal_solution = FALSE}
-fit <- lm(differential ~ NetYards, data = residualmodel)
+fit <- lm(differential ~ net_yards, data = residualmodel)
 summary(fit)
 ```
 ```{r regression1-check}
@@ -127,14 +127,14 @@ residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = r
 
 residualmodel |> 
   arrange(desc(residuals)) |> 
-  select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
+  select(team, opponent, rslt, differential, net_yards, predicted, residuals)
 ```
 ```{r regression2-solution, exercise.reveal_solution = FALSE}
 residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
 
 residualmodel |> 
   arrange(desc(residuals)) |> 
-  select(Team, Opponent, Result, differential, NetYards, predicted, residuals)
+  select(team, opponent, rslt, differential, net_yards, predicted, residuals)
 ```
 ```{r regression2-check}
 grade_this_code()
@@ -147,7 +147,7 @@ But, before we can bestow any validity on this model, we need to see if this lin
 ```{r correlationchart, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
 residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
 
-ggplot(residualmodel, aes(x=NetYards, y=residuals)) + geom_point()
+ggplot(residualmodel, aes(x=net_yards, y=residuals)) + geom_point()
 ```
 
 The lack of a shape here -- the seemingly random nature -- is a good sign that a linear model works for our data. If there was a pattern, that would indicate something else was going on in our data and we needed a different model.
@@ -157,7 +157,7 @@ Another way to view your residuals is by connecting the predicted value with the
 ```{r correlationchart2, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
 residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
 
-ggplot(data=residualmodel, aes(x=NetYards, y=differential)) + geom_point() + geom_segment(aes(xend = NetYards, yend = predicted)) + geom_smooth(method=lm, se=FALSE)
+ggplot(data=residualmodel, aes(x=net_yards, y=differential)) + geom_point() + geom_segment(aes(xend = net_yards, yend = predicted)) + geom_smooth(method=lm, se=FALSE)
 ```
 
 The blue line here separates underperformers from overperformers.
@@ -180,14 +180,14 @@ grade_this_code()
 
 ### Exercise 2: Create another model.
 
-For this we'll make an object called pfit -- for penalty fit -- similar to what we did before. This time, we'll say differential is approximately modeled by TotalPenaltyYards. 
+For this we'll make an object called pfit -- for penalty fit -- similar to what we did before. This time, we'll say differential is approximately modeled by total_penalty_yards. 
 
 ```{r regression3, exercise=TRUE, exercise.setup = "correlations-load-data"}
 pfit <- lm(____ ~ ____, data = penalties)
 summary(____)
 ```
 ```{r regression3-solution, exercise.reveal_solution = FALSE}
-pfit <- lm(differential ~ TotalPenaltyYards, data = penalties)
+pfit <- lm(differential ~ total_penalty_yards, data = penalties)
 summary(pfit)
 ```
 ```{r regression3-check}
@@ -211,25 +211,25 @@ Just like a previous exercise, we'll add predicted and residuals to our datafram
 ```{r regression4, exercise=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties |> mutate(predicted = predict(____), residuals = ____(pfit))
 
-____ |> arrange(desc(____)) |> select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals)
+____ |> arrange(desc(____)) |> select(team, opponent, rslt, differential, total_penalty_yards, predicted, residuals)
 ```
 ```{r regression4-solution, exercise.reveal_solution = FALSE}
 penalties <- penalties |> mutate(predicted = predict(pfit), residuals = residuals(pfit))
 
-penalties |> arrange(desc(residuals)) |> select(Team, Opponent, Result, differential, TotalPenaltyYards, predicted, residuals)
+penalties |> arrange(desc(residuals)) |> select(team, opponent, rslt, differential, total_penalty_yards, predicted, residuals)
 ```
 ```{r regression4-check}
 grade_this_code()
 ```
 
 ```{r residuals3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("First, note all of the biggest misses here are all blowout games. The worst games of the season, the worst being {pensort$Team} vs {pensort$Opponent}. The model missed that differential by ... {format(pensort$residuals, digits=1)} points. The margin of victory? {format(pensort$differential, digits=1)} points. In other words, this model is terrible. But let's look at it anyway.")
+glue("First, note all of the biggest misses here are all blowout games. The worst games of the season, the worst being {pensort$team} vs {pensort$opponent}. The model missed that differential by ... {format(pensort$residuals, digits=1)} points. The margin of victory? {format(pensort$differential, digits=1)} points. In other words, this model is terrible. But let's look at it anyway.")
 ```
 
 ```{r correlationchart3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties |> mutate(predicted = predict(pfit), residuals = residuals(pfit))
 
-ggplot(penalties, aes(x=TotalPenaltyYards, y=residuals)) + geom_point()
+ggplot(penalties, aes(x=total_penalty_yards, y=residuals)) + geom_point()
 ```
 
 Well ... it actually says that a linear model is appropriate. Which an important lesson -- just because your residual plot says a linear model works here, that doesn't say your linear model is good. There are other measures for that, and you need to use them. 
@@ -239,7 +239,7 @@ Here's the segment plot of residuals -- you'll see some really long lines. That'
 ```{r correlationchart4, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
 penalties <- penalties |> mutate(predicted = predict(fit), residuals = residuals(fit))
 
-ggplot(data=penalties, aes(x=TotalPenaltyYards, y=differential)) + geom_point() + geom_segment(aes(xend = TotalPenaltyYards, yend = predicted)) + geom_smooth(method=lm, se=FALSE)
+ggplot(data=penalties, aes(x=total_penalty_yards, y=differential)) + geom_point() + geom_segment(aes(xend = total_penalty_yards, yend = predicted)) + geom_smooth(method=lm, se=FALSE)
 ```
 
 ## The Recap
