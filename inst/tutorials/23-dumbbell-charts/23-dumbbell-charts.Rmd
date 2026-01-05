@@ -278,30 +278,30 @@ To do that, we need to tell ggplot that we want to make Takeaways green and Give
 ```{r dumbbell5, exercise=TRUE, exercise.setup = "dumbbell-load-data", message=FALSE}
 ggplot() + 
   geom_segment(
-    data=____, 
+    data=turnovers, 
     aes(
-      y=____, yend=____,
-      x=____, xend=____),
+      y=team, yend=team,
+      x=takeaways, xend=giveaways),
     color="grey",
-    linewidth = ____
-  ) + 
+    linewidth = 1.5
+  )  + 
   geom_point(
-    data=____,
+    data=turnovers,
     aes(
-      y=____,
-      x=____,
+      y=team,
+      x=takeaways,
       color="Takeaways"
     ),
-    size=____
+    size=2
   ) + 
   geom_point(
-    data=____,
+    data=turnovers,
     aes(
-      y=____,
-      x=____,
-    color="Giveaways"
+      y=team,
+      x=giveaways,
+      color="Giveaways"
     ),
-    size=____
+    size=2
   ) + 
   scale_color_manual(name="Turnovers", values=c("____", "____"))
 ```

@@ -128,10 +128,10 @@ grade_this_code()
 
 ### Exercise 4: Using color ... badly.
 
-Let's try a different element of the aesthetic: color, but this time *inside the aesthetic*. Last time, we did the color outside. When you put it inside, you pass it a column name and ggplot will color each line based on what thing that is, and it will create a legend that labels each line that thing. 
+Let's try a different element of the aesthetic: color, but this time *inside the aesthetic*. Last time, we did the color outside. When you put it inside, you pass it a column name -- like team -- and ggplot will color each line based on what thing that is, and it will create a legend that labels each line that thing. 
 
 ```{r step4, exercise=TRUE, exercise.setup = "step-load-data", message=FALSE}
-ggplot() + ____(data=____, aes(x=game_date, y=____, group=team, color=team))
+ggplot() + ____(data=____, aes(x=game_date, y=____, group=team, color=____))
 ```
 ```{r step4-solution, exercise.reveal_solution = FALSE}
 ggplot() + geom_step(data=bigdiff, aes(x=game_date, y=cum_diff, group=team, color=team))
