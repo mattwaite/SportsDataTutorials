@@ -30,7 +30,7 @@ The point of a bump chart is to show how the ranking of something changed over t
 
 The requirements are that you have a row of data for a team, in that week, with their rank.
 
-This is another extension to ggplot. You installed it at the beginning of the semester, but if you need it, you'll install it the usual way: `install.packages("ggbump")`
+This is another extension to ggplot. You installed it at the beginning of the semester, but if you need it, you'll install it with: `devtools::install_github("mattwaite/ggbump")`
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
