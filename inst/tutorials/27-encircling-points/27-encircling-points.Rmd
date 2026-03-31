@@ -33,7 +33,7 @@ Remember: The point of all of this is to draw the eye to what you are trying to 
 
 It's not hard to draw a shape in ggplot -- it is a challenge to put it in the right place. But, there is a library to the rescue that makes this super easy -- `ggalt`. 
 
-Like usual, you already installed this if you followed the install instructions at the beginning of the course. But if you're having trouble getting this to work, go to your console in R Studio and install it with `install.packages("ggalt")`
+Like usual, you already installed this if you followed the install instructions at the beginning of the course. But if you're having trouble getting this to work, go to your console in R Studio and install it with `devtools::install_github("mattwaite/ggalt")`
 
 There's a bunch of things that `ggalt` does, but one of the most useful for us is the function `encircle`. Let's dive in.
 

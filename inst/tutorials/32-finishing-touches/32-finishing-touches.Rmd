@@ -17,7 +17,6 @@ library(gradethis)
 library(tidyverse)
 library(ggrepel)
 library(ggtext)
-library(waffle)
 knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
