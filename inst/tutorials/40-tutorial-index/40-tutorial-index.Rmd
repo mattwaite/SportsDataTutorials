@@ -1,0 +1,574 @@
+---
+title: "Sports Data Lesson 40: Tutorial Index"
+output:
+  learnr::tutorial:
+    progressive: false
+    allow_skip: true
+    theme: united
+    ace_theme: github
+runtime: shiny_prerendered
+description: >
+  An index of all tutorials, listing the functions and concepts introduced in each one. Use this to find which tutorial taught you a specific skill.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+## How to Use This Index
+
+This tutorial is a reference index. Use it when you need to look something up but can't remember which tutorial covered it.
+
+Each section below corresponds to one tutorial. Under each tutorial heading you'll find the key **functions**, **concepts**, and **terms** introduced in that lesson. If you need a refresher on how something works, go back to that tutorial.
+
+The tutorials are grouped into four parts:
+
+- **Lessons 1–12**: R fundamentals and statistics
+- **Lessons 13–27**: Data visualization with ggplot2
+- **Lessons 28–37**: Advanced topics (publishing, scraping, modeling)
+- **Lessons 38–39**: Reference guides
+
+---
+
+## Part 1: R Fundamentals and Statistics
+
+### Lesson 1: The Basics
+
+*R as a calculator, variables, and data types.*
+
+- **Arithmetic operators**: `+`, `-`, `*`, `/`, `^`, `sqrt()`
+- **PEMDAS**: the order of operations in R
+- **Variables**: named storage for values, assigned with `<-`
+- **Assignment operator** (`<-`): assigns a value to a variable name
+- **Data types**: numeric (numbers without quotes) vs. character/string (text in quotes)
+- **R Notebooks**: files that combine prose and code chunks
+
+---
+
+### Lesson 2: Data Basics
+
+*Importing data and understanding its structure.*
+
+- **`read_csv()`**: imports a CSV file into R as a data frame
+- **`head()`**: shows the first six rows of a data frame
+- **`glimpse()`**: shows a compact summary of a data frame's structure, column names, and data types
+- **Data frame**: R's primary structure for storing tabular data (rows and columns)
+- **Rows**: individual observations (a player, a game, a team)
+- **Columns**: variables or attributes of each observation
+- **Header row**: the first row of a CSV, containing column names
+- **Data types in R**: numeric, character, date, logical
+- **`library(tidyverse)`**: loads the tidyverse suite of packages
+
+---
+
+### Lesson 3: Aggregates, Part 1
+
+*Grouping and counting data.*
+
+- **`group_by()`**: groups data by one or more variables for subsequent operations
+- **`summarise()`** (or `summarize()`): computes summary statistics for each group
+- **`n()`**: counts the number of rows in a group, used inside `summarise()`
+- **`arrange()`**: sorts rows by column values (ascending by default)
+- **`desc()`**: used inside `arrange()` to sort in descending order
+- **Pipe operator** (`|>`): chains operations together, reading left to right
+- **Aggregation**: combining many rows into a single summary statistic
+
+---
+
+### Lesson 4: Aggregates, Part 2
+
+*More summary statistics.*
+
+- **`mean()`**: calculates the arithmetic average of a column
+- **`median()`**: finds the middle value in a sorted set of numbers
+- **`sum()`**: adds up all values in a column
+- **`arrange()`** and **`desc()`**: sorting aggregated results
+
+---
+
+### Lesson 5: Mutating Data
+
+*Creating new columns from existing ones.*
+
+- **`mutate()`**: creates new columns (or modifies existing ones) based on calculations from other columns
+- **Percentage calculation**: `(part / total) * 100`
+- **Per-game statistics**: dividing a cumulative stat by games played to allow fair comparisons
+- **Ratio calculation**: dividing one stat by another (e.g., touchdown-to-interception ratio)
+
+---
+
+### Lesson 6: Filters
+
+*Subsetting rows and selecting columns.*
+
+- **`filter()`**: keeps only rows that meet a specified condition
+- **`select()`**: keeps only specified columns
+- **Conditional operators**: `==` (equals), `!=` (not equal), `>`, `<`, `>=`, `<=`
+- **Boolean operators**: `&` (AND), `|` (OR) for combining conditions
+- **`%in%`**: checks whether values appear in a list
+- **`c()`**: combines values into a vector
+- **`top_n()`**: selects the top n rows based on a column
+
+---
+
+### Lesson 7: Transforming Data
+
+*Reshaping data between wide and long formats.*
+
+- **`pivot_wider()`**: transforms data from long format to wide format (more columns, fewer rows)
+- **`pivot_longer()`**: transforms data from wide format to long format (fewer columns, more rows)
+- **Long format**: each row is one observation; identifier columns repeat
+- **Wide format**: each row is one entity with multiple measurements spread across columns
+- **When to use each**: ggplot2 typically requires long format; some analyses require wide format
+
+---
+
+### Lesson 8: Significance Tests
+
+*Testing whether differences between groups are real or due to chance.*
+
+- **`t.test()`**: compares the means of two groups to determine if they differ significantly
+- **Hypothesis testing**: a formal framework for making statistical decisions
+- **Null hypothesis**: the assumption that there is no meaningful difference between groups
+- **p-value**: the probability of observing results this extreme if the null hypothesis were true; p < 0.05 is typically considered significant
+- **Statistical significance**: the likelihood that a relationship is not due to random chance
+- **t-test**: a statistical test comparing two group means
+
+---
+
+### Lesson 9: Correlations and Regressions
+
+*Measuring and modeling relationships between variables.*
+
+- **`cor()`**: calculates the Pearson correlation coefficient between two variables
+- **`lm()`**: fits a linear regression model
+- **`summary()`**: displays model results including coefficients, p-values, and R-squared
+- **Correlation**: the strength and direction of a linear relationship between two variables
+- **Pearson correlation coefficient**: a value from -1 to 1 measuring linear relationship strength
+- **Linear regression**: models the relationship between a dependent and one or more independent variables
+- **R-squared**: the proportion of variance in the dependent variable explained by the model
+- **Coefficient**: the rate of change in the dependent variable per unit of the independent variable
+- **p-value**: the probability the observed relationship occurred by chance
+- **Independent variable**: the predictor variable in a regression
+- **Dependent variable**: the outcome variable being predicted
+
+---
+
+### Lesson 10: Residuals
+
+*Using leftover prediction error to find over- and underperformers.*
+
+- **`predict()`**: generates predicted values from a fitted regression model
+- **`residuals()`**: extracts the difference between observed and predicted values from a model
+- **Residuals**: the gap between what the model predicted and what actually happened
+- **Overperforming**: a positive residual — doing better than the model predicted
+- **Underperforming**: a negative residual — doing worse than the model predicted
+- **Model fit**: how well the regression line describes the actual data
+- **Outliers**: data points with unusually large residuals
+
+---
+
+### Lesson 11: Z-Scores
+
+*Standardizing data to make fair comparisons.*
+
+- **`scale()`**: computes z-scores by centering and scaling numeric columns
+- **Z-score**: how many standard deviations a value is from the mean
+- **Standard deviation**: the average amount of spread around the mean
+- **Normal distribution**: a symmetric bell-shaped distribution centered at the mean
+- **Composite z-score**: a combined score created by summing multiple individual z-scores
+- **Use case**: comparing players or teams across different eras, conferences, or contexts
+
+---
+
+### Lesson 12: Using Sports Data Packages
+
+*Pulling live sports data directly into R.*
+
+- **`wehoop`**: an R package for accessing women's basketball (WNBA and NCAA) data
+- **SportsDataverse**: a collection of R packages for accessing sports data across many leagues
+- **`tally()`**: a shortcut for counting observations within groups (like `n()` inside `summarise()`)
+- **API (Application Programming Interface)**: the mechanism sports data packages use to retrieve live data from remote servers
+- **Package documentation**: where to find function names, parameters, and examples for a package
+
+---
+
+## Part 2: Data Visualization with ggplot2
+
+### Lesson 13: Bar Charts
+
+*The most common chart type for comparing values.*
+
+- **`ggplot()`**: initializes a ggplot2 chart
+- **`aes()`**: maps data columns to visual properties (x, y, color, fill, size, etc.)
+- **`geom_bar()`**: creates a bar chart; use `weight` aesthetic for pre-counted values
+- **`reorder()`**: changes the order of categories (bars) based on a numeric value
+- **`coord_flip()`**: rotates the chart so bars run horizontally
+- **`labs()`**: adds title, subtitle, axis labels, and caption
+- **`fill`**: controls the interior color of bars
+- **Layering**: adding multiple geoms on top of each other to build a more complex chart
+
+---
+
+### Lesson 14: Stacked Bar Charts
+
+*Showing both totals and their component parts.*
+
+- **Stacked bar chart**: bars divided into colored segments, each representing a subcategory
+- **`pivot_longer()`**: reshapes wide data to long format, which ggplot2 needs for stacked bars
+- **`fill` aesthetic**: assigns different colors to subcategories within the bars
+- **`reorder()`**: sorts bars by their total value for clearer storytelling
+
+---
+
+### Lesson 15: Waffle Charts
+
+*An alternative to pie charts for showing proportions.*
+
+- **Waffle chart**: a grid of colored squares where each square represents a unit of data
+- **`uncount()`**: expands a summarized data frame by repeating rows based on a count column
+- **`geom_tile()`**: draws rectangular tiles; used to create the squares of a waffle chart
+- **Integer division** (`%/%`): divides and returns only the whole number (used to assign rows)
+- **Modulo** (`%%`): returns the remainder after division (used to assign columns)
+- **`coord_equal()`**: forces x and y axes to the same scale so tiles are square
+- **`theme_void()`**: removes all axes, labels, and grid lines — ideal for waffle charts
+- **`facet_wrap()`**: creates small multiples, one chart per category (e.g., one per team)
+
+---
+
+### Lesson 16: Line Charts
+
+*Showing trends over time.*
+
+- **`geom_line()`**: connects data points with lines; primary geom for line charts
+- **Time series**: data indexed in order over time
+- **`scale_y_continuous()`** / **`scale_x_continuous()`**: customize axis limits, breaks, and labels
+- **Layering**: adding multiple `geom_line()` calls to plot several teams or groups at once
+- **Context line**: a reference line (e.g., average) added to give meaning to the other lines
+
+---
+
+### Lesson 17: Step Charts
+
+*Showing cumulative change over time.*
+
+- **`geom_step()`**: creates a step-function line (discrete horizontal and vertical jumps)
+- **`cumsum()`**: calculates a running total (cumulative sum) of a column
+- **`annotate()`**: adds text, shapes, or other elements at specific coordinates on a chart
+- **`labs()`**: adds title, subtitle, axis labels, caption
+- **`theme_minimal()`**: a clean ggplot2 theme that removes the grey background
+- **Point differential**: points scored minus points allowed; used as a team performance metric
+- **Cumulative data**: a running total where each point includes all previous values
+
+---
+
+### Lesson 18: Slope Charts
+
+*Comparing two time points for multiple entities.*
+
+- **Slope chart**: shows change between exactly two time points using connecting lines
+- **`geom_line()`**: draws the connecting lines between time points
+- **`geom_point()`**: places dots at each end of the slope lines
+- **`geom_text()`**: adds text labels directly to the chart at specified coordinates
+- **`scale_x_continuous()`**: customizes x-axis breaks to show only the two time points
+
+---
+
+### Lesson 19: Scatterplots
+
+*Visualizing the relationship between two numeric variables.*
+
+- **`geom_point()`**: plots individual data points as dots
+- **`geom_smooth()`**: adds a trend or regression line through the points
+- **`lm()`**: fits a linear model, used with `geom_smooth(method="lm")` for a straight regression line
+- **Scatterplot**: each dot represents one observation plotted at its (x, y) coordinates
+- **Correlation**: the relationship between two variables visible as the pattern of dots
+- **R-squared**: how well the regression line fits the scatter of points
+
+---
+
+### Lesson 20: Bubble Charts
+
+*Adding a third variable to a scatterplot through point size.*
+
+- **Bubble chart**: a scatterplot where point size encodes a third variable
+- **`alpha`**: controls point transparency (0 = invisible, 1 = opaque); reduces overplotting
+- **`scale_size()`**: adjusts the range of bubble sizes
+- **`geom_vline()`**: adds a vertical reference line
+- **`geom_hline()`**: adds a horizontal reference line
+- **`ggrepel`** package: automatically moves text labels to avoid overlapping other labels or points
+- **`geom_text_repel()`**: adds non-overlapping labels to points
+
+---
+
+### Lesson 21: Beeswarm Plots
+
+*Showing individual data points spread across categories.*
+
+- **`ggbeeswarm`** package: extends ggplot2 with beeswarm-style plots
+- **`geom_beeswarm()`**: plots all individual data points, spreading them horizontally so none overlap
+- **`set.seed()`**: sets the random number seed for reproducibility when randomness is involved
+- **Jittering**: adding small random offsets to points to reduce overplotting
+- **`geom_quasirandom()`**: a beeswarm variant with quasirandom point placement
+- **`geom_jitter()`**: spreads points randomly within each category
+
+---
+
+### Lesson 22: Bump Charts
+
+*Showing how rankings change over time.*
+
+- **`ggbump`** package: extends ggplot2 for ranking-over-time visualizations
+- **`geom_bump()`**: draws smooth curved lines tracking rank changes
+- **`scale_y_reverse()`**: flips the y-axis so rank 1 appears at the top
+- **`scale_color_manual()`**: manually assigns specific colors to categories
+- **`hjust`**: horizontal justification for text labels (0 = left-aligned, 1 = right-aligned)
+- **`legend.position`**: controls where the legend appears, or hides it entirely
+- **Bump chart**: visualizes changes in rankings across multiple time periods
+
+---
+
+### Lesson 23: Dumbbell Charts
+
+*Comparing two values for each item in a list.*
+
+- **Dumbbell chart**: shows two related values per category with a line connecting them
+- **`geom_segment()`**: draws a line segment between two (x, y) coordinate pairs
+- **`geom_point()`**: places dots at each end of the segment
+- **`scale_color_manual()`**: manually assigns colors to the two endpoints
+- **`reorder()`**: sorts the chart items by a meaningful value for clearer storytelling
+
+---
+
+### Lesson 24: Tables
+
+*Presenting data in formatted, readable tables.*
+
+- **`gt`** package: creates publication-quality tables in R
+- **`gt()`**: initializes a gt table from a data frame
+- **`tab_header()`**: adds a title and subtitle to the table
+- **`cols_label()`**: renames column headers for display
+- **`tab_style()`**: applies custom formatting (bold, color, etc.) to specific cells or columns
+- **`tab_source_note()`**: adds a source note or footnote at the bottom of the table
+
+---
+
+### Lesson 25: Faceting
+
+*Creating small multiples — many charts at once, one per category.*
+
+- **`facet_wrap()`**: wraps a series of small charts into a grid layout, one per category
+- **`facet_grid()`**: creates a grid of charts with explicit row and column variables
+- **Small multiples**: a series of charts using the same scale and axes for easy comparison
+- **Tilde (`~`)**: used in facet formulas to specify which variable defines the panels
+- **Faceting**: splitting one chart into many smaller versions, one per group
+
+---
+
+### Lesson 26: Arranging Plots
+
+*Combining multiple charts into one graphic.*
+
+- **`patchwork`** package: combines multiple ggplot2 charts into a single image
+- **`+` operator** (patchwork): places two charts side by side
+- **`/` operator** (patchwork): stacks two charts vertically
+- **`&` operator** (patchwork): applies a theme or other element to all charts in the arrangement
+- **`plot_annotation()`**: adds an overall title, subtitle, and caption to the combined graphic
+
+---
+
+### Lesson 27: Encircling Points
+
+*Drawing attention to specific data points with shapes and annotations.*
+
+- **`ggalt`** package: extends ggplot2 with additional geoms including `geom_encircle()`
+- **`geom_encircle()`**: draws a circle or curved shape around a specified set of data points
+- **`s_shape`**: a parameter in `geom_encircle()` controlling the smoothness of the encircling shape (0–1)
+- **`expand`**: a parameter in `geom_encircle()` controlling how far the shape extends beyond the points
+- **`annotate()`**: adds text, rectangles, or other shapes at specific coordinates
+- **`geom_rect()`**: draws a rectangle, often used to highlight a region of the chart
+
+---
+
+## Part 3: Advanced Topics
+
+### Lesson 28: Blogging with Quarto and GitHub Pages
+
+*Publishing your analysis as a blog post.*
+
+- **Quarto**: an open-source publishing system that renders `.qmd` files into HTML, PDF, and more
+- **YAML**: the configuration block at the top of a Quarto file (between `---` markers) that sets metadata and options
+- **`code-fold`**: a YAML option that makes code chunks collapsible in the rendered output
+- **GitHub**: a web platform for storing and versioning code
+- **Repository**: a project folder tracked by Git
+- **GitHub Pages**: free static website hosting from a GitHub repository
+- **Clone**: downloading a copy of a GitHub repository to your local computer
+- **Commit**: saving a snapshot of changes to Git history
+- **Markdown**: plain-text syntax for formatting (headers, bold, links, etc.) used in Quarto documents
+
+---
+
+### Lesson 29: Text Cleaning
+
+*Fixing messy string data before analysis.*
+
+- **`gsub()`**: finds and replaces patterns in character strings
+- **`separate()`**: splits one column into multiple columns at a delimiter
+- **`as.numeric()`**: converts a character column to a numeric type
+- **Regular expression (regex)**: a pattern-matching syntax for finding and replacing text
+- **Escape character** (`\`): tells R to treat the next character literally (e.g., `\\.` matches an actual period)
+- **`fixed = TRUE`**: tells `gsub()` to treat the pattern as a literal string, not a regex
+
+---
+
+### Lesson 30: Annotations and Headlines
+
+*Making charts communicate clearly through text.*
+
+- **Headline**: the main title of a chart — should tell a story, not just label the data
+- **Chatter**: the subtitle providing context or explanation for the chart
+- **`labs()`**: adds/edits title, subtitle, axis labels, and caption in ggplot2
+- **`geom_text()`**: places text labels on the chart at specified data coordinates
+- **`geom_text_repel()`**: from `ggrepel`; places text labels while automatically avoiding overlaps
+- **Caption**: bottom-of-chart text with source and credit information
+- **Annotation**: any text or shape added to the chart body to highlight something specific
+
+---
+
+### Lesson 31: Color
+
+*Using color purposefully to guide attention.*
+
+- **`fill`**: controls the interior color of shapes like bars; set inside `aes()` to map data, or outside to set a fixed color
+- **`color`**: controls the outline or line color of shapes
+- **Hex code**: a six-character code (e.g., `#E41C38`) specifying an exact color
+- **Color contrast**: using different colors to make certain elements stand out
+- **Color palette**: the set of colors used together in a visualization
+- **Rule of color**: use color sparingly; one or two colors to highlight, grey for everything else
+
+---
+
+### Lesson 32: Finishing Touches
+
+*Polishing charts to publication quality.*
+
+- **`theme_minimal()`**: removes the grey background and many default chart elements
+- **`theme()`**: the master customization function for all chart non-data elements
+- **`element_text()`**: used inside `theme()` to set font size, color, and face for text elements
+- **`plot.title.position = "plot"`**: aligns the title with the left edge of the entire plot area
+- **`panel.grid.minor`**: controls minor gridlines (usually set to `element_blank()` to remove)
+- **`labs()`**: adds or edits all text labels on the chart
+- **`code-fold`**: a Quarto YAML option that makes code blocks collapsible in the blog
+- **Visual hierarchy**: using size and weight to signal importance (headline > chatter > axis labels)
+
+---
+
+### Lesson 33: Web Scraping with rvest
+
+*Pulling data directly from websites.*
+
+- **`rvest`** package: tools for reading and parsing HTML pages
+- **`read_html()`**: downloads and parses an HTML page from a URL
+- **`html_nodes()`**: selects HTML elements matching a CSS selector or XPath expression
+- **`html_table()`**: converts an HTML `<table>` element into an R data frame
+- **`header = FALSE`**: argument for `html_table()` when the first row is not a proper header
+- **XPath**: a query language for selecting elements within an HTML or XML document
+- **Web scraping**: automated extraction of data from web pages
+- **`bind_rows()`**: stacks multiple data frames on top of each other (combining by row)
+- **`mutate_at()`**: applies a transformation to multiple specified columns at once
+- **`rename()`**: changes one or more column names
+
+---
+
+### Lesson 34: Multiple Regression
+
+*Using more than one predictor variable to model an outcome.*
+
+- **Multiple regression**: regression with two or more independent (predictor) variables
+- **`lm(y ~ x1 + x2 + x3, data = ...)`**: the formula syntax for multiple regression in R
+- **Predictor variable**: an independent variable used to explain or predict the dependent variable
+- **Multicollinearity**: when two or more predictor variables are highly correlated with each other, making coefficients unreliable
+- **Adjusted R-squared**: R-squared adjusted for the number of predictors; penalizes adding unhelpful variables
+- **Residual Standard Error**: the average size of the model's prediction errors
+- **Correlation matrix**: a table of pairwise correlations between all variables, used to spot multicollinearity
+- **Model prediction**: using `predict()` to estimate the outcome for new values of the predictors
+
+---
+
+### Lesson 35: Clustering
+
+*Grouping players or teams by statistical similarity.*
+
+- **`kmeans()`**: runs k-means clustering to assign each row to one of k groups
+- **K-means clustering**: an algorithm that repeatedly assigns data points to their nearest cluster center and moves centers until stable
+- **Euclidean distance**: the straight-line distance between two data points in multi-dimensional space
+- **Cluster**: a group of data points that are more similar to each other than to any other group
+- **Centroid**: the mean of all points in a cluster; represents the cluster's "center"
+- **Elbow method**: plotting within-cluster variation across different values of k to find the best k (where the curve bends)
+- **Scaling**: standardizing columns to the same range (usually mean 0, SD 1) before clustering, so no single variable dominates
+
+---
+
+### Lesson 36: Simulations
+
+*Using random sampling to evaluate unusual streaks and performances.*
+
+- **`rbinom(n, size, prob)`**: generates n random values from a binomial distribution
+- **Simulation**: running many random trials to estimate the probability of an outcome
+- **Binomial distribution**: the probability distribution for number of successes in a fixed number of independent yes/no trials
+- **Normal distribution**: a symmetric bell-shaped distribution; many simulation results approach this shape
+- **`set.seed()`**: sets the random number generator state so results are reproducible
+- **Probability**: the likelihood of an event, expressed as a number from 0 to 1
+- **Random variability**: natural fluctuation in outcomes that occurs even when nothing has changed
+- **Standard deviation**: spread of simulated values; large SD means high variability
+
+---
+
+### Lesson 37: Joins
+
+*Combining two data frames into one.*
+
+- **`inner_join()`**: keeps only rows that match in **both** data frames
+- **`left_join()`**: keeps all rows from the left data frame; fills unmatched rows from the right with NA
+- **`right_join()`**: keeps all rows from the right data frame; fills unmatched rows from the left with NA
+- **`full_join()`**: keeps all rows from both data frames; fills NAs wherever there is no match
+- **Key**: the column(s) used to match rows between two data frames
+- **`by = c("col_a" = "col_b")`**: specifies joining keys when the column names differ between tables
+- **`rename()`**: renames columns after a join to distinguish home vs. away, or left vs. right
+
+---
+
+## Part 4: Reference Guides
+
+### Lesson 38: Getting CSVs from Sports Reference
+
+*Exporting any Sports Reference table as a CSV file.*
+
+- **Sports Reference**: the family of websites (Basketball-Reference, Baseball-Reference, Pro-Football-Reference, etc.) with extensive historical sports stats
+- **Share & Export menu**: the Sports Reference button that reveals the CSV export option for any table
+- **Two header rows**: a common Sports Reference issue — you must reduce to one header row before importing
+- **Duplicate column names**: must be renamed manually before import to avoid ambiguity
+- **Repeated header rows in data**: rows that repeat the header in the middle of the table; must be deleted
+- **Plain text file**: the correct staging area for CSV data (not Word or Google Docs)
+- **`read_csv()`**: imports the finished CSV into R
+
+---
+
+### Lesson 39: Project Checklist
+
+*Standards for the SPMC 350 blog post project.*
+
+- **Topic**: must be original and interesting; no "is X the GOAT?" questions
+- **Writing**: spell-checked, read aloud, complete sentences with active verbs
+- **Headline**: tells a story; does not just label the chart
+- **Chatter**: provides context below the headline
+- **Required chart parts**: headline, chatter, credit line, source line
+- **Annotations**: labels on key data points; reference lines for averages
+- **Color**: used sparingly to highlight, not decorate
+- **Visual hierarchy**: headline > chatter > data labels > axis labels
+- **`plot.title.position = "plot"`**: aligns headline flush left
+- **`message=FALSE, warning=FALSE`**: suppresses R startup messages in blog output
+- **Submission**: turn in the `username.github.io/posts/...` URL, not the GitHub.com URL

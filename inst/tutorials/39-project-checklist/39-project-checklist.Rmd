@@ -1,0 +1,98 @@
+---
+title: "Sports Data Lesson 39: Project Checklist"
+output:
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    theme: united
+    ace_theme: github
+runtime: shiny_prerendered
+description: >
+  A checklist for your blog post projects in SPMC 350.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+## The Goal
+
+The goal of this lesson is to give you a reference checklist for your blog post projects. The main projects in SPMC 350 Sports Data Analysis and Visualization involve writing a blog post, published on GitHub Pages, about a sports topic that uses code, data, and three graphics to tell a story. The assignment is worth 20 percent of the semester grade.
+
+An example of a B+/A- post: [Is Nebraska the best worst team in college basketball?](http://mattwaite.github.io/posts/is-nebraska-the-best-worst-basketball-team/)
+
+Use this checklist before you submit. Go through every item. If you can't check something off, fix it first.
+
+## Topic Checklist
+
+Before you spend hours on analysis, make sure your topic is worth pursuing.
+
+1. Is your topic **original**? Is it **interesting**?
+2. Does your topic ask if Tom Brady, Michael Jordan, LeBron James, the 95 Huskers, Alabama football, or Georgia's 2021 defense is the GOAT? Then your topic is **not** original nor interesting.
+3. Seriously. Anything that asks if Alabama is good, or the Golden State Warriors, or Nicola Jokic, or any team that's won more than one championship in a relatively short period of time — if you're asking if they're good, stop. Find something else.
+4. There's a very, very, very big world out there. Read. Listen. Find something new.
+5. Still stuck? Sometimes good projects come from pain. A decent idea might be: is X as bad as we think? One exception: if your idea is "Nebraska is the best 3-9 team of all time," stop. It's played out. Find another cosmically snake-bitten team or player.
+6. Another idea: What sports are in season? What's happening — good or bad? Zero in on that.
+
+## Writing Checklist
+
+Good analysis buried in bad writing doesn't get read.
+
+1. Have you **spell checked** your writing?
+2. Have you **read what you have written out loud**? Reading it out loud will help you find bad writing.
+3. No really. Read it out loud. It makes a huge difference. If you stumble over your own words, you should rewrite it.
+4. If what you read out loud doesn't sound like **you**, rewrite it.
+5. Do you have **complete sentences**? Do you have **active verbs**?
+
+## Headline Checklist
+
+Headlines are not labels. Headlines tell stories.
+
+1. Are your headlines just labels? Examples: *Nebraska's offense. NBA's Best Shooters. The best NFL punters.* Those are labels, not headlines.
+2. Do your headlines **tell a story**, or attempt to draw the reader into one?
+3. Do your headlines include words that describe **what the chart is about**?
+4. Do your headlines **point me toward what I should see** in the chart?
+
+## Graphics Checklist
+
+Every chart needs these things. No exceptions.
+
+1. Do you have the **required parts**? They are: headline, chatter, credit line, source line.
+2. Do your graphics have **annotations** that help me determine what is going on? Example: Are important dots labeled on a scatterplot?
+3. Are there **lines to show averages**? Are those lines labeled?
+4. Can I **read bar chart axis text**?
+5. Does each chart **tell a story**? Can I tell what that story is in a glance?
+6. Do you use **color sparingly** to draw attention to something specific?
+7. Is there **separation between your headline size and your chatter size**?
+8. Does your typography have a **hierarchy**? Does your headline stand out from your chatter? Are your axis labels smaller than your data labels?
+9. Have you **simplified the theme** (i.e., dropped the default grey background)?
+10. Are your **axis labels** something anyone can understand?
+11. Does your `theme()` element include `plot.title.position = "plot"` to move the headline flush left instead of that weird indent?
+
+## Code Checklist
+
+Clean code is part of the grade.
+
+1. Are your **variables named** what they are? If you called your data `logs` when it's made up of players, that's bad.
+2. Is your code **spaced out** so it's one line per command? Look at the example post for guidance.
+3. Is your code in the **proper order**? Libraries at the top. Data preparation before the graphics.
+4. **Did you add `message=FALSE, warning=FALSE`** to any `{r}` blocks that spit out large amounts of automated text? Your library step doesn't need all that gibberish spitting out in your blog.
+
+## Last Thing
+
+The link you are turning in starts with `YourGitHubUserNameHere.github.io` **but is not just your `username.github.io` URL**. **Submit the link to the post**. If you are turning in a `GitHub.com` URL, you are turning in the wrong thing.
+
+## Terms to Know
+
+- **Quarto blog**: The publishing format used for your blog posts — a combination of Markdown prose and R code chunks that renders to a static website.
+- **GitHub Pages**: The free hosting service that publishes your Quarto blog as a live website at `username.github.io`.
+- **Headline**: The main title of a visualization that captures the key message or story of the graphic — not a label.
+- **Chatter**: The subtitle or explanatory text below the headline that provides context about the visualization.
+- **Credit line**: Text in the graphic identifying who made it (you).
+- **Source line**: Text in the graphic identifying where the data came from.
+- **Annotation**: Text or graphical elements added to a chart to highlight or explain specific data points.
+- **`plot.title.position = "plot"`**: A `theme()` argument that aligns the plot title flush with the left edge of the plot area rather than the default indented position.
+- **`message=FALSE, warning=FALSE`**: Arguments added to an R code chunk header to suppress startup messages and warnings from appearing in the rendered blog post.
