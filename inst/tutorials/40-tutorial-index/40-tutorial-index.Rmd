@@ -18,9 +18,18 @@ knitr::opts_chunk$set(echo = FALSE)
 tutorial_options(exercise.completion=FALSE)
 ```
 
-## How to Use This Index
+## Search or Scan
 
-This tutorial is a reference index. Use it when you need to look something up but can't remember which tutorial covered it.
+Type what you're looking for here. If the snippet isn't enough, go to that tutorial and review. 
+
+<iframe 
+    src="https://mattwaite.github.io/sports-search/" 
+    width="80%" 
+    height="500px" 
+    frameborder="0">
+  </iframe>
+
+Below is a reference index. Use it when you need to look something up but can't remember which tutorial covered it.
 
 Each section below corresponds to one tutorial. Under each tutorial heading you'll find the key **functions**, **concepts**, and **terms** introduced in that lesson. If you need a refresher on how something works, go back to that tutorial.
 
@@ -33,9 +42,9 @@ The tutorials are grouped into four parts:
 
 ---
 
-## Part 1: R Fundamentals and Statistics
+### Part 1: R Fundamentals and Statistics
 
-### Lesson 1: The Basics
+#### Lesson 1: The Basics
 
 *R as a calculator, variables, and data types.*
 
@@ -48,7 +57,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 2: Data Basics
+#### Lesson 2: Data Basics
 
 *Importing data and understanding its structure.*
 
@@ -64,7 +73,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 3: Aggregates, Part 1
+#### Lesson 3: Aggregates, Part 1
 
 *Grouping and counting data.*
 
@@ -78,7 +87,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 4: Aggregates, Part 2
+#### Lesson 4: Aggregates, Part 2
 
 *More summary statistics.*
 
@@ -89,7 +98,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 5: Mutating Data
+#### Lesson 5: Mutating Data
 
 *Creating new columns from existing ones.*
 
@@ -100,7 +109,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 6: Filters
+#### Lesson 6: Filters
 
 *Subsetting rows and selecting columns.*
 
@@ -114,7 +123,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 7: Transforming Data
+#### Lesson 7: Transforming Data
 
 *Reshaping data between wide and long formats.*
 
@@ -126,7 +135,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 8: Significance Tests
+#### Lesson 8: Significance Tests
 
 *Testing whether differences between groups are real or due to chance.*
 
@@ -139,7 +148,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 9: Correlations and Regressions
+#### Lesson 9: Correlations and Regressions
 
 *Measuring and modeling relationships between variables.*
 
@@ -157,7 +166,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 10: Residuals
+#### Lesson 10: Residuals
 
 *Using leftover prediction error to find over- and underperformers.*
 
@@ -171,7 +180,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 11: Z-Scores
+#### Lesson 11: Z-Scores
 
 *Standardizing data to make fair comparisons.*
 
@@ -184,7 +193,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 12: Using Sports Data Packages
+#### Lesson 12: Using Sports Data Packages
 
 *Pulling live sports data directly into R.*
 
@@ -196,9 +205,9 @@ The tutorials are grouped into four parts:
 
 ---
 
-## Part 2: Data Visualization with ggplot2
+### Part 2: Data Visualization with ggplot2
 
-### Lesson 13: Bar Charts
+#### Lesson 13: Bar Charts
 
 *The most common chart type for comparing values.*
 
@@ -213,7 +222,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 14: Stacked Bar Charts
+#### Lesson 14: Stacked Bar Charts
 
 *Showing both totals and their component parts.*
 
@@ -224,7 +233,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 15: Waffle Charts
+#### Lesson 15: Waffle Charts
 
 *An alternative to pie charts for showing proportions.*
 
@@ -239,7 +248,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 16: Line Charts
+#### Lesson 16: Line Charts
 
 *Showing trends over time.*
 
@@ -251,7 +260,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 17: Step Charts
+#### Lesson 17: Step Charts
 
 *Showing cumulative change over time.*
 
@@ -265,7 +274,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 18: Slope Charts
+#### Lesson 18: Slope Charts
 
 *Comparing two time points for multiple entities.*
 
@@ -277,7 +286,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 19: Scatterplots
+#### Lesson 19: Scatterplots
 
 *Visualizing the relationship between two numeric variables.*
 
@@ -290,7 +299,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 20: Bubble Charts
+#### Lesson 20: Bubble Charts
 
 *Adding a third variable to a scatterplot through point size.*
 
@@ -304,7 +313,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 21: Beeswarm Plots
+#### Lesson 21: Beeswarm Plots
 
 *Showing individual data points spread across categories.*
 
@@ -317,7 +326,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 22: Bump Charts
+#### Lesson 22: Bump Charts
 
 *Showing how rankings change over time.*
 
@@ -331,7 +340,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 23: Dumbbell Charts
+#### Lesson 23: Dumbbell Charts
 
 *Comparing two values for each item in a list.*
 
@@ -343,7 +352,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 24: Tables
+#### Lesson 24: Tables
 
 *Presenting data in formatted, readable tables.*
 
@@ -356,7 +365,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 25: Faceting
+#### Lesson 25: Faceting
 
 *Creating small multiples — many charts at once, one per category.*
 
@@ -368,7 +377,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 26: Arranging Plots
+#### Lesson 26: Arranging Plots
 
 *Combining multiple charts into one graphic.*
 
@@ -380,7 +389,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 27: Encircling Points
+#### Lesson 27: Encircling Points
 
 *Drawing attention to specific data points with shapes and annotations.*
 
@@ -393,9 +402,9 @@ The tutorials are grouped into four parts:
 
 ---
 
-## Part 3: Advanced Topics
+### Part 3: Advanced Topics
 
-### Lesson 28: Blogging with Quarto and GitHub Pages
+#### Lesson 28: Blogging with Quarto and GitHub Pages
 
 *Publishing your analysis as a blog post.*
 
@@ -411,7 +420,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 29: Text Cleaning
+#### Lesson 29: Text Cleaning
 
 *Fixing messy string data before analysis.*
 
@@ -424,7 +433,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 30: Annotations and Headlines
+#### Lesson 30: Annotations and Headlines
 
 *Making charts communicate clearly through text.*
 
@@ -438,7 +447,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 31: Color
+#### Lesson 31: Color
 
 *Using color purposefully to guide attention.*
 
@@ -451,7 +460,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 32: Finishing Touches
+#### Lesson 32: Finishing Touches
 
 *Polishing charts to publication quality.*
 
@@ -466,7 +475,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 33: Web Scraping with rvest
+#### Lesson 33: Web Scraping with rvest
 
 *Pulling data directly from websites.*
 
@@ -483,7 +492,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 34: Multiple Regression
+#### Lesson 34: Multiple Regression
 
 *Using more than one predictor variable to model an outcome.*
 
@@ -498,7 +507,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 35: Clustering
+#### Lesson 35: Clustering
 
 *Grouping players or teams by statistical similarity.*
 
@@ -512,7 +521,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 36: Simulations
+#### Lesson 36: Simulations
 
 *Using random sampling to evaluate unusual streaks and performances.*
 
@@ -527,7 +536,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 37: Joins
+#### Lesson 37: Joins
 
 *Combining two data frames into one.*
 
@@ -541,9 +550,9 @@ The tutorials are grouped into four parts:
 
 ---
 
-## Part 4: Reference Guides
+### Part 4: Reference Guides
 
-### Lesson 38: Getting CSVs from Sports Reference
+#### Lesson 38: Getting CSVs from Sports Reference
 
 *Exporting any Sports Reference table as a CSV file.*
 
@@ -557,7 +566,7 @@ The tutorials are grouped into four parts:
 
 ---
 
-### Lesson 39: Project Checklist
+#### Lesson 39: Project Checklist
 
 *Standards for the SPMC 350 blog post project.*
 
