@@ -23,7 +23,7 @@ tutorial_options(exercise.completion=FALSE)
 Type what you're looking for here. If the snippet isn't enough, go to that tutorial and review. 
 
 <iframe 
-    src="https://mattwaite.github.io/sports-search/" 
+    src="https://www.mattwaite.com/sports-search/" 
     width="80%" 
     height="500px" 
     frameborder="0">

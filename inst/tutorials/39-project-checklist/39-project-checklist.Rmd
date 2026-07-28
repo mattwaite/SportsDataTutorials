@@ -22,7 +22,7 @@ tutorial_options(exercise.completion=FALSE)
 
 The goal of this lesson is to give you a reference checklist for your blog post projects. The main projects in SPMC 350 Sports Data Analysis and Visualization involve writing a blog post, published on GitHub Pages, about a sports topic that uses code, data, and three graphics to tell a story. The assignment is worth 20 percent of the semester grade.
 
-An example of a B+/A- post: [Is Nebraska the best worst team in college basketball?](http://mattwaite.github.io/posts/is-nebraska-the-best-worst-basketball-team/)
+An example of a B+/A- post: [Is Nebraska the best worst team in college basketball?](https://www.mattwaite.com/posts/is-nebraska-the-best-worst-basketball-team/)
 
 Use this checklist before you submit. Go through every item. If you can't check something off, fix it first.
 

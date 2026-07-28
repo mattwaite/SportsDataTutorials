@@ -53,7 +53,7 @@ grade_this_code()
 And the data.
 
 ```{r ggplot-load-data, message=FALSE, warning=FALSE}
-softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
+softball <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
 
 huskers <- softball |>
   filter(
@@ -66,10 +66,10 @@ big10 <- softball |>
   )
 ```
 ```{r ggplot-load-data-exercise, exercise = TRUE}
-softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
+softball <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
 ```
 ```{r ggplot-load-data-exercise-solution}
-softball <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
+softball <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_softball_team_hitting_2025.csv")
 ```
 ```{r ggplot-load-data-exercise-check}
 grade_this_code()

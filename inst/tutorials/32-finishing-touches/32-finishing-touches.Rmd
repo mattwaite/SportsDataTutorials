@@ -46,7 +46,7 @@ knitr::include_graphics(rep("images/chartannotated.png"))
 Let's explore fixing up ggplot's output. We'll need a graphic to work with first, so I'm going to use a bubble chart. 
 
 ```{r text-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs21.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs21.csv")
 
 winlosslogs <- logs |> 
   mutate(
@@ -424,7 +424,7 @@ Let's look back to the softball waffle chart we did in the waffle tutorial that 
 2. This is a facet chart, so everything done here in theme applies to them too, regardless of the chart type. 
 
 ```{r waffle-load-data, message=FALSE, warning=FALSE}
-softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+softball_teams <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
 
 team_rows <- 5
 

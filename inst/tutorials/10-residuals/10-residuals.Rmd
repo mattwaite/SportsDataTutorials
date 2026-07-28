@@ -47,7 +47,7 @@ grade_this_code()
 Now import the data.
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE, results=FALSE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 
 residualmodel <- correlations |> 
   mutate(
@@ -73,10 +73,10 @@ penresid <- penalties |> mutate(predicted = predict(pfit), residuals = residuals
 pensort <- penresid |> arrange(desc(residuals)) |> select(team, opponent, rslt, differential, total_penalty_yards, predicted, residuals) |> slice(1)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs24.csv")
+correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs24.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()

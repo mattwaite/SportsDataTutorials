@@ -49,7 +49,7 @@ grade_this_code()
 Now we'll load the data. 
 
 ```{r transforming-load-data, message=FALSE, warning=FALSE}
-nba <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbalong.csv")
+nba <- read_csv("https://www.mattwaite.com/sportsdatafiles/nbalong.csv")
 
 nbawide <- nba |> pivot_wider(names_from = Season, values_from = PTS)
 
@@ -59,10 +59,10 @@ tops <- nbawide |>
   slice(1)
 ```
 ```{r transforming-load-data-exercise, exercise = TRUE}
-nba <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbalong.csv")
+nba <- read_csv("https://www.mattwaite.com/sportsdatafiles/nbalong.csv")
 ```
 ```{r transforming-load-data-exercise-solution}
-nba <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbalong.csv")
+nba <- read_csv("https://www.mattwaite.com/sportsdatafiles/nbalong.csv")
 ```
 ```{r transforming-load-data-exercise-check}
 grade_this_code()

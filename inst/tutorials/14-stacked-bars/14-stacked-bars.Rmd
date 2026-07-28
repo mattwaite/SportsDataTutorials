@@ -44,7 +44,7 @@ grade_this_code()
 And the data.
 
 ```{r stacked-load-data, message=FALSE, warning=FALSE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+football <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 
 big <- football |> 
   group_by(conference, team) |> 
@@ -60,10 +60,10 @@ biglong <- big |>
     values_to="yards")
 ```
 ```{r stacked-load-data-exercise, exercise = TRUE}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+football <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r stacked-load-data-exercise-solution}
-football <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+football <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r stacked-load-data-exercise-check}
 grade_this_code()

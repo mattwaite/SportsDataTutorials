@@ -52,13 +52,13 @@ Throughout this class, we've used data from Sports Reference. If you've used the
 Load it.
 
 ```{r cleaning-load-data, message=FALSE, warning=FALSE}
-nbaplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+nbaplayers <- read_csv("https://www.mattwaite.com/sportsdatafiles/nbaplayers.csv")
 ```
 ```{r cleaning-load-data-exercise, exercise = TRUE}
-nbaplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+nbaplayers <- read_csv("https://www.mattwaite.com/sportsdatafiles/nbaplayers.csv")
 ```
 ```{r cleaning-load-data-exercise-solution}
-nbaplayers <- read_csv("https://mattwaite.github.io/sportsdatafiles/nbaplayers.csv")
+nbaplayers <- read_csv("https://www.mattwaite.com/sportsdatafiles/nbaplayers.csv")
 ```
 ```{r cleaning-load-data-exercise-check}
 grade_this_code()
@@ -113,13 +113,13 @@ The NCAA does some very interesting things with data, making it pretty useless.
 Let's import it and take a look.
 
 ```{r cleaning2-load-data, message=FALSE, warning=FALSE}
-kills <- read_csv("https://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+kills <- read_csv("https://www.mattwaite.com/sportsdatafiles/killsperset.csv")
 ```
 ```{r cleaning2-load-data-exercise, exercise = TRUE}
-kills <- read_csv("https://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+kills <- read_csv("https://www.mattwaite.com/sportsdatafiles/killsperset.csv")
 ```
 ```{r cleaning2-load-data-exercise-solution}
-kills <- read_csv("https://mattwaite.github.io/sportsdatafiles/killsperset.csv")
+kills <- read_csv("https://www.mattwaite.com/sportsdatafiles/killsperset.csv")
 ```
 ```{r cleaning2-load-data-exercise-check}
 grade_this_code()

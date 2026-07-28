@@ -48,7 +48,7 @@ grade_this_code()
 And the data.
 
 ```{r line-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs26.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/logs26.csv")
 
 nu <- logs |> filter(team == "Nebraska Cornhuskers")
 pu <- logs |> filter(team == "Purdue Boilermakers")
@@ -56,10 +56,10 @@ big <- logs |> filter(conference == "Big Ten")
 average <- logs |> group_by(game_date) |> summarise(mean_shooting=mean(team_fgpct))
 ```
 ```{r line-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs26.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/logs26.csv")
 ```
 ```{r line-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs26.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/logs26.csv")
 ```
 ```{r line-load-data-exercise-check}
 grade_this_code()

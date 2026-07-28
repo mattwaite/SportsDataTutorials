@@ -50,7 +50,7 @@ grade_this_code()
 And the data.
 
 ```{r slope-load-data, message=FALSE, warning=FALSE}
-yards_per_play <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope2425.csv")
+yards_per_play <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballslope2425.csv")
 
 nu <- yards_per_play |> filter(team == "Nebraska")
 oh <- yards_per_play |> filter(team == "Ohio State")
@@ -60,10 +60,10 @@ big <- yards_per_play |>
   filter(conference == "Big Ten Conference")
 ```
 ```{r slope-load-data-exercise, exercise = TRUE}
-yards_per_play <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope2425.csv")
+yards_per_play <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballslope2425.csv")
 ```
 ```{r slope-load-data-exercise-solution}
-yards_per_play <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballslope2425.csv")
+yards_per_play <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballslope2425.csv")
 ```
 ```{r slope-load-data-exercise-check}
 grade_this_code()

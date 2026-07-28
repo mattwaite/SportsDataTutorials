@@ -50,7 +50,7 @@ grade_this_code()
 And the data.
 
 ```{r step-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs26.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/logs26.csv")
 
 difflogs <- logs |> 
   mutate(differential = team_score - opponent_score) |> 
@@ -63,10 +63,10 @@ pu <- bigdiff |> filter(team == "Purdue Boilermakers")
 mi <- bigdiff |> filter(team == "Michigan Wolverines")
 ```
 ```{r step-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs26.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/logs26.csv")
 ```
 ```{r step-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/logs26.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/logs26.csv")
 ```
 ```{r step-load-data-exercise-check}
 grade_this_code()

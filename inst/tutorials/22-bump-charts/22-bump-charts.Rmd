@@ -47,13 +47,13 @@ grade_this_code()
 Let's use college football playoff rankings, specifically the top 12 in each week of the rankings. 
 
 ```{r bump-load-data, message=FALSE, warning=FALSE}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking25.csv")
+rankings <- read_csv("https://www.mattwaite.com/sportsdatafiles/cfbranking25.csv")
 ```
 ```{r bump-load-data-exercise, exercise = TRUE}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking25.csv")
+rankings <- read_csv("https://www.mattwaite.com/sportsdatafiles/cfbranking25.csv")
 ```
 ```{r bump-load-data-exercise-solution}
-rankings <- read_csv("https://mattwaite.github.io/sportsdatafiles/cfbranking25.csv")
+rankings <- read_csv("https://www.mattwaite.com/sportsdatafiles/cfbranking25.csv")
 ```
 ```{r bump-load-data-exercise-check}
 grade_this_code()

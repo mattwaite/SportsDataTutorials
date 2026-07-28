@@ -46,7 +46,7 @@ grade_this_code()
 For this, let's use college football game logs from this season. Load it.
 
 ```{r dumbbell-load-data, message=FALSE, warning=FALSE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 
 turnovers <- logs |>
   group_by(team, conference) |> 
@@ -56,10 +56,10 @@ turnovers <- logs |>
   filter(conference == "Big Ten Conference")
 ```
 ```{r dumbbell-load-data-exercise, exercise = TRUE}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r dumbbell-load-data-exercise-solution}
-logs <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+logs <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r dumbbell-load-data-exercise-check}
 grade_this_code()

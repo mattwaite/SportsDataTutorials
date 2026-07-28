@@ -66,7 +66,7 @@ waffle_softball <- softball |>
     y = (row_number() - 1) %% rows + 1
   )
 
-softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+softball_teams <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
 
 team_rows <- 5
 
@@ -186,7 +186,7 @@ To make lots of waffles, you're going to need lots of things -- teams, players, 
 For this, we can use a data from the NCAA. For this, we're going to read in a file of softball team stats. Then, we're going to set a different number of rows. Since we already have something called `rows`, we'll call this one `team_rows` and change our math in mutate to reflect that change. Then, we'll make a dataframe called `team_waffle` that will do a couple of things: First, filter for the Big Ten, then select only the rows we need. Because this has to be long data, we're going to use pivot_longer from the Transforming Data chapter to make it long. After that, it'll look just like above with one small exception -- we need to group this by the team so each team ends up in their own rows and columns. 
 
 ```{r waffle3, exercise=TRUE, exercise.setup = "waffle-load-data", message=FALSE}
-softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+softball_teams <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
 
 ____ <- 5
 
@@ -203,7 +203,7 @@ team_waffle <- softball_teams |>
   ungroup()
 ```
 ```{r waffle3-solution, exercise.reveal_solution = FALSE}
-softball_teams <- read_csv("https://mattwaite.github.io/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
+softball_teams <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_womens_softball_teams_2025.csv")
 
 team_rows <- 5
 

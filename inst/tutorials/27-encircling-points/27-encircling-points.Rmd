@@ -56,18 +56,18 @@ Let's say we want to highlight Brice Williams and his place in college basketbal
 And while we're loading it, let's filter out anyone who hasn't played 100 minutes. 
 
 ```{r encircle-load-data, message=FALSE, warning=FALSE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players25.csv") |> filter(MP > 100)
+players <- read_csv("https://www.mattwaite.com/sportsdatafiles/players25.csv") |> filter(MP > 100)
 
 nu <- players |> filter(Team == "Nebraska Cornhuskers Men's")
 
 bw <- nu |> filter(Player == "Brice Williams")
 ```
 ```{r encircle-load-data-exercise, exercise = TRUE}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players25.csv") |>
+players <- read_csv("https://www.mattwaite.com/sportsdatafiles/players25.csv") |>
   filter(MP > 100)
 ```
 ```{r encircle-load-data-exercise-solution}
-players <- read_csv("https://mattwaite.github.io/sportsdatafiles/players25.csv") |>
+players <- read_csv("https://www.mattwaite.com/sportsdatafiles/players25.csv") |>
   filter(MP > 100)
 ```
 ```{r encircle-load-data-exercise-check}

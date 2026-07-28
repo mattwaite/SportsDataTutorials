@@ -51,7 +51,7 @@ grade_this_code()
 Now import the data.
 
 ```{r filtering-load-data, message=FALSE, warning=FALSE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+games <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 
 rushinggames <- nrow(games |> filter(rushing_yds > 250))
 
@@ -65,10 +65,10 @@ toprush <- games |>
   top_n(1, wt=rushing_yds)
 ```
 ```{r filtering-load-data-exercise, exercise = TRUE}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+games <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r filtering-load-data-exercise-solution}
-games <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+games <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r filtering-load-data-exercise-check}
 grade_this_code()

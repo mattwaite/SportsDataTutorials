@@ -47,7 +47,7 @@ grade_this_code()
 Now read in all FBS college football teams and their season stats. 
 
 ```{r correlations-load-data, message=FALSE, warning=FALSE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 
 newcorrelations <- correlations |>
   mutate(
@@ -65,10 +65,10 @@ fit <- lm(differential ~ rushing_yds, data = newcorrelations)
 pass <- lm(differential ~ passing_yds, data = newcorrelations)
 ```
 ```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("https://mattwaite.github.io/sportsdatafiles/footballlogs25.csv")
+correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
 ```
 ```{r correlations-load-data-exercise-check}
 grade_this_code()
