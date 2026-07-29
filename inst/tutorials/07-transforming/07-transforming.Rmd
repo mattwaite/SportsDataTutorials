@@ -1,5 +1,5 @@
 ---
-title: "Sports Data Lesson 7: Transforming Data"
+title: "Sports Data Lesson 7: Pivoting, stacking and joining"
 output: 
   learnr::tutorial:
     progressive: true
@@ -8,7 +8,7 @@ output:
     ace_theme: github
 runtime: shiny_prerendered
 description: >
-  Learn how to turn data on it's side and back again.
+  Learn how to transform data from one shape to another.
 ---
 
 ```{r setup, include=FALSE}
@@ -22,11 +22,11 @@ tutorial_options(exercise.completion=FALSE)
 
 ## The Goal
 
-The goal of this lesson is to introduce you to the concept of data reshaping, specifically focusing on transforming data between "long" and "wide" formats using the pivot_longer() and pivot_wider() functions from the tidyr package. You'll learn why data sometimes needs to be reshaped, how to recognize long and wide data formats, and when to use each transformation. By the end of this lesson, you'll be able to restructure datasets to facilitate different types of analyses and visualizations, a crucial skill in sports analytics where data often comes in various formats. You'll apply these techniques to NBA per-game statistics, demonstrating how data reshaping can help answer questions about team performance across seasons.
+The goal of this lesson is to introduce you to the concept of data reshaping, starting with transforming data between "long" and "wide" formats using the `pivot_longer()` and `pivot_wider()` functions from the tidyr package. You'll learn why data sometimes needs to be reshaped, how to recognize long and wide data formats, and when to use each transformation. Next we'll learn how to stack multiple seasons together using `bind_rows()`. Lastly, we'll learn the basics of joining -- where two different tables become one, side by side. 
 
 ## The Basics
 
-Sometimes long data needs to be wide, and sometimes wide data needs to be long. I'll explain.
+Sometimes, the data you have doesn't look like the data you need. It might have columns side by side that you need in one column. It might be in two separate files that you need to be one, stacked on top of each other. It might be you have two dataframes that you need to be one, side by side. I'll explain each.
 
 You are soon going to discover that long before you can visualize data, **you need to have it in a form that the visualization library can deal with**. One of the ways that isn't immediately obvious is **how your data is cast**. Most of the data you will encounter will be **wide -- each row will represent a single entity with multiple measures for that entity**. So think of teams. The row of your dataset could have the team name, wins this season, wins last season, wins the season before that and so on. 
 
@@ -34,7 +34,7 @@ But what if your visualization library needs one row for each measure? So team, 
 
 We can use a library called `tidyr` to `pivot_longer` or `pivot_wider` the data, depending on what we need. We'll use a dataset of NBA per-game statistics. We're going to try and answer some questions about offensive improvement. 
 
-First we need some libraries. 
+First we need the tidyverse. 
 
 ```{r load-tidyverse, exercise=TRUE}
 library(tidyverse)
@@ -57,6 +57,10 @@ tops <- nbawide |>
   mutate(Difference = `2023` - `2022`) |>
   arrange(desc(Difference)) |>
   slice(1)
+
+offense25 <- read_csv("https://www.mattwaite.com/sportsdatafiles/offense25.csv")
+
+offense24 <- read_csv("https://www.mattwaite.com/sportsdatafiles/offense24.csv")
 ```
 ```{r transforming-load-data-exercise, exercise = TRUE}
 nba <- read_csv("https://www.mattwaite.com/sportsdatafiles/nbalong.csv")
@@ -154,9 +158,199 @@ grade_this_code()
 
 We're back to 270 rows. 
 
+## Binding tables together
+
+Another shape problem you're going to run into is when you have two different datasets but you want them to be one. Now *that can mean two different things*, and they both have their own issues. Let's start with stacking (or more accurately, binding) two datasets together. 
+
+Behind the scenes, I've loaded in two datasets of total offense data from CFBStats.com. They're called `offense25` and `offense24`. Let's take a look at them both, starting with the 2025 season.
+
+```{r bind1-data, exercise=TRUE, exercise.setup = "transforming-load-data"}
+head(offense25)
+```
+```{r bind1-data-solution}
+head(offense25)
+```
+```{r bind1-data-check}
+grade_this_code()
+```
+
+And the 2024 season.
+
+```{r bind2-data, exercise=TRUE, exercise.setup = "transforming-load-data"}
+head(offense24)
+```
+```{r bind2-data-solution}
+head(offense24)
+```
+```{r bind2-data-check}
+grade_this_code()
+```
+
+In a matter of weeks, you're going to want to be able to put each team's offense on a number line. To do that, you'll need *long* data, but you've got two separate datasets here. How do you put them together? 
+
+### Exercise 4: Binding rows
+
+The `bind_rows()` function will stack to datasets on top of each other to make one file, and it's very simple -- give your data a name, then inside bind_rows you just put the two tables you want in there. Let's call our dataframe offense and bind our two dataframes together, starting with the most current. After that, let's take a look at it. 
+
+```{r bind3-data, exercise=TRUE, exercise.setup = "transforming-load-data"}
+____ <- bind_rows(____, ____)
+
+head(offense)
+```
+```{r bind3-data-solution, exercise.reveal_solution = FALSE}
+offense <- bind_rows(offense25, offense24)
+
+head(offense)
+```
+```{r bind3-data-check}
+grade_this_code()
+```
+
+What's the problem? It's hard to see because you're looking for something that isn't there: the season. What season is that first number from? You can guess it's from the most recent season because that's the way you stacked them, but you don't *know* that. 
+
+### Exercise 5: Binding rows with seasons
+
+How do you fix that? With mutate. We can just give our datasets a `season` column and now we'll know for sure. Make sure you note you aren't using offense25 and 24 in the bind and to scroll the window out to see your new column out on the right side of the table. 
+
+```{r bind4-data, exercise=TRUE, exercise.setup = "transforming-load-data"}
+newoffense25 <- offense25 |> mutate(season = ____)
+
+newoffense24 <- offense24 |> mutate(season = ____)
+
+offense <- bind_rows(____, ____)
+
+head(offense)
+```
+```{r bind4-data-solution, exercise.reveal_solution = FALSE}
+newoffense25 <- offense25 |> mutate(season = 2025)
+
+newoffense24 <- offense24 |> mutate(season = 2024)
+
+offense <- bind_rows(newoffense25, newoffense24)
+
+head(offense)
+```
+```{r bind4-data-check}
+grade_this_code()
+```
+
+## Joining data
+
+The next way you might need data to come together is not stacked, but side by side -- wide data, in other words. What if you wanted to know the difference in points per game from one year to the next? You'd need to use `mutate` to calculate that, but you can't calculate something with mutate when they're not side by side -- not two columns. 
+
+Joining handles this. Basic joins are very easy, but joining is something that can get very complicated. The most important part of joining is **knowing what you have** and **knowing what you expect to happen**. 
+
+Let's use our offense data from the last two years. How do we get Nebraska's total offense numbers from 2025 and 2024 on the same line? 
+
+The first thing to understand about joins is that there are actually five different kinds -- an inner join, a left join, a right join, an outer join and an anti join. In my career, I've only ever used three -- inner, left and anti. We'll cover two joins here: inner and left.
+
+The second thing to understand is that a join is based on what matches in the data. They have different names based on the system, but think of them as keys. For our example, the team name columns are going to be our join keys. We want the data for Nebraska in one dataframe to match the Nebraska data in the other dataframe. Same with Minnesota. Purdue. Maryland. etc. 
+
+The third thing to understand is that *unless told otherwise*, tidyverse joins will use *every* column that share the same name across both dataframes. 
+
+**Inner join**: When you use an `inner_join()`, you'll get the results that match in *both* tables. If, for example, you have a team join the FBS in 2025 and they are not in the 2024 data, then an inner_join will *leave them out*. 
+
+**Left join**: A `left_join()` is where you'll get *all* rows in the first (left) table and *only the rows that match* in the second (right) table. Using our FBS team example, using a left join where the 2025 data is first, you would see that FBS newcomer. They just wouldn't have any stats for 2024. 
+
+Which do you need? Depends on your application. 
+
+Let's try this first the wrong way and then set it up the right way. 
+
+Remember that tidyverse joins will use *every column name that matches* as a join condition if you don't tell it otherwise. So, you might be tempted to try this: 
+
+```{r join1-data, exercise=TRUE, exercise.setup = "transforming-load-data"}
+inner_join(offense25, offense24)
+```
+```{r join1-data-solution}
+inner_join(offense25, offense24)
+```
+```{r join1-data-check}
+grade_this_code()
+```
+
+And what do you see? Nothing. You get zero rows returned. That's because inner_join didn't just use the team name as the join key. It used *every column* as a join condition. That would mean for a team to be in there, they'd have to have the *exact* same rank and offensive stats between the two seasons. That's *impossible*. So how do we fix this? There's two ways. One is easy -- just tell it what column is your join key -- but it makes a mess. My way takes a few more steps, but it's *vastly* better when you go to actually use the data. 
+
+1. Use `select` to narrow down to **just the columns you need**. For us, that will be the `name` and the `points_g` columns. 
+2. Use `rename` to spell out which season which `points_g` is from. Rememeber -- we want *both* and we want them side by side. Without using rename, tidyverse will put a .x and .y after your column names. What does that mean? It isn't obvious, and I hate that. Rename is `what you want your column named` = `what the column is currently named`. The column is currently points_g.
+3. Then join. 
+
+Let's start with an inner join. 
+
+### Exercise 6: The inner join
+
+The first thing you should do is look at your tables. If we had an environment to work with, you could look and see that the `offense25` table has 136 rows. That means there's 136 teams in the FBS. How many are in 2024? 134. That means two teams joined the FBS after 2024. So if we're going to match those two together and keep only the rows where they match exactly, **we can expect to get 134 rows back.** Two rows will drop out. If we get fewer than 134, we have a problem with our join keys. 
+
+Let's follow the steps from above -- select two columns, rename one and then inner_join. We're going to rename our `points_g` columsn to `points_gXX` where XX is the year number. And remember, when the time comes, were *not* joining our offense25 and offense24 anymore.
+
+```{r join2-data, exercise=TRUE, exercise.setup = "transforming-load-data"}
+joinoffense25 <- offense25 |> 
+  select(____, ____) |> 
+  rename(____ = points_g)
+
+joinoffense24 <- offense24 |> 
+  select(____, ____) |> 
+  rename(____ = points_g)
+
+inner_join(____, ____)
+```
+```{r join2-data-solution, exercise.reveal_solution = FALSE}
+joinoffense25 <- offense25 |> 
+  select(name, points_g) |> 
+  rename(points_g25 = points_g)
+
+joinoffense24 <- offense24 |> 
+  select(name, points_g) |> 
+  rename(points_g24 = points_g)
+
+inner_join(joinoffense25, joinoffense24)
+```
+```{r join2-data-check}
+grade_this_code()
+```
+
+And what do we see? 134 rows. Now, if we absolutely wanted all 136 rows, we could use the left join. Same pattern, just a different join. 
+
+### Exercise 7: The left join
+
+```{r join3-data, exercise=TRUE, exercise.setup = "transforming-load-data"}
+joinoffense25 <- offense25 |> 
+  select(____, ____) |> 
+  rename(____ = points_g)
+
+joinoffense24 <- offense24 |> 
+  select(____, ____) |> 
+  rename(____ = points_g)
+
+left_join(____, ____)
+```
+```{r join3-data-solution, exercise.reveal_solution = FALSE}
+joinoffense25 <- offense25 |> 
+  select(name, points_g) |> 
+  rename(points_g25 = points_g)
+
+joinoffense24 <- offense24 |> 
+  select(name, points_g) |> 
+  rename(points_g24 = points_g)
+
+left_join(joinoffense25, joinoffense24)
+```
+```{r join3-data-check}
+grade_this_code()
+```
+
+You'll have to scroll through to find them, but you've now got 136 rows, but two will have NA for their 2024 stats because ... well ... they weren't in the FBS then. 
+
 ## The Recap
 
-In this lesson, we've explored the essential skill of data reshaping using the `pivot_wider()` and `pivot_longer()` functions from the tidyr package. We learned how to transform data from a long format, where each row represents a single observation, to a wide format, where each row contains multiple observations for a single entity. This transformation allowed us to perform calculations across seasons, such as comparing team performance year-over-year. We also practiced the reverse process, converting wide data back to long format, which is often necessary for certain types of analyses or visualizations. Through hands-on exercises with NBA data, you've seen how these transformations can help answer real-world sports analytics questions, like identifying the team with the most improved offense. Remember, the ability to reshape data is a powerful tool in your data analysis toolkit, allowing you to adapt your dataset to the specific requirements of your analysis or visualization tasks.
+In this lesson, we covered three different ways your data might need to change shape before you can use it, and a specific tool for each one.
+
+First, we tackled **pivoting** with the `pivot_wider()` and `pivot_longer()` functions from the tidyr package. We learned how to recognize long data, where each row is a single observation, and wide data, where each row is a single entity with multiple measures side by side. Using NBA per-game statistics, we used `pivot_wider()` to turn seasons-as-rows into seasons-as-columns so we could use `mutate()` to calculate the change in scoring from one year to the next -- something you can't do when the numbers you want to subtract are stuck on two different rows. We then used `pivot_longer()` to reverse the process, turning those season columns back into rows, which is the format most visualization libraries expect.
+
+Second, we covered **binding rows** with `bind_rows()`, which stacks two datasets with the same columns on top of each other to make one. Using two seasons of CFBStats.com offense data, we saw how easy this function is to use, and we also saw its biggest trap: if you don't add a column identifying where each row came from -- like a season -- you can lose track of which data is which the moment the two tables become one.
+
+Third, we covered **joining**, where two dataframes come together side by side based on a shared key, rather than stacked on top of each other. We learned that tidyverse joins will use *every* matching column name as the join key unless you tell it otherwise, which is why we adopted a three-step habit: `select()` down to just the columns you need, `rename()` your value column so you know which season or table it came from, and *then* join. We practiced this with `inner_join()`, which only keeps rows that match in both tables, and `left_join()`, which keeps every row from the first table whether it has a match in the second or not. Using our offense data, we saw exactly how those two joins produce different row counts -- and why that difference matters when a team joins or leaves the FBS.
+
+Reshaping, stacking and joining are three of the most common things you'll do to data before you ever get to analyze or visualize it. Knowing which one you need -- and knowing what to expect from it, like a row count -- is what keeps you from silently losing or duplicating data.
 
 ## Terms to Know
 
@@ -164,3 +358,10 @@ In this lesson, we've explored the essential skill of data reshaping using the `
 - pivot_longer(): A function from the tidyr package used to transform data from wide to long format, gathering multiple columns into key-value pairs.
 - Long format: A data structure where each row represents a single observation, and each column represents a variable. In long format, you often have repeated entries in identifier columns.
 - Wide format: A data structure where each row represents a single entity with multiple observations in separate columns. This format often has fewer rows but more columns than long format.
+- bind_rows(): A dplyr function that stacks two or more dataframes with matching columns on top of each other into one dataframe.
+- Join: A way of combining two dataframes side by side based on matching values in one or more shared columns, rather than stacking them.
+- Join key: The column, or columns, that a join uses to match rows between two dataframes. If you don't specify one, tidyverse joins will use every column name the two tables have in common.
+- inner_join(): A dplyr function that returns only the rows that have a match in *both* dataframes being joined, dropping anything that doesn't match on both sides.
+- left_join(): A dplyr function that returns *all* rows from the first (left) dataframe, along with matching data from the second (right) dataframe where it exists. Rows with no match get NA values for the second table's columns.
+- select(): A dplyr function used to narrow a dataframe down to only the columns you specify, often used before a join to avoid unwanted columns becoming part of the join key.
+- rename(): A dplyr function used to change a column's name, written as `new name = old name`. Commonly used before a join to label which table a value came from, such as `points_g25` instead of `points_g`.
