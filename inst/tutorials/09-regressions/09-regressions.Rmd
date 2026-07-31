@@ -1,5 +1,5 @@
 ---
-title: "Sports Data Lesson 9: Correlations and regressions"
+title: "Sports Data Lesson 9: Value above expected"
 output: 
   learnr::tutorial:
     progressive: true
@@ -8,7 +8,7 @@ output:
     ace_theme: github
 runtime: shiny_prerendered
 description: >
-  Learn how to see how related two numbers are and make a model.
+  Learn how to use basic statistics to create new measures of value.
 ---
 
 ```{r setup, include=FALSE}
@@ -22,7 +22,7 @@ tutorial_options(exercise.completion=FALSE)
 
 ## The Goal
 
-The goal of this lesson is to introduce you to correlations and linear regressions, powerful statistical tools for examining relationships between variables in sports data. You'll learn how to calculate and interpret correlation coefficients, which measure the strength and direction of linear relationships between two variables. We'll also explore linear regression, a technique for modeling the relationship between a dependent variable and one or more independent variables. By the end of this lesson, you'll be able to use R to perform correlation analyses and simple linear regressions, interpret their results, and understand key concepts like statistical significance, R-squared values, and regression coefficients. We'll apply these techniques to real college football data, examining popular beliefs about offensive strategies and their impact on game outcomes. This knowledge will enable you to move beyond simple descriptive statistics and start making data-driven insights about the factors that influence sports performance.
+The goal of this lesson is to introduce you to linear regressions, residuals and value above expected metrics, powerful statistical tools for examining performance in sports data. You'll explore linear regression, a technique for modeling the relationship between a dependent variable and one or more independent variables. Then, we'll measure the distance between expected and reality. By the end of this lesson, you'll be able understand key concepts like statistical significance, R-squared values, and regression coefficients. We'll apply these techniques to real college volleyball data, examining players across the sport. This knowledge will enable you to move beyond simple descriptive statistics and start making data-driven insights about the factors that influence sports performance.
 
 ## The Basics
 
@@ -30,7 +30,7 @@ Throughout sports, you will find no shortage of opinions. From people yelling at
 
 Can we put some numbers behind that? Can we prove it or not? 
 
-This is what we're going to start to answer. And we'll do it with correlations and regressions.
+This is what we're going to start to answer. And we'll do it with some statistics: regressions.
 
 First, load the tidyverse.
 
@@ -44,248 +44,208 @@ library(tidyverse)
 grade_this_code()
 ```
 
-Now read in all FBS college football teams and their season stats. 
+Now read in all college volleyball players and their season stats. 
 
-```{r correlations-load-data, message=FALSE, warning=FALSE}
-correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
+```{r regressions-load-data, message=FALSE, warning=FALSE}
+vbplayers <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 
-newcorrelations <- correlations |>
-  mutate(
-    differential = team_pts - opponent_pts
-  )
+outsides <- vbplayers |> 
+  filter(position == "OH") |> 
+  filter(total_attacks > 0)
 
-coefficient <- cor.test(correlations$team_pts, correlations$rushing_yds)
-
-newcoefficient <- cor.test(newcorrelations$differential, newcorrelations$rushing_yds)
-
-passcoefficient <- cor.test(newcorrelations$differential, newcorrelations$passing_yds)
-
-fit <- lm(differential ~ rushing_yds, data = newcorrelations)
-
-pass <- lm(differential ~ passing_yds, data = newcorrelations)
+killsmodel <- lm(kills ~ total_attacks, data=outsides)
 ```
-```{r correlations-load-data-exercise, exercise = TRUE}
-correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
+```{r regressions-load-data-exercise, exercise = TRUE}
+vbplayers <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
-```{r correlations-load-data-exercise-solution}
-correlations <- read_csv("https://www.mattwaite.com/sportsdatafiles/footballlogs25.csv")
+```{r regressions-load-data-exercise-solution}
+vbplayers <- read_csv("https://www.mattwaite.com/sportsdatafiles/ncaa_womens_volleyball_players_2025.csv")
 ```
-```{r correlations-load-data-exercise-check}
+```{r regressions-load-data-exercise-check}
 grade_this_code()
 ```
 
-How much, over the course of a season, does a thing matter? That's the question you're going to answer. 
+How can you measure how good of an attacker a volleyball player is? From the basic stats out of each match, you can look at kills and hitting percentage. The more and the higher of these, the better. But does that tell the whole story? 
 
-In our case, we're going to return to Run the Damn Ball guy. How much does a team's rushing yards impact the number of points they score in a game? How much difference can we explain in points with rushing yards? 
+Not if you've ever watched a match before. 
 
-We're going to use two different methods here and they're closely related. Correlations -- specifically the Pearson Correlation Coefficient -- is a measure of how related two numbers are in a linear fashion. In other words -- if our X value goes up one, what happens to Y? If it also goes up 1, that's a perfect correlation. X goes up 1, Y goes up 1. Every time. 
+In about every sport, you measure greatness by what a player does *above expectations*. We expect top-level athletes to perform at a certain standard. To be great, you have to be better than average. Indeed, you need to be better than expected. 
 
-Correlation coefficients are a number between 0 and 1, with zero being no correlation and 1 being perfect correlation **if our data is linear**. We'll soon go over scatterplots to visually determine if our data is linear, but for now, we have a hypothesis: More rush yards, more points. Run. The. Damn. Ball. That is an argument for a linear relationship between them.
+In volleyball, if you are an outside hitter, when your setter sends a ball you're way, you're expected to get a kill. The more attacks you get, the more kills you get. Now, obviously there's a lot of things that go into this -- the quality of the set, the block the other team puts into place, the quality of the defense behind the block. But the basic, simple logic remains -- the more attacks you have, the more kills you will have. 
 
-But is there one?
+But it isn't one for one. And not every player is the same. 
 
-Let's first take a look at the data. 
+How can we measure expectations? This is where regressions come in. A regression is a simple model -- you learned it in high school algebra, but you may not have known it. The output of a regression is `y = mx+b` -- a line. That line is the *line of best fit*, meaning the line goes through our data coming closest to each point in the graph. 
 
-```{r head-data, exercise=TRUE, exercise.setup = "correlations-load-data"}
+In a good enough model, that line represents the line between being above expectations or below. 
+
+Let's start by taking a look at our data. 
+
+```{r head-data, exercise=TRUE, exercise.setup = "regressions-load-data"}
 head(____)
 ```
 ```{r head-data-solution}
-head(correlations)
+head(vbplayers)
 ```
 ```{r head-data-check}
 grade_this_code()
 ```
 
-### Exercise 1: Correlating rushing yards and points.
+### Exercise 1: Setting up the model
 
-In R, there is a `cor` function, and it works much the same as `mean` or `median`. So we want to see if `team_pts` is correlated with `rushing_yds`, which should be pretty self explanatory. We do that by referencing those two fields and specifying we want a `pearson` correlation. The number we get back is the correlation coefficient.
+As you can see in the data, we have what we need -- total_attacks and kills. But, let's stop and think abou this for a minute. If we're measuring attackers, are all players the same? In this data are serve specialists, setters, liberos -- should they be a part of this? 
 
-```{r correlation1, exercise=TRUE, exercise.setup = "correlations-load-data"}
-____ |> 
-  summarise(
-    pearson = cor(team_pts, ____, method="pearson")
-    )
-```
-```{r correlation1-solution, exercise.reveal_solution = FALSE}
-correlations |> 
-  summarise(
-    pearson = cor(team_pts, rushing_yds, method="pearson")
-    )
-```
-```{r correlation1-check}
-grade_this_code()
-```
+No. And not just no, but even *within* attackers, there's major differences. The job of an outside hitter is fundamentally different from a middle blocker or an opposite-side hitter. Any time you're going to measure a player's performance, you should think about what their competition is? Who are their peers? 
 
-```{r cor1, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("So on a scale of -1 to 1, where 0 means there's no relationship at all and 1 or -1 means a perfect relationship, penalty yards and whether or not the team scores more points than it give up are at {coefficient$estimate}. You could say they're {format(coefficient$estimate*100, digits=1)} percent related in the positive -- sometimes more rushing yards means more points, sometimes there's not. It's about the worst outcome for an argument -- it's 50-50.")
-```
+We need to filter for outsides, and while we're at it, we should remove anyone who didn't even have a swing last season. Let's create a dataframe called `outsides` and add those filters.  
 
-### Exercise 2: Correlating rushing yards and the point spread.
-
-But, but, but, Run The Damn Ball Guy sputters, running the ball is about keeping it away from the other team as much as it's about scoring points. They can't score if they don't have the ball.
-
-Fine, let's test this.
-
-We're going to create a new dataframe called `newcorrelations` and in it, we need to mutate a new field called `differential`. The score differential is the point spread. I leave it to you to figure out how to calculate the point spread.
-
-```{r correlation2, exercise=TRUE, exercise.setup = "correlations-load-data"}
-____ <- correlations |>
-  mutate(
-    differential = ____ - ____
-  )
-
-
-____ |> 
-  summarise(
-    correlation = cor(differential, ____, method="pearson")
-    )
-```
-```{r correlation2-solution, exercise.reveal_solution = FALSE}
-newcorrelations <- correlations |>
-  mutate(
-    differential = team_pts - opponent_pts
-  )
-
-newcorrelations |> 
-  summarise(
-    correlation = cor(differential, rushing_yds, method="pearson")
-    )
-```
-```{r correlation2-check}
-grade_this_code()
-```
-
-```{r cor2, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("Uh oh. Run The Damn Ball Guy's argument has gotten worse. The pearson correlation coefficient is even closer to 50-50 -- {format(newcoefficient$estimate, digits=2)} -- where there's a positive correlation here, but it's not perfect.")
-```
-
-Normally, at this point, you'd quit while you were ahead. Arguments with Run The Damn Ball Guy are, on a good day, an exercise in pounding your head against a rock. They have a world view and are going to stick with it, so bringing inconclusive evidence to a stupid fight is a waste of time. 
-
-But, hope springs eternal and we want to show Mr. Guy that this is not a great argument in modern college football. 
-
-Enter regression. Regression is how we try to fit our data into a line that explains the relationship the best. Regressions will help us predict things as well -- if we have a team that has so many rushing yards, what kind of point differential could we expect? So regressions are about prediction, correlations are about description. Correlations describe a relationship. Regressions help us predict what that relationship means and what it might look like in the real world. **Specifically, it tells us how much of the change in a dependent variable can be explained by the independent variable**.
-
-Another thing regressions do is give us some other tools to evaluate if the relationship is real or not.
-
-### Exercise 3: Using linear regressions for rushing yards
-
-I assure you that Run The Damn Ball Guy doesn't know what a linear regression is, but let's use one to fight him. 
-
-First things first, we're going to use newcorrelations like we did above. It has the point differential we used before. To do this, we're going to create a new object called fit -- named after the line of best fit, which is the regression line. It's going to use a new function -- `lm`. Then we need to say X is approximately modeled by Y. X will be our differential. Y will be the rushing yards. The approximately modeled by is the ~ character. In fact, that's how you read ~ in R. When you see ~, you can say "is approximately modeled by."
-
-```{r regression1, exercise=TRUE, exercise.setup = "correlations-load-data"}
-fit <- lm(____ ~ ____, data = newcorrelations)
-summary(____)
-```
-```{r regression1-solution, exercise.reveal_solution = FALSE}
-fit <- lm(differential ~ rushing_yds, data = newcorrelations)
-summary(fit)
-```
-```{r regression1-check}
-grade_this_code()
-```
-
-There's three things we need here: 
-
-First we want to look at the p-value. It's at the bottom right corner of the output. In the case of rushing yards, the p-value is <2.2e-16. Remember your exponential notation? That means the probability this relationship is just random noise is less than .00000000000000022. The threshold we're looking for here is .05. If it's less than .05, then the relationship is considered to be *statistically significant*. **Significance here does not mean it's a big deal. It means it's not random**. That's it. Just that. Not random. So in our case, the relationship between rushing yards and a team's aggregate point differential is **statistically significant**. The differences in score difference and rushing yards is not random. Run The Damn Ball Guy is excited by this, but as we'll see, he shouldn't be.
-
-```{r rsquared1, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between a teams point spread can be explained by rushing yards. Our correlation coefficient said they're 50 percent related to each other, but rushing yard's ability to explain the difference between point spreads in games? About {format(summary(fit)$r.squared*100, digits=1)} percent. That means we can explain {format(summary(fit)$r.squared*100, digits=1)} percent of the difference in score just by looking at a team's rushing yards. That's ... not super conclusive. It's not nothing, but it's not the clattering proof Run The Damn Ball Guy was looking for. Again, we should quit and do literally anything with our life other than talk to Run The Damn Ball Guy.")
-```
-
-```{r rsquared2, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is {fit$coefficients[1]} and the RushingYds coefficient is {fit$coefficients[2]}. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a team's score differential in a game -- will they score more than they give up -- by using `y=mx+b`. In this case, y is the aggregate score, m is {fit$coefficients[2]} and b is {fit$coefficients[1]}. So we would multiply a teams total rushing yards by {fit$coefficients[2]} and then {fit$coefficients[1]} to it. The result would tell you what the total aggregate score in the game would be, according to our model. Chance that your even close with this? About {format(summary(fit)$r.squared*100, digits=1)} percent.")
-```
-
-```{r rsquared3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("What does that mean? Let's use a simple example. Let's say you rush for 100 yards. 100 * {format(fit$coefficients[2], digits=2)} is {format(fit$coefficients[2]*100, digits=2)}. So 100 yards of rushing gets you {format(fit$coefficients[2]*100, digits=1)} points ... until you factor in the intercept, which is {format(fit$coefficients[1], digits=2)} points. Meaning, according to our model, you rush for 100 yards, your score margin is {format((fit$coefficients[2]*100) + fit$coefficients[1], digits=1)}.")
-```
-
-You can see the problem in a graph. On the X axis is rushing yards, on the y is aggregate score. If these elements had a strong relationship, we'd see a clear pattern moving from right to left, sloping up. On the left would be the teams with few rushing yards and a negative point differential. On right would be teams with high rushing yards and positive point differentials. Do you see that below?
-
-```{r correlationchart, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data"}
-ggplot(newcorrelations, aes(x=rushing_yds, y=differential)) + geom_point()
-```
-
-A charitable reading of this would be ... shrug? Maybe? Seems kind of random? And that's the point. It's squishy. 
-
-## But what about passing the ball?
-
-So we've **firmly** established that Run The Damn Ball Guy arguments are dumb. But is the Playstation Offense the answer? 
-
-So instead of looking at rushing yards, let's look at passing yards. Can we do better looking at yards through the air?
-
-### Exercise 4: A second correlation
-
-The good news is that our newcorrelations dataframe has everything we need.
-
-Just run your correlations like before, swapping out rushing yards for passing yards.
-
-```{r regression2, exercise=TRUE, exercise.setup = "correlations-load-data"}
-newcorrelations |> 
-  summarise(correlation = cor(differential, ____, method="pearson"))
+```{r regression2, exercise=TRUE, exercise.setup = "regressions-load-data"}
+____ <- vbplayers |> 
+  filter(position == "____") |> 
+  filter(total_attacks > 0)
 ```
 ```{r regression2-solution, exercise.reveal_solution = FALSE}
-newcorrelations |> 
-  summarise(correlation = cor(differential, passing_yds, method="pearson"))
+outsides <- vbplayers |> 
+  filter(position == "OH") |> 
+  filter(total_attacks > 0)
 ```
 ```{r regression2-check}
 grade_this_code()
 ```
 
-```{r cor3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("Answer: {format(passcoefficient$estimate*100, digits=1)} percent.
-     
-Oh no. That's way less correlated than rushing yards.")
-```
+### Exercise 2: Making the model
 
-### Exercise 5: A second regression
+Enter regression. Regressions help us show that there is a relationship between two numbers and what it might look like in the real world. **Specifically, it tells us how much of the change in a dependent variable can be explained by the independent variable**.
 
-Let's see how predictive it is.
+Another thing regressions do is give us some other tools to evaluate if the relationship is real or not.
 
-```{r regression3, exercise=TRUE, exercise.setup = "correlations-load-data"}
-pass <- lm(differential ~ ____, data = newcorrelations)
-summary(pass)
+The code to make a linear model -- a regression -- is very simple. You just have to know how to read this symbol: ~. It means "is approximately modeled by." So varable 1 is approximately modeled by variable 2. In our case, kills is approximately modeled by the total_attacks -- aka if we give the average D1 outside hitter 100 attacks, how many kills can we expect?
+
+Then, we need to see the regression values to do some interpretation. We get that by running `summary` on the regression object we just created
+
+```{r regression3, exercise=TRUE, exercise.setup = "regressions-load-data"}
+killsmodel <- lm(____ ~ ____, data = outsides)
+summary(____)
 ```
 ```{r regression3-solution, exercise.reveal_solution = FALSE}
-pass <- lm(differential ~ passing_yds, data = newcorrelations)
-summary(pass)
+killsmodel <- lm(kills ~ total_attacks, data = outsides)
+summary(killsmodel)
 ```
 ```{r regression3-check}
 grade_this_code()
 ```
 
-First we check p-value. Same as before: this is really, really, really not random. 
+There's three things we need here: 
 
-```{r rsquared4, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("Second, Adjusted R-squared: {summary(pass)$r.squared}. With rushing yards, we could predict {format(summary(fit)$r.squared*100, digits=1)} percent of the variation between score margin by looking at a team's rushing yards. But with passing? A whopping {format(summary(pass)$r.squared*100, digits=1)} percent.")
+First we want to look at the p-value. It's at the bottom right corner of the output. In the case of kills vs total_attacks, the p-value is <2.2e-16. Remember your exponential notation? That means the probability this relationship is just random noise is less than .00000000000000022. The threshold we're looking for here is .05. If it's **less than** .05, then the relationship is considered to be *statistically significant*. **Significance here does not mean it's a big deal. It means it's not random**. That's it. Just that. Not random. So in our case, the relationship between kills and total attacks is **statistically significant**. The differences in kills and total attacks is not random. 
+
+Which -- no kidding. Can you have a kill without an attack? *Yes* but they are rare. So this is like saying there's a relationship between rushing yards and rushing attempts in football, or points scored and shots taken in basketball. Of course there is. You have to have one in order to have the other. 
+
+```{r rsquared1, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "regressions-load-data", results='asis'}
+glue("Second, we look at the Adjusted R-squared value. It's right above the p-value. Adjusted R-squared is a measure of how much of the difference between a players kills total can be explained by the number of attacks they get. How much ability does knowing the total attacks have in explaining the number of kills? About {format(summary(killsmodel)$r.squared*100, digits=1)} percent. That means we can explain {format(summary(killsmodel)$r.squared*100, digits=1)} percent of the difference in kills just by looking at a player's total attacks. That's ... crazy good in the world of modelling. But again -- we kind of expect this.")
 ```
 
-Ohhh no. What have we done?
-
-```{r rsquared5, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "correlations-load-data", results='asis'}
-glue("Third, the coefficients: In this case, our `y=mx+b` formula looks like `y = {format(pass$coefficients[2], digits=2)}x {pass$coefficients[1]}`. So if we were applying this, if our team passes for 250 yards, what happens?  
-
-Your score margin is {format(pass$coefficients[2] * 250 + pass$coefficients[1], digits=2)}.
-
-Chances of that being right? About {format(summary(pass)$r.squared*100, digits=1)} percent. Not good at all.
-")
+```{r rsquared2, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "regressions-load-data", results='asis'}
+glue("The third thing we can look at, and we only bother if the first two are meaningful, is the coefficients. In the middle, you can see the (Intercept) is {killsmodel$coefficients[1]} and the total_attacks coefficient is {killsmodel$coefficients[2]}. Remember high school algebra? Remember learning the equation of a line? Remember swearing that learning `y=mx+b` is stupid because you'll never need it again? Surprise. It's useful again. In this case, we could try to predict a player's kill total in a season by using `y=mx+b`. In this case, y is the total kills, m is {killsmodel$coefficients[2]} and b is {killsmodel$coefficients[1]}. So we would multiply a player's total attacks by {killsmodel$coefficients[2]} and then add {killsmodel$coefficients[1]} to it. The result would tell you what the total kills in the season would be, according to our model. Chance that you're even close with this? About {format(summary(killsmodel)$r.squared*100, digits=1)} percent.")
 ```
 
-What does this all mean? It means a sport with 22 players on the field at any one time is much more complicated than simple arguments on message boards would lead you to believe.
+```{r rsquared3, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "regressions-load-data", results='asis'}
+glue("What does that mean? Let's use a simple example. Let's say you get 100 attacks. 100 * {format(killsmodel$coefficients[2], digits=2)} is {format(killsmodel$coefficients[2]*100, digits=2)}. So 100 attacks gets you {format(killsmodel$coefficients[2]*100, digits=1)} kills ... until you factor in the intercept, which is {format(killsmodel$coefficients[1], digits=2)} kills. Meaning, according to our model, you get 100 attacks, your kill total for the season is expected to be {format((killsmodel$coefficients[2]*100) + killsmodel$coefficients[1], digits=1)}.")
+```
+
+You can see what this looks like in a graph. On the X axis is total attacks, on the y is actual kills. If these elements have a strong relationship, we'll see a clear pattern moving from right to left, sloping up. On the left would be the players with few attacks and subsequently few kills. On right would be players with high attacks and lots of kills. Do you see that below?
+
+```{r chart, exercise=FALSE, exercise.eval=TRUE, exercise.setup = "regressions-load-data"}
+ggplot(outsides, aes(x=total_attacks, y=kills)) + geom_point()
+```
+
+Looks like more attacks = more kills, but it's not perfect. That imperfection is called reality. Not everyone has the same talent level.
+
+## Squaring expectations with reality
+
+To find the gap between expectations and what actually happened in competition, we're going to use a statistical tool called a residual. That residual is simply what our model predicted -- expectation -- minus the actual result for the player. 
+
+We *could* do this the hard way by plugging in y = mx+b into a mutate and then subtracting, but regressions are a part of the reason why R exists in the first place, so there are *lots* of tools for regressions built in. 
+
+### Exercise 3: Adding our residual
+
+What we need to do now is take our dataframe of outside hitters and add our new `kills_above_expectation` column. To get that number, we're going to use the `residuals` function, and we just have to add our killsmodel into it. 
+
+```{r regression4, exercise=TRUE, exercise.setup = "regressions-load-data"}
+outsides |> 
+  mutate(
+    kills_above_expectations = ____(____)
+  )
+```
+```{r regression4-solution, exercise.reveal_solution = FALSE}
+outsides |> 
+  mutate(
+    kills_above_expectations = residuals(killsmodel)
+  )
+```
+```{r regression4-check}
+grade_this_code()
+```
+
+Scroll right and you'll see a number. It might be positive -- you had more kills than expected -- or it might be negative -- your setter should look to you less. 
+
+### Exercise 6: Who was the Big Ten's Best last year? 
+
+Now that we can do this, we can start to answer questions. Questions like who was the best in the Big Ten last year at outside hitter? My heart says Harper Murray but what does the data say? 
+
+This is simple stuff now. All you do is add a filter for the Big Ten and then arrange by our new number.
+
+```{r regression5, exercise=TRUE, exercise.setup = "regressions-load-data"}
+outsides |> 
+  mutate(
+    kills_above_expectations = ____(____)
+  ) |> 
+  filter(
+    conference == "____"
+  ) |> 
+  arrange(desc(____))
+```
+```{r regression5-solution, exercise.reveal_solution = FALSE}
+outsides |> 
+  mutate(
+    kills_above_expectations = residuals(killsmodel)
+  ) |> 
+  filter(
+    conference == "Big Ten"
+  ) |> 
+  arrange(desc(kills_above_expectations))
+```
+```{r regression5-check}
+grade_this_code()
+```
+
+I hate to say it, but the data says Wisconsin's Mimi Colyer was a staggering 131 kills *above expectations*. That's not her season total -- that's how much better she was than the average player given the total attacks she had. That's bonkers. 
+
+Harper Murray was the Big Ten's 5th best outside when it comes to exceeding expectations. A question for debate: Why? 
 
 ## The Recap
 
-In this lesson, we've explored the powerful statistical tools of correlation and linear regression, applying them to analyze college football data and test common assumptions about offensive strategies. We learned how to calculate Pearson correlation coefficients to measure the strength of relationships between variables like rushing yards, passing yards, and point differentials. We then delved into linear regression, using it to model these relationships and assess their predictive power. We discovered that while relationships between offensive statistics and game outcomes are statistically significant, they explain less of the variance in point differentials than one might expect. This exercise demonstrated the complexity of football and the danger of oversimplifying strategic analysis. We also learned to interpret key regression outputs like p-values, R-squared values, and coefficients, and how to use these to make predictions. Remember, while these tools are powerful, they have limitations, especially in complex sports like football. 
+In this lesson, we used linear regression to build an expectation for player performance, and then measured how far reality strayed from it -- the foundation of any "value above expected" metric.
+
+We started by building a model with `lm()`, using college volleyball data to see if we could predict an outside hitter's kills from their total attacks. Before we modeled anything, though, we had to think about **peer groups**: you can't fairly compare a middle blocker to an outside hitter, so we filtered our data down to just outside hitters with at least one attack, giving us a fair pool of comparable players.
+
+From there, we learned to read a regression's `summary()` output by checking three things, in order. First, the **p-value**, which tells you whether the relationship between your two variables is statistically significant -- meaning it's probably not just random noise -- using the standard threshold of .05. Second, the **Adjusted R-squared**, which tells you how much of the variation in kills is explained by total attacks. Third, and only once the first two are meaningful, the **coefficients**, which are just `y = mx + b` from algebra class -- a slope and an intercept you can use to predict a player's expected kills from their total attacks.
+
+That prediction is only half the story. The real payoff came from `residuals()`, which gave us the gap between what our model expected a player to do and what they actually did. Adding that residual as a new column -- kills above expectation -- let us go beyond raw kill totals and rank players by who outperformed their opportunities. We put that to work filtering to the Big Ten to see which outside hitter was actually exceeding expectations the most, which turned out to be a very different answer than just looking at who had the most kills.
+
+The bigger idea here: raw counting stats reward opportunity as much as skill. A regression lets you separate the two, and the residual is what's left over once expectation has been accounted for -- which is a much better measure of who's actually playing above their role.
 
 ## Terms to Know
 
-- Correlation: A statistical measure that expresses the extent to which two variables are linearly related.
-- Pearson Correlation Coefficient: A value between -1 and 1 that indicates the strength and direction of a linear relationship between two variables.
-- Linear Regression: A statistical method for modeling the relationship between a dependent variable and one or more independent variables.
-- p-value: In regression analysis, a measure of the probability that an observed relationship between variables in a sample occurred by pure chance.
-- R-squared: A statistical measure that represents the proportion of the variance in the dependent variable that is predictable from the independent variable(s).
-- Coefficient: In a regression equation, the number that represents the rate of change of one variable (y) as a function of changes in the other (x).
-- Statistical Significance: The likelihood that a relationship between two or more variables is caused by something other than random chance.
-- Independent Variable: The variable in a regression analysis that is used to explain or predict the dependent variable.
-- Dependent Variable: The variable in a regression analysis that is being predicted or explained.
+- Linear regression: A statistical method for modeling the relationship between a dependent variable and one or more independent variables, producing a line of best fit.
+- lm(): The R function used to fit a linear regression model, written as `lm(dependent ~ independent, data = dataframe)`.
+- Line of best fit: The line produced by a regression that comes as close as possible to every point in the data, expressed in the familiar `y = mx + b` form.
+- p-value: A measure of the probability that an observed relationship between variables happened by random chance. A p-value below .05 is considered statistically significant.
+- Statistical significance: An indication that a relationship between variables is unlikely to be random -- not a judgment about how large or important that relationship is.
+- Adjusted R-squared: A statistical measure of how much of the variation in the dependent variable can be explained by the independent variable(s), expressed as a percentage.
+- Coefficient: In a regression equation, the number representing the rate of change in the dependent variable (y) for each one-unit change in the independent variable (x) -- the "m" in `y = mx + b`.
+- Intercept: The predicted value of the dependent variable when the independent variable is zero -- the "b" in `y = mx + b`.
+- Independent variable: The variable in a regression used to explain or predict the dependent variable -- in our example, total attacks.
+- Dependent variable: The variable in a regression that is being predicted or explained -- in our example, kills.
+- Residual: The difference between what a regression model predicted for an observation and what actually happened. A positive residual means a player outperformed expectations; a negative one means they underperformed.
+- Value above expected: A general term for any metric, like our kills above expectation, that measures performance relative to what a model predicted rather than as a raw total.
