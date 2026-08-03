@@ -189,7 +189,7 @@ grade_this_code()
 
 Scroll right and you'll see a number. It might be positive -- you had more kills than expected -- or it might be negative -- your setter should look to you less. 
 
-### Exercise 6: Who was the Big Ten's Best last year? 
+### Exercise 4: Who was the Big Ten's Best last year? 
 
 Now that we can do this, we can start to answer questions. Questions like who was the best in the Big Ten last year at outside hitter? My heart says Harper Murray but what does the data say? 
 

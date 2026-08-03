@@ -1,0 +1,375 @@
+---
+title: "Sports Data Lesson 10: Rankings"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    theme: united
+    ace_theme: github
+runtime: shiny_prerendered
+description: >
+  Learn how to see who is better than expected.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(elomakeR)
+library(glue)
+knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.completion=FALSE)
+```
+
+## The Goal
+
+The goal of this lesson is to introduce you to ranking systems, starting with the simple approach -- summing or averaging a number, arranging by it, and cutting off at some number of rows -- and then showing why that approach falls apart the moment strength of schedule matters. From there, you'll learn about Elo ratings, a ranking system borrowed from chess that accounts for who you played and how surprising the result was, not just what you did. Using college football schedule data and the `elomakeR` package, you'll build Elo rankings step by step, adding in margin of victory, home field advantage, and season-to-season carryover, so you can see exactly how each piece changes who ends up on top. By the end of this lesson, you'll understand why "who did you beat" matters as much as "what did you do," and you'll be able to build and tune your own Elo ranking system in R.
+
+## The Basics
+
+Ranking things is either the easiest thing to do or the hardest. There's very little between the extremes. The easiest way? Count/sum up some number, arrange it by that number, rank those things by that number, cut off at 10. Here, let's do it the easy way with a silly example using the data we're going to use today.  
+
+First, load the tidyverse.
+
+```{r load-tidyverse, exercise=TRUE}
+library(tidyverse)
+```
+```{r load-tidyverse-solution}
+library(tidyverse)
+```
+```{r load-tidyverse-check}
+grade_this_code()
+```
+
+Now import the data.
+
+```{r rankings-load-data, message=FALSE, warning=FALSE, results=FALSE}
+football <- read_csv("https://www.mattwaite.com/sportsdatafiles/football_rankings.csv")
+
+football25 <- football |> filter(season == 2025)
+```
+```{r rankings-load-data-exercise, exercise = TRUE}
+football <- read_csv("https://www.mattwaite.com/sportsdatafiles/football_rankings.csv")
+```
+```{r rankings-load-data-exercise-solution}
+football <- read_csv("https://www.mattwaite.com/sportsdatafiles/football_rankings.csv")
+```
+```{r rankings-load-data-exercise-check}
+grade_this_code()
+```
+
+Let's take a look at it. This is a dataset of football games -- with home and away teams, different from the game log data we've used before. An actual schedule of games makes some things hard, some things easy. What you want will depend on what you need. 
+
+```{r head-data, exercise=TRUE, exercise.setup = "rankings-load-data"}
+head(football)
+```
+```{r head-data-solution}
+head(football)
+```
+```{r head-data-check}
+grade_this_code()
+```
+
+### Exercise 1: Simple rankings
+
+We're going to follow the pattern laid out before. Make a number, arrange by that number, rank by that number, and then cut off the number of rows returned. 
+
+The only thing new here is going to be `row_number`, which is the tidyverse way of ranking things by row. Let's rank teams by their average points scored at home from 2023-2025. 
+
+```{r ranking1, exercise=TRUE, exercise.setup = "rankings-load-data"}
+football |>
+  group_by(home_team) |> 
+  summarize(
+    average_points_scored = ____(____)
+  ) |> 
+  ungroup() |>
+  arrange(desc(average_points_scored)) |> 
+  mutate(rank = ____()) |> 
+  top_n(10, wt=-rank)
+```
+```{r ranking1-solution, exercise.reveal_solution = FALSE}
+football |>
+  group_by(home_team) |> 
+  summarize(
+    average_points_scored = mean(home_points)
+  ) |> 
+  ungroup() |>
+  arrange(desc(average_points_scored)) |> 
+  mutate(rank = row_number()) |> 
+  top_n(10, wt=-rank)
+```
+```{r ranking1-check}
+grade_this_code()
+```
+
+As you can see, the best offensive team at home for the last three seasons is SMU, with Oregon, USC, Notre Dame and Texas Tech following them up. Got some blue blood teams in there. And you have UTSA -- University of Texas at San Antonio -- and North Texas in there. So what does our data fail to take into account? 
+
+Who are they playing? 
+
+## Now this gets hard
+
+One of the things that makes college football great and simultaneously insufferable is the endless discussions of Who Should Be X. Who should be in the playoffs? Who should be ranked? Who should be better than who? 
+
+The amount of blood and words spilled over nearly a century of this discussion is bonkers. Oversimplifying a ton, we've gone from newspapers having to do what nobody else would do and pick a national champion, to a computer ranking system everyone hated, to a playoff committee that uses stats that is ... what we have now. And lot of people are mad about that system!
+
+Lots of sports outlets have their own means of rankings, but we're going to talk about one here that gets used in and out of sports that actually comes from the world of chess: Elo rankings. 
+
+Imagine whatever sport or activity you're looking at was just a big pot of points. Everyone has some, and every time two players or teams face off, the winner takes some of the losers points. How many points? That depends on how *surprised* we are that the winner won. 
+
+Let's use a silly example. In chess -- and now here in college football -- everyone starts with 1500 points. Let's pretend Nebraska and Iowa played the first game of the season. So two teams, same rank. Under Elo, because each team has the same points, the surprise of who wins isn't going to be *that* surprising. In fact, under the simplest of settings, if we run that game, the winner gets 7.2 points and the loser loses 7.2 points regardless of outcome. 
+
+Elo has evolved to include margin of victory measures and home field advantage. The differences can be quite large. For example, let's say Nebraska beats Iowa 70-0 at home. Now, instead of Iowa losing 7.2 points of Elo, they lose 59 points. If, say, next week, Nebraska plays Ohio State, who also won their game by 70 points, and only wins by 3, Nebraska gains 19 Elo points. 
+
+As you can see, with Elo, you can get a pretty good idea of how good a team is based on their record against who they played. 
+
+I like Elo so much I made my own library to calculate Elo scores. It does all the things you'd want a ranking system to do and a few more. Let's try it out. First load it. 
+
+```{r load-elo, exercise=TRUE}
+library(elomakeR)
+```
+```{r load-elo-solution}
+library(elomakeR)
+```
+```{r load-elo-check}
+grade_this_code()
+```
+
+The main function here is the `calculate_elo` function. It needs a handful of things, but first things first, it needs specific data. 
+
+Remember before talking about logs vs schedule? `elomakeR` needs schedule data. Meaning it needs one row for each game. Game log data has two rows for each game -- one for the home team, one for the away team. To use `elomakeR`, you need to be careful of this. 
+
+Luckily for us, our football data is already in this form. 
+
+So what does it need? It takes `date` parameter so it can get the games in the right order (which is crucial). Then it takes a `team1` and `team2` parameter, and it doesn't matter which is which because it also takes a `home_team` parameter telling it which is the home team. Then it needs the score for each team. After that, it's settings. You need a TRUE/FALSE column for neutral site games, you need to set how much of a home field advantage you want (if you do) and does margin of victory count.
+
+It seems like a lot, but once you see it, it makes sense. 
+
+Let's do a simple one first. Behind the scenes, I've made a dataframe of the 2025 season called `football25`. You'll need a lot of column names so let's refresh our memory. 
+
+```{r ranking2, exercise=TRUE, exercise.setup = "rankings-load-data"}
+head(football25)
+```
+```{r ranking2-solution, exercise.reveal_solution = FALSE}
+head(football25)
+```
+```{r ranking2-check}
+grade_this_code()
+```
+
+### Exercise 2: Your first Elo ranking
+
+Let's fill in the necessary parts of `calculate_elo`. Our first ranking will have everyone start with 1500 -- no season carryover -- and no margin of victory. 
+
+```{r ranking3, exercise=TRUE, exercise.setup = "rankings-load-data"}
+rankings <- calculate_elo(
+  football25,
+  date = ____, 
+  team1 = ____, 
+  team2 = away_team,
+  score1 = ____, 
+  score2 = away_points,
+  home_team = ____, 
+  neutral = neutral_site
+)
+
+latest_ratings(rankings)
+```
+```{r ranking3-solution, exercise.reveal_solution = FALSE}
+rankings <- calculate_elo(
+  football25,
+  date = start_date, 
+  team1 = home_team, 
+  team2 = away_team,
+  score1 = home_points, 
+  score2 = away_points,
+  home_team = home_team, 
+  neutral = neutral_site
+)
+
+latest_ratings(rankings)
+```
+```{r ranking3-check}
+grade_this_code()
+```
+
+And surprise, surprise, Indiana is #1. But look who is next. Texas Tech. JMU. Georgia. Miami is #18. And the last thing I want to do is give a Notre Dame fan *anything*, but they're #14. 
+
+Note that it took a beat for it to run. Thats because unlike other functions in R, this has to be done sequentially. The results of every game impact the rankings and they have to be taken in order. 
+
+So what changes when we add margin of victory? 
+
+### Exercise 3: Does how you win matter? 
+
+`elomakeR` has a way of factoring margin of victory. The best way to weight that is logarithmically, which we can shorten to just `log`. 
+
+```{r ranking4, exercise=TRUE, exercise.setup = "rankings-load-data"}
+rankings <- calculate_elo(
+  football25,
+  date = ____, 
+  team1 = ____, 
+  team2 = away_team,
+  score1 = ____, 
+  score2 = away_points,
+  home_team = ____, 
+  neutral = neutral_site,
+  mov_adjustment = "____"
+)
+
+latest_ratings(rankings)
+```
+```{r ranking4-solution, exercise.reveal_solution = FALSE}
+rankings <- calculate_elo(
+  football25,
+  date = start_date, 
+  team1 = home_team, 
+  team2 = away_team,
+  score1 = home_points, 
+  score2 = away_points,
+  home_team = home_team, 
+  neutral = neutral_site,
+  mov_adjustment = "log"
+)
+
+latest_ratings(rankings)
+```
+```{r ranking4-check}
+grade_this_code()
+```
+
+Elo really, really loves Texas Tech in 2025. And ... sigh ... Notre Dame is now the 5th best team in the country. 
+
+### Exercise 4: Adding home field advantage
+
+One last thing that elomakeR will do is add a home field advantage modifier, as well as you can change how much home field counts as well as how much change should a win count for. We're not going to handle it here, but the [elomakeR documentation](https://github.com/mattwaite/elomakeR) also show you how to tune those parameters based on your data. 
+
+What you're going to see here is two new parameters: `k` for the amount of shifting that can go on with wins and `home_advantage` for the amount of weight to give to home field. I ran the tunings for this for you -- set k to 40 and home_advantage to 100. Who comes out on top now? 
+
+```{r ranking5, exercise=TRUE, exercise.setup = "rankings-load-data"}
+rankings <- calculate_elo(
+  football25,
+  date = ____, 
+  team1 = ____, 
+  team2 = away_team,
+  score1 = ____, 
+  score2 = away_points,
+  home_team = ____, 
+  neutral = neutral_site,
+  mov_adjustment = "____",
+  k=____,
+  home_advantage = ____,
+)
+
+latest_ratings(rankings)
+```
+```{r ranking5-solution, exercise.reveal_solution = FALSE}
+rankings <- calculate_elo(
+  football25,
+  date = start_date, 
+  team1 = home_team, 
+  team2 = away_team,
+  score1 = home_points, 
+  score2 = away_points,
+  home_team = home_team, 
+  neutral = neutral_site,
+  mov_adjustment = "log",
+  k=40,
+  home_advantage = 100,
+)
+
+latest_ratings(rankings)
+```
+```{r ranking5-check}
+grade_this_code()
+```
+
+Boy is Texas Tech looking good here. Also, note Miami sneaks into the top 10. 
+
+### Exercise 5: Dynasty mode
+
+The last thing that I added to `elomakeR` is a way to solve an obvious problem that is devilishly hard to truly solve: Does last year matter to this year? 
+
+In college football in the transfer portal era, it's as hard as it ever was before to really predict how good a team will be before they put on the pads and play games. There are whole media empires built on making those predictions, and when there is no football to watch, they pass the time for people really obsessed with the sport. 
+
+But one thing is clear: When the season starts, few teams are *legitimately* even. We can argue all day if Iowa or Nebraska is better before a mythical opening game, but the truth is no one really knows. It's not a bad choice to just set them both at 1500 and go from there. 
+
+But Nebraska vs Ohio? Are you going to tell me those two teams are both 1500? If Nebraska played Indiana in the first game, are both of them 1500? Not likely. We don't *know* if Indiana is better than Nebraska, but it's likely. How much better? Shrug. 
+
+What `elomakeR` does is when given a `season` value, it will take where you ended up in the first season, keep a certain amount of your score from the year before, and start you there. In other words, Ohio State, Oregon and Indiana are going to start out with more Elo points than Nebraska or Northwestern or Minnesota. And Nebraska is going to start with more Elo points than UMass or Kent State. 
+
+First things first, we need to change to using `football` instead of `football25`. Then, the three things we're going to add is a `season` value, which we set to the column with the season in it. Then we add the `carryover` parameter. The default is "continuous", which means you start 2026 where you ended 2025. That makes no sense to me in the portal era. So we're going to change that to "regress" and then we get to decide how much a team regresses back to 1500. Let's try .7 here -- or you keep 70 percent of your last season. 
+
+```{r ranking6, exercise=TRUE, exercise.setup = "rankings-load-data"}
+rankings <- calculate_elo(
+  ____,
+  season = ____,
+  date = start_date, 
+  team1 = home_team, 
+  team2 = away_team,
+  score1 = home_points, 
+  score2 = away_points,
+  home_team = home_team, 
+  neutral = neutral_site,
+  mov_adjustment = "log",
+  k=40,
+  home_advantage = 100,
+  carryover = "____",
+  regress_pct = ____
+)
+
+latest_ratings(rankings)
+```
+```{r ranking6-solution, exercise.reveal_solution = FALSE}
+rankings <- calculate_elo(
+  football,
+  season = season,
+  date = start_date, 
+  team1 = home_team, 
+  team2 = away_team,
+  score1 = home_points, 
+  score2 = away_points,
+  home_team = home_team, 
+  neutral = neutral_site,
+  mov_adjustment = "log",
+  k=40,
+  home_advantage = 100,
+  carryover = "regress",
+  regress_pct = .7
+)
+
+latest_ratings(rankings)
+```
+```{r ranking6-check}
+grade_this_code()
+```
+
+Did Utah have a case for the playoff? 
+
+And to save you going looking -- with regression in place, Nebraska ends up 78th in the country. 
+
+## The Recap
+
+In this lesson, we built rankings two different ways, and saw why the simple way and the good way aren't the same thing.
+
+We started with the **easy way**: group, summarize, arrange and use `row_number()` to rank teams by a raw stat -- in our case, average home points scored. That got us a top 10, but it also got us a warning sign. Teams like UTSA and North Texas were sitting next to Oregon and Notre Dame, which should make you suspicious. A raw stat like this has no idea *who you played*, and in a sport where schedules vary wildly in difficulty, that's a fatal flaw.
+
+That's where **Elo ratings** came in. Borrowed from chess, Elo treats every team's rating as a pool of points that shifts after every game based on how *surprising* the result was. Beat a team you were expected to beat, and you gain a little. Beat a team you weren't supposed to beat, and you gain a lot -- and they lose a lot. Using the `elomakeR` package and its `calculate_elo()` function, we built up a ranking system in layers. First, a bare-bones version where every team starts at 1500 with no consideration for how badly they won or lost. Then we added `mov_adjustment = "log"` to account for margin of victory, which reshuffled the rankings meaningfully. Next we added `home_advantage` to account for the edge teams get from playing at home. Finally, we tackled the hardest question -- does last season matter to this one -- using the `season` and `carryover` parameters to let teams start the year with some, but not all, of their rating from the year before.
+
+Along the way, we learned a practical wrinkle too: `elomakeR` needs schedule data, with one row per game and separate home and away columns, not the game-log format with two rows per game that we've used in other lessons. And because Elo has to process games in date order -- each result depends on the ratings coming into it -- these calculations run sequentially instead of all at once, which is why they take a little longer than a simple `summarize()`.
+
+The big lesson: a ranking is only as good as what it accounts for. Raw totals reward opportunity and easy schedules. Elo, even in its simplest form, rewards you for beating good teams and punishes you for losing to bad ones -- which is a lot closer to what "better" actually means.
+
+
+## Terms to Know
+
+- row_number(): A tidyverse function that assigns a sequential rank to rows based on their current order, commonly used after arranging a dataframe to produce a ranking.
+- Strength of schedule: A measure of how difficult a team's opponents have been, often missing from simple ranking systems built on raw totals alone.
+- Elo rating: A ranking system, originally developed for chess, in which every competitor starts with a set number of points that shift after each result based on how surprising that result was relative to expectations.
+- elomakeR: An R package for calculating Elo ratings from schedule data, including adjustments for margin of victory, home field advantage, and season-to-season carryover.
+- calculate_elo(): The main function in the elomakeR package used to generate Elo ratings from a dataframe of games.
+- Schedule data: A dataset format with one row per game, including columns for both the home and away teams, as opposed to game log data, which has one row per team per game.
+- Margin of victory (MOV) adjustment: A setting in Elo calculations that factors in how much a team won or lost by, rather than just whether they won or lost.
+- Home field advantage: A setting in Elo calculations that gives extra weight to the team playing at home, reflecting the real-world edge home teams tend to have.
+- K-factor: A setting that controls how many Elo points can shift after a single game -- a higher k means ratings move more dramatically with each result.
+- Carryover: A setting that determines how much of a team's Elo rating persists from one season into the next, rather than resetting everyone to the same starting point.
+- Regression to the mean: In this context, a carryover method that pulls each team's rating partway back toward a default starting value (1500) between seasons, rather than keeping the full rating or resetting it completely.
+
