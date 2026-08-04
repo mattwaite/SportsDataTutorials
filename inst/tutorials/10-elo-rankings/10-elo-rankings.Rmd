@@ -256,7 +256,7 @@ rankings <- calculate_elo(
   neutral = neutral_site,
   mov_adjustment = "____",
   k=____,
-  home_advantage = ____,
+  home_advantage = ____
 )
 
 latest_ratings(rankings)
@@ -273,7 +273,7 @@ rankings <- calculate_elo(
   neutral = neutral_site,
   mov_adjustment = "log",
   k=40,
-  home_advantage = 100,
+  home_advantage = 100
 )
 
 latest_ratings(rankings)
