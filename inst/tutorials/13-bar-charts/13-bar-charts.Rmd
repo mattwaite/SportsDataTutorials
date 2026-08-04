@@ -124,10 +124,12 @@ We could, for instance, create a bar chart of home runs each team hit. We might 
 We start with `ggplot()` which is creating a blank canvas for us to work in. The `geom_bar()` is the geometry -- the form the data will take. We will learn many geometries over the next several lessons. `big10` is our data, `aes` means aesthetics, `x=short_name` explicitly tells `ggplot2` that our x value -- our horizontal value -- is the short name of the team field from the data. Why short_name (or team if we wanted the long version)? We want one bar per team, no? Put the team on the x axis is what that is saying. And what do we get when we run that? 
 
 ```{r ggplot-bar1, exercise=TRUE, exercise.setup = "ggplot-load-data", message=FALSE}
-ggplot() + geom_bar(data=big10, aes(x=short_name))
+ggplot() + 
+  geom_bar(data=big10, aes(x=short_name))
 ```
 ```{r ggplot-bar1-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_bar(data=big10, aes(x=short_name))
+ggplot() + 
+  geom_bar(data=big10, aes(x=short_name))
 ```
 ```{r ggplot-bar1-check}
 grade_this_code()

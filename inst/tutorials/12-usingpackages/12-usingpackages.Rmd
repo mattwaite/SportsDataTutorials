@@ -26,7 +26,7 @@ The goal of this lesson is to introduce you to using specialized R packages to d
 
 ## The Basics
 
-There is a growing number of packages and repositories of sports data, largely because there's a growing number of people who want to analyze that data. We've done it ourselves with simple Google Sheets tricks. Then there's RVest, which is a method of scraping the data yourself from websites that you'll do later. But with these packages, someone has done the work of gathering the data for you. All you have to learn are the commands to get it.
+There is a growing number of packages and repositories of sports data, largely because there's a growing number of people who want to analyze that data. With these packages, someone has done the work of gathering the data for you. All you have to learn are the commands to get it.
 
 One very promising collection of libraries is something called the [SportsDataverse](https://sportsdataverse.org/), which has a collection of packages covering specific sports, all of which are in various stages of development. Some are more complete than others, but they are all being actively worked on by developers. Packages of interest in this class are: 
 
@@ -39,7 +39,6 @@ One very promising collection of libraries is something called the [SportsDatave
 * [recruitR, for college sports recruiting](https://saiemgilani.github.io/recruitR/)
 
 Not part of the SportsDataverse, but in the same neighborhood, is [nflfastR](https://www.nflfastr.com/), which can provide NFL play-by-play data. 
-Because they're all under development, not all of them can be installed with just a simple `install.packages("something")`. Some require a little work, some require API keys or paid accounts with certain providers.  
 
 The main issue for you is to read the documentation carefully. 
 
@@ -66,13 +65,13 @@ Normally, you would be reading the documentation for wehoop or any of the librar
 Here's how to get player box scores for the most recent season (which are numbered by the year they end in). 
 
 ```{r packages-load-data, message=FALSE, warning=FALSE, results=FALSE}
-playerboxscores <- load_wbb_player_box(seasons = 2025)
+playerboxscores <- load_wbb_player_box(seasons = 2026)
 ```
 ```{r packages-load-data-exercise, exercise = TRUE}
-playerboxscores <- load_wbb_player_box(seasons = 2025)
+playerboxscores <- load_wbb_player_box(seasons = 2026)
 ```
 ```{r packages-load-data-exercise-solution}
-playerboxscores <- load_wbb_player_box(seasons = 2025)
+playerboxscores <- load_wbb_player_box(seasons = 2026)
 ```
 ```{r packages-load-data-exercise-check}
 grade_this_code()
@@ -125,13 +124,13 @@ The wehoop package also has play by play data in it. A warning -- this step will
 The `load_wbb_pbp` function works very similar to the box scores. You're going to provide the season you want. We want this season.
 
 ```{r packages2-load-data, message=FALSE, warning=FALSE, results=FALSE}
-playbyplay <- load_wbb_pbp(2025)
+playbyplay <- load_wbb_pbp(2026)
 ```
 ```{r packages2-load-data-exercise, exercise = TRUE}
 playbyplay <- load_wbb_pbp(____)
 ```
 ```{r packages2-load-data-exercise-solution, exercise.reveal_solution = FALSE}
-playbyplay <- load_wbb_pbp(2025)
+playbyplay <- load_wbb_pbp(2026)
 ```
 ```{r packages2-load-data-exercise-check}
 grade_this_code()
