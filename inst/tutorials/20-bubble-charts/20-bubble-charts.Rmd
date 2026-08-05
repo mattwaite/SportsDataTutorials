@@ -149,10 +149,12 @@ grade_this_code()
 A bubble chart is just a scatterplot with one additional element in the aesthetic -- a size. Here's the scatterplot version. 
 
 ```{r bubble3, exercise=TRUE, exercise.setup = "bubble-load-data", message=FALSE}
-ggplot() + geom_point(data=ypp, aes(x=offensiveYPP, y=defensiveYPP))
+ggplot() + 
+  geom_point(data=ypp, aes(x=offensiveYPP, y=defensiveYPP))
 ```
 ```{r bubble3-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_point(data=ypp, aes(x=offensiveYPP, y=defensiveYPP))
+ggplot() + 
+  geom_point(data=ypp, aes(x=offensiveYPP, y=defensiveYPP))
 ```
 ```{r bubble3-check}
 grade_this_code()

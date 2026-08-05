@@ -51,7 +51,7 @@ library(ggrepel)
 grade_this_code()
 ```
 
-Let's say we want to highlight Brice Williams and his place in college basketball last season. Let's take a look at last season's player data. 
+Let's say we want to highlight Brice Williams and his place in college basketball in the 2024-2025 season. Let's take a look at that season's player data. 
 
 And while we're loading it, let's filter out anyone who hasn't played 100 minutes. 
 
@@ -81,10 +81,12 @@ Let's make a standard scatterplot of points and player efficiency rating.
 Who is hitting shots, and who is using his chances to score efficiently is the question we're after here. Our data is players, and our two fields are PTS and PER.
 
 ```{r encircle1, exercise=TRUE, exercise.setup = "encircle-load-data", message=FALSE}
-ggplot() + geom_point(data=____, aes(x=____, y=____))
+ggplot() + 
+  geom_point(data=____, aes(x=____, y=____))
 ```
 ```{r encircle1-solution, exercise.reveal_solution = FALSE}
-ggplot() + geom_point(data=players, aes(x=PTS, y=PER))
+ggplot() + 
+  geom_point(data=players, aes(x=PTS, y=PER))
 ```
 ```{r encircle1-check}
 grade_this_code()
