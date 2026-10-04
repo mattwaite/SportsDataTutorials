@@ -247,9 +247,9 @@ bigteams <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Northwestern", "Wisc
 big <- logs |> filter(team_short_display_name %in% bigteams)
 
 ggplot() + 
-  geom_line(data=big, aes(x=game_date, y=team_fgpct, group=team_short_display_name), color="grey") +
-  geom_line(data=nu, aes(x=game_date, y=team_fgpct), color="red") + 
-  geom_line(data=mi, aes(x=game_date, y=team_fgpct), color="darkblue") +
+  geom_line(data=big, aes(x=game_date, y=field_goal_pct, group=team_short_display_name), color="grey") +
+  geom_line(data=nu, aes(x=game_date, y=field_goal_pct), color="red") + 
+  geom_line(data=mi, aes(x=game_date, y=field_goal_pct), color="darkblue") +
   geom_line(data=average, aes(x=game_date, y=mean_shooting), color="black") + 
   scale_y_continuous(limits = c(0, 70))
 ```
