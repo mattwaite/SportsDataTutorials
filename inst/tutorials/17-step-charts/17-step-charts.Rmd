@@ -91,6 +91,7 @@ ____ <- logs |>
 ```
 ```{r step1-solution, exercise.reveal_solution = FALSE}
 difflogs <- logs |> 
+  arrange(game_date) |>   
   mutate(differential = team_score - opponent_team_score) |> 
   group_by(team_short_display_name) |> 
   mutate(cum_diff = cumsum(differential))
