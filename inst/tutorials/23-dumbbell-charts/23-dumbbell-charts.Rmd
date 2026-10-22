@@ -213,14 +213,14 @@ ggplot() +
       y=____, yend=____,
       x=____, xend=____),
     color="grey",
-    linewidth = ____,
+    linewidth = ____
   ) + 
   geom_point(
     data=____,
     aes(
       y=____,
       x=____,
-      color="Giveaways"
+      color="Takeaways"
     ),
     size=____
   ) + 
@@ -229,7 +229,7 @@ ggplot() +
     aes(
       y=____,
       x=____,
-    color="Takeaways"
+    color="Giveaways"
     ),
     size=____
   )
